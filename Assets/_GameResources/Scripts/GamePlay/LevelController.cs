@@ -12,7 +12,6 @@ namespace Geckout
     {
         [SerializeField] protected GameLevelData m_gameLevelData;
         [SerializeField] protected GameMap m_gameMap;
-        [SerializeField] protected BodyController m_bodyPrefab;
         [SerializeField] protected Transform m_bodyParent;
 
         
@@ -28,7 +27,6 @@ namespace Geckout
         public void SetLevelData(GameLevelData gameLevelData)
         {
             m_gameLevelData = gameLevelData;
-            m_gameMap.SetLevelData(gameLevelData);
         }
 
         public void StartLevel()
@@ -47,11 +45,6 @@ namespace Geckout
 
         private void ReviveLevel()
         {
-        }
-
-        public BodyController SpawnBody(BodyData bodyData)
-        {
-            return default;
         }
 
         #region Boosters

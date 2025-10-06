@@ -74,8 +74,6 @@ namespace Geckout
         private void OnClickRetry()
         {
             Hide();
-            ((TimePreBooster)BoosterManager.Instance.TimePreBooster).IsSelectedToUse = m_buttonSelectBoosterTime.IsSelected;
-            ((ScissorBooster)BoosterManager.Instance.ScissorBooster).IsSelectedToUse = m_buttonSelectBoosterScissor.IsSelected;
             OnRetry?.Invoke();
         }
     }

@@ -113,8 +113,6 @@ namespace Geckout
         private void OnClickPlay()
         {
             Hide();
-            ((TimePreBooster)BoosterManager.Instance.TimePreBooster).IsSelectedToUse = m_buttonSelectBoosterTime.IsSelected;
-            ((ScissorBooster)BoosterManager.Instance.ScissorBooster).IsSelectedToUse = m_buttonSelectBoosterScissor.IsSelected;
             LevelManager.Instance.StartCurrentLevel();
             UIManager.Instance.ShowScreen<InGameScreenUI>();
 

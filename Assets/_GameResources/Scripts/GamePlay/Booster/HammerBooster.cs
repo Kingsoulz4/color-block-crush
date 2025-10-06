@@ -23,13 +23,10 @@ public class HammerBooster : BoosterBase
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
-                GameTile tile = hitInfo.collider.GetComponent<GameTile>();
+                Transform tile = hitInfo.collider.GetComponent<Transform>();
                 if (tile != null)
                 {
-                    if (GameMap.Instance.TilesWall.Contains(tile))
-                    {
-                        StartCoroutine(DoBooster(tile));
-                    }
+                    StartCoroutine(DoBooster(tile));
                 }
             }
         }
@@ -38,10 +35,6 @@ public class HammerBooster : BoosterBase
     public override void CancelBooster()
     {
         base.CancelBooster();
-        TouchInputHandler.Instance.CanClick = true;
-        IsShowConfirm = false;
-
-        GameMap.Instance.HideHammerIcon();
     }
 
     public override void ActiveBooster()
@@ -55,21 +48,16 @@ public class HammerBooster : BoosterBase
     protected override void ShowBooster()
     {
         base.ShowBooster();
-        TouchInputHandler.Instance.CanClick = false;
         IsShowConfirm = true;
-
-        GameMap.Instance.ShowHammerIcon();
     }
 
     protected override void Done()
     {
         base.Done();
-        TouchInputHandler.Instance.CanClick = true;
-        GameMap.Instance.HideHammerIcon();
 
     }
 
-    private IEnumerator DoBooster(GameTile tile)
+    private IEnumerator DoBooster(Transform tile)
     {
         ActiveBooster();
 
@@ -79,7 +67,6 @@ public class HammerBooster : BoosterBase
         hammer.SmashToBlock(tile.transform.position, 0.35f, () =>
         {
             RemoveHammer(hammer);
-            tile.HideWall();
             Done();
         });
     }

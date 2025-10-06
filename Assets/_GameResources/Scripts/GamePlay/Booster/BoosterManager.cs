@@ -30,10 +30,10 @@ public class BoosterManager : SingletonMono<BoosterManager>
 
     public void Init()
     {
-        foreach (var booster in Boosters)
-        {
-            booster.Init();
-        }
+        //foreach (var booster in Boosters)
+        //{
+        //    booster.Init();
+        //}
     }
 
     public void UpdateVisualBooster()
