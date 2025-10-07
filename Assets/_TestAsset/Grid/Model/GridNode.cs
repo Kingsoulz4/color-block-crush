@@ -123,3 +123,34 @@ public class GridNode : MonoBehaviour
         ParentGridNode = null;
     }
 }
+[Serializable]
+public struct GridPoint
+{
+    public int X;
+    public int Y;
+
+    public GridPoint(int x, int y)
+    {
+        X = x;
+        Y = y;
+    }
+}
+
+public enum GridAxisTypes
+{
+    XY = 0,
+    XZ = 1
+}
+
+public enum GridAnchorTypes
+{
+    BottomLeft = 0,
+    BottomCenter = 1,
+    BottomRight = 2,
+    MiddleLeft = 3,
+    MiddleCenter = 4,
+    MiddleRight = 5,
+    TopLeft = 6,
+    TopCenter = 7,
+    TopRight = 8
+}

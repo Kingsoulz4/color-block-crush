@@ -60,7 +60,7 @@ namespace ColorBlockCrush
             }
         }
 
-        public Block SpawnBlock(int row, int col, BlockType type, ColorType color, int hp)
+        public Block SpawnBlock(int row, int col, BlockType type, ColorType color, int hp, bool isStatic, bool canDestroy)
         {
             if (!IsValidPosition(row, col)) return null;
 
@@ -68,16 +68,22 @@ namespace ColorBlockCrush
             Block block = Instantiate(_blockPrefab, node.transform.position, Quaternion.identity, _blockContainer);
             block.name = $"Block_{row}_{col}";
 
-            block.Initialize(type, color, hp);
-            block.CurrentNode = node;
+            block.Initialize(type, color, hp, isStatic,canDestroy);
+            block.GridNode = node;
 
             PlaceBlock(row, col, block);
 
-            block.OnBlockDestroyed += OnBlockDestroyed;
-            block.OnMovementStarted += OnBlockMovementStarted;
-            block.OnMovementCompleted += OnBlockMovementCompleted;
+            block.OnBlockDestroyCompleted += OnBlockDestroyedComplete;
+            block.OnBlockDestroyStarted += OnBlockDestroyStarted;
+            block.OnBlockMovementStarted += OnBlockMovementStarted;
+            block.OnBlockMovementCompleted += OnBlockMovementCompleted;
 
             return block;
+        }
+
+        private void OnBlockDestroyStarted(Block block)
+        {
+            throw new NotImplementedException();
         }
 
         private void PlaceBlock(int row, int col, Block block)
@@ -86,7 +92,7 @@ namespace ColorBlockCrush
 
             _blockStacks[row, col].Add(block);
 
-            if (block.Type == BlockType.Stone)
+            if (!block.CanDestroy)
             {
                 _gridController.GridNodes[row, col].IsBlocked = true;
             }
@@ -94,25 +100,21 @@ namespace ColorBlockCrush
 
         private void RemoveBlock(Block block)
         {
-            if (block.CurrentNode == null) return;
+            if (block.GridNode == null) return;
 
-            GridPoint gridPoint = block.CurrentNode.GridPoint;
+            GridPoint gridPoint = block.GridNode.GridPoint;
             int row = gridPoint.Y;
             int col = gridPoint.X;
 
             if (IsValidPosition(row, col))
             {
                 _blockStacks[row, col].Remove(block);
-
-                if (block.Type == BlockType.Stone)
-                {
-                    _gridController.GridNodes[row, col].IsBlocked = false;
-                }
             }
 
-            block.OnBlockDestroyed -= OnBlockDestroyed;
-            block.OnMovementStarted -= OnBlockMovementStarted;
-            block.OnMovementCompleted -= OnBlockMovementCompleted;
+            block.OnBlockDestroyCompleted -= OnBlockDestroyedComplete;
+            block.OnBlockDestroyStarted -= OnBlockDestroyStarted;
+            block.OnBlockMovementStarted -= OnBlockMovementStarted;
+            block.OnBlockMovementCompleted -= OnBlockMovementCompleted;
         }
 
         public List<Block> GetBottomRowBlocks()
@@ -140,22 +142,22 @@ namespace ColorBlockCrush
 
             foreach (Block block in bottomBlocks)
             {
-                if (block.Type == BlockType.Stone) continue;
+                if (block.CanDestroy) continue;
 
-                if (!dict.ContainsKey(block.Color))
+                if (!dict.ContainsKey(block.ColorType))
                 {
-                    dict[block.Color] = new List<Block>();
+                    dict[block.ColorType] = new List<Block>();
                 }
 
-                dict[block.Color].Add(block);
+                dict[block.ColorType].Add(block);
             }
 
             return dict;
         }
 
-        private void OnBlockDestroyed(Block block)
+        private void OnBlockDestroyedComplete(Block block)
         {
-            GridPoint pos = block.CurrentNode.GridPoint;
+            GridPoint pos = block.GridNode.GridPoint;
             RemoveBlock(block);
 
             ShiftDownAbovePieceToEmptyGridPoint(pos.Y, pos.X);
@@ -179,14 +181,14 @@ namespace ColorBlockCrush
                 }
 
                 Block movingBlock = result.Block;
-                GridPoint originalPos = movingBlock.CurrentNode.GridPoint;
+                GridPoint originalPos = movingBlock.GridNode.GridPoint;
 
                 _blockStacks[originalPos.Y, originalPos.X].Remove(movingBlock);
 
                 GridPoint finalPos = result.Path[result.Path.Count - 1];
                 _blockStacks[finalPos.Y, finalPos.X].Add(movingBlock);
 
-                movingBlock.StartMoveToNodeSequence(pathNodes, () =>
+                movingBlock.StartMoveToGridNodeSequence(pathNodes,true, false, () =>
                 {
                     if (_blockStacks[originalPos.Y, originalPos.X].Count == 0)
                     {
