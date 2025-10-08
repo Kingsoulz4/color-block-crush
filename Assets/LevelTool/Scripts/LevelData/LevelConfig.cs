@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Geckout.Tools
+namespace ColorBlockCrush.Tools
 {
     [Serializable]
     public class LevelConfig : MonoBehaviour

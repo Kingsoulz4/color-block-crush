@@ -1,4 +1,4 @@
-namespace Geckout.Tools
+namespace ColorBlockCrush.Tools
 {
     public enum LevelDifficult
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Geckout.Tools
+namespace ColorBlockCrush.Tools
 {
     [Serializable]
     public class TunnelConfig

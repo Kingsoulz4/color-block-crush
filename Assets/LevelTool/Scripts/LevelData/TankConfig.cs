@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Geckout.Tools
+namespace ColorBlockCrush.Tools
 {
     public class TankConfig : MonoBehaviour
     {
