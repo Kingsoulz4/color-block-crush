@@ -62,7 +62,6 @@ namespace ColorBlockCrush
             CurrentState = GameState.Playing;
 
             SpawnTestBlocks();
-            SpawnTestGuns();
         }
 
         private void SpawnTestBlocks()
@@ -78,20 +77,6 @@ namespace ColorBlockCrush
             }
 
             //_blockBoardController.SpawnBlock(1, 2, BlockType.Stone, ColorType.Red, 999);
-        }
-
-        private void SpawnTestGuns()
-        {
-            for (int c = 0; c < 3; c++)
-            {
-                for (int r = 0; r < 5; r++)
-                {
-                    ColorType color = (ColorType)(Random.Range(0, 5));
-                    int bullets = Random.Range(5, 15);
-                    float fireRate = Random.Range(1f, 3f);
-                    _gunBoardController.SpawnGun(r, c, color, bullets, fireRate);
-                }
-            }
         }
 
         public void OnWin()

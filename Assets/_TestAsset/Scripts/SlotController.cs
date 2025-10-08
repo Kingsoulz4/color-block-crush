@@ -10,12 +10,15 @@ namespace ColorBlockCrush
         [SerializeField] private int _maxSlots = 5;
         [SerializeField] private Vector3 _slotStartPosition = new Vector3(-2f, 0f, 0);
         [SerializeField] private float _slotSpacing = 1f;
+        [SerializeField] private GameObject slotItemPrb;
 
         private List<Gun> _gunsInSlots;
 
         public Action<Gun> OnGunAddedToSlot;
         public Action<Gun> OnGunRemovedFromSlot;
         public Action OnLoseConditionMet;
+
+        public GameObject SlotItem { get => slotItemPrb; }
 
         private void Awake()
         {
@@ -25,6 +28,17 @@ namespace ColorBlockCrush
         public void Initialize()
         {
             _gunsInSlots.Clear();
+            SpawnSlotItem();
+        }
+
+        private void SpawnSlotItem()
+        {
+            for (int i = 0; i < _maxSlots; i++)
+            {
+                Vector3 slotPos = _slotStartPosition + new Vector3(i * _slotSpacing, 0, 0);
+                var slotItem = Instantiate(slotItemPrb);
+                slotItem.transform.position = slotPos;
+            }
         }
 
         public bool CanPlaceGuns(int count)

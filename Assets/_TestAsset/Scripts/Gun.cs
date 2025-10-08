@@ -14,7 +14,8 @@ namespace ColorBlockCrush
         public int BulletCount { get; private set; }
         public ColorType Color { get; private set; }
         public float FireRate { get; private set; }
-        public Vector2Int GridPosition { get; set; }
+        public int ColumnIndex { get; set; }
+        public bool IsFrontRow { get; set; }
 
         public List<Gun> ConnectedGuns { get; private set; }
 
@@ -36,6 +37,7 @@ namespace ColorBlockCrush
             BulletCount = bulletCount;
             FireRate = fireRate;
             _nextFireTime = 0f;
+            IsFrontRow = false;
 
             UpdateVisuals();
         }
@@ -48,13 +50,13 @@ namespace ColorBlockCrush
         public bool CanPushToSlot()
         {
             if (!IsConnectedGroup())
-                return GridPosition.x == 0;
+                return IsFrontRow;
 
-            if (GridPosition.x != 0) return false;
+            if (!IsFrontRow) return false;
 
             foreach (Gun gun in ConnectedGuns)
             {
-                if (gun.GridPosition.x != 0) return false;
+                if (!gun.IsFrontRow) return false;
             }
 
             return true;
