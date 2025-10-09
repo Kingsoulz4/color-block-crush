@@ -34,7 +34,7 @@ namespace ColorBlockCrush
 
         private int _activeAnimations = 0;
 
-        public void Initialize()
+        public void Init()
         {
             EndRow = 0;
 

@@ -32,17 +32,6 @@ namespace ColorBlockCrush
                 Vector3 inputPosition = Input.mousePosition;
                 DetectAndTapGun(inputPosition);
             }
-
-            // Touch input for mobile
-            if (Input.touchCount > 0)
-            {
-                Touch touch = Input.GetTouch(0);
-
-                if (touch.phase == TouchPhase.Began)
-                {
-                    DetectAndTapGun(touch.position);
-                }
-            }
         }
 
         private void DetectAndTapGun(Vector3 screenPosition)

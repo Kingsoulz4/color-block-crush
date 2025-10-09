@@ -21,13 +21,13 @@ namespace ColorBlockCrush
 
         [Header("References")]
         [SerializeField] private Transform _gunContainer;
-        [SerializeField] private SlotController _slotController;
+        [SerializeField] private ConveyorController conveyor;
 
         private List<List<Gun>> listGunColumn = new List<List<Gun>>();
 
         public Action<Gun> OnGunTapped;
 
-        public void Initialize()
+        public void Init()
         {
             LoadGunDataByColumns(gunBoardData);
         }
@@ -64,9 +64,8 @@ namespace ColorBlockCrush
                 column * _columnSpacing, 0, row * -_rowSpacing);
 
             Gun gun = Instantiate(_gunPrefab, worldPos, Quaternion.identity, _gunContainer);
-            gun.Initialize(color, bulletCount, fireRate);
+            gun.Initialize(color, bulletCount, fireRate, column);
             gun.name = $"Gun_{column}_{row}";
-            gun.ColumnIndex = column;
             return gun;
         }
 
@@ -88,7 +87,7 @@ namespace ColorBlockCrush
             }
 
             int requiredSlots = gunsToPush.Count;
-            if (!_slotController.CanPlaceGuns(requiredSlots))
+            if (!conveyor.CanPlaceGuns(requiredSlots))
             {
                 Debug.Log("Not enough slots available");
                 return;
@@ -96,7 +95,7 @@ namespace ColorBlockCrush
 
             gunsToPush.Sort((a, b) => a.ColumnIndex.CompareTo(b.ColumnIndex));
 
-            _slotController.PushGuns(gunsToPush);
+            conveyor.PushGuns(gunsToPush);
 
             foreach (Gun g in gunsToPush)
             {
@@ -111,7 +110,7 @@ namespace ColorBlockCrush
         private bool CanTapGun(Gun gun)
         {
             if (gun == null) return false;
-            return gun.CanPushToSlot();
+            return gun.CanPushToConveyor();
         }
 
         private void RemoveGunFromColumn(Gun gun)

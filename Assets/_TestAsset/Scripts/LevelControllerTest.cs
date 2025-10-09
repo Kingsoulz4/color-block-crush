@@ -2,15 +2,13 @@ using UnityEngine;
 
 namespace ColorBlockCrush
 {
-    public class LevelControllerTest : MonoBehaviour
+    public class LevelControllerTest : SingletonMono<LevelControllerTest>
     {
-        public static LevelControllerTest Instance { get; private set; }
-
         [Header("Controllers")]
-        [SerializeField] private BlockBoardController _blockBoardController;
-        [SerializeField] private GunBoardController _gunBoardController;
-        [SerializeField] private SlotController _slotController;
-        //[SerializeField] private AttackManager _attackManager;
+        [SerializeField] private BlockBoardController blockBoardController;
+        [SerializeField] private GunBoardController gunBoardController;
+        [SerializeField] private SlotController slotController;
+        [SerializeField] private ConveyorController conveyorController;
 
         public enum GameState
         {
@@ -22,18 +20,6 @@ namespace ColorBlockCrush
 
         public GameState CurrentState { get; private set; }
 
-        private void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
-
         private void Start()
         {
             InitializeGame();
@@ -43,9 +29,10 @@ namespace ColorBlockCrush
         {
             CurrentState = GameState.Idle;
 
-            _blockBoardController.Initialize();
-            _gunBoardController.Initialize();
-            _slotController.Initialize();
+            blockBoardController.Init();
+            gunBoardController.Init();
+            slotController.Init();
+            conveyorController.Init();
 
             RegisterEvents();
             StartGame();
@@ -53,8 +40,8 @@ namespace ColorBlockCrush
 
         private void RegisterEvents()
         {
-            _blockBoardController.OnBoardCleared += OnWin;
-            _slotController.OnLoseConditionMet += OnLose;
+            blockBoardController.OnBoardCleared += OnWin;
+            slotController.OnLoseConditionMet += OnLose;
         }
 
         private void StartGame()
@@ -72,7 +59,7 @@ namespace ColorBlockCrush
                 {
                     ColorType color = (ColorType)(Random.Range(0, 5));
                     int hp = Random.Range(1, 4);
-                    _blockBoardController.SpawnBlock(r, c, BlockType.Normal, color, hp, false, true);
+                    blockBoardController.SpawnBlock(r, c, BlockType.Normal, color, hp, false, true);
                 }
             }
 

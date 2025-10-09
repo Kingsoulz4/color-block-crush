@@ -1,7 +1,9 @@
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Splines;
 
 namespace ColorBlockCrush
 {
@@ -10,6 +12,11 @@ namespace ColorBlockCrush
         [Header("Visual")]
         [SerializeField] private MeshRenderer _meshRenderer;
         [SerializeField] private TextMeshPro _bulletCountText;
+        [SerializeField] private SplineAnimate splineAnimate;
+
+        private float _nextFireTime;
+        private bool isFireFirstTime = false;
+        private Tween moveConveyorTween;
 
         public int BulletCount { get; private set; }
         public ColorType Color { get; private set; }
@@ -20,24 +27,23 @@ namespace ColorBlockCrush
         public List<Gun> ConnectedGuns { get; private set; }
 
         public Block CurrentTarget { get; set; }
-        public int BulletsReservedForTarget { get; set; }
-        private float _nextFireTime;
 
         public Action<Gun> OnGunFired;
         public Action<Gun> OnGunEmpty;
 
-        private void Awake()
+        public void Initialize(ColorType color, int bulletCount, float fireRate, int column)
         {
+            OnGunFired = null;
+            OnGunEmpty = null;
+            CurrentTarget = null;
             ConnectedGuns = new List<Gun>();
-        }
-
-        public void Initialize(ColorType color, int bulletCount, float fireRate)
-        {
             Color = color;
             BulletCount = bulletCount;
             FireRate = fireRate;
+            ColumnIndex = column;
             _nextFireTime = 0f;
             IsFrontRow = false;
+            isFireFirstTime = false;
 
             UpdateVisuals();
         }
@@ -47,7 +53,7 @@ namespace ColorBlockCrush
             return ConnectedGuns.Count > 0;
         }
 
-        public bool CanPushToSlot()
+        public bool CanPushToConveyor()
         {
             if (!IsConnectedGroup())
                 return IsFrontRow;
@@ -62,10 +68,6 @@ namespace ColorBlockCrush
             return true;
         }
 
-        public int GetRequiredSlots()
-        {
-            return IsConnectedGroup() ? (ConnectedGuns.Count + 1) : 1;
-        }
 
         public bool CanFire()
         {
@@ -78,26 +80,49 @@ namespace ColorBlockCrush
         {
             if (!CanFire()) return;
 
+            RotateToBoard(CurrentTarget.transform);
             BulletCount--;
             _nextFireTime = Time.time + (1f / FireRate);
 
             UpdateBulletCountDisplay();
             OnGunFired?.Invoke(this);
 
-            if (BulletCount == 0 || BulletsReservedForTarget <= 0)
+            if (BulletCount == 0)
             {
                 CurrentTarget = null;
-                BulletsReservedForTarget = 0;
+                OnGunEmpty?.Invoke(this);
+            }
+        }
 
-                if (BulletCount == 0)
-                {
-                    OnGunEmpty?.Invoke(this);
-                }
+        private void RotateToBoard(Transform target)
+        {
+            if (!isFireFirstTime)
+            {
+                isFireFirstTime = true;
             }
             else
             {
-                BulletsReservedForTarget--;
+                return;
             }
+
+            Vector3 direction = target.position - transform.position;
+            direction.y = 0;
+
+            float absX = Mathf.Abs(direction.x);
+            float absZ = Mathf.Abs(direction.z);
+
+            float targetAngle;
+
+            if (absX > absZ)
+            {
+                targetAngle = direction.x > 0 ? 90f : -90f; // Right : Left
+            }
+            else
+            {
+                targetAngle = direction.z > 0 ? 0f : 180f; // Forward : Back
+            }
+
+            transform.rotation = Quaternion.Euler(0, targetAngle, 0);
         }
 
         public Vector3 GetSlotPosition()
@@ -136,5 +161,24 @@ namespace ColorBlockCrush
                 default: return UnityEngine.Color.white;
             }
         }
+
+        #region Move
+        public void MoveToConeyor(Vector3 endPos)
+        {
+            splineAnimate.Alignment = SplineAnimate.AlignmentMode.SplineElement;
+            Sequence moveToConeyorSq = null;
+            moveConveyorTween = moveToConeyorSq.Append(transform.DOJump(endPos, 1, 1, 0.3f));
+
+            moveConveyorTween.OnComplete(() =>
+            {
+                splineAnimate.Play();
+            });
+        }
+
+        public void Destroy()
+        {
+
+        }
+        #endregion
     }
 }

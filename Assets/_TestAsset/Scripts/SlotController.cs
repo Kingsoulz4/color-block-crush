@@ -25,7 +25,7 @@ namespace ColorBlockCrush
             _gunsInSlots = new List<Gun>();
         }
 
-        public void Initialize()
+        public void Init()
         {
             _gunsInSlots.Clear();
             SpawnSlotItem();
@@ -56,8 +56,6 @@ namespace ColorBlockCrush
                 Vector3 slotPos = _slotStartPosition + new Vector3(slotIndex * _slotSpacing, 0, 0);
                 gun.transform.position = slotPos;
 
-                gun.OnGunEmpty += OnGunEmpty;
-
                 OnGunAddedToSlot?.Invoke(gun);
             }
         }
@@ -66,7 +64,6 @@ namespace ColorBlockCrush
         {
             if (_gunsInSlots.Remove(gun))
             {
-                gun.OnGunEmpty -= OnGunEmpty;
                 OnGunRemovedFromSlot?.Invoke(gun);
 
                 RepositionGuns();
@@ -81,12 +78,6 @@ namespace ColorBlockCrush
                 Vector3 slotPos = _slotStartPosition + new Vector3(i * _slotSpacing, 0, 0);
                 _gunsInSlots[i].transform.position = slotPos;
             }
-        }
-
-        private void OnGunEmpty(Gun gun)
-        {
-            RemoveGun(gun);
-            Destroy(gun.gameObject);
         }
 
         public void CheckLoseCondition()
