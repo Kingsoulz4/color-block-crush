@@ -1,6 +1,7 @@
 using SFB;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ColorBlockCrush.Tools
 {
@@ -15,6 +16,7 @@ namespace ColorBlockCrush.Tools
         public Texture2D inputTexture2D;
         public ColorType[,] currentColorArray;
         public int[] currentPixelCountByColor;
+        public Canvas canvas;
         
         [SerializeField] private LevelConfig currentLevelConfig;
 
@@ -50,6 +52,20 @@ namespace ColorBlockCrush.Tools
             #endregion
             
             view.ButtonChooseImage.onClick.AddListener(OpenImageFileBrowser);
+
+            #region Tank
+
+            for (int i = 0; i < view.tankLineViews.Count; i++)
+            {
+                int index = i;
+                view.tankLineViews[i].buttonAddElement.onClick.RemoveAllListeners();
+                view.tankLineViews[i].buttonAddElement.onClick.AddListener(() =>
+                {
+                    AddElementToLine(index);
+                });
+            }
+
+            #endregion
         }
 
         private void InitEvents()

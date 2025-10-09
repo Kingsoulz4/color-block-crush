@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
@@ -22,5 +23,8 @@ namespace ColorBlockCrush.Tools
         [Header("Choose Image Area")]
         public Button ButtonChooseImage;
         public TextMeshProUGUI TruePictureImageTxt;
+        
+        [Header("Tank")]
+        public List<TankLineEditorView> tankLineViews;
     }
 }
