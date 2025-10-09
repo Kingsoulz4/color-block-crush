@@ -14,6 +14,7 @@ namespace ColorBlockCrush
         [SerializeField] private SplineAnimate splineAnimate;
         private Gun myGun;
         public SplineAnimate SplineAnimate { get => splineAnimate; set => splineAnimate = value; }
+        public Gun MyGun { get => myGun; set => myGun = value; }
 
         public void Init()
         {
@@ -36,16 +37,26 @@ namespace ColorBlockCrush
 
         private Vector3 originRotation = new Vector3(0, -90, 0);
         private Vector3 targetRotation = Vector3.zero;
+        Sequence moveToConveyorSq;
         public void MoveToConeyor(Vector3 endPos, Action callback = null)
         {
-            Sequence moveToConeyorSq = DOTween.Sequence();
+            if (moveToConveyorSq != null && moveToConveyorSq.IsPlaying())
+            {
+                moveToConveyorSq.Kill();
+            }
+            else
+            {
+                moveToConveyorSq = DOTween.Sequence();
+            }
 
-            moveToConeyorSq.Append(transform.DOMove(endPos, 0.2f)).OnComplete(() =>
+            moveToConveyorSq.Append(transform.DOMove(endPos, 0.2f)).OnComplete(() =>
             {
                 callback?.Invoke();
             });
-            moveToConeyorSq.Join(model.DORotate(targetRotation, 0.2f));
-            moveToConeyorSq.SetId(this);
+
+            moveToConveyorSq.Join(model.DORotate(targetRotation, 0.2f));
+            moveToConveyorSq.SetId(this);
+            moveToConveyorSq.Play();
         }
 
         public void Move()
