@@ -13,7 +13,8 @@ public class Constant
 
     public class Tag
     {
-        
+        public const string GUN = "Gun";
+        public const string BULLET = "Bullet";
     }
 
     public class PlayerPrefs

@@ -20,7 +20,7 @@ public class ConveyorController : MonoBehaviour
     [SerializeField] private float spaceOffsetX = 0.3f; // Khoảng cách giữa các tray
 
     [Header("Animation")]
-    [SerializeField] private float shiftDuration = 0.3f;
+    [SerializeField] private float shiftDuration = 0.2f;
     [SerializeField] private Ease shiftEase = Ease.OutQuad;
 
     public SplineContainer splineContainer;
@@ -112,12 +112,9 @@ public class ConveyorController : MonoBehaviour
 
     private void OnGunEmpty(Gun gun)
     {
-        // Add tray về bên TRÁI (đầu list)
         if (gun.TrayItem != null)
         {
-            trayItemsFree.Insert(0, gun.TrayItem);
-            gun.TrayItem.transform.DOLocalMove(GetTrayPosition(0), shiftDuration).SetEase(shiftEase);
-            ShiftTraysToRight();
+            MoveTrayBack(gun.TrayItem);
         }
 
         RemoveTrayItem(gun.TrayItem);
@@ -146,6 +143,21 @@ public class ConveyorController : MonoBehaviour
     private Vector3 GetTrayPosition(int index)
     {
         return startPosition + new Vector3(index * spaceOffsetX, 0, 0);
+    }
+
+    public bool MoveTrayBack(TrayItem tray)
+    {
+        if (trayItemsFree.Count >= maxSlots)
+        {
+            Debug.LogWarning("List đã đầy!");
+            return false;
+        }
+
+        tray.transform.SetParent(spawnParent);
+        trayItemsFree.Insert(0, tray);
+        RemoveTrayItem(tray);
+        tray.ResetTray(GetTrayPosition(0), () => { ShiftTraysToRight(); });
+        return true;
     }
 
     public TrayItem SpawnTrayAtLeft()

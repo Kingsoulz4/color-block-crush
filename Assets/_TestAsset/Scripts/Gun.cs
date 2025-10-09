@@ -20,6 +20,8 @@ namespace ColorBlockCrush
         private TrayItem trayItem;
 
         public int BulletCount { get; private set; }
+        public bool isMoving { get; private set; }
+        public bool isOnboard { get; private set; }
         public ColorType Color { get; private set; }
         public float FireRate { get; private set; }
         public int ColumnIndex { get; set; }
@@ -46,6 +48,8 @@ namespace ColorBlockCrush
             _nextFireTime = 0f;
             IsFrontRow = false;
             isFireFirstTime = false;
+            isMoving = false;
+            isMoving = true;
             UpdateVisuals();
         }
 
@@ -197,9 +201,9 @@ namespace ColorBlockCrush
         public void MoveToConeyor(Vector3 endPos, Action callback = null)
         {
             Sequence moveToConeyorSq = DOTween.Sequence();
-
             moveConveyorTween = moveToConeyorSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).OnComplete(() =>
             {
+                isOnboard = false;
                 callback?.Invoke();
             });
         }

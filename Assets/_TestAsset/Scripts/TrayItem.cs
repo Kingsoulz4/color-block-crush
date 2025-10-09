@@ -12,16 +12,47 @@ namespace ColorBlockCrush
         [SerializeField] private Transform gunParent;
         [SerializeField] private Transform model;
         [SerializeField] private SplineAnimate splineAnimate;
+        [SerializeField] private float moveOutDuration = 0.2f;
+        [SerializeField] private float moveInDuration = 0.2f;
+        [SerializeField] private Ease shiftEase = Ease.OutQuad;
+
         private Gun myGun;
+        private Vector3 originRotation = new Vector3(0, 0, -90);
+        private Vector3 targetRotation = Vector3.zero;
+        private Sequence moveToConveyorSq;
+
         public SplineAnimate SplineAnimate { get => splineAnimate; set => splineAnimate = value; }
         public Gun MyGun { get => myGun; set => myGun = value; }
 
         public void Init()
         {
             model.transform.Rotate(originRotation);
-            myGun = null;
-            SplineAnimate = null;
             DOTween.Kill(this);
+        }
+
+        public void ResetTray(Vector3 endPos, Action callback = null)
+        {
+            splineAnimate.Pause();
+            myGun = null;
+            SplineAnimate.Container = null;
+
+            if (moveToConveyorSq != null && moveToConveyorSq.IsPlaying())
+            {
+                moveToConveyorSq.Kill();
+            }
+            else
+            {
+                moveToConveyorSq = DOTween.Sequence();
+            }
+
+            moveToConveyorSq.Append(transform.DOLocalMove(endPos, moveInDuration).SetEase(shiftEase));
+            moveToConveyorSq.Join(model.DORotate(originRotation, moveInDuration)).OnComplete(() =>
+            {
+                transform.DORotate(targetRotation, 0).SetId(this);
+                model.DORotate(originRotation, 0).SetId(this);
+                callback?.Invoke();
+            });
+            moveToConveyorSq.Play();
         }
 
         public void SetChild(Gun gun)
@@ -30,14 +61,6 @@ namespace ColorBlockCrush
             gun.transform.SetParent(gunParent);
         }
 
-        public void SetSplineContainer(SplineContainer splineContainer)
-        {
-            splineAnimate.Container = splineContainer;
-        }
-
-        private Vector3 originRotation = new Vector3(0, -90, 0);
-        private Vector3 targetRotation = Vector3.zero;
-        Sequence moveToConveyorSq;
         public void MoveToConeyor(Vector3 endPos, Action callback = null)
         {
             if (moveToConveyorSq != null && moveToConveyorSq.IsPlaying())
@@ -49,12 +72,12 @@ namespace ColorBlockCrush
                 moveToConveyorSq = DOTween.Sequence();
             }
 
-            moveToConveyorSq.Append(transform.DOMove(endPos, 0.2f)).OnComplete(() =>
+            moveToConveyorSq.Append(transform.DOMove(endPos, moveOutDuration)).OnComplete(() =>
             {
                 callback?.Invoke();
             });
 
-            moveToConveyorSq.Join(model.DORotate(targetRotation, 0.2f));
+            moveToConveyorSq.Join(model.DORotate(targetRotation, moveOutDuration));
             moveToConveyorSq.SetId(this);
             moveToConveyorSq.Play();
         }

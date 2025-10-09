@@ -19,7 +19,7 @@ namespace ColorBlockCrush
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Gun"))
+            if (other.CompareTag(Constant.Tag.GUN))
             {
                 if (TryGetComponent(out Gun gun))
                 {

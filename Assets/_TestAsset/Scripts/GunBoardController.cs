@@ -71,7 +71,6 @@ namespace ColorBlockCrush
 
         public void OnTapGun(Gun gun)
         {
-            if (gun == null) return;
             if (!CanTapGun(gun)) return;
 
             List<Gun> gunsToPush = new List<Gun>();
@@ -109,7 +108,7 @@ namespace ColorBlockCrush
 
         private bool CanTapGun(Gun gun)
         {
-            if (gun == null) return false;
+            if (gun == null/*|| !gun.isOnboard*/) return false;
             return gun.CanPushToConveyor();
         }
 
