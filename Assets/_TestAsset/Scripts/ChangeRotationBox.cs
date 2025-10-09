@@ -5,16 +5,15 @@ using UnityEngine;
 
 namespace ColorBlockCrush
 {
+    public enum RotationDirection
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
     public class ChangeRotationBox : MonoBehaviour
     {
-        enum RotationDirection
-        {
-            Up,
-            Down,
-            Left,
-            Right
-        }
-
         [SerializeField] RotationDirection direction;
         [SerializeField] float rotateDuration;
 
@@ -22,25 +21,10 @@ namespace ColorBlockCrush
         {
             if (other.CompareTag("Gun"))
             {
-                Vector3 currentRotation = other.transform.eulerAngles;
-                Vector3 newRotation = currentRotation;
-                switch (direction)
+                if (TryGetComponent(out Gun gun))
                 {
-                    case RotationDirection.Up:
-                        newRotation = new Vector3(0, 0, 0);
-                        break;
-                    case RotationDirection.Down:
-                        newRotation = new Vector3(0, 180, 0);
-                        break;
-                    case RotationDirection.Left:
-                        newRotation = new Vector3(0, -90, 0);
-                        break;
-                    case RotationDirection.Right:
-                        newRotation = new Vector3(0, 90, 0);
-                        break;
+                    gun.Turn(direction, rotateDuration);
                 }
-
-                other.transform.DORotate(newRotation, rotateDuration);
             }
         }
     }

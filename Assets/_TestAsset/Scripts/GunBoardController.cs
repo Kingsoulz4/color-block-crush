@@ -64,7 +64,7 @@ namespace ColorBlockCrush
                 column * _columnSpacing, 0, row * -_rowSpacing);
 
             Gun gun = Instantiate(_gunPrefab, worldPos, Quaternion.identity, _gunContainer);
-            gun.Initialize(color, bulletCount, fireRate, column);
+            gun.Init(color, bulletCount, fireRate, column);
             gun.name = $"Gun_{column}_{row}";
             return gun;
         }

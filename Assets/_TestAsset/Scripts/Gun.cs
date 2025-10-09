@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Splines;
+using static UnityEngine.GridBrushBase;
 
 namespace ColorBlockCrush
 {
@@ -12,11 +13,11 @@ namespace ColorBlockCrush
         [Header("Visual")]
         [SerializeField] private MeshRenderer _meshRenderer;
         [SerializeField] private TextMeshPro _bulletCountText;
-        [SerializeField] private SplineAnimate splineAnimate;
 
         private float _nextFireTime;
         private bool isFireFirstTime = false;
         private Tween moveConveyorTween;
+        private TrayItem trayItem;
 
         public int BulletCount { get; private set; }
         public ColorType Color { get; private set; }
@@ -27,11 +28,12 @@ namespace ColorBlockCrush
         public List<Gun> ConnectedGuns { get; private set; }
 
         public Block CurrentTarget { get; set; }
+        public TrayItem TrayItem { get => trayItem; set => trayItem = value; }
 
         public Action<Gun> OnGunFired;
         public Action<Gun> OnGunEmpty;
 
-        public void Initialize(ColorType color, int bulletCount, float fireRate, int column)
+        public void Init(ColorType color, int bulletCount, float fireRate, int column)
         {
             OnGunFired = null;
             OnGunEmpty = null;
@@ -44,7 +46,6 @@ namespace ColorBlockCrush
             _nextFireTime = 0f;
             IsFrontRow = false;
             isFireFirstTime = false;
-
             UpdateVisuals();
         }
 
@@ -125,6 +126,34 @@ namespace ColorBlockCrush
             transform.rotation = Quaternion.Euler(0, targetAngle, 0);
         }
 
+        public void Turn(RotationDirection direction, float rotateDuration)
+        {
+            if (isFireFirstTime)
+            {
+                return;
+            }
+
+            Vector3 currentRotation = transform.eulerAngles;
+            Vector3 newRotation = currentRotation;
+            switch (direction)
+            {
+                case RotationDirection.Up:
+                    newRotation = new Vector3(0, 0, 0);
+                    break;
+                case RotationDirection.Down:
+                    newRotation = new Vector3(0, 180, 0);
+                    break;
+                case RotationDirection.Left:
+                    newRotation = new Vector3(0, -90, 0);
+                    break;
+                case RotationDirection.Right:
+                    newRotation = new Vector3(0, 90, 0);
+                    break;
+            }
+
+            transform.DORotate(newRotation, rotateDuration);
+        }
+
         public Vector3 GetSlotPosition()
         {
             return transform.position;
@@ -162,16 +191,16 @@ namespace ColorBlockCrush
             }
         }
 
-        #region Move
-        public void MoveToConeyor(Vector3 endPos)
-        {
-            splineAnimate.Alignment = SplineAnimate.AlignmentMode.SplineElement;
-            Sequence moveToConeyorSq = null;
-            moveConveyorTween = moveToConeyorSq.Append(transform.DOJump(endPos, 1, 1, 0.3f));
+        #region Move spline
 
-            moveConveyorTween.OnComplete(() =>
+      
+        public void MoveToConeyor(Vector3 endPos, Action callback = null)
+        {
+            Sequence moveToConeyorSq = DOTween.Sequence();
+
+            moveConveyorTween = moveToConeyorSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).OnComplete(() =>
             {
-                splineAnimate.Play();
+                callback?.Invoke();
             });
         }
 
