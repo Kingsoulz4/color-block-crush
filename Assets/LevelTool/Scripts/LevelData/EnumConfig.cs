@@ -24,7 +24,8 @@ namespace ColorBlockCrush.Tools
         Grey = 11,
         Purple = 12,
         BabyPink = 13,
-        RedWine = 14
+        RedWine = 14,
+        Teal = 15
     }
 
     public enum TankLineElementType

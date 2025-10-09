@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ColorBlockCrush.Tools
 {
-    public class LevelEditorController : MonoBehaviour
+    public partial class LevelEditorController : MonoBehaviour
     {
         [Header("MVC")] 
         [SerializeField] private LevelEditorModel model;
@@ -21,14 +21,44 @@ namespace ColorBlockCrush.Tools
         private void Awake()
         {
             InitButtons();
+            InitEvents();
         }
 
         private void InitButtons()
         {
+            #region Map
+
+            view.HeightMapSize.text = mapHeight.ToString();
+            view.WidthMapSize.text = mapWidth.ToString();
+            
+            view.HeightMapSize.onEndEdit.AddListener(ValidateMapWHeight);
+            view.WidthMapSize.onEndEdit.AddListener(ValidateMapWidth);
+            view.buttonCreateMap.onClick.AddListener(CreateMapEmpty);
+            
+            view.buttonClearAll.onClick.AddListener(ClearAllColor);
+            view.buttonSetColor.onClick.AddListener(SetColorSelected);
+            view.buttonDel.onClick.AddListener(DeleteColorSelected);
+
+            for (int i = 0; i < buttonColorChooses.Count; i++)
+            {
+                buttonColorChooses[i].Init(UpdateCurrentColorChoose);
+            }
+            UpdateCurrentColorChoose(ColorType.Pink);
+            
+            view.dragCellMapSelection.enabled = false;
+            
+            #endregion
+            
             view.ButtonChooseImage.onClick.AddListener(OpenImageFileBrowser);
         }
+
+        private void InitEvents()
+        {
+            onUpdateSelection = UpdateColorGridCell;
+            onDeleteSelection = DeleteColorGridCell;
+        }
         
-        #region Choose Input Image
+        #region Input Image
 
         public void OpenImageFileBrowser()
         {
@@ -60,6 +90,8 @@ namespace ColorBlockCrush.Tools
             if (inputTexture2D != null)
             {
                 Debug.Log("Image loaded and set as Sprite.");
+                currentPixelCountByColor = new int[inputTexture2D.width * inputTexture2D.height];
+                currentColorArray = ImageUtils.QuantizeTexture(inputTexture2D, currentPixelCountByColor);
 
                 Texture2D resultTex = ImageUtils.GenerateTextureFromColorArray(currentColorArray);
                 // Convert Texture2D to Sprite
@@ -70,12 +102,15 @@ namespace ColorBlockCrush.Tools
                 );
 
                 //Set input image info
+                currentLevelConfig = new LevelConfig();
                 currentLevelConfig.imageConfig = new InputImageConfig();
                 currentLevelConfig.imageConfig.SavePath = inputTexturePath;
                 currentLevelConfig.imageConfig.ColorFlatMap = ImageUtils.Flatten2DArray(currentColorArray,
                     out currentLevelConfig.imageConfig.ImageSize);
                 currentLevelConfig.imageConfig.pixelCountByColor = currentPixelCountByColor;
                 //UpdateAllowColor();
+                ClearAllMap();
+                CreateMapByPicture();
             }
         }
         

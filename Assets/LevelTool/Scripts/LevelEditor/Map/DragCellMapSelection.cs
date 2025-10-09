@@ -1,0 +1,474 @@
+using UnityEngine.EventSystems;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+using System.Linq;
+using UnityEngine.UI;
+using Sirenix.OdinInspector;
+
+namespace ColorBlockCrush.Tools
+{
+    public class DragCellMapSelection : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerMoveHandler
+    {
+        [Header("Grid & Camera")] public RectTransform gridParent;
+        public Camera uiCamera;
+
+        [Header("Cells")] public List<GridCellMapView> GridCellList;
+        public List<GridCellMapView> CurrentlySelectedCells = new List<GridCellMapView>();
+        public List<GridCellMapView> FinalSelectedCells = new List<GridCellMapView>();
+
+        [Header("Grid Size")] 
+        [SerializeField] private int rows = 32;
+        [SerializeField] private int cols = 32;
+
+        private bool isDragging = false;
+        
+        private Action<List<GridCellMapView>> onUpdateSelection;
+        private Action<List<GridCellMapView>> onDeleteSelection;
+
+        private GridLayoutGroup glg;
+        private RectOffset pad;
+        private Vector2 cellSize, spacing;
+        private float stepX, stepY;
+        private Vector2 originLocal;
+
+        private GridCellMapView[,] grid;
+        private Dictionary<GridCellMapView, Vector2Int> cellToRC;
+
+        private bool hasLastPointerRC = false;
+        private Vector2Int lastPointerRC;
+
+        [SerializeField] private List<GridCellMapView> selectionOrder = new List<GridCellMapView>();
+
+        private enum SelectionFilter
+        {
+            None,
+            NumberedOnly,
+            UnnumberedOnly
+        }
+
+        private SelectionFilter filterMode = SelectionFilter.None;
+
+        [SerializeField] private readonly SortedSet<int> freedIndices = new SortedSet<int>();
+
+        private int nextDrawIndexCounter = 0;
+
+        // ===================== Init =====================
+        public void Init(int width, int height, RectTransform gridContainer, List<GridCellMapView> gridCellList,
+            Action<List<GridCellMapView>> onUpdateSelection, Action<List<GridCellMapView>> onDeleteSelection)
+        {
+            rows = height;
+            cols = width;
+            gridParent = gridContainer;
+            GridCellList = gridCellList;
+            this.onUpdateSelection = onUpdateSelection;
+            this.onDeleteSelection = onDeleteSelection;
+
+            CacheLayoutParams();
+            BuildGridIndex();
+            RecomputeIndexState();
+        }
+
+        private void CacheLayoutParams()
+        {
+            glg = gridParent.GetComponent<GridLayoutGroup>();
+            if (glg == null) throw new Exception("GridLayoutGroup not found on gridParent.");
+
+            pad = glg.padding;
+            cellSize = glg.cellSize;
+            spacing = glg.spacing;
+            stepX = cellSize.x + spacing.x;
+            stepY = cellSize.y + spacing.y;
+
+            // Origin theo corner
+            var r = gridParent.rect;
+            switch (glg.startCorner)
+            {
+                case GridLayoutGroup.Corner.LowerLeft:
+                    originLocal = new Vector2(r.xMin + pad.left, r.yMin + pad.bottom);
+                    break;
+                case GridLayoutGroup.Corner.UpperLeft:
+                    originLocal = new Vector2(r.xMin + pad.left, r.yMax - pad.top - cellSize.y);
+                    break;
+                case GridLayoutGroup.Corner.LowerRight:
+                    originLocal = new Vector2(r.xMax - pad.right - cellSize.x, r.yMin + pad.bottom);
+                    break;
+                case GridLayoutGroup.Corner.UpperRight:
+                    originLocal = new Vector2(r.xMax - pad.right - cellSize.x, r.yMax - pad.top - cellSize.y);
+                    break;
+            }
+        }
+
+        private void BuildGridIndex()
+        {
+            grid = new GridCellMapView[rows, cols];
+            cellToRC = new Dictionary<GridCellMapView, Vector2Int>(GridCellList.Count);
+
+            foreach (var c in GridCellList)
+            {
+                Rect rc = LocalRectOf(c.rectTransform);
+                Vector2 center = rc.center;
+                if (LocalToRC(center, out int row, out int col))
+                {
+                    grid[row, col] = c;
+                    c.SetRowAndCol(col, row);
+                    cellToRC[c] = new Vector2Int(row, col);
+                }
+            }
+        }
+
+        public void RecomputeIndexState()
+        {
+            freedIndices.Clear();
+            int maxUsed = -1;
+            var used = new HashSet<int>();
+
+            foreach (var cell in GridCellList)
+            {
+                if (cell.drawIndex >= 0)
+                {
+                    used.Add(cell.drawIndex);
+                    if (cell.drawIndex > maxUsed) maxUsed = cell.drawIndex;
+                }
+            }
+
+            nextDrawIndexCounter = maxUsed + 1;
+
+            for (int i = 0; i < maxUsed; i++)
+                if (!used.Contains(i))
+                    freedIndices.Add(i);
+        }
+
+        // ===================== Pointer =====================
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            var cam = eventData.pressEventCamera; // Overlay => null
+            Debug.Log("Pointer down");
+            
+            if (!ScreenToRC(eventData.position, cam, out var rcStart))
+            {
+                Debug.Log("Not Choose");
+                if (FinalSelectedCells.Count > 0)
+                {
+                    ClearOnlySelection();
+                }
+                isDragging = false;
+                return;
+            }
+            
+            var startCell = GetCell(rcStart.x, rcStart.y);
+            if (startCell == null)
+            {
+                Debug.Log("Not Choose 2");
+                if (FinalSelectedCells.Count > 0)
+                {
+                    ClearOnlySelection();
+                }
+
+                isDragging = false;
+                return;
+            }
+
+            filterMode = (startCell.drawIndex != -1) ? SelectionFilter.NumberedOnly : SelectionFilter.UnnumberedOnly;
+            
+            // if (AcceptByMode(startCell))
+            // {
+                CurrentlySelectedCells.Clear();
+                //selectionOrder.Clear();
+                //FinalSelectedCells = FinalSelectedCells.Where(c => c != null && c.IsSelected).ToList();
+                PushIfNew(startCell);
+            
+                hasLastPointerRC = true;
+                lastPointerRC = rcStart;
+                isDragging = true;
+            //}
+            // else
+            // {
+            //     isDragging = false;
+            // }
+        }
+
+        public void OnPointerMove(PointerEventData eventData)
+        {
+            if (!isDragging) return;
+
+            var cam = eventData.pressEventCamera;
+            if (!ScreenToRC(eventData.position, cam, out var currRC))
+            {
+                hasLastPointerRC = false;
+                return;
+            }
+
+            if (!hasLastPointerRC)
+            {
+                hasLastPointerRC = true;
+                lastPointerRC = currRC;
+            }
+
+            foreach (var step in Supercover(lastPointerRC.x, lastPointerRC.y, currRC.x, currRC.y))
+            {
+                var cell = GetCell(step.x, step.y);
+                if (cell == null) continue;
+                if (!AcceptByMode(cell)) continue;
+
+                int top = CurrentlySelectedCells.Count - 1;
+                if (top >= 0 && cell == CurrentlySelectedCells[top])
+                {
+                    continue;
+                }
+
+                if (top >= 1 && cell == CurrentlySelectedCells[top - 1])
+                {
+                    var toRemove = CurrentlySelectedCells[top];
+                    toRemove.IsSelecting = false;
+                    toRemove.UpdateSelectingColor();
+                    CurrentlySelectedCells.RemoveAt(top);
+                }
+                else if (CurrentlySelectedCells.IndexOf(cell) >= 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    PushIfNew(cell);
+                }
+            }
+
+            lastPointerRC = currRC;
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            if (!isDragging) return;
+
+            isDragging = false;
+            hasLastPointerRC = false;
+
+            foreach (var cell in CurrentlySelectedCells)
+            {
+                bool willBeSelected = !cell.IsSelected;
+                cell.IsSelected = willBeSelected;
+                cell.UpdateSelectedColor();
+
+                cell.IsSelecting = false;
+                cell.UpdateSelectingColor();
+            }
+
+            CurrentlySelectedCells.Clear();
+            UpdateSelection();
+        }
+
+        // ===================== Buttons =====================
+
+        public void OnClickSetColor()
+        {
+            onUpdateSelection?.Invoke(FinalSelectedCells);
+
+            foreach (var cellMapView in FinalSelectedCells)
+            {
+                if (cellMapView.IsSelected)
+                {
+                    cellMapView.IsSelected = false;
+                    cellMapView.UpdateSelectedColor();
+                }
+            }
+            FinalSelectedCells.Clear();
+            CurrentlySelectedCells.Clear();
+        }
+        
+        public void OnClickDeleteColor()
+        {
+            onDeleteSelection?.Invoke(FinalSelectedCells);
+
+            foreach (var cellMapView in FinalSelectedCells)
+            {
+                if (cellMapView.IsSelected)
+                {
+                    cellMapView.IsSelected = false;
+                    cellMapView.UpdateSelectedColor();
+                }
+            }
+            FinalSelectedCells.Clear();
+            CurrentlySelectedCells.Clear();
+        }
+
+        [Button]
+        public void ClearAllGrid()
+        {
+            CurrentlySelectedCells.Clear();
+            FinalSelectedCells.Clear();
+
+            for (int i = GridCellList.Count - 1; i >= 0; i--)
+            {
+                GridCellMapView gridCell = GridCellList[i];
+                GridCellList.RemoveAt(i);
+                
+                Destroy(gridCell.gameObject);
+            }
+            
+            GridCellList.Clear();
+        }
+
+        public void CLearAllColor()
+        {
+            CurrentlySelectedCells.Clear();
+            FinalSelectedCells.Clear();
+
+            foreach (var gridCellMapView in GridCellList)
+            {
+                gridCellMapView.DeleteColor();
+            }
+        }
+
+        // ===================== Utils =====================
+        private void UpdateSelection()
+        {
+            FinalSelectedCells.Clear();
+            foreach (var cell in GridCellList)
+            {
+                if (cell.IsSelected)
+                {
+                    cell.UpdateSelectedColor();
+                    FinalSelectedCells.Add(cell);
+                }
+            }
+        }
+
+        private void ClearOnlySelection()
+        {
+            foreach (var cell in FinalSelectedCells)
+            {
+                cell.IsSelected = false;
+                cell.UpdateSelectedColor();
+            }
+
+            FinalSelectedCells.Clear();
+
+            CurrentlySelectedCells.Clear();
+            //selectionOrder.Clear();
+
+            hasLastPointerRC = false;
+            filterMode = SelectionFilter.None;
+        }
+
+        private void PushIfNew(GridCellMapView cell)
+        {
+            if (!CurrentlySelectedCells.Contains(cell))
+            {
+                CurrentlySelectedCells.Add(cell);
+                cell.IsSelecting = true;
+                cell.UpdateSelectingColor();
+            }
+        }
+
+        private bool AcceptByMode(GridCellMapView cell)
+        {
+            if (cell == null) return false;
+
+            switch (filterMode)
+            {
+                case SelectionFilter.NumberedOnly: return cell.drawIndex != -1;
+                case SelectionFilter.UnnumberedOnly: return cell.drawIndex == -1;
+                default: return false;
+            }
+        }
+
+        private GridCellMapView GetCell(int row, int col)
+        {
+            if (row < 0 || col < 0 || row >= rows || col >= cols) return null;
+            return grid[row, col];
+        }
+
+        private bool ScreenToRC(Vector2 screenPos, Camera cam, out Vector2Int rc)
+        {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(gridParent, screenPos, cam, out var local);
+            if (LocalToRC(local, out int r, out int c))
+            {
+                rc = new Vector2Int(r, c);
+                return true;
+            }
+
+            rc = default;
+            return false;
+        }
+
+        private bool LocalToRC(Vector2 local, out int row, out int col)
+        {
+            float dx, dy;
+            switch (glg.startCorner)
+            {
+                case GridLayoutGroup.Corner.LowerLeft:
+                    dx = local.x - originLocal.x;
+                    dy = local.y - originLocal.y;
+                    break;
+                case GridLayoutGroup.Corner.UpperLeft:
+                    dx = local.x - originLocal.x;
+                    dy = (originLocal.y + cellSize.y) - local.y;
+                    break;
+                case GridLayoutGroup.Corner.LowerRight:
+                    dx = (originLocal.x + cellSize.x) - local.x;
+                    dy = local.y - originLocal.y;
+                    break;
+                case GridLayoutGroup.Corner.UpperRight:
+                    dx = (originLocal.x + cellSize.x) - local.x;
+                    dy = (originLocal.y + cellSize.y) - local.y;
+                    break;
+                default:
+                    dx = dy = 0f; break;
+            }
+
+            col = Mathf.FloorToInt(dx / stepX);
+            row = Mathf.FloorToInt(dy / stepY);
+
+            float rx = dx - col * stepX;
+            float ry = dy - row * stepY;
+            if (rx < 0f || ry < 0f || rx > cellSize.x || ry > cellSize.y)
+            {
+                row = col = -1;
+                return false;
+            }
+
+            if (row < 0 || col < 0 || row >= rows || col >= cols) return false;
+            return true;
+        }
+
+        private Rect LocalRectOf(RectTransform rt)
+        {
+            var corners = new Vector3[4];
+            rt.GetWorldCorners(corners); // BL, TL, TR, BR
+            for (int i = 0; i < 4; i++)
+            {
+                corners[i] = gridParent.InverseTransformPoint(corners[i]);
+            }
+            return new Rect(corners[0], corners[2] - corners[0]);
+        }
+
+        private IEnumerable<Vector2Int> Supercover(int r0, int c0, int r1, int c1)
+        {
+            int x0 = r0, y0 = c0, x1 = r1, y1 = c1;
+            int dx = Math.Abs(x1 - x0), dy = Math.Abs(y1 - y0);
+            int sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1;
+            int err = dx - dy;
+            int x = x0, y = y0;
+            yield return new Vector2Int(x, y);
+
+            while (x != x1 || y != y1)
+            {
+                int e2 = err << 1;
+                if (e2 > -dy)
+                {
+                    err -= dy;
+                    x += sx;
+                    yield return new Vector2Int(x, y);
+                }
+
+                if (e2 < dx)
+                {
+                    err += dx;
+                    y += sy;
+                    yield return new Vector2Int(x, y);
+                }
+            }
+        }
+    }
+}
