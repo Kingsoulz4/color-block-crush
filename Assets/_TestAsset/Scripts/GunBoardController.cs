@@ -71,8 +71,6 @@ namespace ColorBlockCrush
 
         public void OnTapGun(Gun gun)
         {
-            if (!CanTapGun(gun)) return;
-
             List<Gun> gunsToPush = new List<Gun>();
 
             if (gun.IsConnectedGroup())
@@ -94,7 +92,7 @@ namespace ColorBlockCrush
 
             gunsToPush.Sort((a, b) => a.ColumnIndex.CompareTo(b.ColumnIndex));
 
-            conveyor.PushGuns(gunsToPush);
+            conveyor.MoveGunIn(gunsToPush);
 
             foreach (Gun g in gunsToPush)
             {
@@ -104,12 +102,6 @@ namespace ColorBlockCrush
             }
 
             OnGunTapped?.Invoke(gun);
-        }
-
-        private bool CanTapGun(Gun gun)
-        {
-            if (gun == null/*|| !gun.isOnboard*/) return false;
-            return gun.CanPushToConveyor();
         }
 
         private void RemoveGunFromColumn(Gun gun)

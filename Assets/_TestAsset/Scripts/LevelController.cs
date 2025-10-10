@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ColorBlockCrush
 {
-    public class LevelControllerTest : SingletonMono<LevelControllerTest>
+    public class LevelController : SingletonMono<LevelController>
     {
         [Header("Controllers")]
         [SerializeField] private BlockBoardController blockBoardController;
@@ -15,10 +15,15 @@ namespace ColorBlockCrush
             Idle,
             Playing,
             Won,
-            Lost
+            Lost,
+            Home
         }
 
         public GameState CurrentState { get; private set; }
+        public BlockBoardController BlockBoardController { get => blockBoardController;}
+        public GunBoardController GunBoardController { get => gunBoardController;}
+        public SlotController SlotController { get => slotController;}
+        public ConveyorController ConveyorController { get => conveyorController;}
 
         private void Start()
         {
@@ -41,7 +46,6 @@ namespace ColorBlockCrush
         private void RegisterEvents()
         {
             blockBoardController.OnBoardCleared += OnWin;
-            slotController.OnLoseConditionMet += OnLose;
         }
 
         private void StartGame()

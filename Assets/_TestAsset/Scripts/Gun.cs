@@ -16,12 +16,11 @@ namespace ColorBlockCrush
 
         private float _nextFireTime;
         private bool isFireFirstTime = false;
-        private Tween moveConveyorTween;
         private TrayItem trayItem;
+        private GunPos gunPos;
 
         public int BulletCount { get; private set; }
         public bool isMoving { get; private set; }
-        public bool isOnboard { get; private set; }
         public ColorType Color { get; private set; }
         public float FireRate { get; private set; }
         public int ColumnIndex { get; set; }
@@ -31,12 +30,14 @@ namespace ColorBlockCrush
 
         public Block CurrentTarget { get; set; }
         public TrayItem TrayItem { get => trayItem; set => trayItem = value; }
+        public GunPos GunPos { get => gunPos; set => gunPos = value; }
 
         public Action<Gun> OnGunFired;
         public Action<Gun> OnGunEmpty;
 
         public void Init(ColorType color, int bulletCount, float fireRate, int column)
         {
+            GunPos = GunPos.ON_GUN_BOARD;
             OnGunFired = null;
             OnGunEmpty = null;
             CurrentTarget = null;
@@ -60,14 +61,18 @@ namespace ColorBlockCrush
 
         public bool CanPushToConveyor()
         {
-            if (!IsConnectedGroup())
-                return IsFrontRow;
+            if (GunPos == GunPos.ON_CONVEYOR || GunPos == GunPos.TWEEN_SORT) return false;
 
-            if (!IsFrontRow) return false;
-
-            foreach (Gun gun in ConnectedGuns)
+            if (GunPos == GunPos.ON_GUN_BOARD)
             {
-                if (!gun.IsFrontRow) return false;
+                if (!IsConnectedGroup())
+                    return IsFrontRow;
+
+
+                foreach (Gun gun in ConnectedGuns)
+                {
+                    if (!gun.IsFrontRow) return false;
+                }
             }
 
             return true;
@@ -196,16 +201,44 @@ namespace ColorBlockCrush
         }
 
         #region Move spline
-
-      
+        Tween moveToConveyorTw;
+        Tween moveToSlotTw;
+        Tween moveSortSlotTw;
         public void MoveToConeyor(Vector3 endPos, Action callback = null)
         {
-            Sequence moveToConeyorSq = DOTween.Sequence();
-            moveConveyorTween = moveToConeyorSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).OnComplete(() =>
+            Sequence moveToConveyorSq = DOTween.Sequence();
+            GunPos = GunPos.ON_CONVEYOR;
+            moveToConveyorTw = moveToConveyorSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.OutQuad).OnComplete(() =>
             {
-                isOnboard = false;
                 callback?.Invoke();
             });
+            moveToConveyorSq.SetId(this);
+        }
+
+        public void MoveToSlot(Vector3 endPos, Action callback = null)
+        {
+            Sequence moveToSlotSq = DOTween.Sequence();
+
+            GunPos = GunPos.ON_SLOT;
+            moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.OutQuad).OnComplete(() =>
+            {
+                Debug.Log("Move to slot done");
+                callback?.Invoke();
+            });
+            moveToSlotSq.Join(transform.DORotate(Vector3.zero, 0.3f));
+            moveToSlotSq.SetId(this);
+        }
+
+        public void MoveSortSlot(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
+        {
+            GunPos = GunPos.TWEEN_SORT;
+            Sequence moveSortSlotSq = DOTween.Sequence();
+
+            moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
+            {
+                GunPos = GunPos.ON_SLOT;
+            });
+            moveSortSlotSq.SetId(this);
         }
 
         public void Destroy()
@@ -213,5 +246,13 @@ namespace ColorBlockCrush
 
         }
         #endregion
+    }
+
+    public enum GunPos
+    {
+        ON_GUN_BOARD = 0,
+        ON_SLOT = 1,
+        ON_CONVEYOR = 2,
+        TWEEN_SORT = 3,
     }
 }

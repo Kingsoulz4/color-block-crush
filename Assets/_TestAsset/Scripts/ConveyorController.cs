@@ -39,7 +39,7 @@ public class ConveyorController : MonoBehaviour
         InitTray();
     }
 
-    public void PushGuns(List<Gun> guns)
+    public void MoveGunIn(List<Gun> guns)
     {
         PrepairTrayItems(guns.Count);
 
@@ -114,7 +114,7 @@ public class ConveyorController : MonoBehaviour
     {
         if (gun.TrayItem != null)
         {
-            MoveTrayBack(gun.TrayItem);
+            MoveTrayIn(gun.TrayItem);
         }
 
         RemoveTrayItem(gun.TrayItem);
@@ -145,7 +145,7 @@ public class ConveyorController : MonoBehaviour
         return startPosition + new Vector3(index * spaceOffsetX, 0, 0);
     }
 
-    public bool MoveTrayBack(TrayItem tray)
+    public bool MoveTrayIn(TrayItem tray)
     {
         if (trayItemsFree.Count >= maxSlots)
         {

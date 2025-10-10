@@ -447,6 +447,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   conveyorController: {fileID: 607245333}
+  slotController: {fileID: 1235970543}
 --- !u!1 &607245331
 GameObject:
   m_ObjectHideFlags: 0
@@ -1393,7 +1394,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1036807930}
   m_Layer: 0
-  m_Name: AttackerContainer
+  m_Name: GunContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1899,6 +1900,9 @@ MonoBehaviour:
   _slotStartPosition: {x: -4, y: 0, z: -8}
   _slotSpacing: 2
   slotItemPrb: {fileID: 2287956003456041693, guid: 0ed4f73e9a182cb4ca1885aa9b37e516, type: 3}
+  gunContainer: {fileID: 1036807930}
+  _shiftDuration: 0.2
+  _shiftEase: 6
 --- !u!1 &1339368054
 GameObject:
   m_ObjectHideFlags: 0

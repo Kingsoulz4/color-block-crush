@@ -6,7 +6,6 @@ namespace ColorBlockCrush
     {
         [Header("References")]
         [SerializeField] private Camera _camera;
-        [SerializeField] private GunBoardController _gunBoardController;
 
         [Header("Settings")]
         [SerializeField] private LayerMask _gunLayerMask;
@@ -58,10 +57,21 @@ namespace ColorBlockCrush
 
         private void OnGunClicked(Gun gun)
         {
-            if (_gunBoardController != null)
+            if (!gun.CanPushToConveyor())
             {
-                _gunBoardController.OnTapGun(gun);
+                return;
             }
+
+            if (gun.GunPos == GunPos.ON_GUN_BOARD)
+            {
+                LevelController.Instance.GunBoardController.OnTapGun(gun);
+            }
+
+            if (gun.GunPos == GunPos.ON_SLOT)
+            {
+                LevelController.Instance.SlotController.OnTapGun(gun);
+            }
+
         }
     }
 }

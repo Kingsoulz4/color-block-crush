@@ -7,17 +7,17 @@ namespace ColorBlockCrush
     public class EndPointConveyor : MonoBehaviour
     {
         [SerializeField] private ConveyorController conveyorController;
+        [SerializeField] private SlotController slotController;
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag(Constant.Tag.GUN))
             {
                 if (other.TryGetComponent(out Gun gun))
                 {
-                    conveyorController.MoveTrayBack(gun.TrayItem);
-                    gun.gameObject.SetActive(false);
+                    conveyorController.MoveTrayIn(gun.TrayItem);
+                    slotController.MoveGunIn(gun);
                 }
             }
-
         }
     }
 }
