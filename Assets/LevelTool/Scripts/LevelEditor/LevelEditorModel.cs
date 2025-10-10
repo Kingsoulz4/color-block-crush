@@ -17,6 +17,7 @@ namespace ColorBlockCrush.Tools
 
         [Header("Tank")] 
         public GameObject tankLineElementPrefab;
-        
+        public GameObject itemTunnelQueuePrefab;
+
     }
 }

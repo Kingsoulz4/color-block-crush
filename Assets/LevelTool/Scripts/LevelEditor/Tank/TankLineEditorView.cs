@@ -11,15 +11,17 @@ namespace ColorBlockCrush.Tools
         public Button buttonAddElement;
         [SerializeField] private Transform elementParent;
         [SerializeField] private List<ItemTankLineElementView> elementViews = new List<ItemTankLineElementView>();
-        
-        public void AddElementToLine(ItemTankLineElementView newElement, TankLineElementConfig elementConfig = null)
-        {
-            TankLineElementConfig newElementConfig = elementConfig != null ? elementConfig : new TankLineElementConfig();
-            if (elementConfig == null)
-            {
-              
 
-            }
+        public void SetId(int newId)
+        {
+            id = newId;
+        }
+        
+        public void AddElementToLine(ItemTankLineElementView newElement, Action<ItemTankLineElementView> onSelectElement,
+            TankLineElementConfig elementConfig = null)
+        {
+            newElement.transform.SetParent(elementParent);
+            newElement.transform.localScale = Vector3.one;
            
             Action onDeleteElement = () =>
             {
@@ -31,12 +33,22 @@ namespace ColorBlockCrush.Tools
                 ChangeIndexBusFromLine(itemIndex, newElement);
             };
 
-            newElement.Init(newElementConfig, onDeleteElement, () =>
+            newElement.Init((int)CantorPairing.MakeId((ulong)id, (ulong)elementViews.Count), onSelectElement,
+                elementConfig, onDeleteElement, 
+                () =>
             {
                
             }, onChangeElement);
             elementViews.Add(newElement);
             newElement.rectTransform.SetParent(elementParent, false);
+        }
+
+        public void ClearAllElementSelected()
+        {
+            foreach (var elementView in elementViews)
+            {
+                elementView.selectedObject.SetActive(false);
+            }
         }
         
         private void RemoteBusFromLine(ItemTankLineElementView itemElement)
@@ -51,5 +63,7 @@ namespace ColorBlockCrush.Tools
             elementViews.Insert(itemIndex, itemBus);
             Debug.Log($"Change Element Index {itemIndex} {itemBus}");
         }
+
+        public List<ItemTankLineElementView> GetElementView() => elementViews;
     }
 }

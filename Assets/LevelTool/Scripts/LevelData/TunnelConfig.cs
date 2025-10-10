@@ -8,5 +8,11 @@ namespace ColorBlockCrush.Tools
     {
         public int tankNumber;
         public List<TankConfig> tanks;
+
+        public TunnelConfig()
+        {
+            tankNumber = 0;
+            tanks = new List<TankConfig>();
+        }
     }
 }

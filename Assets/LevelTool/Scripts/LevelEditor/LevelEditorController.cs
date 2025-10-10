@@ -24,6 +24,8 @@ namespace ColorBlockCrush.Tools
         {
             InitButtons();
             InitEvents();
+
+            UpdateTankLinesInfor();
         }
 
         private void InitButtons()
@@ -41,9 +43,9 @@ namespace ColorBlockCrush.Tools
             view.buttonSetColor.onClick.AddListener(SetColorSelected);
             view.buttonDel.onClick.AddListener(DeleteColorSelected);
 
-            for (int i = 0; i < buttonColorChooses.Count; i++)
+            for (int i = 0; i < view.buttonCellGridColorChooses.Count; i++)
             {
-                buttonColorChooses[i].Init(UpdateCurrentColorChoose);
+                view.buttonCellGridColorChooses[i].Init(UpdateCurrentColorChoose);
             }
             UpdateCurrentColorChoose(ColorType.Pink);
             
@@ -54,17 +56,66 @@ namespace ColorBlockCrush.Tools
             view.ButtonChooseImage.onClick.AddListener(OpenImageFileBrowser);
 
             #region Tank
+            
+            view.buttonSetTankInfor.onClick.AddListener(SetTankInfor);
+            view.buttonDelTankInfor.onClick.AddListener(DellTankInfor);
+            view.buttonClearAllTankSelected.onClick.AddListener(ClearAllTankLineELementSelected);
+            
+            view.buttonSetLineConnect.onClick.AddListener(SetConnectLine);
+            view.buttonDelLineConnect.onClick.AddListener(DelConnectLine);
+            
+            view.buttonAddTunnelItemQueue.onClick.AddListener(() =>
+            {
+                if (string.IsNullOrEmpty(view.bulletTankTunnelQueueInputField.text))
+                {
+                    Debug.LogError("Invalid bullet number");
+                    return;
+                }
+                
+                int bulletNumber = int.Parse(view.bulletTankTunnelQueueInputField.text);
+
+                if (bulletNumber <= 0)
+                {
+                    Debug.LogError("Invalid bullet number");
+                    return;
+                }
+
+                TankConfig newTankConfig = new TankConfig();
+                newTankConfig.bulletNumber = bulletNumber;
+                newTankConfig.colorType = currentTankTunnelQueueColor;
+                newTankConfig.isHidden = false;
+                newTankConfig.hasLock = false;
+                
+                OnAddTankQueueToTunnel(newTankConfig);
+            });
+            view.buttonSetTunnelInfor.onClick.AddListener(SetTunnelInfor);
+            view.buttonDelTunnel.onClick.AddListener(DellTunnelInfor);
 
             for (int i = 0; i < view.tankLineViews.Count; i++)
             {
                 int index = i;
+                view.tankLineViews[i].SetId(index);
                 view.tankLineViews[i].buttonAddElement.onClick.RemoveAllListeners();
                 view.tankLineViews[i].buttonAddElement.onClick.AddListener(() =>
                 {
                     AddElementToLine(index);
                 });
             }
+            
+            for (int i = 0; i < view.buttonTankColorChooses.Count; i++)
+            {
+                view.buttonTankColorChooses[i].Init(UpdateCurrentColorChooseTank);
+            }
+            
+            UpdateCurrentColorChooseTank(ColorType.Pink);
 
+            for (int i = 0; i < view.buttonTankTunnelQueueColorChooses.Count; i++)
+            {
+                view.buttonTankTunnelQueueColorChooses[i].Init(UpdateCurrentColorChooseTankTunnelQueue);
+            }
+            
+            UpdateCurrentColorChooseTankTunnelQueue(ColorType.Pink);
+            
             #endregion
         }
 

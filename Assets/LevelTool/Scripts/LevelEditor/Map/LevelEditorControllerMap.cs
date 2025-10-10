@@ -11,9 +11,7 @@ namespace ColorBlockCrush.Tools
         private int mapWidth = 30;
         [SerializeField]
         private int mapHeight = 30;
-
-        [SerializeField]
-        private List<ButtonColorChoose> buttonColorChooses =  new List<ButtonColorChoose>();
+        
         [SerializeField] 
         private ColorType currentColorChoose = ColorType.Red;
         
@@ -159,7 +157,7 @@ namespace ColorBlockCrush.Tools
 
         private void UpdateCurrentColorChoose(ColorType colorChoose)
         {
-            foreach (var buttonChoose in buttonColorChooses)
+            foreach (var buttonChoose in view.buttonCellGridColorChooses)
             {
                 buttonChoose.UpdateChoosing(buttonChoose.GetColorType() == colorChoose);
             }

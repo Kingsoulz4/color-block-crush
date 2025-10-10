@@ -8,6 +8,8 @@ namespace ColorBlockCrush.Tools
     [Serializable]
     public class TankLineElementConfig
     {
+        public int elementId;
+        
         public TankLineElementType elementType;
         
         public TankConfig tankConfig;
