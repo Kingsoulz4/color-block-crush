@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Splines;
+using UnityEngine.TextCore.Text;
 using static UnityEngine.GridBrushBase;
+using static UnityEngine.UI.CanvasScaler;
 
 namespace ColorBlockCrush
 {
@@ -13,6 +15,7 @@ namespace ColorBlockCrush
         [Header("Visual")]
         [SerializeField] private MeshRenderer _meshRenderer;
         [SerializeField] private TextMeshPro _bulletCountText;
+        [SerializeField] private Bullet bulletPrb;
 
         private float _nextFireTime;
         private bool isFireFirstTime = false;
@@ -95,6 +98,12 @@ namespace ColorBlockCrush
             _nextFireTime = Time.time + (1f / FireRate);
 
             UpdateBulletCountDisplay();
+            Bullet bullet = Instantiate(bulletPrb);
+            bullet.OnInit(this, (gun, block) =>
+            {
+
+            });
+
             OnGunFired?.Invoke(this);
 
             if (BulletCount == 0)

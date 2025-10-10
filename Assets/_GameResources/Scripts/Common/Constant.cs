@@ -15,6 +15,7 @@ public class Constant
     {
         public const string GUN = "Gun";
         public const string BULLET = "Bullet";
+        public const string BLOCK = "Block";
     }
 
     public class PlayerPrefs
