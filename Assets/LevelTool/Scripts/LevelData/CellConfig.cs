@@ -14,19 +14,15 @@ namespace ColorBlockCrush.Tools
         public ColorType colorType;
 
         [Header("Key")]
-        public bool isKey = false;
+        public int keyId;
 
         [Header("Block")] 
-        public bool isBlock = false;
-        public int blockHealth;
         public int blockGroupId;
 
         public CellConfig()
         {
             colorType = ColorType.None;
-            isKey = false;
-            isBlock = false;
-            blockHealth = 0;
+            keyId = -1;
             blockGroupId = -1;
         }
     }

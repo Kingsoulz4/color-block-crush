@@ -37,6 +37,8 @@ namespace ColorBlockCrush.Tools
 
         [Header("Properties Map")] 
         public List<ButtonChooseDragType> buttonChooseDragTypes;
+        public RectTransform mapFeatureParent;
+        public TMP_InputField blockHealthInputField;
         public List<ButtonColorChoose> buttonCellGridColorChooses =  new List<ButtonColorChoose>();
         
         [Header("Choose Image Area")]

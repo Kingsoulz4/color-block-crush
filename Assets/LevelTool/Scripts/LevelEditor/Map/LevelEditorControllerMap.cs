@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using System.Linq;
 
 namespace ColorBlockCrush.Tools
 {
@@ -81,14 +82,15 @@ namespace ColorBlockCrush.Tools
             {
                 for (int j = 0; j < mapWidth; j++)
                 {
-                    GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
-                        .GetComponent<GridCellMapView>();
-                    gridCellList.Add(gridCellMapView);
-                    
                     CellConfig cellConfig = new CellConfig();
                     cellConfig.id = (int)CantorPairing.MakeId((ulong)i, (ulong)j);
                     cellConfig.coordinate = new Vector2Int(i, j);
                     currentLevelConfig.mapConfig.cells.Add(cellConfig);
+                    
+                    GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
+                        .GetComponent<GridCellMapView>();
+                    gridCellMapView.id = cellConfig.id;
+                    gridCellList.Add(gridCellMapView);
                 }
             }
             
@@ -119,16 +121,17 @@ namespace ColorBlockCrush.Tools
             {
                 for (int j = 0; j < mapHeight; j++)
                 {
-                    GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
-                        .GetComponent<GridCellMapView>();
-                    gridCellMapView.UpdateColor(currentColorArray[i, j]);
-                    gridCellList.Add(gridCellMapView);
-                    
                     CellConfig cellConfig = new CellConfig();
                     cellConfig.id = (int)CantorPairing.MakeId((ulong)i, (ulong)j);
                     cellConfig.coordinate = new Vector2Int(i, j);
                     cellConfig.colorType = currentColorArray[i, j];
                     currentLevelConfig.mapConfig.cells.Add(cellConfig);
+                    
+                    GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
+                        .GetComponent<GridCellMapView>();
+                    gridCellMapView.id = cellConfig.id;
+                    gridCellMapView.UpdateColor(currentColorArray[i, j]);
+                    gridCellList.Add(gridCellMapView);
                 }
             }
 
@@ -158,24 +161,108 @@ namespace ColorBlockCrush.Tools
                 {
                     GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
                         .GetComponent<GridCellMapView>();
+                    gridCellMapView.id = mapConfig.cells[i * mapConfig.mapSize.y + j].id;
                     gridCellMapView.UpdateColor(mapConfig.cells[i * mapConfig.mapSize.y + j].colorType);
                     gridCellList.Add(gridCellMapView);
                 }
             }
             
             view.dragCellMapSelection.enabled = true;
-            DOVirtual.DelayedCall(.55f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, gridCellList,
-                onUpdateSelection, onDeleteSelection));
+            DOVirtual.DelayedCall(.55f, () =>
+            {
+                view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, gridCellList,
+                    onUpdateSelection, onDeleteSelection);
+                
+                List<GridCellMapView> cellGridBlockList = new List<GridCellMapView>();
+                for (int i = 0; i < mapConfig.blocks.Count; i++)
+                {
+                    cellGridBlockList.Clear();
+                    cellGridBlockList = gridCellList.Where(cell => mapConfig.blocks[i].cellsId.Contains(cell.id)).ToList();
+                    BlockInforEditorView blockInforView =
+                        Instantiate(model.blockInforPrefab).GetComponent<BlockInforEditorView>();
+                    blockInforView.UpdateInfor(i, view.mapFeatureParent, 
+                        cellGridBlockList.ConvertAll(cell => cell.transform as RectTransform), 
+                        canvas, mapConfig.blocks[i].blockHealth, mapConfig.blocks[i].colorType);
+                }
+
+                for (int i = 0; i < mapConfig.keys.Count; i++)
+                {
+                    cellGridBlockList.Clear();
+                    cellGridBlockList = gridCellList.Where(cell => mapConfig.keys[i].cellsId.Contains(cell.id)).ToList();
+                    KeyInforEditorView keyInforView =
+                        Instantiate(model.keyInforPrefab).GetComponent<KeyInforEditorView>();
+                    keyInforView.UpdateInfor(i, view.mapFeatureParent, 
+                        cellGridBlockList.ConvertAll(cell => cell.transform as RectTransform), 
+                        canvas);
+                }
+            });
         }
         
         public void UpdateColorGridCell(List<GridCellMapView> cellSelection)
         {
-            foreach (var cellMapView in cellSelection)
+            if (currentDragType == DragType.Normal)
             {
-                cellMapView.UpdateColor(currentColorChoose);
+                foreach (var cellMapView in cellSelection)
+                {
+                    cellMapView.UpdateColor(currentColorChoose);
                 
-                currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
-                + cellMapView.Row].colorType = currentColorChoose;
+                    currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
+                                                       + cellMapView.Row].colorType = currentColorChoose;
+                }
+            }
+            else if(currentDragType == DragType.Block)
+            {
+                string blockHealth = view.blockHealthInputField.text;
+                if (string.IsNullOrEmpty(blockHealth))
+                {
+                    Debug.LogError("Invalid Block Health");
+                    return;
+                }
+                
+                BlockConfig blockConfig = new BlockConfig();
+                blockConfig.blockGroupId = currentLevelConfig.mapConfig.blocks.Count;
+                blockConfig.colorType = currentColorChoose;
+                blockConfig.blockHealth = int.Parse(blockHealth);
+                
+                for (int i = 0; i < cellSelection.Count; i++)
+                {
+                    cellSelection[i].UpdateColor(currentColorChoose);
+
+                    int cellIndex = cellSelection[i].Col * currentLevelConfig.mapConfig.mapSize.y
+                                    + cellSelection[i].Row;
+                    currentLevelConfig.mapConfig.cells[cellIndex].colorType = currentColorChoose;
+                    currentLevelConfig.mapConfig.cells[cellIndex].blockGroupId = blockConfig.blockGroupId;
+                    blockConfig.cellsId.Add(currentLevelConfig.mapConfig.cells[cellIndex].id);
+                }
+                
+                currentLevelConfig.mapConfig.blocks.Add(blockConfig);
+                
+                BlockInforEditorView blockInforView =
+                    Instantiate(model.blockInforPrefab).GetComponent<BlockInforEditorView>();
+                blockInforView.UpdateInfor(blockConfig.blockGroupId, view.mapFeatureParent, 
+                    cellSelection.ConvertAll(cell => cell.transform as RectTransform), 
+                    canvas, int.Parse(blockHealth), currentColorChoose);
+            }
+            else if(currentDragType == DragType.Key)
+            {
+                KeyConfig keyConfig = new KeyConfig();
+                keyConfig.keyId = currentLevelConfig.mapConfig.keys.Count;
+                
+                for (int i = 0; i < cellSelection.Count; i++)
+                {
+                    int cellIndex = cellSelection[i].Col * currentLevelConfig.mapConfig.mapSize.y
+                                    + cellSelection[i].Row;
+                    currentLevelConfig.mapConfig.cells[cellIndex].keyId = keyConfig.keyId;
+                    keyConfig.cellsId.Add(currentLevelConfig.mapConfig.cells[cellIndex].id);
+                }
+                
+                currentLevelConfig.mapConfig.keys.Add(keyConfig);
+                
+                KeyInforEditorView keyInforView =
+                    Instantiate(model.keyInforPrefab).GetComponent<KeyInforEditorView>();
+                keyInforView.UpdateInfor(keyConfig.keyId, view.mapFeatureParent, 
+                    cellSelection.ConvertAll(cell => cell.transform as RectTransform), 
+                    canvas);
             }
         }
         
@@ -226,7 +313,7 @@ namespace ColorBlockCrush.Tools
         {
             foreach (var buttonChoose in view.buttonChooseDragTypes)
             {
-                buttonChoose.UpdateButtonState(currentDragType);
+                buttonChoose.UpdateButtonState(dragType);
             }
             currentDragType = dragType;
             view.dragCellMapSelection.ChangeDragType(currentDragType);

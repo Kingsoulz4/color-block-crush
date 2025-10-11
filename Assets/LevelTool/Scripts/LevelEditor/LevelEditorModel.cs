@@ -17,6 +17,8 @@ namespace ColorBlockCrush.Tools
         public GameObject gridCellMapViewPrefab;
         public RectTransform gridContainer;
         public GridLayoutGroup gridLayoutGroup;
+        public GameObject blockInforPrefab;
+        public GameObject keyInforPrefab;
 
         [Header("Tank")] 
         public GameObject tankLineElementPrefab;

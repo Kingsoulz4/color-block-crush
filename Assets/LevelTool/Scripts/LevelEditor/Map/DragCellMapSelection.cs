@@ -202,7 +202,13 @@ namespace ColorBlockCrush.Tools
             }
             else if(currentDragType == DragType.Key)
             {
-                 
+                CurrentlySelectedCells.Clear();
+                if (FinalSelectedCells.Count > 0)
+                {
+                    ClearOnlySelection();
+                }
+                isDragging = true;
+                startPos = eventData.position;
             }
         }
 
@@ -274,7 +280,20 @@ namespace ColorBlockCrush.Tools
                 HighlightCellsInRect(selectionRect);
             }else if (currentDragType == DragType.Key)
             {
+                Vector2 endPos = eventData.position;
+
+                Vector2 localStart, localEnd;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(gridParent, startPos, uiCamera, out localStart);
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(gridParent, endPos, uiCamera, out localEnd);
                 
+                Rect selectionRect = new Rect(
+                    Mathf.Min(localStart.x, localEnd.x),
+                    Mathf.Min(localStart.y, localEnd.y),
+                    Mathf.Abs(localEnd.x - localStart.x),
+                    Mathf.Abs(localEnd.y - localStart.y)
+                );
+                
+                HighlightCellsInRect(selectionRect);
             }
         }
 
@@ -312,7 +331,15 @@ namespace ColorBlockCrush.Tools
             }
             else if(currentDragType == DragType.Key)
             {
-                 
+                foreach (var cell in CurrentlySelectedCells)
+                {
+                    bool willBeSelected = !cell.IsSelected;
+                    cell.IsSelected = willBeSelected;
+                    cell.UpdateSelectedColor();
+
+                    cell.IsSelecting = false;
+                    cell.UpdateSelectingColor();
+                }   
             }
 
             CurrentlySelectedCells.Clear();
