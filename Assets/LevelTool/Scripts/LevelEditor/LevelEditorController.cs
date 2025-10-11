@@ -356,6 +356,7 @@ namespace ColorBlockCrush.Tools
             for (int i = 0; i < view.tankLineViews.Count; i++)
             {
                 List<ItemTankLineElementView> elements = view.tankLineViews[i].GetElementView();
+                
                 currentLevelConfig.tankLines[i] = new TankLineConfig();
                 for (int j = 0; j < elements.Count; j++)
                 {
@@ -431,6 +432,8 @@ namespace ColorBlockCrush.Tools
                 tankLineConfig.tankLineElementConfigs  = new List<TankLineElementConfig>();
                 newLevel.tankLines.Add(tankLineConfig);
             }
+            
+            Debug.Log("tank Congif " + newLevel.tankLines.Count);
 
             UpdateItemLevel();
             // if (ResourcesManager.Instance.collectByJson) SaveLevelConfigToJson(newLevel);
