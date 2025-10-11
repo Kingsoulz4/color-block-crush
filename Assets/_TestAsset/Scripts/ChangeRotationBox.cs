@@ -21,7 +21,7 @@ namespace ColorBlockCrush
         {
             if (other.CompareTag(Constant.Tag.GUN))
             {
-                if (TryGetComponent(out Gun gun))
+                if (other.TryGetComponent(out Gun gun))
                 {
                     gun.Turn(direction, rotateDuration);
                 }

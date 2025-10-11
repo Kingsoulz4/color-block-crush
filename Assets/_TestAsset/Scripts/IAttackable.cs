@@ -2,15 +2,11 @@ using UnityEngine;
 
 public interface IAttackable
 {
-    void TakeDamageNow(int damageAmount);
-
-    void TakeDamageNormal(int damageAmount);
+    void TakeDamage(int damageAmount);
 
     int GetMaxHitPoint();
 
-    int GetNowHitPoint();
-
-    int GetNormalHitPoint();
+    int GetHitPoint();
 
     bool GetIsAttacked();
 

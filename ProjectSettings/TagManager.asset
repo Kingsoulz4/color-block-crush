@@ -11,15 +11,15 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Tile
+  - Block
   - Water
   - UI
   - Wall
-  - Segment
-  - MoveBox
-  - Gun
-  - EndPoint
   - Bullet
+  - TriggerPoint
+  - Gun
+  - 
+  - 
   - 
   - 
   - 

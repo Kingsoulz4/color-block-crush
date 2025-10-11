@@ -16,6 +16,7 @@ namespace ColorBlockCrush
         [SerializeField] private MeshRenderer _meshRenderer;
         [SerializeField] private TextMeshPro _bulletCountText;
         [SerializeField] private Bullet bulletPrb;
+        [SerializeField] private Transform bulletSpawnPos;
 
         private float _nextFireTime;
         private bool isFireFirstTime = false;
@@ -51,7 +52,7 @@ namespace ColorBlockCrush
             ColumnIndex = column;
             _nextFireTime = 0f;
             IsFrontRow = false;
-            isFireFirstTime = false;
+            isFireFirstTime = true;
             UpdateVisuals();
         }
 
@@ -109,7 +110,7 @@ namespace ColorBlockCrush
 
             UpdateBulletCountDisplay();
 
-            Bullet bullet = Instantiate(bulletPrb);
+            Bullet bullet = Instantiate(bulletPrb, bulletSpawnPos.position, Quaternion.identity);
 
             bullet.OnInit(this, target, (gun, block) =>
             {

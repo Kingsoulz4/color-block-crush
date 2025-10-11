@@ -278,7 +278,7 @@ GameObject:
   m_Component:
   - component: {fileID: 367819058}
   - component: {fileID: 367819059}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -364,7 +364,7 @@ GameObject:
   - component: {fileID: 525484013}
   - component: {fileID: 525484015}
   - component: {fileID: 525484014}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: EndPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -519,7 +519,7 @@ GameObject:
   - component: {fileID: 633797226}
   - component: {fileID: 633797227}
   - component: {fileID: 633797228}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Point (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -619,7 +619,7 @@ GameObject:
   m_Component:
   - component: {fileID: 709019701}
   - component: {fileID: 709019702}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -705,7 +705,7 @@ GameObject:
   - component: {fileID: 803585202}
   - component: {fileID: 803585203}
   - component: {fileID: 803585204}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Point (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -802,7 +802,7 @@ GameObject:
   - component: {fileID: 832279210}
   - component: {fileID: 832279211}
   - component: {fileID: 832279212}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Point (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1990,7 +1990,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1446093333}
   - component: {fileID: 1446093334}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2226,7 +2226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1831125143}
   - component: {fileID: 1831125144}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2323,7 +2323,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 641287231}
-  _gunBoardController: {fileID: 2002709152}
   _gunLayerMask:
     serializedVersion: 2
     m_Bits: 512
@@ -2429,7 +2428,7 @@ GameObject:
   - component: {fileID: 2073812200}
   - component: {fileID: 2073812201}
   - component: {fileID: 2073812202}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}

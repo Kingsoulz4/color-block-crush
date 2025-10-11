@@ -31,9 +31,6 @@ namespace ColorBlockCrush
         public Action OnBoardAnimationsStarted;
         public Action OnBoardAnimationsCompleted;
         public Action OnBoardCleared;
-
-        private int _activeAnimations = 0;
-
         public void Init()
         {
             EndRow = 0;
@@ -73,15 +70,12 @@ namespace ColorBlockCrush
 
             PlaceBlock(row, col, block);
 
-            block.OnBlockDestroyCompleted += OnBlockDestroyedComplete;
-            block.OnBlockDestroyStarted += OnBlockDestroyStarted;
-            block.OnBlockMovementStarted += OnBlockMovementStarted;
-            block.OnBlockMovementCompleted += OnBlockMovementCompleted;
+            block.OnBlockDestroyed += OnBlockDestroyed;
 
             return block;
         }
 
-        private void OnBlockDestroyStarted(Block block)
+        private void OnBlockDestroyed(Block block)
         {
             throw new NotImplementedException();
         }
@@ -98,218 +92,6 @@ namespace ColorBlockCrush
             }
         }
 
-        private void RemoveBlock(Block block)
-        {
-            if (block.GridNode == null) return;
-
-            GridPoint gridPoint = block.GridNode.GridPoint;
-            int row = gridPoint.Y;
-            int col = gridPoint.X;
-
-            if (IsValidPosition(row, col))
-            {
-                _blockStacks[row, col].Remove(block);
-            }
-
-            block.OnBlockDestroyCompleted -= OnBlockDestroyedComplete;
-            block.OnBlockDestroyStarted -= OnBlockDestroyStarted;
-            block.OnBlockMovementStarted -= OnBlockMovementStarted;
-            block.OnBlockMovementCompleted -= OnBlockMovementCompleted;
-        }
-
-        public List<Block> GetBottomRowBlocks()
-        {
-            List<Block> blocks = new List<Block>();
-
-            for (int c = 0; c < _columns; c++)
-            {
-                if (_blockStacks[EndRow, c].Count > 0)
-                {
-                    Block baseBlock = _blockStacks[EndRow, c][0];
-                    Block topBlock = baseBlock.GetTopMostBlock();
-                    blocks.Add(topBlock);
-                }
-            }
-
-            return blocks;
-        }
-
-        public Dictionary<ColorType, List<Block>> GetAttackableBlocksByColor()
-        {
-            Dictionary<ColorType, List<Block>> dict = new Dictionary<ColorType, List<Block>>();
-
-            List<Block> bottomBlocks = GetBottomRowBlocks();
-
-            foreach (Block block in bottomBlocks)
-            {
-                if (block.CanDestroy) continue;
-
-                if (!dict.ContainsKey(block.ColorType))
-                {
-                    dict[block.ColorType] = new List<Block>();
-                }
-
-                dict[block.ColorType].Add(block);
-            }
-
-            return dict;
-        }
-
-        private void OnBlockDestroyedComplete(Block block)
-        {
-            GridPoint pos = block.GridNode.GridPoint;
-            RemoveBlock(block);
-
-            ShiftDownAbovePieceToEmptyGridPoint(pos.Y, pos.X);
-        }
-
-        private void ShiftDownAbovePieceToEmptyGridPoint(int emptyRow, int emptyCol)
-        {
-            FindBlockToShiftDownResult result = FindBlockToShiftDownRecursive(
-                emptyCol,
-                emptyRow,
-                new List<GridPoint>(),
-                new HashSet<(int, int)>()
-            );
-
-            if (result != null && result.Block != null && result.Path.Count > 0)
-            {
-                List<GridNode> pathNodes = new List<GridNode>();
-                foreach (GridPoint gp in result.Path)
-                {
-                    pathNodes.Add(_gridController.GridNodes[gp.Y, gp.X]);
-                }
-
-                Block movingBlock = result.Block;
-                GridPoint originalPos = movingBlock.GridNode.GridPoint;
-
-                _blockStacks[originalPos.Y, originalPos.X].Remove(movingBlock);
-
-                GridPoint finalPos = result.Path[result.Path.Count - 1];
-                _blockStacks[finalPos.Y, finalPos.X].Add(movingBlock);
-
-                movingBlock.StartMoveToGridNodeSequence(pathNodes,true, false, () =>
-                {
-                    if (_blockStacks[originalPos.Y, originalPos.X].Count == 0)
-                    {
-                        ShiftDownAbovePieceToEmptyGridPoint(originalPos.Y, originalPos.X);
-                    }
-                });
-            }
-            else
-            {
-                CheckIfAllAnimationsComplete();
-            }
-        }
-
-        private FindBlockToShiftDownResult FindBlockToShiftDownRecursive(
-            int col,
-            int row,
-            List<GridPoint> pathSoFar,
-            HashSet<(int, int)> visited)
-        {
-            if (!IsValidPosition(row, col)) return null;
-            if (visited.Contains((row, col))) return null;
-
-            visited.Add((row, col));
-
-            if (_blockStacks[row, col].Count > 0)
-            {
-                Block block = _blockStacks[row, col][0];
-                pathSoFar.Add(new GridPoint(col, row));
-                return new FindBlockToShiftDownResult
-                {
-                    Block = block,
-                    Path = new List<GridPoint>(pathSoFar)
-                };
-            }
-
-            GridNode currentNode = _gridController.GridNodes[row, col];
-            List<GridNode> sourceNodes = new List<GridNode>();
-
-            // Get nodes that can fall into this position
-            // Look for nodes above (row+1) that are not blocked
-            if (row + 1 < _rows)
-            {
-                GridNode up = _gridController.GridNodes[row + 1, col];
-                if (!up.IsBlocked) sourceNodes.Add(up);
-
-                if (col > 0)
-                {
-                    GridNode upLeft = _gridController.GridNodes[row + 1, col - 1];
-                    if (!upLeft.IsBlocked) sourceNodes.Add(upLeft);
-                }
-
-                if (col < _columns - 1)
-                {
-                    GridNode upRight = _gridController.GridNodes[row + 1, col + 1];
-                    if (!upRight.IsBlocked) sourceNodes.Add(upRight);
-                }
-            }
-
-            foreach (GridNode source in sourceNodes)
-            {
-                List<GridPoint> newPath = new List<GridPoint>(pathSoFar);
-                newPath.Add(new GridPoint(col, row));
-
-                FindBlockToShiftDownResult result = FindBlockToShiftDownRecursive(
-                    source.GridPoint.X,
-                    source.GridPoint.Y,
-                    newPath,
-                    visited
-                );
-
-                if (result != null) return result;
-            }
-
-            return null;
-        }
-
-        private void OnBlockMovementStarted(Block block)
-        {
-            _activeAnimations++;
-
-            if (_activeAnimations == 1)
-            {
-                IsBoardInAnimationState = true;
-                OnBoardAnimationsStarted?.Invoke();
-            }
-        }
-
-        private void OnBlockMovementCompleted(Block block)
-        {
-            _activeAnimations--;
-            CheckIfAllAnimationsComplete();
-        }
-
-        private void CheckIfAllAnimationsComplete()
-        {
-            if (_activeAnimations <= 0)
-            {
-                _activeAnimations = 0;
-                IsBoardInAnimationState = false;
-                OnBoardAnimationsCompleted?.Invoke();
-
-                if (GetTotalBlockCount() == 0)
-                {
-                    OnBoardCleared?.Invoke();
-                }
-            }
-        }
-
-        public int GetTotalBlockCount()
-        {
-            int count = 0;
-            for (int r = 0; r < _rows; r++)
-            {
-                for (int c = 0; c < _columns; c++)
-                {
-                    count += _blockStacks[r, c].Count;
-                }
-            }
-            return count;
-        }
-
         private bool IsValidPosition(int row, int col)
         {
             return row >= 0 && row < _rows && col >= 0 && col < _columns;
@@ -321,11 +103,5 @@ namespace ColorBlockCrush
                 return _gridController.GridNodes[row, col];
             return null;
         }
-    }
-
-    public class FindBlockToShiftDownResult
-    {
-        public Block Block;
-        public List<GridPoint> Path;
     }
 }

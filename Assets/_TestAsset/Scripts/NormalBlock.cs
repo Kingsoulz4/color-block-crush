@@ -3,20 +3,9 @@ using UnityEngine;
 
 public class NormalBlock : Block
 {
-    [Header("Block Piece Mesh Renderer References")]
     [SerializeField]
     private MeshRenderer _blockMeshRenderer;
-
-    [Header("Block Piece Pool References")]
-    [SerializeField]
-    private MeshRenderer _hiddenBlockMeshPrefab;
-
-    [SerializeField]
-    private Transform _hiddenBlockMeshContainerTransform;
-
     private bool _isHidden;
-
-    private MeshRenderer _hiddenBlockMeshRenderer;
 
     public bool IsHidden
     {
@@ -29,7 +18,7 @@ public class NormalBlock : Block
         }
     }
 
-    public void InitializeBlockPiece(BlockType pieceType, ColorType colorType, int hitPointAmount, bool isStatic, bool canDestroy, bool isHidden)
+    public void InitializeBlockPiece(BlockType blockType, ColorType colorType, int hitPointAmount, bool canDestroy, bool isHidden)
     {
     }
 
@@ -38,13 +27,6 @@ public class NormalBlock : Block
     {
     }
 
-    public override void StartDestroySequence()
-    {
-    }
-
-    protected override void StopAllAnimations()
-    {
-    }
 
     private void UpdateHiddenVisualState()
     {
@@ -55,14 +37,6 @@ public class NormalBlock : Block
     }
 
     public void HideHiddenVisualState()
-    {
-    }
-
-    private void SpawnHiddenBlockMeshRenderer()
-    {
-    }
-
-    private void DespawnHiddenBlockMeshRenderer()
     {
     }
 }
