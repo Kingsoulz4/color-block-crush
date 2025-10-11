@@ -72,6 +72,8 @@ namespace ColorBlockCrush.Tools
             float gridCellSize = (float)(model.gridContainer.sizeDelta.x / (float)GetMapSize());
             model.gridLayoutGroup.constraintCount = mapWidth;
             model.gridLayoutGroup.cellSize = new Vector2(gridCellSize, gridCellSize);
+            currentLevelConfig.mapConfig = new MapConfig();
+            currentLevelConfig.mapConfig.mapSize = new Vector2Int(mapWidth, mapHeight);
             
             for (int i = 0; i < mapHeight; i++)
             {
@@ -80,12 +82,18 @@ namespace ColorBlockCrush.Tools
                     GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
                         .GetComponent<GridCellMapView>();
                     gridCellList.Add(gridCellMapView);
+                    
+                    CellConfig cellConfig = new CellConfig();
+                    cellConfig.id = (int)CantorPairing.MakeId((ulong)i, (ulong)j);
+                    cellConfig.coordinate = new Vector2Int(i, j);
+                    currentLevelConfig.mapConfig.cells.Add(cellConfig);
                 }
             }
             
             view.dragCellMapSelection.enabled = true;
             DOVirtual.DelayedCall(.55f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, gridCellList,
                 onUpdateSelection, onDeleteSelection));
+            
         }
 
         private void CreateMapByPicture()
@@ -102,6 +110,8 @@ namespace ColorBlockCrush.Tools
             float gridCellSize = (float)(model.gridContainer.sizeDelta.x / (float)GetMapSize());
             model.gridLayoutGroup.constraintCount = mapWidth;
             model.gridLayoutGroup.cellSize = new Vector2(gridCellSize, gridCellSize);
+            currentLevelConfig.mapConfig = new MapConfig();
+            currentLevelConfig.mapConfig.mapSize = new Vector2Int(mapWidth, mapHeight);
             
             for (int i = 0; i < mapWidth; i++)
             {
@@ -111,11 +121,48 @@ namespace ColorBlockCrush.Tools
                         .GetComponent<GridCellMapView>();
                     gridCellMapView.UpdateColor(currentColorArray[i, j]);
                     gridCellList.Add(gridCellMapView);
+                    
+                    CellConfig cellConfig = new CellConfig();
+                    cellConfig.id = (int)CantorPairing.MakeId((ulong)i, (ulong)j);
+                    cellConfig.coordinate = new Vector2Int(i, j);
+                    cellConfig.colorType = currentColorArray[i, j];
+                    currentLevelConfig.mapConfig.cells.Add(cellConfig);
                 }
             }
 
             view.dragCellMapSelection.enabled = true;
             DOVirtual.DelayedCall(2.5f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, gridCellList,
+                onUpdateSelection, onDeleteSelection));
+        }
+
+        private void UpdateMapData()
+        {
+            MapConfig mapConfig = currentLevelConfig.mapConfig;
+
+            mapWidth = mapConfig.mapSize.x;
+            mapHeight = mapConfig.mapSize.y;
+            
+            view.WidthMapSize.text = mapWidth.ToString();
+            view.HeightMapSize.text = mapHeight.ToString();
+            float gridCellSize = (float)(model.gridContainer.sizeDelta.x / (float)GetMapSize());
+            model.gridLayoutGroup.constraintCount = mapWidth;
+            model.gridLayoutGroup.cellSize = new Vector2(gridCellSize, gridCellSize);
+            
+            List<GridCellMapView> gridCellList = new List<GridCellMapView>();
+            
+            for (int i = 0; i < mapConfig.mapSize.x; i++)
+            {
+                for (int j = 0; j < mapConfig.mapSize.y; j++)
+                {
+                    GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
+                        .GetComponent<GridCellMapView>();
+                    gridCellMapView.UpdateColor(mapConfig.cells[i * mapConfig.mapSize.y + j].colorType);
+                    gridCellList.Add(gridCellMapView);
+                }
+            }
+            
+            view.dragCellMapSelection.enabled = true;
+            DOVirtual.DelayedCall(.55f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, gridCellList,
                 onUpdateSelection, onDeleteSelection));
         }
         
@@ -124,6 +171,9 @@ namespace ColorBlockCrush.Tools
             foreach (var cellMapView in cellSelection)
             {
                 cellMapView.UpdateColor(currentColorChoose);
+                
+                currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
+                + cellMapView.Row].colorType = currentColorChoose;
             }
         }
         
@@ -132,6 +182,8 @@ namespace ColorBlockCrush.Tools
             foreach (var cellMapView in cellSelection)
             {
                 cellMapView.DeleteColor();
+                currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
+                                                   + cellMapView.Row].colorType = ColorType.None;
             }
         }
 
@@ -153,6 +205,10 @@ namespace ColorBlockCrush.Tools
         private void ClearAllColor()
         {
             view.dragCellMapSelection.CLearAllColor();
+            foreach (var cell in currentLevelConfig.mapConfig.cells)
+            {
+                cell.colorType = ColorType.None;
+            }
         }
 
         private void UpdateCurrentColorChoose(ColorType colorChoose)

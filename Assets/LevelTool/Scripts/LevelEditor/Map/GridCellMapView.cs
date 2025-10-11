@@ -66,14 +66,19 @@ namespace ColorBlockCrush.Tools
 
         public void UpdateColor(ColorType colorType)
         {
-            x.gameObject.SetActive(false);
-            Color newTxtColor = txtDrawIndex.color;
-            Color newBgColor = ColorReference.Instance.GetColor(colorType);
+            if (colorType != ColorType.None)
+            {
+                x.gameObject.SetActive(false);
+                Color newBgColor = ColorReference.Instance.GetColor(colorType);
 
-            newBgColor.a = 1f;
-
-            txtDrawIndex.color = newTxtColor;
-            backGroundImage.color = newBgColor;        
+                newBgColor.a = 1f;
+                
+                backGroundImage.color = newBgColor;           
+            }
+            else
+            {
+                DeleteColor();
+            }
         }
 
         public void DeleteColor()

@@ -28,20 +28,27 @@ namespace ColorBlockCrush.Tools
                 Instantiate(model.tankLineElementPrefab).GetComponent<ItemTankLineElementView>();
             newElement.GetComponent<DraggableTankLineElementItem>().dragCanvas = canvas;
             view.tankLineViews[index].AddElementToLine(newElement, SelectTankLineElement, elementConfig);
-
+            
             ClearAllTankLineELementSelected();
             SelectTankLineElement(newElement);
             UpdateTankLinesInfor();
         }
 
-        private void RemoteElementFromLine(int index, ItemTankLineElementView itemBus)
+        private void UpdateTankLineData()
         {
-            UpdateTankLinesInfor();
-        }
+            if(currentLevelConfig.tankLines == null || currentLevelConfig.tankLines.Count == 0)
+                return;
+            
+            for (int i = 0; i < currentLevelConfig.tankLines.Count; i++)
+            {
+                if(currentLevelConfig.tankLines[i].tankLineElementConfigs.Count == 0)
+                    return;
 
-        private void ChangeIndexElementFromLine(int busDictIndex, int itemIndex, ItemTankLineElementView itemBus)
-        {
-            Debug.Log($"Change Element Index {busDictIndex} {itemIndex} {itemBus}");
+                for (int j = 0; j < currentLevelConfig.tankLines[i].tankLineElementConfigs.Count; j++)
+                {
+                    AddElementToLine(i, currentLevelConfig.tankLines[i].tankLineElementConfigs[j]);
+                }
+            }
         }
 
         private void SelectTankLineElement(ItemTankLineElementView elementSelect)
@@ -62,6 +69,7 @@ namespace ColorBlockCrush.Tools
             }
             
             ClearTunnelView();
+            
         }
 
         public void UpdateTankLineElementPropertiesInfor(TankLineElementConfig elementConfig)
@@ -132,10 +140,22 @@ namespace ColorBlockCrush.Tools
                 currentTankLineElementSelected.elementConfig.tankConfig.tankConnect = new List<int>();
                 for (int i = 1; i < tankLinesELementSelected.Count; i++)
                 {
+                    if (tankLinesELementSelected[i].elementConfig.elementType != TankLineElementType.Tank)
+                    {
+                        Debug.LogError($"Must Choose All Tank");
+                        return;   
+                    }
+                    
                     currentTankLineElementSelected.elementConfig.tankConfig.tankConnect
                         .Add(tankLinesELementSelected[i].elementConfig.elementId);
+
+                    ItemTankLineElementView tankConnect =
+                        GetTankLineElementViewById(tankLinesELementSelected[i].elementConfig.elementId);
+                    SpawnConnectUi(currentTankLineElementSelected, tankConnect);
                 }
             }
+
+            ClearAllTankLineELementSelected();
             UpdateTankLinesInfor();
         }
 
@@ -153,6 +173,21 @@ namespace ColorBlockCrush.Tools
             }
 
             UpdateTankLinesInfor();
+        }
+
+        private void SpawnConnectUi(ItemTankLineElementView a, ItemTankLineElementView b)
+        {
+            UiLine uiLine = Instantiate(model.uiLinePrefab, view.uiLineParent).GetComponent<UiLine>();
+            uiLine.canvas = canvas;
+            
+            uiLine.SetPoints(a.GetComponent<RectTransform>(), b.GetComponent<RectTransform>());
+        }
+
+        private ItemTankLineElementView GetTankLineElementViewById(int id)
+        {
+            (ulong i, ulong j) = CantorPairing.Unpair((ulong)id);
+
+            return view.tankLineViews[(int)i].GetElementView()[(int)j];
         }
 
         #endregion

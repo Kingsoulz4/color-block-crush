@@ -7,6 +7,9 @@ namespace ColorBlockCrush.Tools
 {
     public class LevelEditorModel : MonoBehaviour
     {
+        [Header("Choose Level")]
+        public GameObject itemLevelPrefab;
+        
         [Header("Map")] 
         public int maxMapSize = 50;
         public int minMapSize = 20;
@@ -18,6 +21,7 @@ namespace ColorBlockCrush.Tools
         [Header("Tank")] 
         public GameObject tankLineElementPrefab;
         public GameObject itemTunnelQueuePrefab;
+        public GameObject uiLinePrefab;
 
     }
 }

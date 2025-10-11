@@ -1,6 +1,7 @@
 using UnityEngine.UI;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using TMPro;
 
 namespace ColorBlockCrush.Tools
@@ -15,6 +16,7 @@ namespace ColorBlockCrush.Tools
         [SerializeField] private TextMeshProUGUI tankBulletTxtValue;
         [SerializeField] private GameObject hidden;
         [SerializeField] private GameObject lockIcon;
+        [SerializeField] private List<UiLine> linesConnected = new List<UiLine>();
         
         [Header("Tunnel Infor")]
         [SerializeField] private GameObject tunnelInfor;
@@ -98,6 +100,16 @@ namespace ColorBlockCrush.Tools
                 TunnelConfig tunnelConfig = elementConfig.tunnelConfig;
                 tankNumberValue.text = tunnelConfig.tankNumber.ToString();
             }
+        }
+
+        public void AddUiLine(UiLine uiLine)
+        {
+            linesConnected.Add(uiLine);
+        }
+
+        public void ClearUiLine()
+        {
+            linesConnected.Clear();
         }
     }
 }

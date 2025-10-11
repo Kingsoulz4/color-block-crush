@@ -104,16 +104,25 @@ namespace ColorBlockCrush.Tools
             grid = new GridCellMapView[rows, cols];
             cellToRC = new Dictionary<GridCellMapView, Vector2Int>(GridCellList.Count);
 
-            foreach (var c in GridCellList)
+            // foreach (var c in GridCellList)
+            // {
+            //     Rect rc = LocalRectOf(c.rectTransform);
+            //     Vector2 center = rc.center;
+            //     if (LocalToRC(center, out int row, out int col))
+            //     {
+            //         grid[row, col] = c;
+            //         c.SetRowAndCol(col, row);
+            //         cellToRC[c] = new Vector2Int(row, col);
+            //     }
+            // }
+
+            for (int i = 0; i < GridCellList.Count; i++)
             {
-                Rect rc = LocalRectOf(c.rectTransform);
-                Vector2 center = rc.center;
-                if (LocalToRC(center, out int row, out int col))
-                {
-                    grid[row, col] = c;
-                    c.SetRowAndCol(col, row);
-                    cellToRC[c] = new Vector2Int(row, col);
-                }
+                int row = i % rows;
+                int col = Mathf.CeilToInt(i / rows);
+                
+                grid[row, col] = GridCellList[i];
+                GridCellList[i].SetRowAndCol(col, row);
             }
         }
 

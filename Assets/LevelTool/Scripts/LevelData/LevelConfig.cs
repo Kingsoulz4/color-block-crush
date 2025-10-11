@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace ColorBlockCrush.Tools
 {
-    [Serializable]
-    public class LevelConfig : MonoBehaviour
+    [CreateAssetMenu(fileName = "NewLevelConfig", menuName = "GameConfigs/LevelConfig")]
+    public class LevelConfig : ScriptableObject
     {
         public int levelId;
         public LevelDifficult levelDifficult;
@@ -13,5 +13,10 @@ namespace ColorBlockCrush.Tools
         public InputImageConfig imageConfig;
         public MapConfig mapConfig;
         public List<TankLineConfig> tankLines = new List<TankLineConfig>();
+
+        public bool ValidateData()
+        {
+            return true;
+        }
     }
 }

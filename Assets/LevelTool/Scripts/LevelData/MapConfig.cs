@@ -9,5 +9,11 @@ namespace ColorBlockCrush.Tools
     {
         public Vector2Int mapSize;
         public List<CellConfig> cells = new List<CellConfig>();
+
+        public MapConfig()
+        {
+            mapSize = Vector2Int.zero;
+            cells = new List<CellConfig>();
+        }
     }
 }

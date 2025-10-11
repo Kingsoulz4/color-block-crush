@@ -7,6 +7,24 @@ namespace ColorBlockCrush.Tools
 {
     public class LevelEditorView : MonoBehaviour
     {
+        [Header("Menu Panel")]
+        public RectTransform levelItemContainer;
+        public Button newLevelButton;
+        public GameObject levelSelectPanel;
+        public Button buttonBrowerLevelFolder;
+        public Button buttonOpenLevelFolder;
+        public TextMeshProUGUI textFolderLevelPath;
+        public Button buttonBrowerPictureFolder;
+        public Button buttonOpenPictureFolder;
+        public TextMeshProUGUI textFolderPicturePath;
+        
+        [Header("Level Infor")]
+        public GameObject levelEditPanel;
+        public TMP_InputField inputLevelId;
+        public TMP_Dropdown difficultDropdown; 
+        public TextMeshProUGUI truePictureImage;
+        public Button buttonSaveLevel;
+        
         [Header("Map")] 
         public Button buttonCreateMap;
         public TMP_InputField WidthMapSize;
@@ -37,6 +55,7 @@ namespace ColorBlockCrush.Tools
         public Button buttonDelTankInfor;
         public Button buttonClearAllTankSelected;
 
+        public Transform uiLineParent;
         public Button buttonSetLineConnect;
         public Button buttonDelLineConnect;
 
