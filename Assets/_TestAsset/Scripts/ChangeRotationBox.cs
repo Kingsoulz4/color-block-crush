@@ -15,7 +15,6 @@ namespace ColorBlockCrush
     public class ChangeRotationBox : MonoBehaviour
     {
         [SerializeField] RotationDirection direction;
-        [SerializeField] float rotateDuration;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -23,7 +22,8 @@ namespace ColorBlockCrush
             {
                 if (other.TryGetComponent(out Gun gun))
                 {
-                    gun.Turn(direction, rotateDuration);
+                    gun.Turn(direction);
+                    gun.CurrentFireDir = direction;
                 }
             }
         }

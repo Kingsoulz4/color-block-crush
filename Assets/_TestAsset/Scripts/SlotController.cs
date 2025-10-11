@@ -158,7 +158,6 @@ namespace ColorBlockCrush
 
         private void ShiftAllToTheLeft(int fromIndex = 0)
         {
-            Debug.Log("ShiftAllToTheLeft");
             for (int i = fromIndex; i < _gunsInSlots.Count; i++)
             {
                 Vector3 targetPos = GetSlotPosition(i);
