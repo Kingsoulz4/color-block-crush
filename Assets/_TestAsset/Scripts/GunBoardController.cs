@@ -13,7 +13,6 @@ namespace ColorBlockCrush
         [SerializeField] private Vector3 _spawnOrigin = new Vector3(-2f, -5f, 0);
         [SerializeField] private float _columnSpacing = 1f;
         [SerializeField] private float _rowSpacing = 1f;
-        [SerializeField] private float _defaultFireRate = 2f;
         [SerializeField] private GunBoardData gunBoardData;
 
         [Header("Prefabs")]
@@ -44,7 +43,7 @@ namespace ColorBlockCrush
                 for (int i = 0; i < columnData.Count; i++)
                 {
                     GunData data = columnData[i];
-                    var gun = SpawnGun(col, i, data.Color, data.BulletCount, _defaultFireRate);
+                    var gun = SpawnGun(col, i, data.Color, data.BulletCount);
                     if (gun != null)
                     {
                         listGunColumn[col].Add(gun);
@@ -56,7 +55,7 @@ namespace ColorBlockCrush
 
         }
 
-        public Gun SpawnGun(int column, int row, ColorType color, int bulletCount, float fireRate)
+        public Gun SpawnGun(int column, int row, ColorType color, int bulletCount)
         {
             if (!IsValidColumn(column)) return null;
 
@@ -64,7 +63,7 @@ namespace ColorBlockCrush
                 column * _columnSpacing, 0, row * -_rowSpacing);
 
             Gun gun = Instantiate(_gunPrefab, worldPos, Quaternion.identity, _gunContainer);
-            gun.Init(color, bulletCount, fireRate, column);
+            gun.Init(color, bulletCount, column);
             gun.name = $"Gun_{column}_{row}";
             return gun;
         }

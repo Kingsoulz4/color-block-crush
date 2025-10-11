@@ -15,11 +15,11 @@ MonoBehaviour:
   ColumnGunData:
   - Guns:
     - Color: 0
-      BulletCount: 5
+      BulletCount: 50
     - Color: 0
-      BulletCount: 10
+      BulletCount: 50
     - Color: 0
-      BulletCount: 15
+      BulletCount: 100
   - Guns:
     - Color: 1
       BulletCount: 10

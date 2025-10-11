@@ -13,7 +13,7 @@ namespace ColorBlockCrush
         protected Block block;
         protected Action<Gun, Block> onHit;
 
-        private float speed = 25f;
+        private float speed = 10;
         private Vector3 endPos;
         private bool isMoving = false;
         // set bullet data for bullet
@@ -46,8 +46,8 @@ namespace ColorBlockCrush
                 other.TryGetComponent(out Block blockP);
                 if (blockP && block == blockP)
                 {
-                    onHit?.Invoke(gun, block);
                     isMoving = false;
+                    onHit?.Invoke(gun, block);
                 }
             }
         }

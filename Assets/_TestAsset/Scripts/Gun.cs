@@ -13,11 +13,15 @@ namespace ColorBlockCrush
     public class Gun : MonoBehaviour
     {
         [Header("Visual")]
-        [SerializeField] private MeshRenderer _meshRenderer;
-        [SerializeField] private TextMeshPro _bulletCountText;
+        [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private TextMeshPro bulletCountText;
         [SerializeField] private Bullet bulletPrb;
         [SerializeField] private Transform bulletSpawnPos;
         [SerializeField] private float turnDuration = 0.4f;
+        [SerializeField] private LayerMask blockMask;
+        [SerializeField] private float fireRate;
+
+
 
         private float nextFireTime;
         private bool isTurning;
@@ -25,11 +29,10 @@ namespace ColorBlockCrush
         private TrayItem trayItem;
         private GunPos gunPos;
         private RotationDirection currentFireDir = RotationDirection.Up;
+        private List<Block> victims;
 
         public int BulletCount { get; private set; }
-        public bool isMoving { get; private set; }
         public ColorType Color { get; private set; }
-        public float FireRate { get; private set; }
         public int ColumnIndex { get; set; }
         public bool IsFrontRow { get; set; }
 
@@ -43,7 +46,7 @@ namespace ColorBlockCrush
         public Action<Gun> OnGunFired;
         public Action<Gun> OnGunEmpty;
 
-        public void Init(ColorType color, int bulletCount, float fireRate, int column)
+        public void Init(ColorType color, int bulletCount, int column)
         {
             GunPos = GunPos.ON_GUN_BOARD;
             currentFireDir = RotationDirection.Up;
@@ -53,14 +56,13 @@ namespace ColorBlockCrush
             ConnectedGuns = new List<Gun>();
             Color = color;
             BulletCount = bulletCount;
-            FireRate = fireRate;
             ColumnIndex = column;
             nextFireTime = 0f;
             IsFrontRow = false;
             isFireFirstTime = false;
             isTurning = false;
+            victims = new List<Block>();
             UpdateVisuals();
-            InvokeRepeating(nameof(TestRay), 0f, 0.05f);
         }
 
         private void Update()
@@ -72,14 +74,30 @@ namespace ColorBlockCrush
             transform.DOKill(this);
         }
 
-        private void TestRay()
+        private void CheckFire()
         {
             if (!CanFire())
             {
                 return;
             }
-            var dir = GetFireDirection(currentFireDir);
-            Debug.DrawRay(transform.position, dir * 10, UnityEngine.Color.red, 10);
+
+            var target = GetTargetBock();
+
+            if (!target)
+            {
+                return;
+            }
+
+            if (!victims.Contains(target))
+            {
+                victims.Add(target);
+            }
+            else
+            {
+                return;
+            }
+
+            Fire(target);
         }
 
 
@@ -116,10 +134,13 @@ namespace ColorBlockCrush
                 ;
         }
 
-        public Block GetTargetPointFromForward(Transform start, float maxDist, LayerMask mask)
+        public Block GetTargetBock()
         {
-            Ray ray = new Ray(start.position, start.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, maxDist, mask, QueryTriggerInteraction.Ignore))
+            var dir = GetFireDirection(currentFireDir);
+            Debug.DrawRay(bulletSpawnPos.position, dir * 10, UnityEngine.Color.red, 10);
+
+            Ray ray = new Ray(bulletSpawnPos.position, dir);
+            if (Physics.Raycast(ray, out RaycastHit hit, 10, blockMask))
             {
                 hit.transform.TryGetComponent(out Block block);
                 return block;
@@ -132,17 +153,18 @@ namespace ColorBlockCrush
         {
             if (!CanFire()) return;
 
-            RotateToBoard(CurrentTarget.transform);
+            RotateToFire(target.transform);
             BulletCount--;
-            nextFireTime = Time.time + (1f / FireRate);
+            nextFireTime = Time.time + (1f / fireRate);
 
             UpdateBulletCountDisplay();
 
             Bullet bullet = Instantiate(bulletPrb, bulletSpawnPos.position, Quaternion.identity);
-
             bullet.OnInit(this, target, (gun, block) =>
             {
-
+                victims.Remove(target);
+                Destroy(target.gameObject);
+                Destroy(bullet.gameObject);
             });
 
             OnGunFired?.Invoke(this);
@@ -154,7 +176,7 @@ namespace ColorBlockCrush
             }
         }
 
-        private void RotateToBoard(Transform target)
+        private void RotateToFire(Transform target)
         {
             if (!isFireFirstTime)
             {
@@ -187,7 +209,7 @@ namespace ColorBlockCrush
 
         public void Turn(RotationDirection direction)
         {
-            if (isFireFirstTime)
+            if (!isFireFirstTime)
             {
                 return;
             }
@@ -249,9 +271,9 @@ namespace ColorBlockCrush
 
         private void UpdateVisuals()
         {
-            if (_meshRenderer != null)
+            if (meshRenderer != null)
             {
-                Material mat = _meshRenderer.material;
+                Material mat = meshRenderer.material;
                 mat.color = GetColorFromType(Color);
             }
 
@@ -260,9 +282,9 @@ namespace ColorBlockCrush
 
         private void UpdateBulletCountDisplay()
         {
-            if (_bulletCountText != null)
+            if (bulletCountText != null)
             {
-                _bulletCountText.text = BulletCount.ToString();
+                bulletCountText.text = BulletCount.ToString();
             }
         }
 
@@ -286,11 +308,18 @@ namespace ColorBlockCrush
         public void MoveToConeyor(Vector3 endPos, Action callback = null)
         {
             Sequence moveToConveyorSq = DOTween.Sequence();
-            GunPos = GunPos.ON_CONVEYOR;
+            GunPos = GunPos.TWEEN_SORT;
+            currentFireDir = RotationDirection.Up;
+
             moveToConveyorTw = moveToConveyorSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.OutQuad).OnComplete(() =>
             {
                 callback?.Invoke();
+                GunPos = GunPos.ON_CONVEYOR;
+                InvokeRepeating(nameof(CheckFire), 0f, 0.01f);
             });
+
+            Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
+            moveToConveyorSq.Join(transform.DORotate(newRotation, 0.3f));
             moveToConveyorSq.SetId(this);
         }
 

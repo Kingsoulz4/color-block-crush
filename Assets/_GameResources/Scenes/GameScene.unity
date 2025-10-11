@@ -1972,7 +1972,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6, y: 1, z: 0.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2137201417}
@@ -2408,7 +2408,6 @@ MonoBehaviour:
   _spawnOrigin: {x: -2, y: 0, z: -10}
   _columnSpacing: 3
   _rowSpacing: 2
-  _defaultFireRate: 2
   gunBoardData: {fileID: 11400000, guid: b587a30ef96018845bf52485d348948d, type: 2}
   _gunPrefab: {fileID: 769447249408881793, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}
   _gunContainer: {fileID: 1070506719}
@@ -2558,7 +2557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rows: 30
-  _columns: 10
+  _columns: 8
   _spawnOrigin: {x: 0, y: 0, z: 12}
   _gridNodeScale: {x: 1, y: 1, z: 1}
   _gridNodeOffset: {x: 0, y: 0, z: 0}
