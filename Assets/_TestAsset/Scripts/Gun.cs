@@ -52,8 +52,6 @@ namespace ColorBlockCrush
             _nextFireTime = 0f;
             IsFrontRow = false;
             isFireFirstTime = false;
-            isMoving = false;
-            isMoving = true;
             UpdateVisuals();
         }
 
@@ -89,7 +87,19 @@ namespace ColorBlockCrush
             return true;
         }
 
-        public void Fire()
+        public Block GetTargetPointFromForward(Transform start, float maxDist, LayerMask mask)
+        {
+            Ray ray = new Ray(start.position, start.forward);
+            if (Physics.Raycast(ray, out RaycastHit hit, maxDist, mask, QueryTriggerInteraction.Ignore))
+            {
+                hit.transform.TryGetComponent(out Block block);
+                return block;
+            }
+
+            return null;
+        }
+
+        public void Fire(Block target)
         {
             if (!CanFire()) return;
 
@@ -98,8 +108,10 @@ namespace ColorBlockCrush
             _nextFireTime = Time.time + (1f / FireRate);
 
             UpdateBulletCountDisplay();
+
             Bullet bullet = Instantiate(bulletPrb);
-            bullet.OnInit(this, (gun, block) =>
+
+            bullet.OnInit(this, target, (gun, block) =>
             {
 
             });
