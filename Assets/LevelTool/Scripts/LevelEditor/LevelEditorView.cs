@@ -36,7 +36,7 @@ namespace ColorBlockCrush.Tools
         public Button buttonDel;
 
         [Header("Properties Map")] 
-        public ToggleGroupListener propertyGroup;
+        public List<ButtonChooseDragType> buttonChooseDragTypes;
         public List<ButtonColorChoose> buttonCellGridColorChooses =  new List<ButtonColorChoose>();
         
         [Header("Choose Image Area")]

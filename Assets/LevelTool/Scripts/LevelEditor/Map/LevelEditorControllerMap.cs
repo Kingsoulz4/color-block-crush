@@ -14,6 +14,8 @@ namespace ColorBlockCrush.Tools
         
         [SerializeField] 
         private ColorType currentColorChoose = ColorType.Red;
+
+        [SerializeField] private DragType currentDragType = DragType.Normal;
         
         private Action<List<GridCellMapView>> onUpdateSelection;
         private Action<List<GridCellMapView>> onDeleteSelection;
@@ -218,6 +220,16 @@ namespace ColorBlockCrush.Tools
                 buttonChoose.UpdateChoosing(buttonChoose.GetColorType() == colorChoose);
             }
             currentColorChoose = colorChoose;
+        }
+
+        private void UpdateCurrentDragType(DragType dragType)
+        {
+            foreach (var buttonChoose in view.buttonChooseDragTypes)
+            {
+                buttonChoose.UpdateButtonState(currentDragType);
+            }
+            currentDragType = dragType;
+            view.dragCellMapSelection.ChangeDragType(currentDragType);
         }
 
         private int GetMapSize()

@@ -77,6 +77,11 @@ namespace ColorBlockCrush.Tools
         public void ChangeDragType(DragType newDragType)
         {
             currentDragType = newDragType;
+            
+            if (FinalSelectedCells.Count > 0)
+            {
+                ClearOnlySelection();
+            }
         }
 
         private void CacheLayoutParams()
@@ -156,7 +161,6 @@ namespace ColorBlockCrush.Tools
             {
                 if (!ScreenToRC(eventData.position, cam, out var rcStart))
                 {
-                    Debug.Log("Not Choose");
                     if (FinalSelectedCells.Count > 0)
                     {
                         ClearOnlySelection();
@@ -168,7 +172,6 @@ namespace ColorBlockCrush.Tools
                 var startCell = GetCell(rcStart.x, rcStart.y);
                 if (startCell == null)
                 {
-                    Debug.Log("Not Choose 2");
                     if (FinalSelectedCells.Count > 0)
                     {
                         ClearOnlySelection();

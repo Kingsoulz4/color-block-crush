@@ -128,6 +128,12 @@ namespace ColorBlockCrush.Tools
             }
             UpdateCurrentColorChoose(ColorType.Pink);
             
+            for (int i = 0; i < view.buttonChooseDragTypes.Count; i++)
+            {
+                view.buttonChooseDragTypes[i].Init(UpdateCurrentDragType);
+            }
+            UpdateCurrentDragType(DragType.Normal);
+            
             view.dragCellMapSelection.enabled = false;
             
             #endregion
