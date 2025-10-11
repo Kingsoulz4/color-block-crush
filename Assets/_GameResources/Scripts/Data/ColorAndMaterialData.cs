@@ -11,8 +11,8 @@ namespace Geckout
     {
         public SerializedDictionary<ColorType, Color> listColor;
 
-        public SerializedDictionary<ColorType, Material> listDogMaterial;
+        public SerializedDictionary<ColorType, Material> listGunMaterial;
 
-        public SerializedDictionary<ColorType, Material> listPortalMaterial;
+        public SerializedDictionary<ColorType, Material> listBlockMaterial;
     }
 }
