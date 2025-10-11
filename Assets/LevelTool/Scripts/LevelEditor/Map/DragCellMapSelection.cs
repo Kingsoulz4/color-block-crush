@@ -20,6 +20,9 @@ namespace ColorBlockCrush.Tools
         [Header("Grid Size")] 
         [SerializeField] private int rows = 32;
         [SerializeField] private int cols = 32;
+        
+        [Header("Drag Type")]
+        [SerializeField] private DragType currentDragType;
 
         private bool isDragging = false;
         
@@ -31,6 +34,8 @@ namespace ColorBlockCrush.Tools
         private Vector2 cellSize, spacing;
         private float stepX, stepY;
         private Vector2 originLocal;
+
+        private Vector2 startPos;
 
         private GridCellMapView[,] grid;
         private Dictionary<GridCellMapView, Vector2Int> cellToRC;
@@ -69,6 +74,11 @@ namespace ColorBlockCrush.Tools
             RecomputeIndexState();
         }
 
+        public void ChangeDragType(DragType newDragType)
+        {
+            currentDragType = newDragType;
+        }
+
         private void CacheLayoutParams()
         {
             glg = gridParent.GetComponent<GridLayoutGroup>();
@@ -103,18 +113,6 @@ namespace ColorBlockCrush.Tools
         {
             grid = new GridCellMapView[rows, cols];
             cellToRC = new Dictionary<GridCellMapView, Vector2Int>(GridCellList.Count);
-
-            // foreach (var c in GridCellList)
-            // {
-            //     Rect rc = LocalRectOf(c.rectTransform);
-            //     Vector2 center = rc.center;
-            //     if (LocalToRC(center, out int row, out int col))
-            //     {
-            //         grid[row, col] = c;
-            //         c.SetRowAndCol(col, row);
-            //         cellToRC[c] = new Vector2Int(row, col);
-            //     }
-            // }
 
             for (int i = 0; i < GridCellList.Count; i++)
             {
@@ -153,97 +151,128 @@ namespace ColorBlockCrush.Tools
         {
             var cam = eventData.pressEventCamera; // Overlay => null
             Debug.Log("Pointer down");
-            
-            if (!ScreenToRC(eventData.position, cam, out var rcStart))
+
+            if (currentDragType == DragType.Normal)
             {
-                Debug.Log("Not Choose");
-                if (FinalSelectedCells.Count > 0)
+                if (!ScreenToRC(eventData.position, cam, out var rcStart))
                 {
-                    ClearOnlySelection();
+                    Debug.Log("Not Choose");
+                    if (FinalSelectedCells.Count > 0)
+                    {
+                        ClearOnlySelection();
+                    }
+                    isDragging = false;
+                    return;
                 }
-                isDragging = false;
-                return;
-            }
             
-            var startCell = GetCell(rcStart.x, rcStart.y);
-            if (startCell == null)
-            {
-                Debug.Log("Not Choose 2");
-                if (FinalSelectedCells.Count > 0)
+                var startCell = GetCell(rcStart.x, rcStart.y);
+                if (startCell == null)
                 {
-                    ClearOnlySelection();
+                    Debug.Log("Not Choose 2");
+                    if (FinalSelectedCells.Count > 0)
+                    {
+                        ClearOnlySelection();
+                    }
+
+                    isDragging = false;
+                    return;
                 }
 
-                isDragging = false;
-                return;
-            }
+                filterMode = (startCell.drawIndex != -1) ? SelectionFilter.NumberedOnly : SelectionFilter.UnnumberedOnly;
 
-            filterMode = (startCell.drawIndex != -1) ? SelectionFilter.NumberedOnly : SelectionFilter.UnnumberedOnly;
-            
-            // if (AcceptByMode(startCell))
-            // {
                 CurrentlySelectedCells.Clear();
-                //selectionOrder.Clear();
-                //FinalSelectedCells = FinalSelectedCells.Where(c => c != null && c.IsSelected).ToList();
                 PushIfNew(startCell);
-            
+
                 hasLastPointerRC = true;
                 lastPointerRC = rcStart;
                 isDragging = true;
-            //}
-            // else
-            // {
-            //     isDragging = false;
-            // }
+            }
+            else if (currentDragType == DragType.Block)
+            {
+                CurrentlySelectedCells.Clear();
+                if (FinalSelectedCells.Count > 0)
+                {
+                    ClearOnlySelection();
+                }
+                isDragging = true;
+                startPos = eventData.position;
+            }
+            else if(currentDragType == DragType.Key)
+            {
+                 
+            }
         }
 
         public void OnPointerMove(PointerEventData eventData)
         {
             if (!isDragging) return;
 
-            var cam = eventData.pressEventCamera;
-            if (!ScreenToRC(eventData.position, cam, out var currRC))
+            if (currentDragType == DragType.Normal)
             {
-                hasLastPointerRC = false;
-                return;
-            }
+                var cam = eventData.pressEventCamera;
+                if (!ScreenToRC(eventData.position, cam, out var currRC))
+                {
+                    hasLastPointerRC = false;
+                    return;
+                }
 
-            if (!hasLastPointerRC)
+                if (!hasLastPointerRC)
+                {
+                    hasLastPointerRC = true;
+                    lastPointerRC = currRC;
+                }
+
+                foreach (var step in Supercover(lastPointerRC.x, lastPointerRC.y, currRC.x, currRC.y))
+                {
+                    var cell = GetCell(step.x, step.y);
+                    if (cell == null) continue;
+                    if (!AcceptByMode(cell)) continue;
+
+                    int top = CurrentlySelectedCells.Count - 1;
+                    if (top >= 0 && cell == CurrentlySelectedCells[top])
+                    {
+                        continue;
+                    }
+
+                    if (top >= 1 && cell == CurrentlySelectedCells[top - 1])
+                    {
+                        var toRemove = CurrentlySelectedCells[top];
+                        toRemove.IsSelecting = false;
+                        toRemove.UpdateSelectingColor();
+                        CurrentlySelectedCells.RemoveAt(top);
+                    }
+                    else if (CurrentlySelectedCells.IndexOf(cell) >= 0)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        PushIfNew(cell);
+                    }
+                }
+
+                lastPointerRC = currRC;   
+            }
+            else if (currentDragType == DragType.Block)
             {
-                hasLastPointerRC = true;
-                lastPointerRC = currRC;
-            }
+                Vector2 endPos = eventData.position;
 
-            foreach (var step in Supercover(lastPointerRC.x, lastPointerRC.y, currRC.x, currRC.y))
+                Vector2 localStart, localEnd;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(gridParent, startPos, uiCamera, out localStart);
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(gridParent, endPos, uiCamera, out localEnd);
+                
+                Rect selectionRect = new Rect(
+                    Mathf.Min(localStart.x, localEnd.x),
+                    Mathf.Min(localStart.y, localEnd.y),
+                    Mathf.Abs(localEnd.x - localStart.x),
+                    Mathf.Abs(localEnd.y - localStart.y)
+                );
+
+                HighlightCellsInRect(selectionRect);
+            }else if (currentDragType == DragType.Key)
             {
-                var cell = GetCell(step.x, step.y);
-                if (cell == null) continue;
-                if (!AcceptByMode(cell)) continue;
-
-                int top = CurrentlySelectedCells.Count - 1;
-                if (top >= 0 && cell == CurrentlySelectedCells[top])
-                {
-                    continue;
-                }
-
-                if (top >= 1 && cell == CurrentlySelectedCells[top - 1])
-                {
-                    var toRemove = CurrentlySelectedCells[top];
-                    toRemove.IsSelecting = false;
-                    toRemove.UpdateSelectingColor();
-                    CurrentlySelectedCells.RemoveAt(top);
-                }
-                else if (CurrentlySelectedCells.IndexOf(cell) >= 0)
-                {
-                    continue;
-                }
-                else
-                {
-                    PushIfNew(cell);
-                }
+                
             }
-
-            lastPointerRC = currRC;
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -251,20 +280,85 @@ namespace ColorBlockCrush.Tools
             if (!isDragging) return;
 
             isDragging = false;
-            hasLastPointerRC = false;
 
-            foreach (var cell in CurrentlySelectedCells)
+            if (currentDragType == DragType.Normal)
             {
-                bool willBeSelected = !cell.IsSelected;
-                cell.IsSelected = willBeSelected;
-                cell.UpdateSelectedColor();
+                hasLastPointerRC = false;
 
-                cell.IsSelecting = false;
-                cell.UpdateSelectingColor();
+                foreach (var cell in CurrentlySelectedCells)
+                {
+                    bool willBeSelected = !cell.IsSelected;
+                    cell.IsSelected = willBeSelected;
+                    cell.UpdateSelectedColor();
+
+                    cell.IsSelecting = false;
+                    cell.UpdateSelectingColor();
+                }   
+            }
+            else if (currentDragType == DragType.Block)
+            {
+                foreach (var cell in CurrentlySelectedCells)
+                {
+                    bool willBeSelected = !cell.IsSelected;
+                    cell.IsSelected = willBeSelected;
+                    cell.UpdateSelectedColor();
+
+                    cell.IsSelecting = false;
+                    cell.UpdateSelectingColor();
+                }   
+            }
+            else if(currentDragType == DragType.Key)
+            {
+                 
             }
 
             CurrentlySelectedCells.Clear();
             UpdateSelection();
+        }
+        
+        void HighlightCellsInRect(Rect selectionRect)
+        {
+            bool hasSelectCell = false;
+            foreach (GridCellMapView cell in GridCellList)
+            {
+                // Get world corners of the cell
+                Vector3[] corners = new Vector3[4];
+                cell.rectTransform.GetWorldCorners(corners);
+
+                // Convert corners to local space relative to gridParent
+                for (int i = 0; i < 4; i++)
+                    corners[i] = gridParent.InverseTransformPoint(corners[i]);
+
+                Rect cellRect = new Rect(corners[0], corners[2] - corners[0]);
+
+                bool isOverlapping = selectionRect.Overlaps(cellRect, true);
+                bool isCellSelecting = CurrentlySelectedCells.Contains(cell);
+
+                if (isOverlapping)
+                {
+                    hasSelectCell = true;
+                    if (!isCellSelecting)
+                    {
+                        CurrentlySelectedCells.Add(cell);
+                        cell.IsSelecting = true;
+                        cell.UpdateSelectingColor();
+                    }
+                }
+                else
+                {
+                    if (isCellSelecting)
+                    {
+                        CurrentlySelectedCells.Remove(cell);
+                        cell.IsSelecting = false;
+                        cell.UpdateSelectingColor();
+                    }
+                }
+            }
+
+            if (!hasSelectCell)
+            {
+                // ClearSelection();
+            }
         }
 
         // ===================== Buttons =====================
@@ -479,5 +573,12 @@ namespace ColorBlockCrush.Tools
                 }
             }
         }
+    }
+
+    public enum DragType
+    {
+        Normal,
+        Key,
+        Block
     }
 }
