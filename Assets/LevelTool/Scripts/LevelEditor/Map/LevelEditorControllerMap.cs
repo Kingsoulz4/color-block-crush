@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using System.Linq;
+using Sirenix.OdinInspector;
 
 namespace ColorBlockCrush.Tools
 {
@@ -14,9 +16,18 @@ namespace ColorBlockCrush.Tools
         
         [SerializeField] 
         private ColorType currentColorChoose = ColorType.Red;
+
+        [SerializeField] private DragType currentDragType = DragType.Normal;
         
         private Action<List<GridCellMapView>> onUpdateSelection;
         private Action<List<GridCellMapView>> onDeleteSelection;
+        
+        [SerializeField]
+        private List<GridCellMapView> _gridCellMapViews = new List<GridCellMapView>();
+        [SerializeField]
+        private List<BlockInforEditorView> _blockInforEditorViews = new List<BlockInforEditorView>();
+        [SerializeField]
+        private List<KeyInforEditorView> _keyInforEditorViews = new List<KeyInforEditorView>();
 
         private void ValidateMapWidth(string value)
         {
@@ -67,7 +78,8 @@ namespace ColorBlockCrush.Tools
         private void CreateMapEmpty()
         {
             ClearAllMap();
-            List<GridCellMapView> gridCellList = new List<GridCellMapView>();
+            currentColorSet = new HashSet<ColorType>();
+            _gridCellMapViews = new List<GridCellMapView>();
 
             float gridCellSize = (float)(model.gridContainer.sizeDelta.x / (float)GetMapSize());
             model.gridLayoutGroup.constraintCount = mapWidth;
@@ -79,21 +91,23 @@ namespace ColorBlockCrush.Tools
             {
                 for (int j = 0; j < mapWidth; j++)
                 {
-                    GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
-                        .GetComponent<GridCellMapView>();
-                    gridCellList.Add(gridCellMapView);
-                    
                     CellConfig cellConfig = new CellConfig();
                     cellConfig.id = (int)CantorPairing.MakeId((ulong)i, (ulong)j);
                     cellConfig.coordinate = new Vector2Int(i, j);
                     currentLevelConfig.mapConfig.cells.Add(cellConfig);
+                    
+                    GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
+                        .GetComponent<GridCellMapView>();
+                    gridCellMapView.cellConfig = cellConfig;
+                    _gridCellMapViews.Add(gridCellMapView);
                 }
             }
             
             view.dragCellMapSelection.enabled = true;
-            DOVirtual.DelayedCall(.55f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, gridCellList,
+            DOVirtual.DelayedCall(.55f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, _gridCellMapViews,
                 onUpdateSelection, onDeleteSelection));
-            
+
+            UpdateLevelState();
         }
 
         private void CreateMapByPicture()
@@ -105,7 +119,7 @@ namespace ColorBlockCrush.Tools
             view.WidthMapSize.text = mapWidth.ToString();
             view.HeightMapSize.text = mapHeight.ToString();
             
-            List<GridCellMapView> gridCellList = new List<GridCellMapView>();
+            _gridCellMapViews = new List<GridCellMapView>();
 
             float gridCellSize = (float)(model.gridContainer.sizeDelta.x / (float)GetMapSize());
             model.gridLayoutGroup.constraintCount = mapWidth;
@@ -117,22 +131,25 @@ namespace ColorBlockCrush.Tools
             {
                 for (int j = 0; j < mapHeight; j++)
                 {
-                    GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
-                        .GetComponent<GridCellMapView>();
-                    gridCellMapView.UpdateColor(currentColorArray[i, j]);
-                    gridCellList.Add(gridCellMapView);
-                    
                     CellConfig cellConfig = new CellConfig();
                     cellConfig.id = (int)CantorPairing.MakeId((ulong)i, (ulong)j);
                     cellConfig.coordinate = new Vector2Int(i, j);
                     cellConfig.colorType = currentColorArray[i, j];
                     currentLevelConfig.mapConfig.cells.Add(cellConfig);
+                    
+                    GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
+                        .GetComponent<GridCellMapView>();
+                    gridCellMapView.cellConfig = cellConfig;
+                    gridCellMapView.UpdateColor(currentColorArray[i, j]);
+                    _gridCellMapViews.Add(gridCellMapView);
                 }
             }
 
             view.dragCellMapSelection.enabled = true;
-            DOVirtual.DelayedCall(2.5f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, gridCellList,
+            DOVirtual.DelayedCall(2.5f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, _gridCellMapViews,
                 onUpdateSelection, onDeleteSelection));
+
+            UpdateLevelState();
         }
 
         private void UpdateMapData()
@@ -148,7 +165,8 @@ namespace ColorBlockCrush.Tools
             model.gridLayoutGroup.constraintCount = mapWidth;
             model.gridLayoutGroup.cellSize = new Vector2(gridCellSize, gridCellSize);
             
-            List<GridCellMapView> gridCellList = new List<GridCellMapView>();
+            _gridCellMapViews = new List<GridCellMapView>();
+            currentColorSet = new HashSet<ColorType>();
             
             for (int i = 0; i < mapConfig.mapSize.x; i++)
             {
@@ -156,35 +174,230 @@ namespace ColorBlockCrush.Tools
                 {
                     GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
                         .GetComponent<GridCellMapView>();
-                    gridCellMapView.UpdateColor(mapConfig.cells[i * mapConfig.mapSize.y + j].colorType);
-                    gridCellList.Add(gridCellMapView);
+                    int cellIndex = i * mapConfig.mapSize.y + j;
+                    gridCellMapView.cellConfig = mapConfig.cells[cellIndex];
+                    gridCellMapView.UpdateColor(mapConfig.cells[cellIndex].colorType);
+                    currentColorSet.Add(mapConfig.cells[cellIndex].colorType);
+                    _gridCellMapViews.Add(gridCellMapView);
                 }
             }
             
             view.dragCellMapSelection.enabled = true;
-            DOVirtual.DelayedCall(.55f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, gridCellList,
-                onUpdateSelection, onDeleteSelection));
-        }
-        
-        public void UpdateColorGridCell(List<GridCellMapView> cellSelection)
-        {
-            foreach (var cellMapView in cellSelection)
+            DOVirtual.DelayedCall(.55f, () =>
             {
-                cellMapView.UpdateColor(currentColorChoose);
+                view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, _gridCellMapViews,
+                    onUpdateSelection, onDeleteSelection);
                 
-                currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
-                + cellMapView.Row].colorType = currentColorChoose;
-            }
+                List<GridCellMapView> cellGridBlockList = new List<GridCellMapView>();
+                for (int i = 0; i < mapConfig.blocks.Count; i++)
+                {
+                    cellGridBlockList.Clear();
+                    cellGridBlockList = _gridCellMapViews.Where(cell => mapConfig.blocks[i].cellsId.Contains(cell.cellConfig.id)).ToList();
+                    BlockInforEditorView blockInforView =
+                        Instantiate(model.blockInforPrefab).GetComponent<BlockInforEditorView>();
+                    blockInforView.UpdateInfor(i, view.mapFeatureParent, 
+                        cellGridBlockList.ConvertAll(cell => cell.transform as RectTransform), 
+                        canvas, mapConfig.blocks[i].blockHealth, mapConfig.blocks[i].colorType);
+                    _blockInforEditorViews.Add(blockInforView);
+                    currentColorSet.Add(mapConfig.blocks[i].colorType);
+                }
+
+                for (int i = 0; i < mapConfig.keys.Count; i++)
+                {
+                    cellGridBlockList.Clear();
+                    cellGridBlockList = _gridCellMapViews.Where(cell => mapConfig.keys[i].cellsId.Contains(cell.cellConfig.id)).ToList();
+                    KeyInforEditorView keyInforView =
+                        Instantiate(model.keyInforPrefab).GetComponent<KeyInforEditorView>();
+                    keyInforView.UpdateInfor(i, view.mapFeatureParent, 
+                        cellGridBlockList.ConvertAll(cell => cell.transform as RectTransform), 
+                        canvas);
+                    _keyInforEditorViews.Add(keyInforView);
+                }
+
+                UpdateLevelState();
+            });
         }
         
-        public void DeleteColorGridCell(List<GridCellMapView> cellSelection)
+        public void SetStateGridCell(List<GridCellMapView> cellSelection)
         {
-            foreach (var cellMapView in cellSelection)
+            if (currentDragType == DragType.Normal)
             {
-                cellMapView.DeleteColor();
-                currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
-                                                   + cellMapView.Row].colorType = ColorType.None;
+                foreach (var cellMapView in cellSelection)
+                {
+                    cellMapView.UpdateColor(currentColorChoose);
+                
+                    currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
+                                                       + cellMapView.Row].colorType = currentColorChoose;
+                }
+                
+                currentColorSet.Add(currentColorChoose);
             }
+            else if(currentDragType == DragType.Block)
+            {
+                string blockHealth = view.blockHealthInputField.text;
+                if (string.IsNullOrEmpty(blockHealth))
+                {
+                    Debug.LogError("Invalid Block Health");
+                    return;
+                }
+                
+                BlockConfig blockConfig = new BlockConfig();
+                blockConfig.blockGroupId = currentLevelConfig.mapConfig.blocks.Count;
+                blockConfig.colorType = currentColorChoose;
+                blockConfig.blockHealth = int.Parse(blockHealth);
+                
+                for (int i = 0; i < cellSelection.Count; i++)
+                {
+                    cellSelection[i].DeleteColor();
+
+                    int cellIndex = cellSelection[i].Col * currentLevelConfig.mapConfig.mapSize.y
+                                    + cellSelection[i].Row;
+                    currentLevelConfig.mapConfig.cells[cellIndex].colorType = ColorType.None;
+                    currentLevelConfig.mapConfig.cells[cellIndex].blockGroupId = blockConfig.blockGroupId;
+                    blockConfig.cellsId.Add(currentLevelConfig.mapConfig.cells[cellIndex].id);
+                }
+                
+                currentLevelConfig.mapConfig.blocks.Add(blockConfig);
+                
+                BlockInforEditorView blockInforView =
+                    Instantiate(model.blockInforPrefab).GetComponent<BlockInforEditorView>();
+                blockInforView.UpdateInfor(blockConfig.blockGroupId, view.mapFeatureParent, 
+                    cellSelection.ConvertAll(cell => cell.transform as RectTransform), 
+                    canvas, int.Parse(blockHealth), currentColorChoose);
+                _blockInforEditorViews.Add(blockInforView);
+                
+                currentColorSet.Add(currentColorChoose);
+            }
+            else if(currentDragType == DragType.Key)
+            {
+                KeyConfig keyConfig = new KeyConfig();
+                keyConfig.keyId = currentLevelConfig.mapConfig.keys.Count;
+                
+                for (int i = 0; i < cellSelection.Count; i++)
+                {
+                    int cellIndex = cellSelection[i].Col * currentLevelConfig.mapConfig.mapSize.y
+                                    + cellSelection[i].Row;
+                    currentLevelConfig.mapConfig.cells[cellIndex].keyId = keyConfig.keyId;
+                    keyConfig.cellsId.Add(currentLevelConfig.mapConfig.cells[cellIndex].id);
+                }
+                
+                currentLevelConfig.mapConfig.keys.Add(keyConfig);
+                
+                KeyInforEditorView keyInforView =
+                    Instantiate(model.keyInforPrefab).GetComponent<KeyInforEditorView>();
+                keyInforView.UpdateInfor(keyConfig.keyId, view.mapFeatureParent, 
+                    cellSelection.ConvertAll(cell => cell.transform as RectTransform), 
+                    canvas);
+                _keyInforEditorViews.Add(keyInforView);
+            }
+            
+            UpdateLevelState();
+        }
+        
+        public void DeleteStateGridCell(List<GridCellMapView> cellSelection)
+        {
+            if (currentDragType == DragType.Normal)
+            {
+                foreach (var cellMapView in cellSelection)
+                {
+                    cellMapView.DeleteColor();
+                    currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
+                                                       + cellMapView.Row].colorType = ColorType.None;
+                }
+            }
+            else if (currentDragType == DragType.Block)
+            {
+                HashSet<int> blocksRemoved = new HashSet<int>();
+                List<BlockConfig> blockConfigsRemove = new List<BlockConfig>();
+                
+                foreach (var cellMapView in cellSelection)
+                {
+                    cellMapView.DeleteColor();
+                    currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
+                                                       + cellMapView.Row].colorType = ColorType.None;
+                    if (cellMapView.cellConfig.blockGroupId != -1 
+                        && !blocksRemoved.Contains(cellMapView.cellConfig.blockGroupId))
+                    {
+                        blocksRemoved.Add(cellMapView.cellConfig.blockGroupId);
+                        BlockInforEditorView blockInforViewRemove =
+                            _blockInforEditorViews.FirstOrDefault(blocksRemove =>
+                                blocksRemove.GetKeyId() == cellMapView.cellConfig.blockGroupId);
+                        if (blockInforViewRemove != null)
+                        {
+                            _blockInforEditorViews.Remove(blockInforViewRemove);
+                            Destroy(blockInforViewRemove.gameObject);
+                            Debug.Log($"Remove Block {cellMapView.cellConfig.blockGroupId}");
+                        }
+                        BlockConfig blockConfigRenove = currentLevelConfig.mapConfig.blocks[cellMapView.cellConfig.blockGroupId];
+                        currentLevelConfig.mapConfig.blocks.Remove(blockConfigRenove);
+                        blockConfigsRemove.Add(blockConfigRenove);
+                    }
+                }
+                
+                ReUpdateBlockId();
+
+                Debug.Log("Block Config Count " + blocksRemoved.Count);
+                if (blockConfigsRemove.Count > 0)
+                {
+                    foreach (var blockConfig in blockConfigsRemove)
+                    {
+                        foreach (var cellId in blockConfig.cellsId)
+                        {
+                            (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                            int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
+                                            + (int)row;
+                            Debug.Log("Cell Index " + cellIndex);
+                            _gridCellMapViews[cellIndex].cellConfig.blockGroupId = -1;
+                        }
+                    }
+                }
+            }
+            else if (currentDragType == DragType.Key)
+            {
+                HashSet<int> keysIdRemoved = new HashSet<int>();
+                List<KeyConfig> keyConfigsRemove = new List<KeyConfig>();
+                
+                foreach (var cellMapView in cellSelection)
+                {
+                    if (cellMapView.cellConfig.keyId != -1 
+                        && !keysIdRemoved.Contains(cellMapView.cellConfig.keyId))
+                    {
+                        keysIdRemoved.Add(cellMapView.cellConfig.keyId);
+                        KeyInforEditorView keyInforViewRemove =
+                            _keyInforEditorViews.FirstOrDefault(keyRemove =>
+                                keyRemove.GetKeyId() == cellMapView.cellConfig.keyId);
+                        if (keyInforViewRemove != null)
+                        {
+                            _keyInforEditorViews.Remove(keyInforViewRemove);
+                            Destroy(keyInforViewRemove.gameObject);
+                            Debug.Log($"Remove Key {cellMapView.cellConfig.keyId}");
+                        }
+                        KeyConfig keyConfigRemove = currentLevelConfig.mapConfig.keys[cellMapView.cellConfig.keyId];
+                        currentLevelConfig.mapConfig.keys.Remove(keyConfigRemove);
+                        keyConfigsRemove.Add(keyConfigRemove);
+                    }
+                }
+                
+                ReUpdateKeyIdInLevel();
+                
+                Debug.Log("Key Config Count " + keyConfigsRemove.Count);
+                if (keyConfigsRemove.Count > 0)
+                {
+                    foreach (var keyConfig in keyConfigsRemove)
+                    {
+                        foreach (var cellId in keyConfig.cellsId)
+                        {
+                            (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                            int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
+                                            + (int)row;
+                            Debug.Log("Cell Index " + cellIndex);
+                            _gridCellMapViews[cellIndex].cellConfig.keyId = -1;
+                        }
+                    }
+                }
+            }
+            
+            UpdateLevelState();
         }
 
         private void SetColorSelected()
@@ -197,9 +410,38 @@ namespace ColorBlockCrush.Tools
             view.dragCellMapSelection.OnClickDeleteColor();   
         }
 
+        [Button]
         private void ClearAllMap()
         {
             view.dragCellMapSelection.ClearAllGrid();
+            ClearAllBlock();
+            ClearAllKey();
+        }
+
+        private void ClearAllBlock()
+        {
+            for (int i = _blockInforEditorViews.Count - 1; i >= 0; i--)
+            {
+                BlockInforEditorView blockEditorView = _blockInforEditorViews[i];
+                _blockInforEditorViews.RemoveAt(i);
+                
+                Destroy(blockEditorView.gameObject);
+            }
+            
+            _blockInforEditorViews.Clear();
+        }
+        
+        private void ClearAllKey()
+        {
+            for (int i = _keyInforEditorViews.Count - 1; i >= 0; i--)
+            {
+                KeyInforEditorView keyInforEditorView = _keyInforEditorViews[i];
+                _keyInforEditorViews.RemoveAt(i);
+                
+                Destroy(keyInforEditorView.gameObject);
+            }
+            
+            _keyInforEditorViews.Clear();
         }
 
         private void ClearAllColor()
@@ -220,6 +462,89 @@ namespace ColorBlockCrush.Tools
             currentColorChoose = colorChoose;
         }
 
+        private void UpdateCurrentDragType(DragType dragType)
+        {
+            foreach (var buttonChoose in view.buttonChooseDragTypes)
+            {
+                buttonChoose.UpdateButtonState(dragType);
+            }
+            currentDragType = dragType;
+            view.dragCellMapSelection.ChangeDragType(currentDragType);
+        }
+
+        private void ReUpdateBlockId()
+        {
+            for (int i = 0; i < currentLevelConfig.mapConfig.blocks.Count; i++)
+            {
+                BlockConfig blockConfig = currentLevelConfig.mapConfig.blocks[i];
+                currentLevelConfig.mapConfig.blocks[i].blockGroupId = i;
+
+                foreach (var cellId in blockConfig.cellsId)
+                {
+                    (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                    int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
+                                    + (int)row;
+                    _gridCellMapViews[cellIndex].cellConfig.blockGroupId = i;
+                    currentLevelConfig.mapConfig.cells[cellIndex].blockGroupId = i;
+                }
+            }
+        }
+
+        private void ReUpdateKeyIdInLevel()
+        {
+            for (int i = 0; i < currentLevelConfig.mapConfig.keys.Count; i++)
+            {
+                KeyConfig keyConfig = currentLevelConfig.mapConfig.keys[i];
+                currentLevelConfig.mapConfig.keys[i].keyId = i;
+                
+                foreach (var cellId in keyConfig.cellsId)
+                {
+                    (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                    int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
+                                    + (int)row;
+                    _gridCellMapViews[cellIndex].cellConfig.keyId = i;
+                    currentLevelConfig.mapConfig.cells[cellIndex].keyId = i;
+                }
+            }
+        }
+
+        public void UpdateBlockBulletValidate()
+        {
+            foreach (var blockBulletValidateEditorView in view.blockBulletValidateEditorViews)
+            {
+                ColorType colorType = blockBulletValidateEditorView.GetColorType();
+                if (!currentColorSet.Contains(colorType))
+                {
+                    blockBulletValidateEditorView.gameObject.SetActive(false);
+                }
+                else
+                {
+                    blockBulletValidateEditorView.gameObject.SetActive(true);
+                    blockBulletValidateEditorView.ValidateState(GetBloclColorNumber(colorType),
+                        GetBulletNumber(colorType));   
+                }
+            }
+        }
+
+        public int GetBloclColorNumber(ColorType colorType)
+        {
+            int number = 0;
+
+            foreach (var cellConfig in currentLevelConfig.mapConfig.cells)
+            {
+                if (cellConfig.colorType == colorType)
+                    number++;
+            }
+            
+            foreach (var blockConfig in currentLevelConfig.mapConfig.blocks)
+            {
+                if (blockConfig.colorType == colorType)
+                    number += blockConfig.blockHealth;
+            }
+            
+            return number;
+        }
+        
         private int GetMapSize()
         {
             return mapWidth >= mapHeight ? mapWidth : mapHeight;

@@ -359,6 +359,7 @@ MonoBehaviour:
   tankBulletTxtValue: {fileID: 402351947138461677}
   hidden: {fileID: 4007659103245302301}
   lockIcon: {fileID: 8663870230581856249}
+  linesConnected: []
   tunnelInfor: {fileID: 595049202671929828}
   tankNumberValue: {fileID: 1343052216647179034}
   buttonDelete: {fileID: 5653382206789143637}
@@ -1197,7 +1198,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -17.5, y: -9.9}
   m_SizeDelta: {x: 21.906097, y: 26.6169}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1893401470285343781

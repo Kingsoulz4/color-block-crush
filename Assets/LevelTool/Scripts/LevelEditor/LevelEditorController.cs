@@ -16,6 +16,7 @@ namespace ColorBlockCrush.Tools
         public string inputTexturePath;
         public Texture2D inputTexture2D;
         public ColorType[,] currentColorArray;
+        public HashSet<ColorType> currentColorSet;
         public int[] currentPixelCountByColor;
         public Canvas canvas;
         
@@ -86,6 +87,7 @@ namespace ColorBlockCrush.Tools
                 currentLevelConfig = null;
                 
                 ClearAllMap();
+                ClearAllTankLines();
                 view.levelSelectPanel.gameObject.SetActive(true);
                 view.levelEditPanel.gameObject.SetActive(false);
             });
@@ -127,6 +129,12 @@ namespace ColorBlockCrush.Tools
                 view.buttonCellGridColorChooses[i].Init(UpdateCurrentColorChoose);
             }
             UpdateCurrentColorChoose(ColorType.Pink);
+            
+            for (int i = 0; i < view.buttonChooseDragTypes.Count; i++)
+            {
+                view.buttonChooseDragTypes[i].Init(UpdateCurrentDragType);
+            }
+            UpdateCurrentDragType(DragType.Normal);
             
             view.dragCellMapSelection.enabled = false;
             
@@ -200,8 +208,8 @@ namespace ColorBlockCrush.Tools
 
         private void InitEvents()
         {
-            onUpdateSelection = UpdateColorGridCell;
-            onDeleteSelection = DeleteColorGridCell;
+            onUpdateSelection = SetStateGridCell;
+            onDeleteSelection = DeleteStateGridCell;
         }
 
         #region Choose Level
@@ -341,6 +349,8 @@ namespace ColorBlockCrush.Tools
 
                 UpdateMapData();
                 UpdateTankLineData();
+                
+                UpdateLevelState();
             }
             
             Debug.Log("Open Complete");
@@ -356,6 +366,7 @@ namespace ColorBlockCrush.Tools
             for (int i = 0; i < view.tankLineViews.Count; i++)
             {
                 List<ItemTankLineElementView> elements = view.tankLineViews[i].GetElementView();
+                
                 currentLevelConfig.tankLines[i] = new TankLineConfig();
                 for (int j = 0; j < elements.Count; j++)
                 {
@@ -431,6 +442,8 @@ namespace ColorBlockCrush.Tools
                 tankLineConfig.tankLineElementConfigs  = new List<TankLineElementConfig>();
                 newLevel.tankLines.Add(tankLineConfig);
             }
+            
+            Debug.Log("tank Congif " + newLevel.tankLines.Count);
 
             UpdateItemLevel();
             // if (ResourcesManager.Instance.collectByJson) SaveLevelConfigToJson(newLevel);
@@ -600,7 +613,9 @@ namespace ColorBlockCrush.Tools
             {
                 Debug.Log("Image loaded and set as Sprite.");
                 currentPixelCountByColor = new int[inputTexture2D.width * inputTexture2D.height];
-                currentColorArray = ImageUtils.QuantizeTexture(inputTexture2D, currentPixelCountByColor);
+                currentColorArray = ImageUtils.QuantizeTexture(inputTexture2D, currentPixelCountByColor, out currentColorSet);
+                
+                Debug.Log("Color Number " + currentColorSet.Count);
 
                 Texture2D resultTex = ImageUtils.GenerateTextureFromColorArray(currentColorArray);
                 // Convert Texture2D to Sprite
@@ -715,5 +730,12 @@ namespace ColorBlockCrush.Tools
         }
 
         #endregion
+
+        public void UpdateLevelState()
+        {
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
+        }
     }
 }
