@@ -2408,7 +2408,6 @@ MonoBehaviour:
   _spawnOrigin: {x: -2, y: 0, z: -10}
   _columnSpacing: 3
   _rowSpacing: 2
-  gunBoardData: {fileID: 11400000, guid: b587a30ef96018845bf52485d348948d, type: 2}
   _gunPrefab: {fileID: 769447249408881793, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}
   _gunContainer: {fileID: 1070506719}
   conveyor: {fileID: 607245333}
@@ -2556,9 +2555,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e4a45bfa468d494fa09413437432043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rows: 30
-  _columns: 8
-  _spawnOrigin: {x: 0, y: 0, z: 12}
+  _spawnOrigin: {x: 0, y: 0, z: 2.5}
   _gridNodeScale: {x: 1, y: 1, z: 1}
   _gridNodeOffset: {x: 0, y: 0, z: 0}
   _axisType: 1
@@ -2618,6 +2615,7 @@ MonoBehaviour:
   gunBoardController: {fileID: 2002709152}
   slotController: {fileID: 1235970543}
   conveyorController: {fileID: 607245333}
+  levelData: {fileID: 0}
 --- !u!1001 &8329528925555558761
 PrefabInstance:
   m_ObjectHideFlags: 0

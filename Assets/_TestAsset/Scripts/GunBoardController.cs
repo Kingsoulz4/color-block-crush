@@ -37,9 +37,15 @@ namespace ColorBlockCrush
 
             for (int col = 0; col < gunBoardData.tankLines.Count; col++)
             {
+
+                if (gunBoardData.tankLines[col].tankLineElementConfigs.Count == 0)
+                {
+                    return;
+                }
+
                 listGunColumn.Add(new List<Gun>());
                 List<TankLineElementConfig> columnData = new List<TankLineElementConfig>(gunBoardData.tankLines[col].tankLineElementConfigs);
-
+                columnData.Reverse();
                 for (int i = 0; i < columnData.Count; i++)
                 {
                     TankLineElementConfig data = columnData[i];
