@@ -64,7 +64,7 @@ namespace ColorBlockCrush
         }
         private void SpawnBlockBoard(LevelConfig levelConfig)
         {
-            var listBlock = levelConfig.mapConfig.cells;
+            var listBlock = levelConfig.mapConfig.blocks;
             for (int c = 0; c < _columns; c++)
             {
                 for (int r = 0; r < _rows; r++)
@@ -79,7 +79,7 @@ namespace ColorBlockCrush
         }
 
 
-        public Block SpawnBlock(int row, int col, BlockType type,CellConfig blockData, bool isStatic, bool canDestroy)
+        public Block SpawnBlock(int row, int col, BlockType type,BlockConfig blockData, bool isStatic, bool canDestroy)
         {
             if (!IsValidPosition(row, col)) return null;
 
@@ -142,6 +142,7 @@ namespace ColorBlockCrush
 
             Debug.Log($"Map Size: {columns}x{rows} | Block Scale: {scaleFactor:F2} | Offset: {offsetFactor:F2}");
         }
+
 
         private void PlaceBlock(int row, int col, Block block)
         {
