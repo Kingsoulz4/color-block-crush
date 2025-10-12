@@ -36,7 +36,7 @@ namespace ColorBlockCrush
         {
             if (gunBoardData == null) return;
 
-            int totalColumns = gunBoardData.tankLines.Where(x => x.tankLineElementConfigs.Count>2).Count();
+            int totalColumns = gunBoardData.tankLines.Where(x => x.tankLineElementConfigs.Count > 0).Count();
 
             float totalWidth = (totalColumns - 1) * _columnSpacing;
             float centerOffsetX = -totalWidth / 2f;
