@@ -27,7 +27,6 @@ namespace Geckout.Data
         public List<PortalData> listPortalData = new();
         public List<MovableBoxData> listMovableBoxData = new();
         public List<CrateData> listCrateData = new();
-        public ColorAndMaterialData colorAndMaterialData;
 
         public GameLevelData() { }
 
@@ -70,8 +69,6 @@ namespace Geckout.Data
             {
                 listCrateData.Add(new CrateData(crate));
             }
-
-            colorAndMaterialData = other.colorAndMaterialData;
         }
 
         public void GenerateDefaultMap()
@@ -130,16 +127,6 @@ namespace Geckout.Data
         {
             Debug.Log("Map Data: " + JsonConvert.SerializeObject(mapTileDatas));
         }
-            
-
-        private void OnValidate()
-        {
-            if (colorAndMaterialData == null)
-            {
-                colorAndMaterialData = Resources.Load<ColorAndMaterialData>("ColorsAndMaterials/ColorAndMaterialData");
-            }
-        }
-
     }
 
 

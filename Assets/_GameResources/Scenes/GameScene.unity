@@ -720,7 +720,7 @@ Transform:
   m_GameObject: {fileID: 803585200}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.975, y: 0, z: -6.129}
+  m_LocalPosition: {x: 4.435, y: 0, z: -5.89}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -816,7 +816,7 @@ Transform:
   m_GameObject: {fileID: 832279208}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.31, y: 0, z: 8.64}
+  m_LocalPosition: {x: 5.95, y: 0, z: 8.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -948,9 +948,9 @@ MonoBehaviour:
           z: 0
           w: 0.71019346
     - Position:
-        x: 4
+        x: 4.5
         y: 0
-        z: -5.93
+        z: -5.9
       TangentIn:
         x: 0
         y: 0
@@ -966,45 +966,45 @@ MonoBehaviour:
           z: 0
           w: 0.72944486
     - Position:
-        x: 4.81
+        x: 5.3
         y: 0
         z: -5.7
       TangentIn:
         x: -0
         y: -0
-        z: -0.2527136
+        z: -0.25472334
       TangentOut:
         x: 0
         y: 0
-        z: 0.22223298
+        z: 0.2358761
       Rotation:
         value:
           x: 0
-          y: 0.48732075
+          y: 0.5036374
           z: 0
-          w: 0.8732231
+          w: 0.8639152
     - Position:
-        x: 5.25
+        x: 5.8
         y: 0
-        z: -5.22
+        z: -5.2
       TangentIn:
         x: -0
         y: -0
-        z: -0.21008639
+        z: -0.21601398
       TangentOut:
         x: 0
         y: 0
-        z: 0.21323551
+        z: 0.20035018
       Rotation:
         value:
           x: 0
-          y: 0.22841588
+          y: 0.23540626
           z: 0
-          w: 0.9735637
+          w: 0.971897
     - Position:
-        x: 5.37
+        x: 5.9
         y: 0
-        z: -4.56
+        z: -4.6
       TangentIn:
         x: 0
         y: 0
@@ -1020,9 +1020,9 @@ MonoBehaviour:
           z: 0
           w: 0.99590564
     - Position:
-        x: 5.5
+        x: 6
         y: 0
-        z: 8.26
+        z: 8.3
       TangentIn:
         x: 0
         y: 0
@@ -1038,45 +1038,45 @@ MonoBehaviour:
           z: -0
           w: 0.9999672
     - Position:
-        x: 5.34
+        x: 5.9
         y: 0
-        z: 9.43
+        z: 9.4
       TangentIn:
         x: -0
         y: -0
-        z: -0.38955352
+        z: -0.37114337
       TangentOut:
         x: 0
         y: 0
-        z: 0.38839605
+        z: 0.38818622
       Rotation:
         value:
           x: 0
-          y: -0.1342345
+          y: -0.12896164
           z: -0
-          w: 0.99094963
+          w: 0.9916495
     - Position:
-        x: 4.88
+        x: 5.4
         y: 0
-        z: 10.51
+        z: 10.5
       TangentIn:
         x: -0
         y: -0
-        z: -0.3523151
+        z: -0.36486587
       TangentOut:
         x: 0
         y: 0
-        z: 0.35449988
+        z: 0.3691628
       Rotation:
         value:
           x: 0
-          y: -0.41647735
+          y: -0.4242299
           z: -0
-          w: 0.9091461
+          w: 0.9055545
     - Position:
-        x: 3.73
+        x: 4.2
         y: 0
-        z: 10.81
+        z: 10.8
       TangentIn:
         x: 0
         y: 0
@@ -1797,6 +1797,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2230016266906352520, guid: 936491bd935aae742b5ad8d1ade5a10f, type: 3}
+      propertyPath: orthographic size
+      value: 14.8
+      objectReference: {fileID: 0}
     - target: {fileID: 5378794868553911417, guid: 936491bd935aae742b5ad8d1ade5a10f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2556,8 +2560,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnOrigin: {x: 0, y: 0, z: 2.5}
-  _gridNodeScale: {x: 1, y: 1, z: 1}
-  _gridNodeOffset: {x: 0, y: 0, z: 0}
+  _maxBlockScale: {x: 1, y: 1, z: 1}
+  _maxGridWidth: 9
+  _maxGridHeight: 9
+  _minBlockScale: 0.2
   _axisType: 1
   _anchorType: 4
   _blockPrefab: {fileID: 7708169521855786892, guid: 57aaf600ca7fdd24d9cddce4b20ac661, type: 3}
