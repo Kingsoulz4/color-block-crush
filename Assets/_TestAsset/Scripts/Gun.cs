@@ -21,6 +21,7 @@ namespace ColorBlockCrush
         [SerializeField] private float turnDuration = 0.4f;
         [SerializeField] private LayerMask blockMask;
         [SerializeField] private float fireRate;
+        [SerializeField] private ColorReference colorReference;
 
 
 
@@ -275,7 +276,7 @@ namespace ColorBlockCrush
             if (meshRenderer != null)
             {
                 Material mat = meshRenderer.material;
-                mat.color = GetColorFromType(Color);
+                mat.color = colorReference.GetColor(Color);
             }
 
             UpdateBulletCountDisplay();
@@ -286,19 +287,6 @@ namespace ColorBlockCrush
             if (bulletCountText != null)
             {
                 bulletCountText.text = BulletCount.ToString();
-            }
-        }
-
-        private UnityEngine.Color GetColorFromType(ColorType colorType)
-        {
-            switch (colorType)
-            {
-                case ColorType.Red: return UnityEngine.Color.red;
-                case ColorType.Blue: return UnityEngine.Color.blue;
-                case ColorType.Green: return UnityEngine.Color.green;
-                case ColorType.Yellow: return UnityEngine.Color.yellow;
-                case ColorType.Purple: return new UnityEngine.Color(0.5f, 0, 0.5f);
-                default: return UnityEngine.Color.white;
             }
         }
 

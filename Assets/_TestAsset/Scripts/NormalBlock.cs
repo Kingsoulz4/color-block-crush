@@ -18,14 +18,6 @@ public class NormalBlock : Block
         }
     }
    
-    protected override void StartBlock()
-    {
-    }
-
-    private void UpdateHiddenVisualState()
-    {
-    }
-
     private void ShowHiddenVisualState()
     {
     }

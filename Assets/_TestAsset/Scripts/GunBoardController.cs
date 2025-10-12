@@ -28,10 +28,10 @@ namespace ColorBlockCrush
 
         public void Init(LevelConfig levelConfig)
         {
-            LoadGunDataByColumns(levelConfig);
+            SpawnGunBoard(levelConfig);
         }
 
-        public void LoadGunDataByColumns(LevelConfig gunBoardData)
+        public void SpawnGunBoard(LevelConfig gunBoardData)
         {
             if (gunBoardData == null) return;
 

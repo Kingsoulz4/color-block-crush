@@ -48,6 +48,7 @@ namespace ColorBlockCrush
 
         protected virtual void StartBlock()
         {
+            UpdateColors(ColorType);
         }
 
         protected virtual void UpdateColors(ColorType colorType)

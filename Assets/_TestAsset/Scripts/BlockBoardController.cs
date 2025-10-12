@@ -72,7 +72,6 @@ namespace ColorBlockCrush
                     int hp = listBlock[idx].blockHealth;
                     
                     SpawnBlock(r, c, BlockType.Normal, color, hp, false, true);
-                    Debug.Log($"Spawn Block at Row: {r}, Col: {c}, Color: {color}, HP: {hp}");
                 }
             }
         }
