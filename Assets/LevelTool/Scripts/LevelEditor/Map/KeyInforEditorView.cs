@@ -15,5 +15,7 @@ namespace ColorBlockCrush.Tools
             UiBoundsFitter.FitFrameToTargets(rectTransform, selectionParent,
                 cells, Vector2.zero, rootCanvas);
         }
+        
+        public int GetKeyId() => keyId;
     }
 }

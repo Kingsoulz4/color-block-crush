@@ -206,8 +206,8 @@ namespace ColorBlockCrush.Tools
 
         private void InitEvents()
         {
-            onUpdateSelection = UpdateColorGridCell;
-            onDeleteSelection = DeleteColorGridCell;
+            onUpdateSelection = SetStateGridCell;
+            onDeleteSelection = DeleteStateGridCell;
         }
 
         #region Choose Level

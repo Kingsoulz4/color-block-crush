@@ -15,7 +15,8 @@ namespace ColorBlockCrush.Tools
         public TextMeshProUGUI txtDrawIndex;
         public int Row, Col;
         public int drawIndex = -1;
-        public int id;
+        
+        public CellConfig cellConfig;
 
         [Header("Others")]
         public bool IsSelected = false;
