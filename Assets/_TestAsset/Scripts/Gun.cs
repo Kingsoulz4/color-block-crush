@@ -89,7 +89,12 @@ namespace ColorBlockCrush
 
             var target = GetTargetBock();
 
-            if (!target || target.ColorType != ColorType)
+            if (!target.IsAttacked)
+            {
+                target.IsAttacked = true;
+            }
+
+            if (target.IsAttacked || target.ColorType != ColorType)
             {
                 return;
             }

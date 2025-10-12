@@ -32,7 +32,7 @@ namespace ColorBlockCrush
         public GridNode GridNode { get; set; }
         public int GridHeight { get; set; }
         public bool CanDestroy { get; private set; }
-        public bool IsAttacked { get; protected set; }
+        public bool IsAttacked { get; set; }
         public CellConfig BlockData { get => blockData;}
         public int Id { get => id;}
 
@@ -84,11 +84,6 @@ namespace ColorBlockCrush
         public int GetHitPoint()
         {
             return hitPoint;
-        }
-
-        public bool GetIsAttacked()
-        {
-            return IsAttacked;
         }
 
         public Vector3 GetDamagePointPosition()
