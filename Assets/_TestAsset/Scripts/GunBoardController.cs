@@ -12,15 +12,15 @@ namespace ColorBlockCrush
     public class GunBoardController : MonoBehaviour
     {
         [Header("Settings")]
-        [SerializeField] private Vector3 _spawnOrigin = new Vector3(-2f, -5f, 0);
-        [SerializeField] private float _columnSpacing = 1f;
-        [SerializeField] private float _rowSpacing = 1f;
+        [SerializeField] private Vector3 spawnOrigin = new Vector3(0f, 0f, -10f);
+        [SerializeField] private float columnSpacing = 3f;
+        [SerializeField] private float rowSpacing = 2f;
 
         [Header("Prefabs")]
-        [SerializeField] private Gun _gunPrefab;
+        [SerializeField] private Gun gunPrefab;
 
         [Header("References")]
-        [SerializeField] private Transform _gunContainer;
+        [SerializeField] private Transform gunContainer;
         [SerializeField] private ConveyorController conveyor;
 
         private List<List<Gun>> listGunColumn = new List<List<Gun>>();
@@ -38,7 +38,7 @@ namespace ColorBlockCrush
 
             int totalColumns = gunBoardData.tankLines.Where(x => x.tankLineElementConfigs.Count > 0).Count();
 
-            float totalWidth = (totalColumns - 1) * _columnSpacing;
+            float totalWidth = (totalColumns - 1) * columnSpacing;
             float centerOffsetX = -totalWidth / 2f;
 
             for (int col = 0; col < totalColumns; col++)
@@ -71,13 +71,13 @@ namespace ColorBlockCrush
         {
             if (!IsValidColumn(column)) return null;
 
-            Vector3 worldPos = _spawnOrigin + new Vector3(
-                (column * _columnSpacing) + centerOffsetX,
+            Vector3 worldPos = spawnOrigin + new Vector3(
+                (column * columnSpacing) + centerOffsetX,
                 0,
-                row * -_rowSpacing
+                row * -rowSpacing
             );
 
-            Gun gun = Instantiate(_gunPrefab, worldPos, Quaternion.identity, _gunContainer);
+            Gun gun = Instantiate(gunPrefab, worldPos, Quaternion.identity, gunContainer);
             gun.Init(color, bulletCount, column);
             gun.name = $"Gun_{column}_{row}";
 
@@ -138,7 +138,7 @@ namespace ColorBlockCrush
                 Gun gun = columnGuns[i];
 
                 Vector3 newPos = new Vector3(
-                     gun.transform.position.x, 0, gun.transform.position.z + _rowSpacing);
+                     gun.transform.position.x, 0, gun.transform.position.z + rowSpacing);
 
                 gun.transform.position = newPos;
             }

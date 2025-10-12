@@ -431,7 +431,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 028eb968d23bf3e4b881811a20eb953c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 23099022703509112}
+  meshRendererList:
+  - {fileID: 23099022703509112}
+  - {fileID: 23462752320407506}
   bulletCountText: {fileID: 23198141706592332}
   bulletPrb: {fileID: 395657148022226912, guid: 01063d7c4dbbe6b4c8702d9c79d9492e, type: 3}
   bulletSpawnPos: {fileID: 4941286966147067}

@@ -9,26 +9,26 @@ namespace ColorBlockCrush
     public class BlockBoardController : MonoBehaviour
     {
         [Header("Settings")]
-        [SerializeField] private Vector3 _spawnOrigin = new Vector3(0, 0, 0);
-        [SerializeField] private Vector3 _maxBlockScale = Vector3.one;
-        [SerializeField] private float _maxGridWidth = 10f;
-        [SerializeField] private float _maxGridHeight = 10f;
-        [SerializeField] private float _minBlockScale = 0.2f;
-        [SerializeField] private GridAxisTypes _axisType = GridAxisTypes.XY;
-        [SerializeField] private GridAnchorTypes _anchorType = GridAnchorTypes.MiddleCenter;
+        [SerializeField] private Vector3 spawnOrigin = new Vector3(0, 0, 0);
+        [SerializeField] private Vector3 maxBlockScale = Vector3.one;
+        [SerializeField] private float maxGridWidth = 9f;
+        [SerializeField] private float maxGridHeight = 9f;
+        [SerializeField] private float _minBlockScale = 0.1f;
+        [SerializeField] private GridAxisTypes axisType = GridAxisTypes.XZ;
+        [SerializeField] private GridAnchorTypes anchorType = GridAnchorTypes.MiddleCenter;
 
         [Header("Prefabs")]
-        [SerializeField] private Block _blockPrefab;
+        [SerializeField] private Block blockPrefab;
 
         [Header("References")]
-        [SerializeField] private GridController _gridController;
-        [SerializeField] private Transform _blockContainer;
+        [SerializeField] private GridController gridController;
+        [SerializeField] private Transform blockContainer;
 
         private int _rows;
         private int _columns;
         private List<Block>[,] _blockStacks;
-        private Vector3 _calculatedBlockScale;
-        private Vector3 _calculatedBlockOffset;
+        private Vector3 calculatedBlockScale;
+        private Vector3 calculatedBlockOffset;
 
         public int EndRow { get; private set; } = 0;
 
@@ -41,14 +41,14 @@ namespace ColorBlockCrush
 
             CalculateDynamicScaleAndOffset(_rows, _columns);
 
-            _gridController.PrepareGrid(
+            gridController.PrepareGrid(
                 _rows,
                 _columns,
-                _spawnOrigin,
-                _axisType,
-                _anchorType,
-                _calculatedBlockScale,  
-                _calculatedBlockOffset  
+                spawnOrigin,
+                axisType,
+                anchorType,
+                calculatedBlockScale,  
+                calculatedBlockOffset  
             );
 
             _blockStacks = new List<Block>[_rows, _columns];
@@ -83,10 +83,10 @@ namespace ColorBlockCrush
         {
             if (!IsValidPosition(row, col)) return null;
 
-            GridNode node = _gridController.GridNodes[row, col];
-            Block block = Instantiate(_blockPrefab, node.transform.position, Quaternion.identity, _blockContainer);
+            GridNode node = gridController.GridNodes[row, col];
+            Block block = Instantiate(blockPrefab, node.transform.position, Quaternion.identity, blockContainer);
 
-            block.transform.localScale = _calculatedBlockScale;
+            block.transform.localScale = calculatedBlockScale;
 
             block.name = $"Block_{row}_{col}";
             block.Initialize(type, color, hp, isStatic, canDestroy);
@@ -105,39 +105,39 @@ namespace ColorBlockCrush
 
         private void CalculateDynamicScaleAndOffset(int rows, int columns)
         {
-            float scaleFactorX = _maxGridWidth / columns;
-            float scaleFactorY = _maxGridHeight / rows;
+            float scaleFactorX = maxGridWidth / columns;
+            float scaleFactorY = maxGridHeight / rows;
 
             float scaleFactor = Mathf.Min(scaleFactorX, scaleFactorY);
 
             scaleFactor = Mathf.Max(scaleFactor, _minBlockScale);
 
-            if (_axisType == GridAxisTypes.XY)
+            if (axisType == GridAxisTypes.XY)
             {
-                _calculatedBlockScale = new Vector3(
+                calculatedBlockScale = new Vector3(
                     scaleFactor,
                     scaleFactor,
-                    _maxBlockScale.z
+                    maxBlockScale.z
                 );
             }
             else
             {
-                _calculatedBlockScale = new Vector3(
+                calculatedBlockScale = new Vector3(
                     scaleFactor,
-                    _maxBlockScale.y,
+                    maxBlockScale.y,
                     scaleFactor
                 );
             }
 
             float offsetFactor = 0;
 
-            if (_axisType == GridAxisTypes.XY)
+            if (axisType == GridAxisTypes.XY)
             {
-                _calculatedBlockOffset = new Vector3(offsetFactor, offsetFactor, 0);
+                calculatedBlockOffset = new Vector3(offsetFactor, offsetFactor, 0);
             }
             else
             {
-                _calculatedBlockOffset = new Vector3(offsetFactor, 0, offsetFactor);
+                calculatedBlockOffset = new Vector3(offsetFactor, 0, offsetFactor);
             }
 
             Debug.Log($"Map Size: {columns}x{rows} | Block Scale: {scaleFactor:F2} | Offset: {offsetFactor:F2}");
@@ -151,7 +151,7 @@ namespace ColorBlockCrush
 
             if (!block.CanDestroy)
             {
-                _gridController.GridNodes[row, col].IsBlocked = true;
+                gridController.GridNodes[row, col].IsBlocked = true;
             }
         }
 
@@ -163,7 +163,7 @@ namespace ColorBlockCrush
         public GridNode GetGridNode(int row, int col)
         {
             if (IsValidPosition(row, col))
-                return _gridController.GridNodes[row, col];
+                return gridController.GridNodes[row, col];
             return null;
         }
     }

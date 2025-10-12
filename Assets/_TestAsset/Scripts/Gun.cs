@@ -14,7 +14,7 @@ namespace ColorBlockCrush
     public class Gun : MonoBehaviour
     {
         [Header("Visual")]
-        [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private List<MeshRenderer> meshRendererList;
         [SerializeField] private TextMeshPro bulletCountText;
         [SerializeField] private Bullet bulletPrb;
         [SerializeField] private Transform bulletSpawnPos;
@@ -273,10 +273,13 @@ namespace ColorBlockCrush
 
         private void UpdateVisuals()
         {
-            if (meshRenderer != null)
+            for (int i = 0; i < meshRendererList.Count; i++)
             {
-                Material mat = meshRenderer.material;
-                mat.color = colorReference.GetColor(Color);
+                if (meshRendererList[i])
+                {
+                    Material mat = meshRendererList[i].material;
+                    mat.color = colorReference.GetColor(Color);
+                }
             }
 
             UpdateBulletCountDisplay();

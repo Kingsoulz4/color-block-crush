@@ -2409,11 +2409,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd90f07f28a54340ba3077f2b6237f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnOrigin: {x: 0, y: 0, z: -10}
-  _columnSpacing: 3
-  _rowSpacing: 2
-  _gunPrefab: {fileID: 769447249408881793, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}
-  _gunContainer: {fileID: 1070506719}
+  spawnOrigin: {x: 0, y: 0, z: -10}
+  columnSpacing: 3
+  rowSpacing: 2
+  gunPrefab: {fileID: 769447249408881793, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}
+  gunContainer: {fileID: 1070506719}
   conveyor: {fileID: 607245333}
 --- !u!1 &2073812198
 GameObject:
@@ -2559,16 +2559,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e4a45bfa468d494fa09413437432043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnOrigin: {x: 0, y: 0, z: 2.5}
-  _maxBlockScale: {x: 1, y: 1, z: 1}
-  _maxGridWidth: 9
-  _maxGridHeight: 9
+  spawnOrigin: {x: 0, y: 0, z: 0}
+  maxBlockScale: {x: 1, y: 1, z: 1}
+  maxGridWidth: 9
+  maxGridHeight: 9
   _minBlockScale: 0.2
-  _axisType: 1
-  _anchorType: 4
-  _blockPrefab: {fileID: 7708169521855786892, guid: 57aaf600ca7fdd24d9cddce4b20ac661, type: 3}
-  _gridController: {fileID: 1471882904}
-  _blockContainer: {fileID: 1396620237}
+  axisType: 1
+  anchorType: 4
+  blockPrefab: {fileID: 0}
+  gridController: {fileID: 1471882904}
+  blockContainer: {fileID: 1396620237}
 --- !u!4 &2564703448884700552
 Transform:
   m_ObjectHideFlags: 0
