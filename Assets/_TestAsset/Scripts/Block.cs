@@ -3,6 +3,7 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace ColorBlockCrush
 {
@@ -30,6 +31,7 @@ namespace ColorBlockCrush
         public BlockType BlockType { get; private set; }
         public ColorType ColorType { get; protected set; }
         public GridNode GridNode { get; set; }
+        public Gun Gun { get; set; }
         public int GridHeight { get; set; }
         public bool CanDestroy { get; private set; }
         public bool IsAttacked { get; set; }
@@ -46,6 +48,7 @@ namespace ColorBlockCrush
             CanDestroy = canDestroy;
             IsAttacked = false;
             blockData = blockDataP;
+            Gun = null;
 
             StartBlock();
             OnBlockInitialized?.Invoke(this);
@@ -73,6 +76,7 @@ namespace ColorBlockCrush
 
             if (hitPoint <= 0)
             {
+                Destroy(gameObject);
             }
         }
 

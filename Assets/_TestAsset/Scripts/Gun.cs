@@ -88,13 +88,14 @@ namespace ColorBlockCrush
             }
 
             var target = GetTargetBock();
+            if (!target) return;
 
-            if (!target.IsAttacked)
-            {
-                target.IsAttacked = true;
-            }
+            //if (!target.Gun)
+            //{
+            //    target.Gun = this;
+            //}
 
-            if (target.IsAttacked || target.ColorType != ColorType)
+            if (/*target.Gun != this ||*/ target.ColorType != ColorType)
             {
                 return;
             }
@@ -175,7 +176,7 @@ namespace ColorBlockCrush
             Bullet bullet = Instantiate(bulletPrb, bulletSpawnPos.position, Quaternion.identity);
             bullet.OnInit(this, target, (gun, block) =>
             {
-                Destroy(target.gameObject);
+                target.TakeDamage(1);
                 Destroy(bullet.gameObject);
             });
 

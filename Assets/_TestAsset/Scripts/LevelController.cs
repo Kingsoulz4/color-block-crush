@@ -39,7 +39,7 @@ namespace ColorBlockCrush
             InitializeGame();
             test.onClick.AddListener(() =>
             {
-                SceneManager.LoadScene("GameScence");
+                SceneManager.LoadScene(0);
             });
         }
 
