@@ -92,6 +92,16 @@ namespace ColorBlockCrush.Tools
                 view.levelEditPanel.gameObject.SetActive(false);
             });
             
+            view.buttonExitLevel.onClick.AddListener(() =>
+            {
+                currentLevelConfig = null;
+                
+                ClearAllMap();
+                ClearAllTankLines();
+                view.levelSelectPanel.gameObject.SetActive(true);
+                view.levelEditPanel.gameObject.SetActive(false);
+            });
+            
             view.inputLevelId.onEndEdit.AddListener((string value) =>
             {
                 if (string.IsNullOrEmpty(value))
@@ -599,10 +609,10 @@ namespace ColorBlockCrush.Tools
                 inputTexturePath = paths[0];
             }
 
-            UpdateInputTexture();
+            UpdateInputTexture(true);
         }
         
-        private void UpdateInputTexture()
+        private void UpdateInputTexture(bool genMap = false)
         {
             inputTexture2D = LoadTextureFromAbsolutePath(inputTexturePath);
             Debug.Log("Load Texture 1 " + inputTexture2D);
@@ -626,15 +636,16 @@ namespace ColorBlockCrush.Tools
                 );
 
                 //Set input image info
-                currentLevelConfig = new LevelConfig();
                 currentLevelConfig.imageConfig = new InputImageConfig();
                 currentLevelConfig.imageConfig.SavePath = inputTexturePath;
                 currentLevelConfig.imageConfig.ColorFlatMap = ImageUtils.Flatten2DArray(currentColorArray,
                     out currentLevelConfig.imageConfig.ImageSize);
                 currentLevelConfig.imageConfig.pixelCountByColor = currentPixelCountByColor;
-                //UpdateAllowColor();
-                ClearAllMap();
-                CreateMapByPicture();
+                if (genMap)
+                {
+                    ClearAllMap();
+                    CreateMapByPicture();   
+                }
             }
         }
         

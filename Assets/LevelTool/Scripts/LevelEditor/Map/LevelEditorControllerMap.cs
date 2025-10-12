@@ -172,6 +172,7 @@ namespace ColorBlockCrush.Tools
             {
                 for (int j = 0; j < mapConfig.mapSize.y; j++)
                 {
+                    Debug.Log($"Gen Cell {i * mapConfig.mapSize.y + j}");
                     GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
                         .GetComponent<GridCellMapView>();
                     int cellIndex = i * mapConfig.mapSize.y + j;
@@ -296,10 +297,12 @@ namespace ColorBlockCrush.Tools
         
         public void DeleteStateGridCell(List<GridCellMapView> cellSelection)
         {
+            HashSet<ColorType> colorDelete = new HashSet<ColorType>();
             if (currentDragType == DragType.Normal)
             {
                 foreach (var cellMapView in cellSelection)
                 {
+                    colorDelete.Add(cellMapView.cellConfig.colorType);
                     cellMapView.DeleteColor();
                     currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
                                                        + cellMapView.Row].colorType = ColorType.None;
@@ -318,6 +321,7 @@ namespace ColorBlockCrush.Tools
                     if (cellMapView.cellConfig.blockGroupId != -1 
                         && !blocksRemoved.Contains(cellMapView.cellConfig.blockGroupId))
                     {
+                        colorDelete.Add(currentLevelConfig.mapConfig.blocks[cellMapView.cellConfig.blockGroupId].colorType);
                         blocksRemoved.Add(cellMapView.cellConfig.blockGroupId);
                         BlockInforEditorView blockInforViewRemove =
                             _blockInforEditorViews.FirstOrDefault(blocksRemove =>
@@ -397,6 +401,16 @@ namespace ColorBlockCrush.Tools
                 }
             }
             
+            if (colorDelete.Count > 0)
+            {
+                foreach (var colorType in colorDelete)
+                {
+                    Debug.Log("Color Type Delete " + colorType + " " + GetBloclColorNumber(colorType));
+                    if(GetBloclColorNumber(colorType) <= 0)
+                        if (currentColorSet.Contains(colorType))
+                            currentColorSet.Remove(colorType);
+                }
+            }
             UpdateLevelState();
         }
 
