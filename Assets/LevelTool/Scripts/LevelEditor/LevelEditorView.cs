@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Geckout;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
@@ -40,6 +41,7 @@ namespace ColorBlockCrush.Tools
         public RectTransform mapFeatureParent;
         public TMP_InputField blockHealthInputField;
         public List<ButtonColorChoose> buttonCellGridColorChooses =  new List<ButtonColorChoose>();
+        public List<BlockBulletValidateEditorView> blockBulletValidateEditorViews = new List<BlockBulletValidateEditorView>();
         
         [Header("Choose Image Area")]
         public Button ButtonChooseImage;

@@ -77,6 +77,7 @@ namespace ColorBlockCrush.Tools
         private void CreateMapEmpty()
         {
             ClearAllMap();
+            currentColorSet = new HashSet<ColorType>();
             _gridCellMapViews = new List<GridCellMapView>();
 
             float gridCellSize = (float)(model.gridContainer.sizeDelta.x / (float)GetMapSize());
@@ -104,7 +105,10 @@ namespace ColorBlockCrush.Tools
             view.dragCellMapSelection.enabled = true;
             DOVirtual.DelayedCall(.55f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, _gridCellMapViews,
                 onUpdateSelection, onDeleteSelection));
-            
+
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
         }
 
         private void CreateMapByPicture()
@@ -145,6 +149,10 @@ namespace ColorBlockCrush.Tools
             view.dragCellMapSelection.enabled = true;
             DOVirtual.DelayedCall(2.5f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, _gridCellMapViews,
                 onUpdateSelection, onDeleteSelection));
+            
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
         }
 
         private void UpdateMapData()
@@ -161,6 +169,7 @@ namespace ColorBlockCrush.Tools
             model.gridLayoutGroup.cellSize = new Vector2(gridCellSize, gridCellSize);
             
             _gridCellMapViews = new List<GridCellMapView>();
+            currentColorSet = new HashSet<ColorType>();
             
             for (int i = 0; i < mapConfig.mapSize.x; i++)
             {
@@ -171,6 +180,7 @@ namespace ColorBlockCrush.Tools
                     int cellIndex = i * mapConfig.mapSize.y + j;
                     gridCellMapView.cellConfig = mapConfig.cells[cellIndex];
                     gridCellMapView.UpdateColor(mapConfig.cells[cellIndex].colorType);
+                    currentColorSet.Add(mapConfig.cells[cellIndex].colorType);
                     _gridCellMapViews.Add(gridCellMapView);
                 }
             }
@@ -192,6 +202,7 @@ namespace ColorBlockCrush.Tools
                         cellGridBlockList.ConvertAll(cell => cell.transform as RectTransform), 
                         canvas, mapConfig.blocks[i].blockHealth, mapConfig.blocks[i].colorType);
                     _blockInforEditorViews.Add(blockInforView);
+                    currentColorSet.Add(mapConfig.blocks[i].colorType);
                 }
 
                 for (int i = 0; i < mapConfig.keys.Count; i++)
@@ -205,6 +216,10 @@ namespace ColorBlockCrush.Tools
                         canvas);
                     _keyInforEditorViews.Add(keyInforView);
                 }
+                
+                UpdateButtonChooseTankColor();
+                UpdateButtonChooseTunnelQueueColor();
+                UpdateBlockBulletValidate();
             });
         }
         
@@ -219,6 +234,8 @@ namespace ColorBlockCrush.Tools
                     currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
                                                        + cellMapView.Row].colorType = currentColorChoose;
                 }
+                
+                currentColorSet.Add(currentColorChoose);
             }
             else if(currentDragType == DragType.Block)
             {
@@ -253,6 +270,8 @@ namespace ColorBlockCrush.Tools
                     cellSelection.ConvertAll(cell => cell.transform as RectTransform), 
                     canvas, int.Parse(blockHealth), currentColorChoose);
                 _blockInforEditorViews.Add(blockInforView);
+                
+                currentColorSet.Add(currentColorChoose);
             }
             else if(currentDragType == DragType.Key)
             {
@@ -276,6 +295,10 @@ namespace ColorBlockCrush.Tools
                     canvas);
                 _keyInforEditorViews.Add(keyInforView);
             }
+            
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
         }
         
         public void DeleteStateGridCell(List<GridCellMapView> cellSelection)
@@ -380,6 +403,10 @@ namespace ColorBlockCrush.Tools
                     }
                 }
             }
+            
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
         }
 
         private void SetColorSelected()
@@ -459,6 +486,43 @@ namespace ColorBlockCrush.Tools
                     currentLevelConfig.mapConfig.cells[cellIndex].keyId = i;
                 }
             }
+        }
+
+        public void UpdateBlockBulletValidate()
+        {
+            foreach (var blockBulletValidateEditorView in view.blockBulletValidateEditorViews)
+            {
+                ColorType colorType = blockBulletValidateEditorView.GetColorType();
+                if (!currentColorSet.Contains(colorType))
+                {
+                    blockBulletValidateEditorView.gameObject.SetActive(false);
+                }
+                else
+                {
+                    blockBulletValidateEditorView.gameObject.SetActive(true);
+                    blockBulletValidateEditorView.ValidateState(GetBloclColorNumber(colorType),
+                        GetBulletNumber(colorType));   
+                }
+            }
+        }
+
+        public int GetBloclColorNumber(ColorType colorType)
+        {
+            int number = 0;
+
+            foreach (var cellConfig in currentLevelConfig.mapConfig.cells)
+            {
+                if (cellConfig.colorType == colorType)
+                    number++;
+            }
+            
+            foreach (var blockConfig in currentLevelConfig.mapConfig.blocks)
+            {
+                if (blockConfig.colorType == colorType)
+                    number += blockConfig.blockHealth;
+            }
+            
+            return number;
         }
         
         private int GetMapSize()

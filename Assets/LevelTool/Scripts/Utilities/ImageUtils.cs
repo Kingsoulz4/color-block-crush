@@ -5,11 +5,12 @@ namespace ColorBlockCrush.Tools
 {
     public class ImageUtils : MonoBehaviour
     {
-        public static ColorType[,] QuantizeTexture(Texture2D inputTexture, int[] pixelCountByColor)
+        public static ColorType[,] QuantizeTexture(Texture2D inputTexture, int[] pixelCountByColor, out HashSet<ColorType> colorTypes)
         {
             int w = inputTexture.width;
             int h = inputTexture.height;
             ColorType[,] result = new ColorType[w, h];
+            colorTypes = new HashSet<ColorType>();
             for (int x = 0; x < w; x++)
             {
                 for (int y = 0; y < h; y++)
@@ -23,7 +24,8 @@ namespace ColorBlockCrush.Tools
                         Debug.LogWarning(
                             $"FindClosestColor - x: {x} - y: {y} | INPUT COLOR: {colorString} - OUTPUT COLOR: {resultColor.colorType}-#{outputColorString} - MIN DISTANCE: {minDistance}");
                     }
-
+                    
+                    colorTypes.Add(resultColor.colorType);
 
                     result[x, y] = resultColor.colorType;
 

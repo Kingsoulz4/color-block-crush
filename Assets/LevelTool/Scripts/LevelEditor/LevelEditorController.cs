@@ -16,6 +16,7 @@ namespace ColorBlockCrush.Tools
         public string inputTexturePath;
         public Texture2D inputTexture2D;
         public ColorType[,] currentColorArray;
+        public HashSet<ColorType> currentColorSet;
         public int[] currentPixelCountByColor;
         public Canvas canvas;
         
@@ -347,6 +348,10 @@ namespace ColorBlockCrush.Tools
 
                 UpdateMapData();
                 UpdateTankLineData();
+                
+                UpdateButtonChooseTankColor();
+                UpdateButtonChooseTunnelQueueColor();
+                UpdateBlockBulletValidate();
             }
             
             Debug.Log("Open Complete");
@@ -609,7 +614,9 @@ namespace ColorBlockCrush.Tools
             {
                 Debug.Log("Image loaded and set as Sprite.");
                 currentPixelCountByColor = new int[inputTexture2D.width * inputTexture2D.height];
-                currentColorArray = ImageUtils.QuantizeTexture(inputTexture2D, currentPixelCountByColor);
+                currentColorArray = ImageUtils.QuantizeTexture(inputTexture2D, currentPixelCountByColor, out currentColorSet);
+                
+                Debug.Log("Color Number " + currentColorSet.Count);
 
                 Texture2D resultTex = ImageUtils.GenerateTextureFromColorArray(currentColorArray);
                 // Convert Texture2D to Sprite

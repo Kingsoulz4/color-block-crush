@@ -32,6 +32,10 @@ namespace ColorBlockCrush.Tools
             ClearAllTankLineELementSelected();
             SelectTankLineElement(newElement);
             UpdateTankLinesInfor();
+            
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
         }
 
         private void UpdateTankLineData()
@@ -117,6 +121,9 @@ namespace ColorBlockCrush.Tools
 
             currentTankLineElementSelected.UpdateUI();
             UpdateTankLinesInfor();
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
         }
 
         private void DellTankInfor()
@@ -128,6 +135,9 @@ namespace ColorBlockCrush.Tools
             UpdateTankLineElementPropertiesInfor(currentTankLineElementSelected.elementConfig);
             
             UpdateTankLinesInfor();
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
         }
 
         private void SetConnectLine()
@@ -157,6 +167,9 @@ namespace ColorBlockCrush.Tools
 
             ClearAllTankLineELementSelected();
             UpdateTankLinesInfor();
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
         }
 
         private void DelConnectLine()
@@ -173,6 +186,9 @@ namespace ColorBlockCrush.Tools
             }
 
             UpdateTankLinesInfor();
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
         }
 
         private void SpawnConnectUi(ItemTankLineElementView a, ItemTankLineElementView b)
@@ -234,6 +250,9 @@ namespace ColorBlockCrush.Tools
             listIconTunnelQueue.Add(newItemTunnelQueue);
             view.tankTunnelQueueNumber.text = listIconTunnelQueue.Count.ToString();
             UpdateTankLinesInfor();
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
         }
 
         private void ChangeIndexItemTunnel(int oldItemIndex, int newItemIndex, ItemTunnelQueueView itemTunnel)
@@ -252,6 +271,9 @@ namespace ColorBlockCrush.Tools
             Destroy(itemTunnel.gameObject);
             view.tankTunnelQueueNumber.text = listIconTunnelQueue.Count.ToString();
             UpdateTankLinesInfor();
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
         }
 
         private void OnClearTunnelHumanQueue()
@@ -273,6 +295,9 @@ namespace ColorBlockCrush.Tools
             UpdateTankLineElementPropertiesInfor(currentTankLineElementSelected.elementConfig);
             
             UpdateTankLinesInfor();
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
         }
 
         private void ClearTunnelView()
@@ -332,6 +357,9 @@ namespace ColorBlockCrush.Tools
             currentTankLineElementSelected.UpdateUI();
             ClearTunnelView();
             UpdateTankLinesInfor();
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
             
             ClearAllTankLineELementSelected();
         }
@@ -366,7 +394,7 @@ namespace ColorBlockCrush.Tools
                     else if (elementConfig.elementType == TankLineElementType.Tunnel)
                     {
                         tankNumber += elementConfig.tunnelConfig.tankNumber;
-                        tunnel++;
+                        tunnel += tankNumber;
 
                         foreach (var tankConfig in elementConfig.tunnelConfig.tanks)
                         {
@@ -382,6 +410,51 @@ namespace ColorBlockCrush.Tools
             view.tankConnectionNumberTxtValue.text = tankConnect.ToString();
             view.tunneNumberTxtValue.text = tunnel.ToString();
             view.tankColorNumberTxtValue.text = colors.Count.ToString();
+        }
+        
+        public void UpdateButtonChooseTankColor()
+        {
+            foreach (var buttonColorChoose in view.buttonTankColorChooses)
+            {
+                buttonColorChoose.gameObject.
+                    SetActive(currentColorSet.Contains(buttonColorChoose.GetColorType()));
+            }
+        }
+
+        public void UpdateButtonChooseTunnelQueueColor()
+        {
+            foreach (var buttonColorChoose in view.buttonTankTunnelQueueColorChooses)
+            {
+                buttonColorChoose.gameObject.
+                    SetActive(currentColorSet.Contains(buttonColorChoose.GetColorType()));
+            }
+        }
+
+        public int GetBulletNumber(ColorType colorType)
+        {
+            int number = 0;
+
+            foreach (var tankLineEditorView in view.tankLineViews)
+            {
+                foreach (var tankLineElementView in tankLineEditorView.GetElementView())
+                {
+                    if (tankLineElementView.elementConfig.elementType == TankLineElementType.Tank)
+                    {
+                        if (tankLineElementView.elementConfig.tankConfig.colorType == colorType)
+                            number += tankLineElementView.elementConfig.tankConfig.bulletNumber;
+                    }
+                    else if(tankLineElementView.elementConfig.elementType == TankLineElementType.Tunnel)
+                    {
+                        foreach (var tankConfig in tankLineElementView.elementConfig.tunnelConfig.tanks)
+                        {
+                            if (tankConfig.colorType == colorType)
+                                number += tankConfig.bulletNumber;
+                        }
+                    }
+                }
+            }
+
+            return number;
         }
     }
 }
