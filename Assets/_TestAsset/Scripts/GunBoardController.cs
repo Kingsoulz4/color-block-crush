@@ -1,3 +1,4 @@
+using ColorBlockCrush.Tools;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,7 +14,6 @@ namespace ColorBlockCrush
         [SerializeField] private Vector3 _spawnOrigin = new Vector3(-2f, -5f, 0);
         [SerializeField] private float _columnSpacing = 1f;
         [SerializeField] private float _rowSpacing = 1f;
-        [SerializeField] private GunBoardData gunBoardData;
 
         [Header("Prefabs")]
         [SerializeField] private Gun _gunPrefab;
@@ -26,24 +26,24 @@ namespace ColorBlockCrush
 
         public Action<Gun> OnGunTapped;
 
-        public void Init()
+        public void Init(LevelConfig levelConfig)
         {
-            LoadGunDataByColumns(gunBoardData);
+            LoadGunDataByColumns(levelConfig);
         }
 
-        public void LoadGunDataByColumns(GunBoardData gunBoardData)
+        public void LoadGunDataByColumns(LevelConfig gunBoardData)
         {
             if (gunBoardData == null) return;
 
-            for (int col = 0; col < gunBoardData.ColumnGunData.Count; col++)
+            for (int col = 0; col < gunBoardData.tankLines.Count; col++)
             {
                 listGunColumn.Add(new List<Gun>());
-                List<GunData> columnData = new List<GunData>(gunBoardData.ColumnGunData[col].Guns);
+                List<TankLineElementConfig> columnData = new List<TankLineElementConfig>(gunBoardData.tankLines[col].tankLineElementConfigs);
 
                 for (int i = 0; i < columnData.Count; i++)
                 {
-                    GunData data = columnData[i];
-                    var gun = SpawnGun(col, i, data.Color, data.BulletCount);
+                    TankLineElementConfig data = columnData[i];
+                    var gun = SpawnGun(col, i, data.tankConfig.colorType, data.tankConfig.bulletNumber);
                     if (gun != null)
                     {
                         listGunColumn[col].Add(gun);

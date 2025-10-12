@@ -1,10 +1,10 @@
 using ColorBlockCrush;
+using ColorBlockCrush.Tools;
 using UnityEngine;
 
 public class NormalBlock : Block
 {
-    [SerializeField]
-    private MeshRenderer _blockMeshRenderer;
+
     private bool _isHidden;
 
     public bool IsHidden
@@ -17,16 +17,10 @@ public class NormalBlock : Block
         {
         }
     }
-
-    public void InitializeBlockPiece(BlockType blockType, ColorType colorType, int hitPointAmount, bool canDestroy, bool isHidden)
-    {
-    }
-
    
     protected override void StartBlock()
     {
     }
-
 
     private void UpdateHiddenVisualState()
     {

@@ -1,3 +1,6 @@
+using ColorBlockCrush.Tools;
+using Newtonsoft.Json;
+using System.IO;
 using UnityEngine;
 
 namespace ColorBlockCrush
@@ -9,6 +12,8 @@ namespace ColorBlockCrush
         [SerializeField] private GunBoardController gunBoardController;
         [SerializeField] private SlotController slotController;
         [SerializeField] private ConveyorController conveyorController;
+
+        [SerializeField] LevelConfig levelData;
 
         public enum GameState
         {
@@ -27,6 +32,7 @@ namespace ColorBlockCrush
 
         private void Start()
         {
+            ParseLevelData();
             InitializeGame();
         }
 
@@ -34,13 +40,24 @@ namespace ColorBlockCrush
         {
             CurrentState = GameState.Idle;
 
-            blockBoardController.Init();
-            gunBoardController.Init();
+            blockBoardController.Init(levelData);
+            gunBoardController.Init(levelData);
             slotController.Init();
             conveyorController.Init();
 
             RegisterEvents();
             StartGame();
+        }
+
+        private void ParseLevelData()
+        {
+            var ta = Resources.Load<TextAsset>("Level_1");
+            var json = ta.text;
+            json = QT.DecryptAndDecompress(json, LevelEditorController.pass);
+            levelData =  JsonConvert.DeserializeObject<LevelConfig>(json);
+            levelData = ScriptableObject.CreateInstance<LevelConfig>();
+            JsonUtility.FromJsonOverwrite(json, levelData);
+
         }
 
         private void RegisterEvents()
@@ -51,25 +68,9 @@ namespace ColorBlockCrush
         private void StartGame()
         {
             CurrentState = GameState.Playing;
-
-            SpawnTestBlocks();
         }
 
-        private void SpawnTestBlocks()
-        {
-            for (int c = 0; c < 10; c++)
-            {
-                for (int r = 0; r < 10; r++)
-                {
-                    ColorType color = (ColorType)(Random.Range(0, 5));
-                    int hp = Random.Range(1, 4);
-                    blockBoardController.SpawnBlock(r, c, BlockType.Normal, color, hp, false, true);
-                }
-            }
-
-            //_blockBoardController.SpawnBlock(1, 2, BlockType.Stone, ColorType.Red, 999);
-        }
-
+       
         public void OnWin()
         {
             if (CurrentState != GameState.Playing) return;

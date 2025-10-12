@@ -1,18 +1,11 @@
+using ColorBlockCrush.Tools;
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 namespace ColorBlockCrush
 {
-    public enum ColorType
-    {
-        Red,
-        Blue,
-        Green,
-        Yellow,
-        Purple
-    }
 
     public enum BlockType
     {
@@ -26,8 +19,9 @@ namespace ColorBlockCrush
         public Action<Block> OnBlockDestroyed;
 
         [Header("Renderer References")]
-        [SerializeField] protected List<MeshRenderer> meshList;
         [SerializeField] protected Transform centerPoint;
+        [SerializeField] private MeshRenderer _blockMeshRenderer;
+        [SerializeField] private ColorReference colorRef;
 
         protected int maxHitPoint;
         protected int hitPoint;
@@ -54,34 +48,13 @@ namespace ColorBlockCrush
 
         protected virtual void StartBlock()
         {
-            UpdateColors();
         }
 
-        protected virtual void UpdateColors()
+        protected virtual void UpdateColors(ColorType colorType)
         {
-            if (meshList == null) return;
-
-            Color color = GetColorFromType(ColorType);
-
-            foreach (MeshRenderer renderer in meshList)
+            if (_blockMeshRenderer != null && colorRef != null)
             {
-                if (renderer != null)
-                {
-                    renderer.material.color = color;
-                }
-            }
-        }
-
-        private Color GetColorFromType(ColorType colorType)
-        {
-            switch (colorType)
-            {
-                case ColorType.Red: return Color.red;
-                case ColorType.Blue: return Color.blue;
-                case ColorType.Green: return Color.green;
-                case ColorType.Yellow: return Color.yellow;
-                case ColorType.Purple: return new Color(0.5f, 0, 0.5f);
-                default: return Color.white;
+                _blockMeshRenderer.material.color = colorRef.GetColor(colorType);
             }
         }
 

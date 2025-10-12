@@ -50,6 +50,7 @@ MonoBehaviour:
   meshList: []
   centerPoint: {fileID: 4289695443016426}
   _blockMeshRenderer: {fileID: 23945417545486132}
+  colorRef: {fileID: 11400000, guid: 7de4625270019b345a309edc404aa0f7, type: 2}
 --- !u!65 &207611675957290789
 BoxCollider:
   m_ObjectHideFlags: 0
