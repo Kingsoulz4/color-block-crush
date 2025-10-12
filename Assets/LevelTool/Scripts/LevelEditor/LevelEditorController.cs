@@ -87,6 +87,7 @@ namespace ColorBlockCrush.Tools
                 currentLevelConfig = null;
                 
                 ClearAllMap();
+                ClearAllTankLines();
                 view.levelSelectPanel.gameObject.SetActive(true);
                 view.levelEditPanel.gameObject.SetActive(false);
             });
@@ -349,9 +350,7 @@ namespace ColorBlockCrush.Tools
                 UpdateMapData();
                 UpdateTankLineData();
                 
-                UpdateButtonChooseTankColor();
-                UpdateButtonChooseTunnelQueueColor();
-                UpdateBlockBulletValidate();
+                UpdateLevelState();
             }
             
             Debug.Log("Open Complete");
@@ -731,5 +730,12 @@ namespace ColorBlockCrush.Tools
         }
 
         #endregion
+
+        public void UpdateLevelState()
+        {
+            UpdateButtonChooseTankColor();
+            UpdateButtonChooseTunnelQueueColor();
+            UpdateBlockBulletValidate();
+        }
     }
 }

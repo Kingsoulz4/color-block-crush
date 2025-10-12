@@ -18,7 +18,7 @@ namespace ColorBlockCrush.Tools
         }
         
         public void AddElementToLine(ItemTankLineElementView newElement, Action<ItemTankLineElementView> onSelectElement,
-            TankLineElementConfig elementConfig = null)
+            Action onDelete, TankLineElementConfig elementConfig = null)
         {
             newElement.transform.SetParent(elementParent);
             newElement.transform.localScale = Vector3.one;
@@ -26,6 +26,7 @@ namespace ColorBlockCrush.Tools
             Action onDeleteElement = () =>
             {
                 RemoteBusFromLine(newElement);
+                onDelete?.Invoke();
             };
 
             Action<int> onChangeElement = (itemIndex) =>

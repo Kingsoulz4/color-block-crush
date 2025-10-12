@@ -24,18 +24,23 @@ namespace ColorBlockCrush.Tools
         {
             if (index < 0 && index >= view.tankLineViews.Count) return;
 
+            Action onDelete = () =>
+            {
+                UpdateTankLinesInfor();
+                UpdateLevelState();
+            };
+
             ItemTankLineElementView newElement =
                 Instantiate(model.tankLineElementPrefab).GetComponent<ItemTankLineElementView>();
             newElement.GetComponent<DraggableTankLineElementItem>().dragCanvas = canvas;
-            view.tankLineViews[index].AddElementToLine(newElement, SelectTankLineElement, elementConfig);
+            view.tankLineViews[index].AddElementToLine(newElement, SelectTankLineElement, 
+                onDelete, elementConfig);
             
             ClearAllTankLineELementSelected();
             SelectTankLineElement(newElement);
             UpdateTankLinesInfor();
             
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+            UpdateLevelState();
         }
 
         private void UpdateTankLineData()
@@ -121,9 +126,8 @@ namespace ColorBlockCrush.Tools
 
             currentTankLineElementSelected.UpdateUI();
             UpdateTankLinesInfor();
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+            
+            UpdateLevelState();
         }
 
         private void DellTankInfor()
@@ -135,9 +139,8 @@ namespace ColorBlockCrush.Tools
             UpdateTankLineElementPropertiesInfor(currentTankLineElementSelected.elementConfig);
             
             UpdateTankLinesInfor();
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+            
+            UpdateLevelState();
         }
 
         private void SetConnectLine()
@@ -167,9 +170,7 @@ namespace ColorBlockCrush.Tools
 
             ClearAllTankLineELementSelected();
             UpdateTankLinesInfor();
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+            UpdateLevelState();
         }
 
         private void DelConnectLine()
@@ -186,9 +187,7 @@ namespace ColorBlockCrush.Tools
             }
 
             UpdateTankLinesInfor();
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+            UpdateLevelState();
         }
 
         private void SpawnConnectUi(ItemTankLineElementView a, ItemTankLineElementView b)
@@ -250,9 +249,7 @@ namespace ColorBlockCrush.Tools
             listIconTunnelQueue.Add(newItemTunnelQueue);
             view.tankTunnelQueueNumber.text = listIconTunnelQueue.Count.ToString();
             UpdateTankLinesInfor();
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+            UpdateLevelState();
         }
 
         private void ChangeIndexItemTunnel(int oldItemIndex, int newItemIndex, ItemTunnelQueueView itemTunnel)
@@ -271,9 +268,7 @@ namespace ColorBlockCrush.Tools
             Destroy(itemTunnel.gameObject);
             view.tankTunnelQueueNumber.text = listIconTunnelQueue.Count.ToString();
             UpdateTankLinesInfor();
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+            UpdateLevelState();
         }
 
         private void OnClearTunnelHumanQueue()
@@ -295,9 +290,7 @@ namespace ColorBlockCrush.Tools
             UpdateTankLineElementPropertiesInfor(currentTankLineElementSelected.elementConfig);
             
             UpdateTankLinesInfor();
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+            UpdateLevelState();
         }
 
         private void ClearTunnelView()
@@ -308,6 +301,7 @@ namespace ColorBlockCrush.Tools
             }
 
             listIconTunnelQueue.Clear();
+            view.tankTunnelQueueNumber.text = "0";
         }
 
         private void UpdateTunnelHumanQueue()
@@ -335,6 +329,9 @@ namespace ColorBlockCrush.Tools
                 newItemTunnelQueue.Init(onDelete, onChangeIndex);
                 listIconTunnelQueue.Add(newItemTunnelQueue);
             }
+
+            view.tankTunnelQueueNumber.text =
+                currentTankLineElementSelected.elementConfig.tunnelConfig.tankNumber.ToString();
         }
 
         private void SetTunnelInfor()
@@ -357,9 +354,7 @@ namespace ColorBlockCrush.Tools
             currentTankLineElementSelected.UpdateUI();
             ClearTunnelView();
             UpdateTankLinesInfor();
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+            UpdateLevelState();
             
             ClearAllTankLineELementSelected();
         }
@@ -371,6 +366,24 @@ namespace ColorBlockCrush.Tools
         }
 
         #endregion
+
+        [Button]
+        public void ClearAllTankLines()
+        {
+            foreach (TankLineEditorView tankLineView in view.tankLineViews)
+            {
+                List<ItemTankLineElementView> itemTankLineElementViews = tankLineView.GetElementView();
+                for (int i = itemTankLineElementViews.Count - 1; i >= 0; i--)
+                {
+                    ItemTankLineElementView itemTankLineElementView = itemTankLineElementViews[i];
+                    itemTankLineElementViews.RemoveAt(i);
+
+                    Destroy(itemTankLineElementView.gameObject);
+                }
+
+                itemTankLineElementViews.Clear();
+            }
+        }
 
         [Button]
         public void UpdateTankLinesInfor()
@@ -394,7 +407,7 @@ namespace ColorBlockCrush.Tools
                     else if (elementConfig.elementType == TankLineElementType.Tunnel)
                     {
                         tankNumber += elementConfig.tunnelConfig.tankNumber;
-                        tunnel += tankNumber;
+                        tunnel += elementConfig.tunnelConfig.tankNumber;
 
                         foreach (var tankConfig in elementConfig.tunnelConfig.tanks)
                         {

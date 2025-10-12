@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using System.Linq;
+using Sirenix.OdinInspector;
 
 namespace ColorBlockCrush.Tools
 {
@@ -106,9 +107,7 @@ namespace ColorBlockCrush.Tools
             DOVirtual.DelayedCall(.55f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, _gridCellMapViews,
                 onUpdateSelection, onDeleteSelection));
 
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+            UpdateLevelState();
         }
 
         private void CreateMapByPicture()
@@ -149,10 +148,8 @@ namespace ColorBlockCrush.Tools
             view.dragCellMapSelection.enabled = true;
             DOVirtual.DelayedCall(2.5f, () => view.dragCellMapSelection.Init(mapWidth, mapHeight, model.gridContainer, _gridCellMapViews,
                 onUpdateSelection, onDeleteSelection));
-            
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+
+            UpdateLevelState();
         }
 
         private void UpdateMapData()
@@ -216,10 +213,8 @@ namespace ColorBlockCrush.Tools
                         canvas);
                     _keyInforEditorViews.Add(keyInforView);
                 }
-                
-                UpdateButtonChooseTankColor();
-                UpdateButtonChooseTunnelQueueColor();
-                UpdateBlockBulletValidate();
+
+                UpdateLevelState();
             });
         }
         
@@ -296,9 +291,7 @@ namespace ColorBlockCrush.Tools
                 _keyInforEditorViews.Add(keyInforView);
             }
             
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+            UpdateLevelState();
         }
         
         public void DeleteStateGridCell(List<GridCellMapView> cellSelection)
@@ -404,9 +397,7 @@ namespace ColorBlockCrush.Tools
                 }
             }
             
-            UpdateButtonChooseTankColor();
-            UpdateButtonChooseTunnelQueueColor();
-            UpdateBlockBulletValidate();
+            UpdateLevelState();
         }
 
         private void SetColorSelected()
@@ -419,9 +410,38 @@ namespace ColorBlockCrush.Tools
             view.dragCellMapSelection.OnClickDeleteColor();   
         }
 
+        [Button]
         private void ClearAllMap()
         {
             view.dragCellMapSelection.ClearAllGrid();
+            ClearAllBlock();
+            ClearAllKey();
+        }
+
+        private void ClearAllBlock()
+        {
+            for (int i = _blockInforEditorViews.Count - 1; i >= 0; i--)
+            {
+                BlockInforEditorView blockEditorView = _blockInforEditorViews[i];
+                _blockInforEditorViews.RemoveAt(i);
+                
+                Destroy(blockEditorView.gameObject);
+            }
+            
+            _blockInforEditorViews.Clear();
+        }
+        
+        private void ClearAllKey()
+        {
+            for (int i = _keyInforEditorViews.Count - 1; i >= 0; i--)
+            {
+                KeyInforEditorView keyInforEditorView = _keyInforEditorViews[i];
+                _keyInforEditorViews.RemoveAt(i);
+                
+                Destroy(keyInforEditorView.gameObject);
+            }
+            
+            _keyInforEditorViews.Clear();
         }
 
         private void ClearAllColor()
