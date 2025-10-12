@@ -56,7 +56,7 @@ namespace ColorBlockCrush
                 for (int i = 0; i < columnData.Count; i++)
                 {
                     TankLineElementConfig data = columnData[i];
-                    var gun = SpawnGun(col, i, data.tankConfig.colorType, data.tankConfig.bulletNumber, centerOffsetX);
+                    var gun = SpawnGun(col, i, data.tankConfig, centerOffsetX);
                     if (gun != null)
                     {
                         listGunColumn[col].Add(gun);
@@ -67,7 +67,7 @@ namespace ColorBlockCrush
             }
         }
 
-        public Gun SpawnGun(int column, int row, ColorType color, int bulletCount, float centerOffsetX = 0f)
+        public Gun SpawnGun(int column, int row, TankConfig gunData, float centerOffsetX = 0f)
         {
             if (!IsValidColumn(column)) return null;
 
@@ -78,7 +78,7 @@ namespace ColorBlockCrush
             );
 
             Gun gun = Instantiate(gunPrefab, worldPos, Quaternion.identity, gunContainer);
-            gun.Init(color, bulletCount, column);
+            gun.Init(gunData, column);
             gun.name = $"Gun_{column}_{row}";
 
             return gun;

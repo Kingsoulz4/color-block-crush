@@ -2,6 +2,8 @@ using ColorBlockCrush.Tools;
 using Newtonsoft.Json;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace ColorBlockCrush
 {
@@ -12,6 +14,7 @@ namespace ColorBlockCrush
         [SerializeField] private GunBoardController gunBoardController;
         [SerializeField] private SlotController slotController;
         [SerializeField] private ConveyorController conveyorController;
+        [SerializeField] private Button test;
 
         [SerializeField] LevelConfig levelData;
 
@@ -34,6 +37,10 @@ namespace ColorBlockCrush
         {
             ParseLevelData();
             InitializeGame();
+            test.onClick.AddListener(() =>
+            {
+                SceneManager.LoadScene("GameScence");
+            });
         }
 
         private void InitializeGame()
@@ -55,8 +62,8 @@ namespace ColorBlockCrush
             var json = ta.text;
             json = QT.DecryptAndDecompress(json, LevelEditorController.pass);
             levelData =  JsonConvert.DeserializeObject<LevelConfig>(json);
-            levelData = ScriptableObject.CreateInstance<LevelConfig>();
-            JsonUtility.FromJsonOverwrite(json, levelData);
+            //levelData = ScriptableObject.CreateInstance<LevelConfig>();
+            //JsonUtility.FromJsonOverwrite(json, levelData);
 
         }
 

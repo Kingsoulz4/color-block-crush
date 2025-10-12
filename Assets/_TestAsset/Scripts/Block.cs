@@ -25,22 +25,27 @@ namespace ColorBlockCrush
 
         protected int maxHitPoint;
         protected int hitPoint;
-
+        private int id;
+        private CellConfig blockData;
         public BlockType BlockType { get; private set; }
         public ColorType ColorType { get; protected set; }
         public GridNode GridNode { get; set; }
         public int GridHeight { get; set; }
         public bool CanDestroy { get; private set; }
         public bool IsAttacked { get; protected set; }
+        public CellConfig BlockData { get => blockData;}
+        public int Id { get => id;}
 
-        public void Initialize(BlockType blockType, ColorType colorType, int hitPointAmount, bool isStatic, bool canDestroy)
+        public void Init(BlockType blockType, CellConfig blockDataP, bool isStatic, bool canDestroy)
         {
             BlockType = blockType;
-            ColorType = colorType;
-            maxHitPoint = hitPointAmount;
-            hitPoint = hitPointAmount;
+            ColorType = blockDataP.colorType;
+            id = blockDataP.id;
+            maxHitPoint = blockDataP.blockHealth;
+            hitPoint = blockDataP.blockHealth;
             CanDestroy = canDestroy;
             IsAttacked = false;
+            blockData = blockDataP;
 
             StartBlock();
             OnBlockInitialized?.Invoke(this);

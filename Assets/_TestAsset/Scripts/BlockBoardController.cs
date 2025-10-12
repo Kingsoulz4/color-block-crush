@@ -73,13 +73,13 @@ namespace ColorBlockCrush
                     ColorType color = listBlock[idx].colorType;
                     int hp = listBlock[idx].blockHealth;
                     
-                    SpawnBlock(r, c, BlockType.Normal, color, hp, false, true);
+                    SpawnBlock(r, c, BlockType.Normal, listBlock[idx], false, true);
                 }
             }
         }
 
 
-        public Block SpawnBlock(int row, int col, BlockType type, ColorType color, int hp, bool isStatic, bool canDestroy)
+        public Block SpawnBlock(int row, int col, BlockType type,CellConfig blockData, bool isStatic, bool canDestroy)
         {
             if (!IsValidPosition(row, col)) return null;
 
@@ -89,7 +89,7 @@ namespace ColorBlockCrush
             block.transform.localScale = calculatedBlockScale;
 
             block.name = $"Block_{row}_{col}";
-            block.Initialize(type, color, hp, isStatic, canDestroy);
+            block.Init(type, blockData, isStatic, canDestroy);
             block.GridNode = node;
 
             PlaceBlock(row, col, block);

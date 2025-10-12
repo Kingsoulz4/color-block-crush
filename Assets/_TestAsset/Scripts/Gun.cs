@@ -2,6 +2,7 @@
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -31,7 +32,8 @@ namespace ColorBlockCrush
         private TrayItem trayItem;
         private GunPos gunPos;
         private RotationDirection currentFireDir = RotationDirection.Up;
-        private List<Block> victims;
+        private TankConfig gunData;
+        private HashSet<int> victims;
 
         public int BulletCount { get; private set; }
         public ColorType ColorType { get; private set; }
@@ -48,7 +50,7 @@ namespace ColorBlockCrush
         public Action<Gun> OnGunFired;
         public Action<Gun> OnGunEmpty;
 
-        public void Init(ColorType color, int bulletCount, int column)
+        public void Init(TankConfig gunDataP, int column)
         {
             GunPos = GunPos.ON_GUN_BOARD;
             currentFireDir = RotationDirection.Up;
@@ -56,14 +58,15 @@ namespace ColorBlockCrush
             OnGunEmpty = null;
             CurrentTarget = null;
             ConnectedGuns = new List<Gun>();
-            ColorType = color;
-            BulletCount = bulletCount;
+            ColorType = gunDataP.colorType;
+            BulletCount = gunDataP.bulletNumber;
             ColumnIndex = column;
             nextFireTime = 0f;
             IsFrontRow = false;
             isFireFirstTime = false;
             isTurning = false;
-            victims = new List<Block>();
+            victims = new HashSet<int>();
+            gunData = gunDataP;
             UpdateVisuals();
         }
 
@@ -74,6 +77,7 @@ namespace ColorBlockCrush
         private void OnDisable()
         {
             transform.DOKill(this);
+            victims.Clear();
         }
 
         private void CheckFire()
@@ -90,9 +94,9 @@ namespace ColorBlockCrush
                 return;
             }
 
-            if (!victims.Contains(target))
+            if (!victims.Contains(target.Id))
             {
-                victims.Add(target);
+                victims.Add(target.Id);
             }
             else
             {
@@ -166,7 +170,6 @@ namespace ColorBlockCrush
             Bullet bullet = Instantiate(bulletPrb, bulletSpawnPos.position, Quaternion.identity);
             bullet.OnInit(this, target, (gun, block) =>
             {
-                victims.Remove(target);
                 Destroy(target.gameObject);
                 Destroy(bullet.gameObject);
             });

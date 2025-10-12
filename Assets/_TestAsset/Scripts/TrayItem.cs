@@ -27,6 +27,10 @@ namespace ColorBlockCrush
         public void Init()
         {
             model.transform.Rotate(originRotation);
+        }
+
+        private void OnDisable()
+        {
             DOTween.Kill(this);
         }
 
