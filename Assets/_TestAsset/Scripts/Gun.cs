@@ -1,4 +1,4 @@
-using ColorBlockCrush.Tools;
+﻿using ColorBlockCrush.Tools;
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
@@ -34,7 +34,7 @@ namespace ColorBlockCrush
         private List<Block> victims;
 
         public int BulletCount { get; private set; }
-        public ColorType Color { get; private set; }
+        public ColorType ColorType { get; private set; }
         public int ColumnIndex { get; set; }
         public bool IsFrontRow { get; set; }
 
@@ -56,7 +56,7 @@ namespace ColorBlockCrush
             OnGunEmpty = null;
             CurrentTarget = null;
             ConnectedGuns = new List<Gun>();
-            Color = color;
+            ColorType = color;
             BulletCount = bulletCount;
             ColumnIndex = column;
             nextFireTime = 0f;
@@ -85,7 +85,7 @@ namespace ColorBlockCrush
 
             var target = GetTargetBock();
 
-            if (!target)
+            if (!target || target.ColorType != ColorType)
             {
                 return;
             }
@@ -96,9 +96,11 @@ namespace ColorBlockCrush
             }
             else
             {
+                Debug.Log("Bỏ qua target " + target.name);
                 return;
             }
 
+            Debug.Log("Fire target " + target.name);
             Fire(target);
         }
 
@@ -131,7 +133,7 @@ namespace ColorBlockCrush
         public bool CanFire()
         {
             return !isTurning && BulletCount > 0
-                && Time.time >= nextFireTime
+                //&& Time.time >= nextFireTime
                 && GunPos == GunPos.ON_CONVEYOR
                 ;
         }
@@ -157,7 +159,7 @@ namespace ColorBlockCrush
 
             RotateToFire(target.transform);
             BulletCount--;
-            nextFireTime = Time.time + (1f / fireRate);
+            //nextFireTime = Time.time + (1f / fireRate);
 
             UpdateBulletCountDisplay();
 
@@ -278,7 +280,7 @@ namespace ColorBlockCrush
                 if (meshRendererList[i])
                 {
                     Material mat = meshRendererList[i].material;
-                    mat.color = colorReference.GetColor(Color);
+                    mat.color = colorReference.GetColor(ColorType);
                 }
             }
 
@@ -307,11 +309,11 @@ namespace ColorBlockCrush
             {
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
-                InvokeRepeating(nameof(CheckFire), 0f, 0.01f);
+                InvokeRepeating(nameof(CheckFire), 0f, 0.02f);
             });
 
             Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
-            moveToConveyorSq.Join(transform.DORotate(newRotation, 0.3f));
+            //moveToConveyorSq.Join(transform.DORotate(newRotation, 0.3f));
             moveToConveyorSq.SetId(this);
         }
 
