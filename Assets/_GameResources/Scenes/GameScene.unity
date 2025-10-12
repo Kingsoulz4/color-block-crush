@@ -2405,7 +2405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd90f07f28a54340ba3077f2b6237f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnOrigin: {x: -2, y: 0, z: -10}
+  _spawnOrigin: {x: 0, y: 0, z: -10}
   _columnSpacing: 3
   _rowSpacing: 2
   _gunPrefab: {fileID: 769447249408881793, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}

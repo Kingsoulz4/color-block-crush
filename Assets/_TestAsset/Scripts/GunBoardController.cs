@@ -2,6 +2,7 @@ using ColorBlockCrush.Tools;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.Rendering.DebugUI.Table;
@@ -35,21 +36,27 @@ namespace ColorBlockCrush
         {
             if (gunBoardData == null) return;
 
-            for (int col = 0; col < gunBoardData.tankLines.Count; col++)
-            {
+            int totalColumns = gunBoardData.tankLines.Where(x => x.tankLineElementConfigs.Count>2).Count();
 
+            float totalWidth = (totalColumns - 1) * _columnSpacing;
+            float centerOffsetX = -totalWidth / 2f;
+
+            for (int col = 0; col < totalColumns; col++)
+            {
                 if (gunBoardData.tankLines[col].tankLineElementConfigs.Count == 0)
                 {
-                    return;
+                    continue;
                 }
 
                 listGunColumn.Add(new List<Gun>());
+
                 List<TankLineElementConfig> columnData = new List<TankLineElementConfig>(gunBoardData.tankLines[col].tankLineElementConfigs);
                 columnData.Reverse();
+
                 for (int i = 0; i < columnData.Count; i++)
                 {
                     TankLineElementConfig data = columnData[i];
-                    var gun = SpawnGun(col, i, data.tankConfig.colorType, data.tankConfig.bulletNumber);
+                    var gun = SpawnGun(col, i, data.tankConfig.colorType, data.tankConfig.bulletNumber, centerOffsetX);
                     if (gun != null)
                     {
                         listGunColumn[col].Add(gun);
@@ -58,19 +65,22 @@ namespace ColorBlockCrush
 
                 UpdateFrontRowFlags(col);
             }
-
         }
 
-        public Gun SpawnGun(int column, int row, ColorType color, int bulletCount)
+        public Gun SpawnGun(int column, int row, ColorType color, int bulletCount, float centerOffsetX = 0f)
         {
             if (!IsValidColumn(column)) return null;
 
             Vector3 worldPos = _spawnOrigin + new Vector3(
-                column * _columnSpacing, 0, row * -_rowSpacing);
+                (column * _columnSpacing) + centerOffsetX,
+                0,
+                row * -_rowSpacing
+            );
 
             Gun gun = Instantiate(_gunPrefab, worldPos, Quaternion.identity, _gunContainer);
             gun.Init(color, bulletCount, column);
             gun.name = $"Gun_{column}_{row}";
+
             return gun;
         }
 
