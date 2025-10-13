@@ -34,6 +34,7 @@ namespace ColorBlockCrush
         private RotationDirection currentFireDir = RotationDirection.Up;
         private GunConfig gunData;
         private HashSet<int> victims;
+        private List<int> victims1;
 
         public int BulletCount { get; private set; }
         public ColorType ColorType { get; private set; }
@@ -72,6 +73,7 @@ namespace ColorBlockCrush
 
         private void Update()
         {
+            victims1 = new List<int>(victims);
         }
 
         private void OnDisable()

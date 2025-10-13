@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Geckout.PathFinding
+namespace ColorBlockCrush.PathFinding
 {
     public class Heap<T> where T : IHeapItem<T>
     {

@@ -1,7 +1,6 @@
 using AYellowpaper.SerializedCollections;
 using DG.Tweening;
-using Geckout;
-using Geckout.Data;
+using ColorBlockCrush;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +9,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using ColorBlockCrush.Tools;
 
 public class InGameScreenUI : ScreenUI
 {
@@ -20,7 +20,7 @@ public class InGameScreenUI : ScreenUI
     [SerializeField] Button btn_pause;
     [SerializeField] Button btn_Replay;
 
-    [SerializeField] SerializedDictionary<LevelType, GameObject> m_listTimeBarBackground;
+    [SerializeField] SerializedDictionary<LevelDifficult, GameObject> m_listTimeBarBackground;
 
     [Space, Header("Booster")]
     BoosterDataSO boosterDataSO;
@@ -62,25 +62,25 @@ public class InGameScreenUI : ScreenUI
     {
         base.Initialize(uiManager);
 
-        timeBoosterBtn.onClick.AddListener(OnTimeBoosterClick);
-        handMoveBoosterBtn.onClick.AddListener(HandMoveboosterClick);
-        hammerBtn.onClick.AddListener(HammerBoosterClick);
-        //suffleBoosterBtn.onClick.AddListener(SuffleBoosterClick);
+        //timeBoosterBtn.onClick.AddListener(OnTimeBoosterClick);
+        //handMoveBoosterBtn.onClick.AddListener(HandMoveboosterClick);
+        //hammerBtn.onClick.AddListener(HammerBoosterClick);
+        ////suffleBoosterBtn.onClick.AddListener(SuffleBoosterClick);
         btn_pause.onClick.AddListener(OnPauseClick);
         btn_Replay.onClick.AddListener(OnReplayClick);
 
-        foreach (var booster in BoosterManager.Instance.Boosters)
-        {
-            booster.OnStartUseBooster += OnStartUseBooster;
-            booster.OnChangeBoosterCount += OnChangeBoosterCount;
-            booster.OnUseBoosterDone += OnUseBoosterDone;
-        }
+        //foreach (var booster in BoosterManager.Instance.Boosters)
+        //{
+        //    booster.OnStartUseBooster += OnStartUseBooster;
+        //    booster.OnChangeBoosterCount += OnChangeBoosterCount;
+        //    booster.OnUseBoosterDone += OnUseBoosterDone;
+        //}
 
-        boosterDataSO = BoosterManager.Instance.BoosterData;
+        //boosterDataSO = BoosterManager.Instance.BoosterData;
 
-        timeBoosterCount.Init(UserDataManager.TimeIngameBooster, BoosterType.TIME_INGAME);
-        hammerBoosterCount.Init(UserDataManager.HammerBooster, BoosterType.HAMMER);
-        handMoveBoosterCount.Init(UserDataManager.HandMoveBooster, BoosterType.HAND_MOVE);
+        //timeBoosterCount.Init(UserDataManager.TimeIngameBooster, BoosterType.TIME_INGAME);
+        //hammerBoosterCount.Init(UserDataManager.HammerBooster, BoosterType.HAMMER);
+        //handMoveBoosterCount.Init(UserDataManager.HandMoveBooster, BoosterType.HAND_MOVE);
         //suffleBoosterCount.Init(UserDataManager.SuffleBooster, BoosterType.SUFFLE);
     }
 
@@ -95,6 +95,7 @@ public class InGameScreenUI : ScreenUI
         if (BoosterManager.Instance == null) return;
         foreach (var booster in BoosterManager.Instance.Boosters)
         {
+            if (!booster) return;
             booster.OnStartUseBooster -= OnStartUseBooster;
             booster.OnUseBoosterDone -= OnUseBoosterDone;
             booster.OnChangeBoosterCount -= OnChangeBoosterCount;
@@ -234,7 +235,7 @@ public class InGameScreenUI : ScreenUI
         {
             item.Value.SetActive(false);
         }
-        m_listTimeBarBackground[LevelController.GameLevelData.type].SetActive(true);
+        m_listTimeBarBackground[LevelController.GameLevelData.levelDifficult].SetActive(true);
     }
 
     private void PoupNewFeature()

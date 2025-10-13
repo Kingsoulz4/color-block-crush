@@ -1,13 +1,13 @@
 using DG.Tweening;
-using Geckout.Data;
 using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using ColorBlockCrush.Tools;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     public class PopupWarningDifficultLevel : PopupUI, IFlowCallback
     {
@@ -21,7 +21,7 @@ namespace Geckout
 
         public void Execute(Action callback)
         {
-            if(LevelGame.GameLevelData.type != LevelType.HARD && LevelGame.GameLevelData.type != LevelType.SUPER_HARD)
+            if(LevelGame.GameLevelData.levelDifficult != LevelDifficult.Hard && LevelGame.GameLevelData.levelDifficult != LevelDifficult.SuperHard)
             {
                 Hide();
                 callback?.Invoke();
@@ -29,21 +29,21 @@ namespace Geckout
             }    
             else
             {
-                Show(LevelGame.GameLevelData.type, callback);
+                Show(LevelGame.GameLevelData.levelDifficult, callback);
             }    
         }
 
-        public void Show(LevelType levelType, Action callback)
+        public void Show(LevelDifficult levelType, Action callback)
         {
             base.Show(null);
             StartCoroutine(IEAnimate(levelType, callback));
         }
 
-        private IEnumerator IEAnimate(LevelType levelType, Action callback)
+        private IEnumerator IEAnimate(LevelDifficult levelType, Action callback)
         {
             m_hardLevelObject.SetActive(false);
             m_superHardLevelObject.SetActive(false);
-            var objectShow = levelType == LevelType.HARD ? m_hardLevelObject : m_superHardLevelObject;
+            var objectShow = levelType == LevelDifficult.Hard ? m_hardLevelObject : m_superHardLevelObject;
             objectShow.gameObject.SetActive(true);
             objectShow.transform.localScale = Vector3.zero;
             objectShow.transform.DOScale(1, 0.5f);

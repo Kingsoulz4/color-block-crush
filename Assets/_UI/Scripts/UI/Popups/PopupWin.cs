@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     public class PopupWin : PopupUI
     {

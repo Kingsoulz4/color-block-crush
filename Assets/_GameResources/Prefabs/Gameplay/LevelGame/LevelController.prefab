@@ -1633,7 +1633,7 @@ MonoBehaviour:
   _minBlockScale: 0.2
   axisType: 1
   anchorType: 4
-  blockPrefab: {fileID: 0}
+  blockPrefab: {fileID: 7708169521855786892, guid: 57aaf600ca7fdd24d9cddce4b20ac661, type: 3}
   gridController: {fileID: 1346653134287712912}
   blockContainer: {fileID: 1332189147923130460}
 --- !u!1 &6648344636809376776
@@ -1961,10 +1961,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cfc22709db03624598f96c62441ce8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  test: {fileID: 0}
   blockBoardController: {fileID: 863405588112645247}
   gunBoardController: {fileID: 6445409415423125377}
   slotController: {fileID: 5243801649469231434}
   conveyorController: {fileID: 6226058982253706133}
+  m_tutorialHandGuide: {fileID: 0}
   levelData: {fileID: 0}
 --- !u!1 &9055837541032993411
 GameObject:

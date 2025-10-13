@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
-namespace Geckout.PathFinding
+namespace ColorBlockCrush.PathFinding
 {
     public class ASPathFinding
     {

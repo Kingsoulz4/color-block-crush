@@ -42,7 +42,7 @@ namespace ColorBlockCrush
         {
             BlockType = blockType;
             ColorType = blockDataP.colorType;
-            id = blockDataP.bigBlockId;
+            id = blockDataP.id;
             maxHitPoint = 1;
             hitPoint = 1;
             CanDestroy = canDestroy;

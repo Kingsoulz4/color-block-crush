@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     public class PopupLoseHaveSelectBooster : PopupUI
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     public class PopupRemoveAds : PopupUI
     {

@@ -1,12 +1,12 @@
 using System.Collections;
 using DG.Tweening;
-using Geckout;
+using ColorBlockCrush;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     public class PopupReceiveCoin : PopupUI
     {

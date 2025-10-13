@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     public class PopupLose : PopupUI
     {

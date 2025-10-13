@@ -1,10 +1,10 @@
 using AYellowpaper.SerializedCollections;
-using Geckout.Data;
+using ColorBlockCrush.Tools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     [CreateAssetMenu(fileName = "ListColorByColorType", menuName = "ScriptableObjects/ListColorByColorType", order = 1)]
     public class ListColorByColorType : ScriptableObject

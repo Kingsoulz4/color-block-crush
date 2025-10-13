@@ -1,5 +1,6 @@
-using Geckout.Data;
-using Geckout.PathFinding;
+using ColorBlockCrush.PathFinding;
+using ColorBlockCrush.Tools;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Net.NetworkInformation;
 using UnityEngine;
 using static DG.Tweening.DOTweenAnimation;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     public class LevelManager : SingletonDontDestroyMono<LevelManager>
     {
@@ -68,7 +69,7 @@ namespace Geckout
         {
             LevelEvent.OnWin += OnWinGame;
             LevelEvent.OnLose += OnLoseGame;
-            
+
         }
 
         private void OnDisable()
@@ -85,33 +86,40 @@ namespace Geckout
         public void StartLevel(int level, int levelSetID = 0)
         {
             var levelData = LoadLevel(level, levelSetID);
-//#if !UNITY_EDITOR
+            //#if !UNITY_EDITOR
             Destroy(LevelGame.gameObject);
             LevelGame = Instantiate(m_levelGameOriginal);
-//#endif
+            //#endif
             LevelGame.SetLevelData(levelData);
             OnStartGame(CurrentLevel);
         }
 
-        public GameLevelData LoadLevel(int level, int levelSetID)
+        public LevelConfig LoadLevel(int level, int levelSetID)
         {
-            var levelData = Resources.Load<GameLevelData>($"Levels/{levelSetID}/Level{level}");
-            if (levelData == null)
+            var textLv = Resources.Load<TextAsset>($"Levels/{levelSetID}/Level_{level}");
+            if (textLv == null)
             {
-                levelData = Resources.Load<GameLevelData>($"Levels/0/Level{level}");
-                if(levelData == null)
+                textLv = Resources.Load<TextAsset>($"Levels/0/Level_{level}");
+                if (textLv == null)
                 {
-                    levelData = Resources.Load<GameLevelData>($"Levels/0/Level{1}");
+                    textLv = Resources.Load<TextAsset>($"Levels/0/Level_{1}");
                 }
             }
-
-            return new GameLevelData(levelData);   
+            return ParseLevelData(textLv);
         }
 
-        public LevelType GetCurrentLevelType()
+        private LevelConfig ParseLevelData(TextAsset textLv)
+        {
+            var json = textLv.text;
+            json = QT.DecryptAndDecompress(json, LevelEditorController.pass);
+            var levelData = JsonConvert.DeserializeObject<LevelConfig>(json);
+            return levelData;
+        }
+
+        public LevelDifficult GetCurrentLevelType()
         {
             var levelData = LoadLevel(CurrentLevel, CurrentLevelSetID);
-            return levelData.type;
+            return levelData.levelDifficult;
         }
 
         #region GameState
@@ -144,7 +152,7 @@ namespace Geckout
 
         public void OnRetryGame()
         {
-            if(UserDataManager.Heart > 0)
+            if (UserDataManager.Heart > 0)
             {
                 StartCurrentLevel();
                 UIManager.Instance.ShowScreen<InGameScreenUI>();
@@ -165,10 +173,10 @@ namespace Geckout
 
         public void OnReviveGame()
         {
-            if(UserDataManager.Gold >= priceRevive)
+            if (UserDataManager.Gold >= priceRevive)
             {
                 UserDataManager.AddGold(-priceRevive, "Revive");
-                
+
             }
             else
             {
@@ -180,7 +188,7 @@ namespace Geckout
         {
             throw new System.NotImplementedException();
         }
-   
+
 
         public void OnStartGame(int level)
         {
@@ -199,7 +207,7 @@ namespace Geckout
 
         private void CheckShowTutorials()
         {
-            if(CurrentLevel == 1 || CurrentLevel == 2)
+            if (CurrentLevel == 1 || CurrentLevel == 2)
             {
                 LevelGame.ActiveTutLevel1();
             }
@@ -217,7 +225,7 @@ namespace Geckout
         public void NextLevel()
         {
             CurrentLevel++;
-            
+
             StartCurrentLevel();
             UIManager.Instance.ShowScreen<InGameScreenUI>();
         }
@@ -248,7 +256,7 @@ namespace Geckout
             var topElement = queueFlowStartGame.First();
             queueFlowStartGame.Remove(topElement.Key);
             topElement.Value.Execute(ExecuteNextFlowStep);
-            
+
         }
 
         public void DoneFlowStartGame()
