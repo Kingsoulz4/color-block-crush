@@ -36,27 +36,27 @@ namespace ColorBlockCrush
         {
             if (gunBoardData == null) return;
 
-            int totalColumns = gunBoardData.tankLines.Where(x => x.tankLineElementConfigs.Count > 0).Count();
+            int totalColumns = gunBoardData.tankLines.Where(x => x.gunLineElementConfigs.Count > 0).Count();
 
             float totalWidth = (totalColumns - 1) * columnSpacing;
             float centerOffsetX = -totalWidth / 2f;
 
             for (int col = 0; col < totalColumns; col++)
             {
-                if (gunBoardData.tankLines[col].tankLineElementConfigs.Count == 0)
+                if (gunBoardData.tankLines[col].gunLineElementConfigs.Count == 0)
                 {
                     continue;
                 }
 
                 listGunColumn.Add(new List<Gun>());
 
-                List<TankLineElementConfig> columnData = new List<TankLineElementConfig>(gunBoardData.tankLines[col].tankLineElementConfigs);
+                List<GunLineElementConfig> columnData = new List<GunLineElementConfig>(gunBoardData.tankLines[col].gunLineElementConfigs);
                 columnData.Reverse();
 
                 for (int i = 0; i < columnData.Count; i++)
                 {
-                    TankLineElementConfig data = columnData[i];
-                    var gun = SpawnGun(col, i, data.tankConfig, centerOffsetX);
+                    GunLineElementConfig data = columnData[i];
+                    var gun = SpawnGun(col, i, data.gunConfig, centerOffsetX);
                     if (gun != null)
                     {
                         listGunColumn[col].Add(gun);
@@ -67,7 +67,7 @@ namespace ColorBlockCrush
             }
         }
 
-        public Gun SpawnGun(int column, int row, TankConfig gunData, float centerOffsetX = 0f)
+        public Gun SpawnGun(int column, int row, GunConfig gunData, float centerOffsetX = 0f)
         {
             if (!IsValidColumn(column)) return null;
 

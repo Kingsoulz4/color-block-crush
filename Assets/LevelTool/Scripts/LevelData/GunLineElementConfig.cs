@@ -6,13 +6,13 @@ using UnityEngine;
 namespace ColorBlockCrush.Tools
 {
     [Serializable]
-    public class TankLineElementConfig
+    public class GunLineElementConfig
     {
         public int elementId;
         
-        public TankLineElementType elementType;
+        public GunLineElementType elementType;
         
-        public TankConfig tankConfig;
+        public GunConfig gunConfig;
         
         public TunnelConfig tunnelConfig;
     }

@@ -28,7 +28,7 @@ namespace ColorBlockCrush.Tools
         Teal = 15
     }
 
-    public enum TankLineElementType
+    public enum GunLineElementType
     {
         Tank,
         Tunnel

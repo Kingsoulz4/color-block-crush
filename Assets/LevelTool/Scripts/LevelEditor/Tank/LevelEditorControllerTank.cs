@@ -20,7 +20,7 @@ namespace ColorBlockCrush.Tools
 
         [SerializeField] private ColorType currentTankColor = ColorType.Red;
 
-        public void AddElementToLine(int index, TankLineElementConfig elementConfig = null)
+        public void AddElementToLine(int index, GunLineElementConfig elementConfig = null)
         {
             if (index < 0 && index >= view.tankLineViews.Count) return;
 
@@ -50,12 +50,12 @@ namespace ColorBlockCrush.Tools
             
             for (int i = 0; i < currentLevelConfig.tankLines.Count; i++)
             {
-                if(currentLevelConfig.tankLines[i].tankLineElementConfigs.Count == 0)
+                if(currentLevelConfig.tankLines[i].gunLineElementConfigs.Count == 0)
                     return;
 
-                for (int j = 0; j < currentLevelConfig.tankLines[i].tankLineElementConfigs.Count; j++)
+                for (int j = 0; j < currentLevelConfig.tankLines[i].gunLineElementConfigs.Count; j++)
                 {
-                    AddElementToLine(i, currentLevelConfig.tankLines[i].tankLineElementConfigs[j]);
+                    AddElementToLine(i, currentLevelConfig.tankLines[i].gunLineElementConfigs[j]);
                 }
             }
         }
@@ -81,11 +81,11 @@ namespace ColorBlockCrush.Tools
             
         }
 
-        public void UpdateTankLineElementPropertiesInfor(TankLineElementConfig elementConfig)
+        public void UpdateTankLineElementPropertiesInfor(GunLineElementConfig elementConfig)
         {
-            if (elementConfig.elementType == TankLineElementType.Tank)
+            if (elementConfig.elementType == GunLineElementType.Tank)
             {
-                TankConfig tankConfig = elementConfig.tankConfig;
+                GunConfig tankConfig = elementConfig.gunConfig;
 
                 view.bulletInputField.text = tankConfig.bulletNumber.ToString();
                 view.toggleTankLock.isOn = tankConfig.hasLock;
@@ -113,16 +113,16 @@ namespace ColorBlockCrush.Tools
         {
             if (currentTankLineElementSelected == null) return;
 
-            currentTankLineElementSelected.elementConfig.elementType = TankLineElementType.Tank;
+            currentTankLineElementSelected.elementConfig.elementType = GunLineElementType.Tank;
 
-            if (currentTankLineElementSelected.elementConfig.tankConfig == null)
-                currentTankLineElementSelected.elementConfig.tankConfig = new TankConfig();
+            if (currentTankLineElementSelected.elementConfig.gunConfig == null)
+                currentTankLineElementSelected.elementConfig.gunConfig = new GunConfig();
 
-            currentTankLineElementSelected.elementConfig.tankConfig.colorType = currentTankColor;
-            currentTankLineElementSelected.elementConfig.tankConfig.bulletNumber =
+            currentTankLineElementSelected.elementConfig.gunConfig.colorType = currentTankColor;
+            currentTankLineElementSelected.elementConfig.gunConfig.bulletNumber =
                 int.Parse(view.bulletInputField.text);
-            currentTankLineElementSelected.elementConfig.tankConfig.hasLock = view.toggleTankLock.isOn;
-            currentTankLineElementSelected.elementConfig.tankConfig.isHidden = view.toggleTankHidden.isOn;
+            currentTankLineElementSelected.elementConfig.gunConfig.hasLock = view.toggleTankLock.isOn;
+            currentTankLineElementSelected.elementConfig.gunConfig.isHidden = view.toggleTankHidden.isOn;
 
             currentTankLineElementSelected.UpdateUI();
             UpdateTankLinesInfor();
@@ -148,20 +148,20 @@ namespace ColorBlockCrush.Tools
         private void SetConnectLine()
         {
             if (currentTankLineElementSelected == null) return;
-            if (currentTankLineElementSelected.elementConfig.elementType != TankLineElementType.Tank) return;
+            if (currentTankLineElementSelected.elementConfig.elementType != GunLineElementType.Tank) return;
 
             if (tankLinesELementSelected.Count > 1)
             {
-                currentTankLineElementSelected.elementConfig.tankConfig.tankConnect = new List<int>();
+                currentTankLineElementSelected.elementConfig.gunConfig.gunConnect = new List<int>();
                 for (int i = 1; i < tankLinesELementSelected.Count; i++)
                 {
-                    if (tankLinesELementSelected[i].elementConfig.elementType != TankLineElementType.Tank)
+                    if (tankLinesELementSelected[i].elementConfig.elementType != GunLineElementType.Tank)
                     {
                         Debug.LogError($"Must Choose All Tank");
                         return;   
                     }
                     
-                    currentTankLineElementSelected.elementConfig.tankConfig.tankConnect
+                    currentTankLineElementSelected.elementConfig.gunConfig.gunConnect
                         .Add(tankLinesELementSelected[i].elementConfig.elementId);
 
                     ItemTankLineElementView tankConnect =
@@ -178,13 +178,13 @@ namespace ColorBlockCrush.Tools
         private void DelConnectLine()
         {
             if (currentTankLineElementSelected == null) return;
-            if (currentTankLineElementSelected.elementConfig.elementType != TankLineElementType.Tank) return;
+            if (currentTankLineElementSelected.elementConfig.elementType != GunLineElementType.Tank) return;
 
             if (tankLinesELementSelected.Count > 1)
             {
-                for (int i = 0; i < currentTankLineElementSelected.elementConfig.tankConfig.tankConnect.Count; i++)
+                for (int i = 0; i < currentTankLineElementSelected.elementConfig.gunConfig.gunConnect.Count; i++)
                 {
-                    currentTankLineElementSelected.elementConfig.tankConfig.ClearConnect();
+                    currentTankLineElementSelected.elementConfig.gunConfig.ClearConnect();
                 }
             }
 
@@ -224,10 +224,10 @@ namespace ColorBlockCrush.Tools
             currentTankTunnelQueueColor = colorChoose;
         }
         
-        private void OnAddTankQueueToTunnel(TankConfig tankConfig)
+        private void OnAddTankQueueToTunnel(GunConfig tankConfig)
         {
             if (currentTankLineElementSelected == null
-                && currentTankLineElementSelected.elementConfig.elementType != TankLineElementType.Tunnel)
+                && currentTankLineElementSelected.elementConfig.elementType != GunLineElementType.Tunnel)
             {
                 Debug.LogError("OnSetTunnelArea - SELECT A TUNNEL FIRST");
                 return;
@@ -276,7 +276,7 @@ namespace ColorBlockCrush.Tools
         private void OnClearTunnelHumanQueue()
         {
             if (currentTankLineElementSelected == null
-                && currentTankLineElementSelected.elementConfig.elementType != TankLineElementType.Tunnel)
+                && currentTankLineElementSelected.elementConfig.elementType != GunLineElementType.Tunnel)
             {
                 Debug.Log("OnSetTunnelArea - SELECT A TUNNEL FIRST");
                 return;
@@ -340,13 +340,13 @@ namespace ColorBlockCrush.Tools
         {
             if (currentTankLineElementSelected == null) return;
 
-            currentTankLineElementSelected.elementConfig.elementType = TankLineElementType.Tunnel;
+            currentTankLineElementSelected.elementConfig.elementType = GunLineElementType.Tunnel;
 
             if (currentTankLineElementSelected.elementConfig.tunnelConfig == null)
                 currentTankLineElementSelected.elementConfig.tunnelConfig = new TunnelConfig();
 
             currentTankLineElementSelected.elementConfig.tunnelConfig.tankNumber = listIconTunnelQueue.Count;
-            currentTankLineElementSelected.elementConfig.tunnelConfig.tanks = new List<TankConfig>();
+            currentTankLineElementSelected.elementConfig.tunnelConfig.tanks = new List<GunConfig>();
             
             for (int i = 0; i < listIconTunnelQueue.Count; i++)
             {
@@ -397,16 +397,16 @@ namespace ColorBlockCrush.Tools
             {
                 foreach (var elementView in tankLineView.GetElementView())
                 {
-                    TankLineElementConfig elementConfig = elementView.elementConfig;
-                    if (elementConfig.elementType == TankLineElementType.Tank)
+                    GunLineElementConfig elementConfig = elementView.elementConfig;
+                    if (elementConfig.elementType == GunLineElementType.Tank)
                     {
                         tankNumber++;
-                        if (elementConfig.tankConfig.isHidden) tankHidden++;
-                        if (elementConfig.tankConfig.hasLock) tankLock++;
+                        if (elementConfig.gunConfig.isHidden) tankHidden++;
+                        if (elementConfig.gunConfig.hasLock) tankLock++;
                         
-                        colors.Add(elementConfig.tankConfig.colorType);
+                        colors.Add(elementConfig.gunConfig.colorType);
                     }
-                    else if (elementConfig.elementType == TankLineElementType.Tunnel)
+                    else if (elementConfig.elementType == GunLineElementType.Tunnel)
                     {
                         tankNumber += elementConfig.tunnelConfig.tankNumber;
                         tunnel += elementConfig.tunnelConfig.tankNumber;
@@ -453,12 +453,12 @@ namespace ColorBlockCrush.Tools
             {
                 foreach (var tankLineElementView in tankLineEditorView.GetElementView())
                 {
-                    if (tankLineElementView.elementConfig.elementType == TankLineElementType.Tank)
+                    if (tankLineElementView.elementConfig.elementType == GunLineElementType.Tank)
                     {
-                        if (tankLineElementView.elementConfig.tankConfig.colorType == colorType)
-                            number += tankLineElementView.elementConfig.tankConfig.bulletNumber;
+                        if (tankLineElementView.elementConfig.gunConfig.colorType == colorType)
+                            number += tankLineElementView.elementConfig.gunConfig.bulletNumber;
                     }
-                    else if(tankLineElementView.elementConfig.elementType == TankLineElementType.Tunnel)
+                    else if(tankLineElementView.elementConfig.elementType == GunLineElementType.Tunnel)
                     {
                         foreach (var tankConfig in tankLineElementView.elementConfig.tunnelConfig.tanks)
                         {

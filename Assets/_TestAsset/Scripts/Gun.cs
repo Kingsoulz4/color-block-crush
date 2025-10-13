@@ -32,7 +32,7 @@ namespace ColorBlockCrush
         private TrayItem trayItem;
         private GunPos gunPos;
         private RotationDirection currentFireDir = RotationDirection.Up;
-        private TankConfig gunData;
+        private GunConfig gunData;
         private HashSet<int> victims;
 
         public int BulletCount { get; private set; }
@@ -50,7 +50,7 @@ namespace ColorBlockCrush
         public Action<Gun> OnGunFired;
         public Action<Gun> OnGunEmpty;
 
-        public void Init(TankConfig gunDataP, int column)
+        public void Init(GunConfig gunDataP, int column)
         {
             GunPos = GunPos.ON_GUN_BOARD;
             currentFireDir = RotationDirection.Up;

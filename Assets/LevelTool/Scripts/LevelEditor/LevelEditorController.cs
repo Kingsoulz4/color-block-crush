@@ -177,7 +177,7 @@ namespace ColorBlockCrush.Tools
                     return;
                 }
 
-                TankConfig newTankConfig = new TankConfig();
+                GunConfig newTankConfig = new GunConfig();
                 newTankConfig.bulletNumber = bulletNumber;
                 newTankConfig.colorType = currentTankTunnelQueueColor;
                 newTankConfig.isHidden = false;
@@ -377,10 +377,10 @@ namespace ColorBlockCrush.Tools
             {
                 List<ItemTankLineElementView> elements = view.tankLineViews[i].GetElementView();
                 
-                currentLevelConfig.tankLines[i] = new TankLineConfig();
+                currentLevelConfig.tankLines[i] = new GunLineConfig();
                 for (int j = 0; j < elements.Count; j++)
                 {
-                    currentLevelConfig.tankLines[i].tankLineElementConfigs.Add(elements[j].elementConfig);
+                    currentLevelConfig.tankLines[i].gunLineElementConfigs.Add(elements[j].elementConfig);
                 }
             }
             if (oldId != currentLevelConfig.levelId)
@@ -445,11 +445,11 @@ namespace ColorBlockCrush.Tools
             // Create the new LevelConfig
             LevelConfig newLevel = ScriptableObject.CreateInstance<LevelConfig>();
             newLevel.levelId = nextIndex;
-            newLevel.tankLines = new List<TankLineConfig>();
+            newLevel.tankLines = new List<GunLineConfig>();
             for (int i = 0; i < 5; i++)
             {
-                TankLineConfig tankLineConfig = new TankLineConfig();
-                tankLineConfig.tankLineElementConfigs  = new List<TankLineElementConfig>();
+                GunLineConfig tankLineConfig = new GunLineConfig();
+                tankLineConfig.gunLineElementConfigs  = new List<GunLineElementConfig>();
                 newLevel.tankLines.Add(tankLineConfig);
             }
             

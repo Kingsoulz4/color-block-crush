@@ -18,7 +18,7 @@ namespace ColorBlockCrush.Tools
         }
         
         public void AddElementToLine(ItemTankLineElementView newElement, Action<ItemTankLineElementView> onSelectElement,
-            Action onDelete, TankLineElementConfig elementConfig = null)
+            Action onDelete, GunLineElementConfig elementConfig = null)
         {
             newElement.transform.SetParent(elementParent);
             newElement.transform.localScale = Vector3.one;

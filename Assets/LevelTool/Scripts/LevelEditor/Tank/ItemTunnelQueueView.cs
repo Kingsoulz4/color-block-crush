@@ -9,7 +9,7 @@ namespace  ColorBlockCrush.Tools
     {
         public RectTransform rectTransform;
         public Image IconColor;
-        public TankConfig tankConfig;
+        public GunConfig tankConfig;
         public TextMeshProUGUI bulletNumber;
         public Button buttonDelete;
 

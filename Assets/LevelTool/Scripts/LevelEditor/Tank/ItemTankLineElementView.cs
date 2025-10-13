@@ -29,12 +29,12 @@ namespace ColorBlockCrush.Tools
         public GameObject selectedObject;
         
         
-        public TankLineElementConfig elementConfig = new TankLineElementConfig();
+        public GunLineElementConfig elementConfig = new GunLineElementConfig();
         
         private Action onUpdateSeatQuantity;
         private Action<int> onChangeIndex;
         
-        public void Init(int elementId, Action<ItemTankLineElementView> onSelectElement, TankLineElementConfig elementConfig = null, 
+        public void Init(int elementId, Action<ItemTankLineElementView> onSelectElement, GunLineElementConfig elementConfig = null, 
             Action onDetete = null, Action onUpdateSeatQuantity = null, Action<int> onChangeIndex = null)
         {
             if (elementConfig != null) this.elementConfig = elementConfig;
@@ -66,26 +66,26 @@ namespace ColorBlockCrush.Tools
 
         public void SetElementConfigDefault()
         {
-            elementConfig = new TankLineElementConfig();
-            elementConfig.elementType = TankLineElementType.Tank;
-            elementConfig.tankConfig = new TankConfig();
-            elementConfig.tankConfig.colorType = ColorType.Pink;
-            elementConfig.tankConfig.bulletNumber = 10;
+            elementConfig = new GunLineElementConfig();
+            elementConfig.elementType = GunLineElementType.Tank;
+            elementConfig.gunConfig = new GunConfig();
+            elementConfig.gunConfig.colorType = ColorType.Pink;
+            elementConfig.gunConfig.bulletNumber = 10;
                 
-            elementConfig.tankConfig.isHidden = false;
-            elementConfig.tankConfig.hasLock = false;
+            elementConfig.gunConfig.isHidden = false;
+            elementConfig.gunConfig.hasLock = false;
             
             elementConfig.tunnelConfig = new TunnelConfig();
         }
 
         public void UpdateUI()
         {
-            if (elementConfig.elementType == TankLineElementType.Tank)
+            if (elementConfig.elementType == GunLineElementType.Tank)
             {
                 tankInfor.SetActive(true);
                 tunnelInfor.SetActive(false);
                 
-                TankConfig tankConfig = elementConfig.tankConfig;
+                GunConfig tankConfig = elementConfig.gunConfig;
                 tankColorBg.color = ColorReference.Instance.GetColor(tankConfig.colorType);
                 tankBulletTxtValue.text = tankConfig.bulletNumber.ToString();
                 

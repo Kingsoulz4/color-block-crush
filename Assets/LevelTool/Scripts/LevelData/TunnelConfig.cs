@@ -7,12 +7,12 @@ namespace ColorBlockCrush.Tools
     public class TunnelConfig
     {
         public int tankNumber;
-        public List<TankConfig> tanks;
+        public List<GunConfig> tanks;
 
         public TunnelConfig()
         {
             tankNumber = 0;
-            tanks = new List<TankConfig>();
+            tanks = new List<GunConfig>();
         }
     }
 }

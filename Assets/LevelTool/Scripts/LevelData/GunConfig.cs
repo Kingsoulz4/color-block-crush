@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ColorBlockCrush.Tools
 {
     [Serializable]
-    public class TankConfig
+    public class GunConfig
     {
         [Header("Base Infor")]
         public ColorType colorType;
@@ -18,13 +18,13 @@ namespace ColorBlockCrush.Tools
         public bool isHidden = false;
         
         [Header("Connect")]
-        public List<int> tankConnect =  new List<int>();
+        public List<int> gunConnect =  new List<int>();
 
         public void ClearConnect()
         {
-            if (tankConnect == null || tankConnect.Count == 0) return;
+            if (gunConnect == null || gunConnect.Count == 0) return;
             
-            tankConnect.Clear();
+            gunConnect.Clear();
         }
     }
 }
