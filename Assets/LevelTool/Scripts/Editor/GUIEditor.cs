@@ -19,15 +19,14 @@ public static class GUIEditor
         // {
         //     OpenScene("Assets/Scenes/FirstScene.unity");
         // }
-        // if (GUILayout.Button("Main Scene", GUILayout.Width(100)))
-        // {
-        //     OpenScene("Assets/Scenes/MainMenu.unity");
-        // }
-        // if (GUILayout.Button("GamePlay", GUILayout.Width(100)))
-        // {
-        //     OpenScene("Assets/Scenes/Gameplay.unity");
-        // }
-
+        if (GUILayout.Button("GamePlay UI", GUILayout.Width(100)))
+        {
+            OpenScene("Assets/_GameResources/Scenes/GameSceneUI.unity");
+        }
+        if (GUILayout.Button("GamePlay", GUILayout.Width(100)))
+        {
+            OpenScene("Assets/_GameResources/Scenes/GameScene.unity");
+        }
         if (GUILayout.Button("Level Editor", GUILayout.Width(100)))
         {
             OpenScene("Assets/_GameResources/Scenes/LevelEditor.unity");
