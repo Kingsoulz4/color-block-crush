@@ -64,14 +64,13 @@ namespace ColorBlockCrush
         }
         private void SpawnBlockBoard(LevelConfig levelConfig)
         {
-            var listBlock = levelConfig.mapConfig.bigBlocks;
+            var listBlock = levelConfig.mapConfig.blocks;
             for (int c = 0; c < _columns; c++)
             {
                 for (int r = 0; r < _rows; r++)
                 {
                     var idx = c * _rows + r;
                     ColorType color = listBlock[idx].colorType;
-                    int hp = listBlock[idx].blockHealth;
                     
                     SpawnBlock(r, c, BlockType.Normal, listBlock[idx], false, true);
                 }
@@ -79,7 +78,7 @@ namespace ColorBlockCrush
         }
 
 
-        public Block SpawnBlock(int row, int col, BlockType type,BigBlockConfig blockData, bool isStatic, bool canDestroy)
+        public Block SpawnBlock(int row, int col, BlockType type, BlockConfig blockData, bool isStatic, bool canDestroy)
         {
             if (!IsValidPosition(row, col)) return null;
 
