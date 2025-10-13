@@ -241,9 +241,10 @@ namespace ColorBlockCrush.Tools
                 tankConnect.elementConfig.gunConfig.gunConnect.Remove(currentElementId);
 
                 UiLine currentLineViewConnect = uiLines.FirstOrDefault(line =>
-                    (line.connectId.x == currentElementId && line.connectId.y == tankConnect.elementConfig.elementId)
-                    || (line.connectId.x == tankConnect.elementConfig.elementId &&
-                         line.connectId.y == currentElementId));
+                    (line.elementConnectA.elementConfig.elementId == currentElementId 
+                     && line.elementConnectB.elementConfig.elementId == tankConnect.elementConfig.elementId)
+                    || (line.elementConnectA.elementConfig.elementId == tankConnect.elementConfig.elementId &&
+                         line.elementConnectB.elementConfig.elementId == currentElementId));
 
                 if (currentLineViewConnect != null)
                 {
@@ -263,7 +264,9 @@ namespace ColorBlockCrush.Tools
             UiLine uiLine = Instantiate(model.uiLinePrefab, view.uiLineParent).GetComponent<UiLine>();
             uiLine.canvas = canvas;
             uiLine.SetPoints(a.GetComponent<RectTransform>(), b.GetComponent<RectTransform>());
-            uiLine.SetId(a.elementConfig.elementId, b.elementConfig.elementId);
+            uiLine.SetElementConnect(a, b);
+            a.AddUiLine(uiLine);
+            b.AddUiLine(uiLine);
             uiLines.Add(uiLine);
         }
 
