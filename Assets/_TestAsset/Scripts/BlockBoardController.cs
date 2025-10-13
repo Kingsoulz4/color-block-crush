@@ -156,6 +156,35 @@ namespace ColorBlockCrush
             }
         }
 
+        //private void CalculateDynamicScaleAndOffset(int rows, int columns)
+        //{
+        //    float spacingRatio = 0f;
+
+        //    // Tính scale c?n thi?t ?? fit trong bound
+        //    float totalUnitsX = columns + (columns - 1) * spacingRatio;
+        //    float totalUnitsY = rows + (rows - 1) * spacingRatio;
+
+        //    float scaleFactorX = maxGridWidth / totalUnitsX;
+        //    float scaleFactorY = maxGridHeight / totalUnitsY;
+
+        //    float scaleFactor = Mathf.Min(scaleFactorX, scaleFactorY, 1f);
+        //    scaleFactor = Mathf.Max(scaleFactor, _minBlockScale);
+
+        //    // Apply scale
+        //    if (axisType == GridAxisTypes.XY)
+        //    {
+        //        calculatedBlockScale = new Vector3(scaleFactor, scaleFactor, maxBlockScale.z);
+        //        calculatedBlockOffset = new Vector3(scaleFactor * spacingRatio, scaleFactor * spacingRatio, 0);
+        //    }
+        //    else // XZ
+        //    {
+        //        calculatedBlockScale = new Vector3(scaleFactor, maxBlockScale.y, scaleFactor);
+        //        calculatedBlockOffset = new Vector3(scaleFactor * spacingRatio, 0, scaleFactor * spacingRatio);
+        //    }
+
+        //    Debug.Log($"Map: {columns}x{rows} | Scale: {scaleFactor:F3} | BlockSize: {calculatedBlockScale.x:F3}");
+        //}
+
         private bool IsValidPosition(int row, int col)
         {
             return row >= 0 && row < _rows && col >= 0 && col < _columns;
