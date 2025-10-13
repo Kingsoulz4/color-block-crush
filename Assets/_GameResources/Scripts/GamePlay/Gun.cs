@@ -75,7 +75,8 @@ namespace ColorBlockCrush
 
         private void Update()
         {
-            victims1 = new List<int>(victims);
+            //victims1 = new List<int>(victims);
+            CheckFire();
         }
 
         private void OnDisable()
@@ -94,18 +95,19 @@ namespace ColorBlockCrush
             var target = GetTargetBock();
             if (!target) return;
 
-            //if (!target.Gun)
-            //{
-            //    target.Gun = this;
-            //}
+            if (!target.CanBeRaycastHit())
+            {
+                return;
+            }
 
-            if (/*target.Gun != this ||*/ target.ColorType != ColorType)
+            if (target.ColorType != ColorType)
             {
                 return;
             }
 
             if (!victims.Contains(target.Id))
             {
+                target.TakeDamageRaycast(1);
                 victims.Add(target.Id);
             }
             else
@@ -323,7 +325,6 @@ namespace ColorBlockCrush
             {
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
-                InvokeRepeating(nameof(CheckFire), 0f, 0.02f);
             });
 
             Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
