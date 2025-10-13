@@ -128,6 +128,7 @@ namespace ColorBlockCrush.Tools
             UpdateTankLinesInfor();
             
             UpdateLevelState();
+            ClearAllTankLineELementSelected();
         }
 
         private void DellTankInfor()
@@ -141,6 +142,7 @@ namespace ColorBlockCrush.Tools
             UpdateTankLinesInfor();
             
             UpdateLevelState();
+            ClearAllTankLineELementSelected();
         }
 
         private void SetConnectLine()

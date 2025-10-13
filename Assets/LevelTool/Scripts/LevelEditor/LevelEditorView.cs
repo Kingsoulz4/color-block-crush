@@ -25,6 +25,7 @@ namespace ColorBlockCrush.Tools
         public TMP_Dropdown difficultDropdown; 
         public TextMeshProUGUI truePictureImage;
         public Button buttonSaveLevel;
+        public Button buttonExitLevel;
         
         [Header("Map")] 
         public Button buttonCreateMap;
