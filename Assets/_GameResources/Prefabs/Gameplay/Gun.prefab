@@ -410,6 +410,9 @@ MonoBehaviour:
     m_Bits: 8
   fireRate: 10
   colorReference: {fileID: 11400000, guid: 7de4625270019b345a309edc404aa0f7, type: 2}
+  moveToConveyorDuration: 0.3
+  moveToConveyorJumpForce: 5
+  moveToConveyorEase: 1
 --- !u!65 &8597390162283652098
 BoxCollider:
   m_ObjectHideFlags: 0

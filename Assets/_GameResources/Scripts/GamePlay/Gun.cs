@@ -24,6 +24,10 @@ namespace ColorBlockCrush
         [SerializeField] private float fireRate;
         [SerializeField] private ColorReference colorReference;
 
+        [Header("Move")]
+        [SerializeField] private float moveToConveyorDuration = 0.4f;
+        [SerializeField] private float moveToConveyorJumpForce = 2;
+        [SerializeField] private Ease moveToConveyorEase = Ease.OutQuad;
 
 
         private bool isTurning;
@@ -314,7 +318,8 @@ namespace ColorBlockCrush
             GunPos = GunPos.TWEEN_SORT;
             currentFireDir = RotationDirection.Up;
 
-            moveToConveyorTw = moveToConveyorSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.OutQuad).OnComplete(() =>
+            moveToConveyorTw = moveToConveyorSq.Append(
+                transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration)).SetEase(moveToConveyorEase).OnComplete(() =>
             {
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
