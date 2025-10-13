@@ -26,7 +26,6 @@ namespace ColorBlockCrush
 
 
 
-        private float nextFireTime;
         private bool isTurning;
         private bool isFireFirstTime = false;
         private TrayItem trayItem;
@@ -62,7 +61,6 @@ namespace ColorBlockCrush
             ColorType = gunDataP.colorType;
             BulletCount = gunDataP.bulletNumber;
             ColumnIndex = column;
-            nextFireTime = 0f;
             IsFrontRow = false;
             isFireFirstTime = false;
             isTurning = false;
