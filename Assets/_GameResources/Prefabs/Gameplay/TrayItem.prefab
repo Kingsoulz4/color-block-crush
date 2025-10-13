@@ -50,7 +50,7 @@ MonoBehaviour:
   gunParent: {fileID: 4486925285688589}
   model: {fileID: 4739935737060379}
   splineAnimate: {fileID: 5991191196748580028}
-  moveOutDuration: 0.2
+  moveOutDuration: 0.15
   moveInDuration: 0.2
   shiftEase: 6
 --- !u!114 &5991191196748580028
