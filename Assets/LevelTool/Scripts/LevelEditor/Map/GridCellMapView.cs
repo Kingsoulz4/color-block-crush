@@ -16,7 +16,7 @@ namespace ColorBlockCrush.Tools
         public int Row, Col;
         public int drawIndex = -1;
         
-        public CellConfig cellConfig;
+        public BlockConfig cellConfig;
 
         [Header("Others")]
         public bool IsSelected = false;

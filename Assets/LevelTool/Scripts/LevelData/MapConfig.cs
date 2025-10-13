@@ -8,16 +8,16 @@ namespace ColorBlockCrush.Tools
     public class MapConfig
     {
         public Vector2Int mapSize;
-        public List<CellConfig> cells = new List<CellConfig>();
         public List<BlockConfig> blocks = new List<BlockConfig>();
+        public List<BigBlockConfig> bigBlocks = new List<BigBlockConfig>();
         public List<KeyConfig> keys = new List<KeyConfig>();
         
 
         public MapConfig()
         {
             mapSize = Vector2Int.zero;
-            cells = new List<CellConfig>();
             blocks = new List<BlockConfig>();
+            bigBlocks = new List<BigBlockConfig>();
             keys = new List<KeyConfig>();
         }
     }

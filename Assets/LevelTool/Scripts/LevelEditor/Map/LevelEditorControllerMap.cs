@@ -91,10 +91,10 @@ namespace ColorBlockCrush.Tools
             {
                 for (int j = 0; j < mapWidth; j++)
                 {
-                    CellConfig cellConfig = new CellConfig();
+                    BlockConfig cellConfig = new BlockConfig();
                     cellConfig.id = (int)CantorPairing.MakeId((ulong)i, (ulong)j);
                     cellConfig.coordinate = new Vector2Int(i, j);
-                    currentLevelConfig.mapConfig.cells.Add(cellConfig);
+                    currentLevelConfig.mapConfig.blocks.Add(cellConfig);
                     
                     GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
                         .GetComponent<GridCellMapView>();
@@ -131,11 +131,11 @@ namespace ColorBlockCrush.Tools
             {
                 for (int j = 0; j < mapHeight; j++)
                 {
-                    CellConfig cellConfig = new CellConfig();
+                    BlockConfig cellConfig = new BlockConfig();
                     cellConfig.id = (int)CantorPairing.MakeId((ulong)i, (ulong)j);
                     cellConfig.coordinate = new Vector2Int(i, j);
                     cellConfig.colorType = currentColorArray[i, j];
-                    currentLevelConfig.mapConfig.cells.Add(cellConfig);
+                    currentLevelConfig.mapConfig.blocks.Add(cellConfig);
                     
                     GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
                         .GetComponent<GridCellMapView>();
@@ -176,9 +176,9 @@ namespace ColorBlockCrush.Tools
                     GridCellMapView gridCellMapView = Instantiate(model.gridCellMapViewPrefab, model.gridContainer)
                         .GetComponent<GridCellMapView>();
                     int cellIndex = i * mapConfig.mapSize.y + j;
-                    gridCellMapView.cellConfig = mapConfig.cells[cellIndex];
-                    gridCellMapView.UpdateColor(mapConfig.cells[cellIndex].colorType);
-                    currentColorSet.Add(mapConfig.cells[cellIndex].colorType);
+                    gridCellMapView.cellConfig = mapConfig.blocks[cellIndex];
+                    gridCellMapView.UpdateColor(mapConfig.blocks[cellIndex].colorType);
+                    currentColorSet.Add(mapConfig.blocks[cellIndex].colorType);
                     _gridCellMapViews.Add(gridCellMapView);
                 }
             }
@@ -190,23 +190,23 @@ namespace ColorBlockCrush.Tools
                     onUpdateSelection, onDeleteSelection);
                 
                 List<GridCellMapView> cellGridBlockList = new List<GridCellMapView>();
-                for (int i = 0; i < mapConfig.blocks.Count; i++)
+                for (int i = 0; i < mapConfig.bigBlocks.Count; i++)
                 {
                     cellGridBlockList.Clear();
-                    cellGridBlockList = _gridCellMapViews.Where(cell => mapConfig.blocks[i].cellsId.Contains(cell.cellConfig.id)).ToList();
+                    cellGridBlockList = _gridCellMapViews.Where(cell => mapConfig.bigBlocks[i].blocksId.Contains(cell.cellConfig.id)).ToList();
                     BlockInforEditorView blockInforView =
                         Instantiate(model.blockInforPrefab).GetComponent<BlockInforEditorView>();
                     blockInforView.UpdateInfor(i, view.mapFeatureParent, 
                         cellGridBlockList.ConvertAll(cell => cell.transform as RectTransform), 
-                        canvas, mapConfig.blocks[i].blockHealth, mapConfig.blocks[i].colorType);
+                        canvas, mapConfig.bigBlocks[i].blockHealth, mapConfig.bigBlocks[i].colorType);
                     _blockInforEditorViews.Add(blockInforView);
-                    currentColorSet.Add(mapConfig.blocks[i].colorType);
+                    currentColorSet.Add(mapConfig.bigBlocks[i].colorType);
                 }
 
                 for (int i = 0; i < mapConfig.keys.Count; i++)
                 {
                     cellGridBlockList.Clear();
-                    cellGridBlockList = _gridCellMapViews.Where(cell => mapConfig.keys[i].cellsId.Contains(cell.cellConfig.id)).ToList();
+                    cellGridBlockList = _gridCellMapViews.Where(cell => mapConfig.keys[i].blockId.Contains(cell.cellConfig.id)).ToList();
                     KeyInforEditorView keyInforView =
                         Instantiate(model.keyInforPrefab).GetComponent<KeyInforEditorView>();
                     keyInforView.UpdateInfor(i, view.mapFeatureParent, 
@@ -227,7 +227,7 @@ namespace ColorBlockCrush.Tools
                 {
                     cellMapView.UpdateColor(currentColorChoose);
                 
-                    currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
+                    currentLevelConfig.mapConfig.blocks[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
                                                        + cellMapView.Row].colorType = currentColorChoose;
                 }
                 
@@ -242,8 +242,8 @@ namespace ColorBlockCrush.Tools
                     return;
                 }
                 
-                BlockConfig blockConfig = new BlockConfig();
-                blockConfig.blockGroupId = currentLevelConfig.mapConfig.blocks.Count;
+                BigBlockConfig blockConfig = new BigBlockConfig();
+                blockConfig.bigBlockId = currentLevelConfig.mapConfig.bigBlocks.Count;
                 blockConfig.colorType = currentColorChoose;
                 blockConfig.blockHealth = int.Parse(blockHealth);
                 
@@ -253,16 +253,16 @@ namespace ColorBlockCrush.Tools
 
                     int cellIndex = cellSelection[i].Col * currentLevelConfig.mapConfig.mapSize.y
                                     + cellSelection[i].Row;
-                    currentLevelConfig.mapConfig.cells[cellIndex].colorType = ColorType.None;
-                    currentLevelConfig.mapConfig.cells[cellIndex].blockGroupId = blockConfig.blockGroupId;
-                    blockConfig.cellsId.Add(currentLevelConfig.mapConfig.cells[cellIndex].id);
+                    currentLevelConfig.mapConfig.blocks[cellIndex].colorType = ColorType.None;
+                    currentLevelConfig.mapConfig.blocks[cellIndex].bigBlockId = blockConfig.bigBlockId;
+                    blockConfig.blocksId.Add(currentLevelConfig.mapConfig.blocks[cellIndex].id);
                 }
                 
-                currentLevelConfig.mapConfig.blocks.Add(blockConfig);
+                currentLevelConfig.mapConfig.bigBlocks.Add(blockConfig);
                 
                 BlockInforEditorView blockInforView =
                     Instantiate(model.blockInforPrefab).GetComponent<BlockInforEditorView>();
-                blockInforView.UpdateInfor(blockConfig.blockGroupId, view.mapFeatureParent, 
+                blockInforView.UpdateInfor(blockConfig.bigBlockId, view.mapFeatureParent, 
                     cellSelection.ConvertAll(cell => cell.transform as RectTransform), 
                     canvas, int.Parse(blockHealth), currentColorChoose);
                 _blockInforEditorViews.Add(blockInforView);
@@ -278,8 +278,8 @@ namespace ColorBlockCrush.Tools
                 {
                     int cellIndex = cellSelection[i].Col * currentLevelConfig.mapConfig.mapSize.y
                                     + cellSelection[i].Row;
-                    currentLevelConfig.mapConfig.cells[cellIndex].keyId = keyConfig.keyId;
-                    keyConfig.cellsId.Add(currentLevelConfig.mapConfig.cells[cellIndex].id);
+                    currentLevelConfig.mapConfig.blocks[cellIndex].keyId = keyConfig.keyId;
+                    keyConfig.blockId.Add(currentLevelConfig.mapConfig.blocks[cellIndex].id);
                 }
                 
                 currentLevelConfig.mapConfig.keys.Add(keyConfig);
@@ -304,36 +304,36 @@ namespace ColorBlockCrush.Tools
                 {
                     colorDelete.Add(cellMapView.cellConfig.colorType);
                     cellMapView.DeleteColor();
-                    currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
+                    currentLevelConfig.mapConfig.blocks[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
                                                        + cellMapView.Row].colorType = ColorType.None;
                 }
             }
             else if (currentDragType == DragType.Block)
             {
                 HashSet<int> blocksRemoved = new HashSet<int>();
-                List<BlockConfig> blockConfigsRemove = new List<BlockConfig>();
+                List<BigBlockConfig> blockConfigsRemove = new List<BigBlockConfig>();
                 
                 foreach (var cellMapView in cellSelection)
                 {
                     cellMapView.DeleteColor();
-                    currentLevelConfig.mapConfig.cells[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
+                    currentLevelConfig.mapConfig.blocks[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
                                                        + cellMapView.Row].colorType = ColorType.None;
-                    if (cellMapView.cellConfig.blockGroupId != -1 
-                        && !blocksRemoved.Contains(cellMapView.cellConfig.blockGroupId))
+                    if (cellMapView.cellConfig.bigBlockId != -1 
+                        && !blocksRemoved.Contains(cellMapView.cellConfig.bigBlockId))
                     {
-                        colorDelete.Add(currentLevelConfig.mapConfig.blocks[cellMapView.cellConfig.blockGroupId].colorType);
-                        blocksRemoved.Add(cellMapView.cellConfig.blockGroupId);
+                        colorDelete.Add(currentLevelConfig.mapConfig.bigBlocks[cellMapView.cellConfig.bigBlockId].colorType);
+                        blocksRemoved.Add(cellMapView.cellConfig.bigBlockId);
                         BlockInforEditorView blockInforViewRemove =
                             _blockInforEditorViews.FirstOrDefault(blocksRemove =>
-                                blocksRemove.GetKeyId() == cellMapView.cellConfig.blockGroupId);
+                                blocksRemove.GetKeyId() == cellMapView.cellConfig.bigBlockId);
                         if (blockInforViewRemove != null)
                         {
                             _blockInforEditorViews.Remove(blockInforViewRemove);
                             Destroy(blockInforViewRemove.gameObject);
-                            Debug.Log($"Remove Block {cellMapView.cellConfig.blockGroupId}");
+                            Debug.Log($"Remove Block {cellMapView.cellConfig.bigBlockId}");
                         }
-                        BlockConfig blockConfigRenove = currentLevelConfig.mapConfig.blocks[cellMapView.cellConfig.blockGroupId];
-                        currentLevelConfig.mapConfig.blocks.Remove(blockConfigRenove);
+                        BigBlockConfig blockConfigRenove = currentLevelConfig.mapConfig.bigBlocks[cellMapView.cellConfig.bigBlockId];
+                        currentLevelConfig.mapConfig.bigBlocks.Remove(blockConfigRenove);
                         blockConfigsRemove.Add(blockConfigRenove);
                     }
                 }
@@ -345,13 +345,13 @@ namespace ColorBlockCrush.Tools
                 {
                     foreach (var blockConfig in blockConfigsRemove)
                     {
-                        foreach (var cellId in blockConfig.cellsId)
+                        foreach (var cellId in blockConfig.blocksId)
                         {
                             (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
                             int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
                                             + (int)row;
                             Debug.Log("Cell Index " + cellIndex);
-                            _gridCellMapViews[cellIndex].cellConfig.blockGroupId = -1;
+                            _gridCellMapViews[cellIndex].cellConfig.bigBlockId = -1;
                         }
                     }
                 }
@@ -389,7 +389,7 @@ namespace ColorBlockCrush.Tools
                 {
                     foreach (var keyConfig in keyConfigsRemove)
                     {
-                        foreach (var cellId in keyConfig.cellsId)
+                        foreach (var cellId in keyConfig.blockId)
                         {
                             (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
                             int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
@@ -461,7 +461,7 @@ namespace ColorBlockCrush.Tools
         private void ClearAllColor()
         {
             view.dragCellMapSelection.CLearAllColor();
-            foreach (var cell in currentLevelConfig.mapConfig.cells)
+            foreach (var cell in currentLevelConfig.mapConfig.blocks)
             {
                 cell.colorType = ColorType.None;
             }
@@ -488,18 +488,18 @@ namespace ColorBlockCrush.Tools
 
         private void ReUpdateBlockId()
         {
-            for (int i = 0; i < currentLevelConfig.mapConfig.blocks.Count; i++)
+            for (int i = 0; i < currentLevelConfig.mapConfig.bigBlocks.Count; i++)
             {
-                BlockConfig blockConfig = currentLevelConfig.mapConfig.blocks[i];
-                currentLevelConfig.mapConfig.blocks[i].blockGroupId = i;
+                BigBlockConfig blockConfig = currentLevelConfig.mapConfig.bigBlocks[i];
+                currentLevelConfig.mapConfig.bigBlocks[i].bigBlockId = i;
 
-                foreach (var cellId in blockConfig.cellsId)
+                foreach (var cellId in blockConfig.blocksId)
                 {
                     (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
                     int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
                                     + (int)row;
-                    _gridCellMapViews[cellIndex].cellConfig.blockGroupId = i;
-                    currentLevelConfig.mapConfig.cells[cellIndex].blockGroupId = i;
+                    _gridCellMapViews[cellIndex].cellConfig.bigBlockId = i;
+                    currentLevelConfig.mapConfig.blocks[cellIndex].bigBlockId = i;
                 }
             }
         }
@@ -511,13 +511,13 @@ namespace ColorBlockCrush.Tools
                 KeyConfig keyConfig = currentLevelConfig.mapConfig.keys[i];
                 currentLevelConfig.mapConfig.keys[i].keyId = i;
                 
-                foreach (var cellId in keyConfig.cellsId)
+                foreach (var cellId in keyConfig.blockId)
                 {
                     (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
                     int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
                                     + (int)row;
                     _gridCellMapViews[cellIndex].cellConfig.keyId = i;
-                    currentLevelConfig.mapConfig.cells[cellIndex].keyId = i;
+                    currentLevelConfig.mapConfig.blocks[cellIndex].keyId = i;
                 }
             }
         }
@@ -544,13 +544,13 @@ namespace ColorBlockCrush.Tools
         {
             int number = 0;
 
-            foreach (var cellConfig in currentLevelConfig.mapConfig.cells)
+            foreach (var cellConfig in currentLevelConfig.mapConfig.blocks)
             {
                 if (cellConfig.colorType == colorType)
                     number++;
             }
             
-            foreach (var blockConfig in currentLevelConfig.mapConfig.blocks)
+            foreach (var blockConfig in currentLevelConfig.mapConfig.bigBlocks)
             {
                 if (blockConfig.colorType == colorType)
                     number += blockConfig.blockHealth;
