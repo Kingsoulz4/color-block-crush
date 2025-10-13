@@ -27,7 +27,7 @@ namespace ColorBlockCrush
         protected int maxHitPoint;
         protected int hitPoint;
         private int id;
-        private BlockConfig blockData;
+        private BigBlockConfig blockData;
         public BlockType BlockType { get; private set; }
         public ColorType ColorType { get; protected set; }
         public GridNode GridNode { get; set; }
@@ -35,14 +35,14 @@ namespace ColorBlockCrush
         public int GridHeight { get; set; }
         public bool CanDestroy { get; private set; }
         public bool IsAttacked { get; set; }
-        public BlockConfig BlockData { get => blockData;}
+        public BigBlockConfig BlockData { get => blockData;}
         public int Id { get => id;}
 
-        public void Init(BlockType blockType, BlockConfig blockDataP, bool isStatic, bool canDestroy)
+        public void Init(BlockType blockType, BigBlockConfig blockDataP, bool isStatic, bool canDestroy)
         {
             BlockType = blockType;
             ColorType = blockDataP.colorType;
-            id = blockDataP.blockGroupId;
+            id = blockDataP.bigBlockId;
             maxHitPoint = blockDataP.blockHealth;
             hitPoint = blockDataP.blockHealth;
             CanDestroy = canDestroy;

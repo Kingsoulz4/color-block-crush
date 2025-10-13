@@ -7,11 +7,11 @@ namespace ColorBlockCrush.Tools
     public class KeyConfig
     {
         public int keyId;
-        public List<int> cellsId;
+        public List<int> blockId;
 
         public KeyConfig()
         {
-            cellsId = new List<int>();
+            blockId = new List<int>();
         }
     }
 }

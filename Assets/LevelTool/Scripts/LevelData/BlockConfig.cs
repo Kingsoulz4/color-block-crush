@@ -8,14 +8,23 @@ namespace ColorBlockCrush.Tools
     [Serializable]
     public class BlockConfig
     {
-        public int blockGroupId;
+        [Header("Base Infor")]
+        public int id;
+        public Vector2Int coordinate;
         public ColorType colorType;
-        public int blockHealth;
-        public List<int> cellsId;
+        public BlockType blockType;
+
+        [Header("Key")]
+        public int keyId;
+
+        [Header("Block")] 
+        public int bigBlockId;
 
         public BlockConfig()
         {
-            cellsId = new List<int>();
+            colorType = ColorType.None;
+            keyId = -1;
+            bigBlockId = -1;
         }
     }
 }
