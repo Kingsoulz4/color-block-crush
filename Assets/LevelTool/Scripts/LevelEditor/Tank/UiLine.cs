@@ -9,6 +9,7 @@ namespace ColorBlockCrush.Tools
         public RectTransform parent;
         public RectTransform lineRect;
         [Header("Config")] public float thickness = 3f;
+        public Vector2Int connectId;
 
         void Reset()
         {
@@ -24,6 +25,11 @@ namespace ColorBlockCrush.Tools
                 img.raycastTarget = false;
                 img.color = Color.white;
             }
+        }
+
+        public void SetId(int configA, int configB)
+        {
+            connectId = new Vector2Int(configA, configB);
         }
         
         public void SetPoints(RectTransform a, RectTransform b)

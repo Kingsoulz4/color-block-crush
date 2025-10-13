@@ -28,7 +28,6 @@ namespace ColorBlockCrush.Tools
         public Button buttonSelected;
         public GameObject selectedObject;
         
-        
         public GunLineElementConfig elementConfig = new GunLineElementConfig();
         
         private Action onUpdateSeatQuantity;

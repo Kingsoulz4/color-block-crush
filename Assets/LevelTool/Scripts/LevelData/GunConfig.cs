@@ -20,6 +20,11 @@ namespace ColorBlockCrush.Tools
         [Header("Connect")]
         public List<int> gunConnect =  new List<int>();
 
+        public GunConfig()
+        {
+            gunConnect = new List<int>();
+        }
+
         public void ClearConnect()
         {
             if (gunConnect == null || gunConnect.Count == 0) return;

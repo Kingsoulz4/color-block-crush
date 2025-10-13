@@ -394,7 +394,7 @@ namespace ColorBlockCrush.Tools
                             (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
                             int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
                                             + (int)row;
-                            Debug.Log("Cell Index " + cellIndex);
+                           
                             _gridCellMapViews[cellIndex].cellConfig.keyId = -1;
                         }
                     }

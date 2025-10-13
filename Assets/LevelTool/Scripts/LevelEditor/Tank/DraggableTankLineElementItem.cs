@@ -134,9 +134,11 @@ namespace ColorBlockCrush.Tools
             }
 
             // Determine new sibling index in original parent
+            VerticalLayoutGroup verticalLayoutGroup = originalParent.GetComponent<VerticalLayoutGroup>();
             int newIndex = 0;
             for (int i = 0; i < originalParent.childCount; i++)
             {
+                int childIndex = verticalLayoutGroup.reverseArrangement ? i : originalParent.childCount - 1 - i;
                 var child = originalParent.GetChild(i);
                 //if (child == placeholder.transform) continue;
 

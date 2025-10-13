@@ -368,12 +368,12 @@ MonoBehaviour:
   elementConfig:
     elementId: 0
     elementType: 0
-    tankConfig:
+    gunConfig:
       colorType: 0
       bulletNumber: 0
       hasLock: 0
       isHidden: 0
-      tankConnect: 
+      gunConnect: 
     tunnelConfig:
       tankNumber: 0
       tanks: []
@@ -411,7 +411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragCanvas: {fileID: 0}
   holdThreshold: 0.7
-  isBottomToTop: 1
+  isBottomToTop: 0
   autoScrollSpeed: 5
   edgeThreshold: 0.1
   canDrag: 0
