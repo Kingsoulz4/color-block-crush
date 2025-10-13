@@ -1,16 +1,16 @@
 using AYellowpaper.SerializedCollections;
-using Geckout.Data;
+using ColorBlockCrush.Tools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     public class ButtonPlay : MonoBehaviour
     {
-        [SerializeField] private SerializedDictionary<LevelType, GameObject> m_listTypeDisplay;
+        [SerializeField] private SerializedDictionary<LevelDifficult, GameObject> m_listTypeDisplay;
 
-        public void SetDisplayLevelType(LevelType levelType)
+        public void SetDisplayLevelType(LevelDifficult levelType)
         {
             foreach (var item in m_listTypeDisplay)
             {

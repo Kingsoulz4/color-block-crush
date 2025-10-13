@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     [Serializable]
     public class RewardDataGameGecko : RewardData

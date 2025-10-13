@@ -15,11 +15,9 @@ public class BoosterManager : SingletonMono<BoosterManager>
     [SerializeField] private BoosterBase handMoveBooster;
     [SerializeField] private BoosterBase suffleBooster;
     public BoosterBase TimeIngameBooster { get => timeInGameBooster; set => timeInGameBooster = value; }
-    public BoosterBase TimePreBooster { get => timePreBooster; set => timePreBooster = value; }
     public BoosterBase HammerBooster { get => hammerBooster; set => hammerBooster = value; }
     public BoosterDataSO BoosterData { get => boosterData; }
     public List<BoosterBase> Boosters { get => boosters; }
-    public BoosterBase ScissorBooster { get => scissorBooster; set => scissorBooster = value; }
     public BoosterBase HandMoveBooster { get => handMoveBooster; set => handMoveBooster = value; }
     public BoosterBase SuffleBooster { get => suffleBooster; set => suffleBooster = value; }
 
@@ -38,10 +36,10 @@ public class BoosterManager : SingletonMono<BoosterManager>
 
     public void UpdateVisualBooster()
     {
-        foreach(var booster in Boosters)
-        {
-            booster.UpdateVisualBooster();
-        }
+        //foreach(var booster in Boosters)
+        //{
+        //    booster.UpdateVisualBooster();
+        //}
     }
 
     public BoosterBase GetBoosterByType(BoosterType type)

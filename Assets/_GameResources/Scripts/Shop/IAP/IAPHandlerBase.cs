@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Purchasing;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     public class IAPHandlerBase : MonoBehaviour, IHandleIAP
     {

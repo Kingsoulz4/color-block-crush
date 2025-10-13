@@ -4,7 +4,7 @@ using System.Net.WebSockets;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     [DefaultExecutionOrder(-10)]
     public class TestManager : SingletonMono<TestManager>

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     [CreateAssetMenu(fileName = "ListItemRewardIcon", menuName = "ScriptableObjects/ListItemRewardIcon", order = 1)]
     public class ListItemRewardIcon : ScriptableObject

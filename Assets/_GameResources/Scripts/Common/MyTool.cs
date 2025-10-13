@@ -6,7 +6,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Geckout
+namespace ColorBlockCrush
 {
     public static class MyTool 
     {
