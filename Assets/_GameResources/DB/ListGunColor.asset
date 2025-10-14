@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c4a973780bbcc934cbf9c87cf6cd1ccc, type: 3}
-  m_Name: ListBodySubColorMaterials
+  m_Name: ListGunColor
   m_EditorClassIdentifier: 
   listMaterial:
     _serializedList:
@@ -43,4 +43,6 @@ MonoBehaviour:
     - Key: 13
       Value: {fileID: 2100000, guid: 5093cf03c10c05a49a11548bf07fa7a4, type: 2}
     - Key: 14
+      Value: {fileID: 2100000, guid: de7c7748f06540148b0154b32192575e, type: 2}
+    - Key: 15
       Value: {fileID: 2100000, guid: de7c7748f06540148b0154b32192575e, type: 2}
