@@ -323,12 +323,14 @@ namespace ColorBlockCrush
             moveToConveyorTw = moveToConveyorSq.Append(
                 transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration)).SetEase(moveToConveyorEase).OnComplete(() =>
             {
+                Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
+                transform.DORotate(newRotation, 0f).SetId(this);
+
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
+                
             });
 
-            Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
-            //moveToConveyorSq.Join(transform.DORotate(newRotation, 0.3f));
             moveToConveyorSq.SetId(this);
         }
 
