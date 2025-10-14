@@ -377,10 +377,10 @@ namespace ColorBlockCrush.Tools
             {
                 List<ItemTankLineElementView> elements = view.tankLineViews[i].GetElementView();
                 
-                currentLevelConfig.tankLines[i] = new GunLineConfig();
+                currentLevelConfig.gunLines[i] = new GunLineConfig();
                 for (int j = 0; j < elements.Count; j++)
                 {
-                    currentLevelConfig.tankLines[i].gunLineElementConfigs.Add(elements[j].elementConfig);
+                    currentLevelConfig.gunLines[i].gunLineElementConfigs.Add(elements[j].elementConfig);
                 }
             }
             if (oldId != currentLevelConfig.levelId)
@@ -445,15 +445,15 @@ namespace ColorBlockCrush.Tools
             // Create the new LevelConfig
             LevelConfig newLevel = ScriptableObject.CreateInstance<LevelConfig>();
             newLevel.levelId = nextIndex;
-            newLevel.tankLines = new List<GunLineConfig>();
+            newLevel.gunLines = new List<GunLineConfig>();
             for (int i = 0; i < 5; i++)
             {
                 GunLineConfig tankLineConfig = new GunLineConfig();
                 tankLineConfig.gunLineElementConfigs  = new List<GunLineElementConfig>();
-                newLevel.tankLines.Add(tankLineConfig);
+                newLevel.gunLines.Add(tankLineConfig);
             }
             
-            Debug.Log("tank Congif " + newLevel.tankLines.Count);
+            Debug.Log("tank Congif " + newLevel.gunLines.Count);
 
             UpdateItemLevel();
             // if (ResourcesManager.Instance.collectByJson) SaveLevelConfigToJson(newLevel);
