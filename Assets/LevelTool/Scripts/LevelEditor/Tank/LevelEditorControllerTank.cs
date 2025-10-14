@@ -45,17 +45,17 @@ namespace ColorBlockCrush.Tools
 
         private void UpdateTankLineData()
         {
-            if(currentLevelConfig.tankLines == null || currentLevelConfig.tankLines.Count == 0)
+            if(currentLevelConfig.gunLines == null || currentLevelConfig.gunLines.Count == 0)
                 return;
             
-            for (int i = 0; i < currentLevelConfig.tankLines.Count; i++)
+            for (int i = 0; i < currentLevelConfig.gunLines.Count; i++)
             {
-                if(currentLevelConfig.tankLines[i].gunLineElementConfigs.Count == 0)
+                if(currentLevelConfig.gunLines[i].gunLineElementConfigs.Count == 0)
                     return;
 
-                for (int j = 0; j < currentLevelConfig.tankLines[i].gunLineElementConfigs.Count; j++)
+                for (int j = 0; j < currentLevelConfig.gunLines[i].gunLineElementConfigs.Count; j++)
                 {
-                    AddElementToLine(i, currentLevelConfig.tankLines[i].gunLineElementConfigs[j]);
+                    AddElementToLine(i, currentLevelConfig.gunLines[i].gunLineElementConfigs[j]);
                 }
             }
         }
