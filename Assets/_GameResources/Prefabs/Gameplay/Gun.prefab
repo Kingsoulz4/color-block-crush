@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1046489559498283}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.06433725, z: 0.698}
+  m_LocalPosition: {x: 0, y: 0.06433725, z: 0.85}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -404,7 +404,7 @@ MonoBehaviour:
   bulletCountText: {fileID: 23198141706592332}
   bulletPrb: {fileID: 395657148022226912, guid: 01063d7c4dbbe6b4c8702d9c79d9492e, type: 3}
   bulletSpawnPos: {fileID: 4941286966147067}
-  turnDuration: 0.3
+  turnDuration: 0.25
   blockMask:
     serializedVersion: 2
     m_Bits: 8

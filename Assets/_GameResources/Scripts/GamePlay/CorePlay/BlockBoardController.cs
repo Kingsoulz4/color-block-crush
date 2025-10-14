@@ -102,45 +102,45 @@ namespace ColorBlockCrush
             throw new NotImplementedException();
         }
 
-        private void CalculateDynamicScaleAndOffset(int rows, int columns)
-        {
-            float scaleFactorX = maxGridWidth / columns;
-            float scaleFactorY = maxGridHeight / rows;
+        //private void CalculateDynamicScaleAndOffset(int rows, int columns)
+        //{
+        //    float scaleFactorX = maxGridWidth / columns;
+        //    float scaleFactorY = maxGridHeight / rows;
 
-            float scaleFactor = Mathf.Min(scaleFactorX, scaleFactorY);
+        //    float scaleFactor = Mathf.Min(scaleFactorX, scaleFactorY);
 
-            scaleFactor = Mathf.Max(scaleFactor, _minBlockScale);
+        //    scaleFactor = Mathf.Max(scaleFactor, _minBlockScale);
 
-            if (axisType == GridAxisTypes.XY)
-            {
-                calculatedBlockScale = new Vector3(
-                    scaleFactor,
-                    scaleFactor,
-                    maxBlockScale.z
-                );
-            }
-            else
-            {
-                calculatedBlockScale = new Vector3(
-                    scaleFactor,
-                    maxBlockScale.y,
-                    scaleFactor
-                );
-            }
+        //    if (axisType == GridAxisTypes.XY)
+        //    {
+        //        calculatedBlockScale = new Vector3(
+        //            scaleFactor,
+        //            scaleFactor,
+        //            maxBlockScale.z
+        //        );
+        //    }
+        //    else
+        //    {
+        //        calculatedBlockScale = new Vector3(
+        //            scaleFactor,
+        //            maxBlockScale.y,
+        //            scaleFactor
+        //        );
+        //    }
 
-            float offsetFactor = 0;
+        //    float offsetFactor = 0;
 
-            if (axisType == GridAxisTypes.XY)
-            {
-                calculatedBlockOffset = new Vector3(offsetFactor, offsetFactor, 0);
-            }
-            else
-            {
-                calculatedBlockOffset = new Vector3(offsetFactor, 0, offsetFactor);
-            }
+        //    if (axisType == GridAxisTypes.XY)
+        //    {
+        //        calculatedBlockOffset = new Vector3(offsetFactor, offsetFactor, 0);
+        //    }
+        //    else
+        //    {
+        //        calculatedBlockOffset = new Vector3(offsetFactor, 0, offsetFactor);
+        //    }
 
-            Debug.Log($"Map Size: {columns}x{rows} | Block Scale: {scaleFactor:F2} | Offset: {offsetFactor:F2}");
-        }
+        //    Debug.Log($"Map Size: {columns}x{rows} | Block Scale: {scaleFactor:F2} | Offset: {offsetFactor:F2}");
+        //}
 
 
         private void PlaceBlock(int row, int col, Block block)
@@ -155,34 +155,34 @@ namespace ColorBlockCrush
             }
         }
 
-        //private void CalculateDynamicScaleAndOffset(int rows, int columns)
-        //{
-        //    float spacingRatio = 0f;
+        private void CalculateDynamicScaleAndOffset(int rows, int columns)
+        {
+            float spacingRatio = 0f;
 
-        //    // Tính scale c?n thi?t ?? fit trong bound
-        //    float totalUnitsX = columns + (columns - 1) * spacingRatio;
-        //    float totalUnitsY = rows + (rows - 1) * spacingRatio;
+            // Tính scale c?n thi?t ?? fit trong bound
+            float totalUnitsX = columns + (columns - 1) * spacingRatio;
+            float totalUnitsY = rows + (rows - 1) * spacingRatio;
 
-        //    float scaleFactorX = maxGridWidth / totalUnitsX;
-        //    float scaleFactorY = maxGridHeight / totalUnitsY;
+            float scaleFactorX = maxGridWidth / totalUnitsX;
+            float scaleFactorY = maxGridHeight / totalUnitsY;
 
-        //    float scaleFactor = Mathf.Min(scaleFactorX, scaleFactorY, 1f);
-        //    scaleFactor = Mathf.Max(scaleFactor, _minBlockScale);
+            float scaleFactor = Mathf.Min(scaleFactorX, scaleFactorY, 1f);
+            scaleFactor = Mathf.Max(scaleFactor, _minBlockScale);
 
-        //    // Apply scale
-        //    if (axisType == GridAxisTypes.XY)
-        //    {
-        //        calculatedBlockScale = new Vector3(scaleFactor, scaleFactor, maxBlockScale.z);
-        //        calculatedBlockOffset = new Vector3(scaleFactor * spacingRatio, scaleFactor * spacingRatio, 0);
-        //    }
-        //    else // XZ
-        //    {
-        //        calculatedBlockScale = new Vector3(scaleFactor, maxBlockScale.y, scaleFactor);
-        //        calculatedBlockOffset = new Vector3(scaleFactor * spacingRatio, 0, scaleFactor * spacingRatio);
-        //    }
+            // Apply scale
+            if (axisType == GridAxisTypes.XY)
+            {
+                calculatedBlockScale = new Vector3(scaleFactor, scaleFactor, maxBlockScale.z);
+                calculatedBlockOffset = new Vector3(scaleFactor * spacingRatio, scaleFactor * spacingRatio, 0);
+            }
+            else // XZ
+            {
+                calculatedBlockScale = new Vector3(scaleFactor, maxBlockScale.y, scaleFactor);
+                calculatedBlockOffset = new Vector3(scaleFactor * spacingRatio, 0, scaleFactor * spacingRatio);
+            }
 
-        //    Debug.Log($"Map: {columns}x{rows} | Scale: {scaleFactor:F3} | BlockSize: {calculatedBlockScale.x:F3}");
-        //}
+            Debug.Log($"Map: {columns}x{rows} | Scale: {scaleFactor:F3} | BlockSize: {calculatedBlockScale.x:F3}");
+        }
 
         private bool IsValidPosition(int row, int col)
         {
