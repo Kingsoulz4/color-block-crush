@@ -24,6 +24,10 @@ namespace ColorBlockCrush
         [SerializeField] private float fireRate;
         [SerializeField] private ColorReference colorReference;
 
+        [Header("Move")]
+        [SerializeField] private float moveToConveyorDuration = 0.4f;
+        [SerializeField] private float moveToConveyorJumpForce = 2;
+        [SerializeField] private Ease moveToConveyorEase = Ease.OutQuad;
 
 
         private bool isTurning;
@@ -71,7 +75,8 @@ namespace ColorBlockCrush
 
         private void Update()
         {
-            victims1 = new List<int>(victims);
+            //victims1 = new List<int>(victims);
+            CheckFire();
         }
 
         private void OnDisable()
@@ -90,18 +95,19 @@ namespace ColorBlockCrush
             var target = GetTargetBock();
             if (!target) return;
 
-            //if (!target.Gun)
-            //{
-            //    target.Gun = this;
-            //}
+            if (!target.CanBeRaycastHit())
+            {
+                return;
+            }
 
-            if (/*target.Gun != this ||*/ target.ColorType != ColorType)
+            if (target.ColorType != ColorType)
             {
                 return;
             }
 
             if (!victims.Contains(target.Id))
             {
+                target.TakeDamageRaycast(1);
                 victims.Add(target.Id);
             }
             else
@@ -314,11 +320,11 @@ namespace ColorBlockCrush
             GunPos = GunPos.TWEEN_SORT;
             currentFireDir = RotationDirection.Up;
 
-            moveToConveyorTw = moveToConveyorSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.OutQuad).OnComplete(() =>
+            moveToConveyorTw = moveToConveyorSq.Append(
+                transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration)).SetEase(moveToConveyorEase).OnComplete(() =>
             {
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
-                InvokeRepeating(nameof(CheckFire), 0f, 0.02f);
             });
 
             Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
@@ -331,7 +337,7 @@ namespace ColorBlockCrush
             Sequence moveToSlotSq = DOTween.Sequence();
 
             GunPos = GunPos.ON_SLOT;
-            moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.OutQuad).OnComplete(() =>
+            moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.Linear).OnComplete(() =>
             {
                 callback?.Invoke();
             });

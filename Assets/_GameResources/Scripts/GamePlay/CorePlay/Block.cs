@@ -26,12 +26,12 @@ namespace ColorBlockCrush
 
         protected int maxHitPoint;
         protected int hitPoint;
+        protected int hitPointRaycast;
         private int id;
         private BlockConfig blockData;
         public BlockType BlockType { get; private set; }
         public ColorType ColorType { get; protected set; }
         public GridNode GridNode { get; set; }
-        public Gun Gun { get; set; }
         public int GridHeight { get; set; }
         public bool CanDestroy { get; private set; }
         public bool IsAttacked { get; set; }
@@ -45,10 +45,10 @@ namespace ColorBlockCrush
             id = blockDataP.id;
             maxHitPoint = 1;
             hitPoint = 1;
+            hitPointRaycast = 1;
             CanDestroy = canDestroy;
             IsAttacked = false;
             blockData = blockDataP;
-            Gun = null;
 
             StartBlock();
             OnBlockInitialized?.Invoke(this);
@@ -78,6 +78,20 @@ namespace ColorBlockCrush
             {
                 Destroy(gameObject);
             }
+        }
+
+        public virtual void TakeDamageRaycast(int damageAmount)
+        {
+            if (!CanDestroy) return;
+            if (hitPointRaycast > 0)
+            {
+                hitPointRaycast -= damageAmount;
+            }
+        }
+
+        public bool CanBeRaycastHit()
+        {
+            return hitPointRaycast > 0;
         }
 
         public int GetMaxHitPoint()
