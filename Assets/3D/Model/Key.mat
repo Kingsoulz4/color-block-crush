@@ -30,7 +30,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: aaeded1bf0c6e3740be6110b39ea00d8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -124,7 +124,7 @@ Material:
     - _OutlinePixelSizeType: 0
     - _OutlineTextureLOD: 1.96
     - _OutlineTextureType: 0
-    - _OutlineWidth: 0.3
+    - _OutlineWidth: 1.1
     - _Parallax: 0.02
     - _RampBands: 20
     - _RampBandsSmoothing: 1
@@ -169,7 +169,7 @@ Material:
     - _BaseColor: {r: 1, g: 0.74686915, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HColor: {r: 1, g: 1, b: 1, a: 1}
+    - _HColor: {r: 0.8773585, g: 0.8773585, b: 0.8773585, a: 1}
     - _MatCapColor: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectionColor: {r: 1, g: 1, b: 1, a: 1}
