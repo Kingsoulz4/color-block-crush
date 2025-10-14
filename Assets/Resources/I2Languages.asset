@@ -23,9 +23,9 @@ MonoBehaviour:
     mLanguages: []
     IgnoreDeviceLanguage: 0
     _AllowUnloadingLanguages: 0
-    Google_WebServiceURL: 
-    Google_SpreadsheetKey: 
-    Google_SpreadsheetName: 
+    Google_WebServiceURL: https://script.google.com/macros/s/AKfycbxMqCXyTiN_PyFrLYDE1XF4owNSWUfvCq-gYA1uLUPVkyzqXdhMeBghVyGIw1q_QqN_iA/exec
+    Google_SpreadsheetKey: 1tez-f603ElTwS8Yfqi72E0Wq-69JaMVmL_cORyXOWac
+    Google_SpreadsheetName: I2Loc gec Localization
     Google_LastUpdatedVersion: 
     Google_Password: change_this
     GoogleUpdateFrequency: 3
