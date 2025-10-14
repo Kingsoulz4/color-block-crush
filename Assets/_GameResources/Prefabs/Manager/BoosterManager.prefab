@@ -315,8 +315,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boosterData: {fileID: 11400000, guid: 55705ad30119ab94a967803154fac2b8, type: 2}
   boosters:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8744219414392260340}
+  - {fileID: 2959119882975584505}
   - {fileID: 4683005929746910059}
   - {fileID: 8744219414392260340}
   - {fileID: 2959119882975584505}

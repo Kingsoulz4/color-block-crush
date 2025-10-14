@@ -93,9 +93,9 @@ public class MainScreenUI : ScreenUI
 
     private void PlayLevel()
     {
-        //LevelManager.Instance.StartCurrentLevel();
-        //UIManager.Instance.ShowScreen<InGameScreenUI>();
-        UIManager.Instance.ShowPopup<PopupSelectBooster>(null);
+        LevelManager.Instance.StartCurrentLevel();
+        UIManager.Instance.ShowScreen<InGameScreenUI>();
+        //UIManager.Instance.ShowPopup<PopupSelectBooster>(null);
     }
 
     public void MoveCoin(int amount, string reason, string where)
