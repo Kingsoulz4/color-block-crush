@@ -1909,9 +1909,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd90f07f28a54340ba3077f2b6237f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnOrigin: {x: 0, y: 0, z: -10}
+  spawnOrigin: {x: 0, y: 0, z: -10.5}
   columnSpacing: 3
-  rowSpacing: 2
+  rowSpacing: 2.5
   gunPrefab: {fileID: 769447249408881793, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}
   gunContainer: {fileID: 4637696110757540719}
   conveyor: {fileID: 6226058982253706133}
