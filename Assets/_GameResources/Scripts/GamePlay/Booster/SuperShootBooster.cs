@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ColorBlockCrush
 {
-    public class SuffleBooster : BoosterBase
+    public class SuperShootBooster : BoosterBase
     {
         
     }

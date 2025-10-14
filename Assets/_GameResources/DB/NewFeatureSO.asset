@@ -15,7 +15,7 @@ MonoBehaviour:
   newFeatureItemDatas:
   - level: 12
     icon: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
-    title: Double Color
+    title: Surprise Shooter
     des: Put stacked dogs to the holes in order
     desInTutorial: Put the outer dog into hole to release the inner one.
     spriteBG: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}

@@ -1,19 +1,18 @@
 using DG.Tweening;
 using ColorBlockCrush;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class HammerBooster : BoosterBase
+public class ShuffleBooster : BoosterBase
 {
     [SerializeField] Hammer hammerPrefab;
 
-    protected override int CurrentCount { get => UserDataManager.HammerBooster; set => UserDataManager.HammerBooster = value; }
+    protected override int CurrentCount { get => UserDataManager.ShuffleBooster; set => UserDataManager.ShuffleBooster = value; }
 
     public override void Init()
     {
         base.Init();
-        CurrentCount = UserDataManager.HammerBooster;
+        CurrentCount = UserDataManager.ShuffleBooster;
     }
 
     private void Update()

@@ -3,54 +3,57 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VisualCountBooster : MonoBehaviour
+namespace ColorBlockCrush
 {
-    [SerializeField] Text txt_CountBooster;
-    [SerializeField] GameObject obj_BoosterActive;
-    [SerializeField] GameObject obj_BoosterAdd;
-    [SerializeField] Button btn_AddBooster;
-    [SerializeField] Image icon;
-    private BoosterType boosterType;
-
-    public Image Icon { get => icon;}
-
-    public void Init(int count, BoosterType boosterType)
+    public class VisualCountBooster : MonoBehaviour
     {
-        this.boosterType = boosterType;
-        if (obj_BoosterActive == null || obj_BoosterAdd == null) { return; }
-        btn_AddBooster.onClick.AddListener(ShowPopupAddBooster);
-        bool isActive = count > 0;
-        obj_BoosterActive.SetActive(isActive);
-        obj_BoosterAdd.SetActive(!isActive);
-        UpdateText(count);
-    }
+        [SerializeField] Text txt_CountBooster;
+        [SerializeField] GameObject obj_BoosterActive;
+        [SerializeField] GameObject obj_BoosterAdd;
+        [SerializeField] Button btn_AddBooster;
+        [SerializeField] Image icon;
+        private BoosterType boosterType;
 
-    private void ShowPopupAddBooster()
-    {
-        //PopupBuyBooster poup = UIManager.Instance.GetPopupActive<PopupBuyBooster>();
-        //if (poup == null)
-        //{
-        //    poup = UIManager.Instance.ShowPopup<PopupBuyBooster>(null);                
-        //    poup.VisualBooster(boosterType);
-        //}
-    }
+        public Image Icon { get => icon;}
 
-    public void UpdateTextCountBooster(int count)
-    {
-        bool isActive = count > 0;
-        if (obj_BoosterActive == null || obj_BoosterAdd == null) { return; }
-        obj_BoosterActive.SetActive(isActive);
-        obj_BoosterAdd.SetActive(!isActive);
-        UpdateText(count);
-    }
-
-    private void UpdateText(int count)
-    {
-        string value = $"{count}";
-        if (count > 99)
+        public void Init(int count, BoosterType boosterType)
         {
-            value = $"99+";
+            this.boosterType = boosterType;
+            if (obj_BoosterActive == null || obj_BoosterAdd == null) { return; }
+            btn_AddBooster.onClick.AddListener(ShowPopupAddBooster);
+            bool isActive = count > 0;
+            obj_BoosterActive.SetActive(isActive);
+            obj_BoosterAdd.SetActive(!isActive);
+            UpdateText(count);
         }
-        txt_CountBooster.text = value;
-    }
+
+        private void ShowPopupAddBooster()
+        {
+            // PopupBuyBooster poup = UIManager.Instance.GetPopupActive<PopupBuyBooster>();
+            // if (poup == null)
+            // {
+            //     poup = UIManager.Instance.ShowPopup<PopupBuyBooster>(null);                
+            //     poup.VisualBooster(boosterType);
+            // }
+        }
+
+        public void UpdateTextCountBooster(int count)
+        {
+            bool isActive = count > 0;
+            if (obj_BoosterActive == null || obj_BoosterAdd == null) { return; }
+            obj_BoosterActive.SetActive(isActive);
+            obj_BoosterAdd.SetActive(!isActive);
+            UpdateText(count);
+        }
+
+        private void UpdateText(int count)
+        {
+            string value = $"{count}";
+            if (count > 99)
+            {
+                value = $"99+";
+            }
+            txt_CountBooster.text = value;
+        }
+    }   
 }

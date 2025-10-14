@@ -43,16 +43,7 @@ namespace ColorBlockCrush
 
         public void Execute(Action callback)
         {
-            var boosterUnlock = BoosterManager.Instance.BoosterData.boosterItemDatas.Find(x => x.levelUnlock == LevelManager.Instance.CurrentLevel);
-            if (boosterUnlock != null && boosterUnlock.boosterType != BoosterType.TIME_PRE && boosterUnlock.boosterType != BoosterType.CISSOR)
-            {
-                base.Show(callback);
-                SetData(boosterUnlock.title, boosterUnlock.description, boosterUnlock.icon);
-            }
-            else
-            {
-                callback?.Invoke();
-            }    
+            callback?.Invoke();
         }
     }
 }

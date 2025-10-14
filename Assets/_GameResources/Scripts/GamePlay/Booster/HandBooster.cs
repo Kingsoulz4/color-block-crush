@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace ColorBlockCrush
 {
-    public class HandMoveBooster : BoosterBase
+    public class HandBooster : BoosterBase
     {
 
-        protected override int CurrentCount { get => UserDataManager.HandMoveBooster; set => UserDataManager.HandMoveBooster = value; }
+        protected override int CurrentCount { get => UserDataManager.HandBooster; set => UserDataManager.HandBooster = value; }
 
         private void Update()
         {
@@ -22,7 +22,7 @@ namespace ColorBlockCrush
         public override void Init()
         {
             base.Init();
-            CurrentCount = UserDataManager.HandMoveBooster;
+            CurrentCount = UserDataManager.HandBooster;
         }
 
         public override void CancelBooster()

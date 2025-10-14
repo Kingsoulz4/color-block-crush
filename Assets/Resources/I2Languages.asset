@@ -16,23 +16,376 @@ MonoBehaviour:
     UserAgreesToHaveItOnTheScene: 0
     UserAgreesToHaveItInsideThePluginsFolder: 0
     GoogleLiveSyncIsUptoDate: 1
-    mTerms: []
+    mTerms:
+    - Term: LANGUAGE
+      TermType: 0
+      Description: 
+      Languages:
+      - Language
+      - "Ng\xF4n Ng\u1EEF"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: fonts
+      TermType: 1
+      Description: 
+      Languages:
+      - MADE Waffle Soft PERSONAL USE
+      - MADE Waffle Soft PERSONAL USE
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/btn_cancel
+      TermType: 0
+      Description: 
+      Languages:
+      - Cancel
+      - "H\u1EE7y"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/btn_continue
+      TermType: 0
+      Description: 
+      Languages:
+      - Continue
+      - "Ti\u1EBFp T\u1EE5c"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/btn_free
+      TermType: 0
+      Description: 
+      Languages:
+      - Free
+      - "Mi\u1EC5n Ph\xED"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/btn_next_level
+      TermType: 0
+      Description: 
+      Languages:
+      - Next
+      - "Ti\u1EBFp T\u1EE5c"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/btn_shop
+      TermType: 0
+      Description: 
+      Languages:
+      - Shop
+      - "C\u1EEDa H\xE0ng"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_claim
+      TermType: 0
+      Description: 
+      Languages:
+      - Claim
+      - "Nh\u1EADn"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_close
+      TermType: 0
+      Description: 
+      Languages:
+      - Close
+      - "\u0110\xF3ng"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_coming_soon
+      TermType: 0
+      Description: 
+      Languages:
+      - Coming soon!
+      - "S\u1EAFp m\u1EDF!"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_extreme
+      TermType: 0
+      Description: 
+      Languages:
+      - Hard
+      - "Kh\xF3"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_extreme_level
+      TermType: 0
+      Description: 
+      Languages:
+      - Super Hard
+      - "Si\xEAu Kh\xF3"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_hard
+      TermType: 0
+      Description: 
+      Languages:
+      - Hard
+      - "Kh\xF3"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_hard_level
+      TermType: 0
+      Description: 
+      Languages:
+      - Hard Level
+      - "C\u1EA5p \u0110\u1ED9 Kh\xF3"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_hold_continue
+      TermType: 0
+      Description: 
+      Languages:
+      - Hold to see the board
+      - "Gi\u1EEF \u0111\u1EC3 xem m\xE0n ch\u01A1i"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_level
+      TermType: 0
+      Description: 
+      Languages:
+      - Level {[NUMBER]}
+      - "C\u1EA5p \u0111\u1ED9 {[NUMBER]}"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_not_enough_coin
+      TermType: 0
+      Description: 
+      Languages:
+      - Not enough gold!
+      - "Kh\xF4ng \u0111\u1EE7 v\xE0ng!"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_play
+      TermType: 0
+      Description: 
+      Languages:
+      - PLAY
+      - "Ch\u01A1i"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_play_on
+      TermType: 0
+      Description: 
+      Languages:
+      - Play On
+      - "Ch\u01A1i Tr\xEAn"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_purchase_successful
+      TermType: 0
+      Description: 
+      Languages:
+      - Purchase successful!
+      - "Mua th\xE0nh c\xF4ng!"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_reward
+      TermType: 0
+      Description: 
+      Languages:
+      - Reward
+      - "Ph\u1EA7n Th\u01B0\u1EDFng"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_tap_to_continue
+      TermType: 0
+      Description: 
+      Languages:
+      - Tap to continue
+      - "Ch\u1EA1m \u0111\u1EC3 ti\u1EBFp t\u1EE5c"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_unlock
+      TermType: 0
+      Description: 
+      Languages:
+      - Unlock
+      - "M\u1EDF Kh\xF3a"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_unlock_at_level
+      TermType: 0
+      Description: 
+      Languages:
+      - Unlock at <color=red>level {0}</color>
+      - "M\u1EDF kh\xF3a \u1EDF <color=red>c\u1EA5p \u0111\u1ED9 {0}</color>"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_unlocked
+      TermType: 0
+      Description: 
+      Languages:
+      - Unlocked
+      - "\u0110\xE3 m\u1EDF kh\xF3a"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Game/txt_video_not_available
+      TermType: 0
+      Description: 
+      Languages:
+      - Video not available!
+      - "Qu\u1EA3ng c\xE1o kh\xF4ng c\xF3 s\u1EB5n!"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Setting/titles_setting
+      TermType: 0
+      Description: 
+      Languages:
+      - SETTING
+      - "C\xC0I \u0110\u1EB6T"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Setting/txt_bonus
+      TermType: 0
+      Description: 
+      Languages:
+      - Bonus
+      - "Th\u01B0\u1EDFng"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Setting/txt_quit
+      TermType: 0
+      Description: 
+      Languages:
+      - Quit Level
+      - "Tho\xE1t"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Setting/txt_reset_in
+      TermType: 0
+      Description: 
+      Languages:
+      - Reset in
+      - "L\xE0m m\u1EDBi trong"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Setting/txt_restore_failed
+      TermType: 0
+      Description: 
+      Languages:
+      - Restore purchase failed!
+      - "Kh\xF4i ph\u1EE5c mua h\xE0ng th\u1EA5t b\u1EA1i!"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Setting/txt_restore_purchase
+      TermType: 0
+      Description: 
+      Languages:
+      - Restore Purchase
+      - "Kh\xF4i Ph\u1EE5c Mua H\xE0ng"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Setting/txt_restore_success
+      TermType: 0
+      Description: 
+      Languages:
+      - Restore purchase success!
+      - "Kh\xF4i ph\u1EE5c mua h\xE0ng th\xE0nh c\xF4ng!"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Shop/titles_no_ads
+      TermType: 0
+      Description: 
+      Languages:
+      - NO ADS
+      - "B\u1ECE QU\u1EA2NG C\xC1O"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Shop/titles_shop
+      TermType: 0
+      Description: 
+      Languages:
+      - SHOP
+      - "C\u1EECA H\xC0NG"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Shop/txt_best_offer
+      TermType: 0
+      Description: 
+      Languages:
+      - Best Offer
+      - "\u01AFu \u0110\xE3i T\u1ED1t Nh\u1EA5t"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Shop/txt_best_seller
+      TermType: 0
+      Description: 
+      Languages:
+      - Best Seller
+      - "B\xE1n Ch\u1EA1y Nh\u1EA5t"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Shop/txt_bonus
+      TermType: 0
+      Description: 
+      Languages:
+      - Bonus
+      - "Th\u01B0\u1EDFng"
+      - 
+      Flags: 000000
+      Languages_Touch: []
     CaseInsensitiveTerms: 0
     OnMissingTranslation: 1
     mTerm_AppName: 
-    mLanguages: []
+    mLanguages:
+    - Name: English
+      Code: en
+      Flags: 0
+    - Name: Vietnamese
+      Code: vi
+      Flags: 0
+    - Name: Description
+      Code: 
+      Flags: 0
     IgnoreDeviceLanguage: 0
     _AllowUnloadingLanguages: 0
     Google_WebServiceURL: https://script.google.com/macros/s/AKfycbxMqCXyTiN_PyFrLYDE1XF4owNSWUfvCq-gYA1uLUPVkyzqXdhMeBghVyGIw1q_QqN_iA/exec
     Google_SpreadsheetKey: 1tez-f603ElTwS8Yfqi72E0Wq-69JaMVmL_cORyXOWac
     Google_SpreadsheetName: I2Loc gec Localization
-    Google_LastUpdatedVersion: 
+    Google_LastUpdatedVersion: 1760429381103
     Google_Password: change_this
     GoogleUpdateFrequency: 3
     GoogleInEditorCheckFrequency: 2
     GoogleUpdateSynchronization: 1
     GoogleUpdateDelay: 0
-    Assets: []
+    Assets:
+    - {fileID: 11400000, guid: 2878ecf5e42911945aea1b30a8f48376, type: 2}
+    - {fileID: 12800000, guid: 196aec6f1b3db6d4baf00144756d846e, type: 3}
     Spreadsheet_LocalFileName: 
     Spreadsheet_LocalCSVSeparator: ','
     Spreadsheet_LocalCSVEncoding: utf-8
