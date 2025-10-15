@@ -51,6 +51,7 @@ namespace ColorBlockCrush
         private void WinLevel()
         {
             LevelEvent.OnWin?.Invoke(levelData.levelId);
+            UIManager.Instance.ShowPopup<PopupWin>(() => { });
         }
 
         private void LoseLevel()

@@ -180,6 +180,7 @@ namespace ColorBlockCrush
             UpdateBulletCountDisplay();
 
             Bullet bullet = Instantiate(bulletPrb, bulletSpawnPos.position, Quaternion.identity);
+            bullet.transform.SetParent(LevelController.Instance.transform);
             bullet.OnInit(this, target, (gun, block) =>
             {
                 target.TakeDamage(1);
