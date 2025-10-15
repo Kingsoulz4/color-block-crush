@@ -70,7 +70,12 @@ namespace ColorBlockCrush
                 {
                     var idx = c * _rows + r;
                     ColorType color = listBlock[idx].colorType;
-                    
+
+                    if (color == ColorType.None)
+                    {
+                        continue;
+                    }
+
                     SpawnBlock(r, c, BlockType.Normal, listBlock[idx], false, true);
                 }
             }
@@ -81,6 +86,7 @@ namespace ColorBlockCrush
         {
             if (!IsValidPosition(row, col)) return null;
 
+         
             GridNode node = gridController.GridNodes[row, col];
             Block block = Instantiate(blockPrefab, node.transform.position, Quaternion.identity, blockContainer);
 
