@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.WebSockets;
@@ -14,6 +15,8 @@ namespace ColorBlockCrush
         [SerializeField] Button btn_backLevel;
         [SerializeField] InputField inputField;
         [SerializeField] InputField inputLevelSet;
+        [SerializeField] private Button btnTestLose;
+        [SerializeField] private Button btnTestWin;
 
         private void Update()
         {
@@ -36,7 +39,7 @@ namespace ColorBlockCrush
 
         private void Start()
         {
-            AddRes();
+            //AddRes();
 
 
             BoosterManager.Instance.UpdateVisualBooster();
@@ -61,6 +64,13 @@ namespace ColorBlockCrush
                     LevelManager.Instance.CurrentLevelSetID = int.Parse(inputLevelSet.text);
                 });
             }    
+            
+            btnTestLose.onClick.AddListener(LoseLevel);
+            
+            btnTestWin.onClick.AddListener(() =>
+            {
+                LevelEvent.OnWin?.Invoke(LevelManager.Instance.CurrentLevel);
+            });
         }
 
         private void LoadLevel()
@@ -72,7 +82,7 @@ namespace ColorBlockCrush
 
             if (int.Parse(inputField.text) == -1)
             {
-                AddRes();
+                //AddRes();
                 return;
             }
 
@@ -80,15 +90,31 @@ namespace ColorBlockCrush
             LevelManager.Instance.StartCurrentLevel();
         }
 
+        private void LoseLevel()
+        {
+            Action onClose = () =>
+            {
+                LevelEvent.OnLose?.Invoke(LevelManager.Instance.CurrentLevel);
+            };
+
+            Action onrevival = () =>
+            {
+
+            };
+            
+            var popupOutOfSpace = UIManager.Instance.ShowPopup<PopupOutOfSpace>(() => { });
+            popupOutOfSpace.Show();
+            popupOutOfSpace.OnClose = onClose;
+            popupOutOfSpace.OnKeepPlaying = onrevival;
+        }
+
         private void AddRes()
         {
             UserDataManager.AddGold(1000, "test", false);
             UserDataManager.AddHeart(5, "test", false);
-            UserDataManager.HammerBooster += 3;
-            UserDataManager.HandMoveBooster += 3;
-            UserDataManager.TimeIngameBooster += 3;
-            UserDataManager.TimePreBooster += 3;
-            UserDataManager.CissorBooster += 3;
+            UserDataManager.ShuffleBooster += 3;
+            UserDataManager.HandBooster += 3;
+            UserDataManager.AddTrayBooster += 3;
         }
     }
 }

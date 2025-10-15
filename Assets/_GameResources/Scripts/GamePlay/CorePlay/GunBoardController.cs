@@ -51,7 +51,6 @@ namespace ColorBlockCrush
                 listGunColumn.Add(new List<Gun>());
 
                 List<GunLineElementConfig> columnData = new List<GunLineElementConfig>(gunBoardData.gunLines[col].gunLineElementConfigs);
-                columnData.Reverse();
 
                 for (int i = 0; i < columnData.Count; i++)
                 {

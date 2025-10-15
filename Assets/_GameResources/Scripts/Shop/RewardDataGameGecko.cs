@@ -19,19 +19,16 @@ namespace ColorBlockCrush
                     HeartManager.InfinityEndTime += quantity;
                     break;
                 case ItemType.BOOSTER_1:
-                    UserDataManager.TimePreBooster += quantity;
+                    UserDataManager.AddTrayBooster += quantity;
                     break;
                 case ItemType.BOOSTER_2:
-                    UserDataManager.CissorBooster += quantity;
+                    UserDataManager.HandBooster += quantity;
                     break;
                 case ItemType.BOOSTER_3:
-                    UserDataManager.TimeIngameBooster += quantity;
+                    UserDataManager.ShuffleBooster += quantity;
                     break;
                 case ItemType.BOOSTER_4:
-                    UserDataManager.HammerBooster += quantity;
-                    break;
-                case ItemType.BOOSTER_5:
-                    UserDataManager.HandMoveBooster += quantity;
+                    UserDataManager.SuperShootBooster += quantity;
                     break;
             }
         }

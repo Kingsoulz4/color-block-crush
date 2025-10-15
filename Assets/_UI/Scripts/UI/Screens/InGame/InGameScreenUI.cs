@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using I2.Loc;
 using UnityEngine.UI;
 using ColorBlockCrush.Tools;
 
@@ -15,7 +15,8 @@ public class InGameScreenUI : ScreenUI
 {
     [Space, Header("UI")]
     [SerializeField] Text txt_Time;
-    [SerializeField] Text txt_Level;
+    [SerializeField] LocalizationParamsManager txt_Level_Localize_Param;
+    private const string txt_Level_Localize_Param_String = "NUMBER";
 
     [SerializeField] Button btn_pause;
     [SerializeField] Button btn_Replay;
@@ -24,11 +25,13 @@ public class InGameScreenUI : ScreenUI
 
     [Space, Header("Booster")]
     BoosterDataSO boosterDataSO;
+
+    [SerializeField] private GameObject boostersObj;
     [SerializeField] BoosterConfirmUI boosterConfirmUI;
 
-    [Header("Booster FreeTime")]
-    [SerializeField] VisualCountBooster timeBoosterCount;
-    [SerializeField] Button timeBoosterBtn;
+    [Header("Booster Add Tray")]
+    [SerializeField] VisualCountBooster addTrayBoosterCount;
+    [SerializeField] Button addTrayBoosterBtn;
     [SerializeField] Image img_BG_Time;
     [SerializeField] TimeBoosterTopUI timeBoosterTopUI;
 
@@ -36,17 +39,16 @@ public class InGameScreenUI : ScreenUI
     [SerializeField] Button handMoveBoosterBtn;
     [SerializeField] VisualCountBooster handMoveBoosterCount;
 
-    [Header("Booster hammer")]
-    [SerializeField] Button hammerBtn;
-    [SerializeField] VisualCountBooster hammerBoosterCount;
+    [Header("Booster shuffle")]
+    [SerializeField] Button shuffleBtn;
+    [SerializeField] VisualCountBooster shuffleBoosterCount;
 
+    [Header("Booster Super Shoot")]
+    [SerializeField] Button superShootBoosterBtn;
+    [SerializeField] VisualCountBooster superShootBoosterCount;
+    
     [Header("Booster Time")]
     [SerializeField] private GameObject m_iconClock;
-
-    //[Header("Booster remove 1 tail")]
-    //[SerializeField] Button suffleBoosterBtn;
-    //[SerializeField] VisualCountBooster suffleBoosterCount;
-
 
     [Space, Header("Top")]
 
@@ -62,26 +64,26 @@ public class InGameScreenUI : ScreenUI
     {
         base.Initialize(uiManager);
 
-        //timeBoosterBtn.onClick.AddListener(OnTimeBoosterClick);
-        //handMoveBoosterBtn.onClick.AddListener(HandMoveboosterClick);
-        //hammerBtn.onClick.AddListener(HammerBoosterClick);
-        ////suffleBoosterBtn.onClick.AddListener(SuffleBoosterClick);
+        addTrayBoosterBtn.onClick.AddListener(OnAddTrayBoosterClick);
+        handMoveBoosterBtn.onClick.AddListener(HandMoveboosterClick);
+        shuffleBtn.onClick.AddListener(ShuffleBoosterClick);
+        superShootBoosterBtn.onClick.AddListener(SuperShootBoosterClick);
         btn_pause.onClick.AddListener(OnPauseClick);
         btn_Replay.onClick.AddListener(OnReplayClick);
 
-        //foreach (var booster in BoosterManager.Instance.Boosters)
-        //{
-        //    booster.OnStartUseBooster += OnStartUseBooster;
-        //    booster.OnChangeBoosterCount += OnChangeBoosterCount;
-        //    booster.OnUseBoosterDone += OnUseBoosterDone;
-        //}
+        foreach (var booster in BoosterManager.Instance.Boosters)
+        {
+            booster.OnStartUseBooster += OnStartUseBooster;
+            booster.OnChangeBoosterCount += OnChangeBoosterCount;
+            booster.OnUseBoosterDone += OnUseBoosterDone;
+        }
 
-        //boosterDataSO = BoosterManager.Instance.BoosterData;
+        boosterDataSO = BoosterManager.Instance.BoosterData;
 
-        //timeBoosterCount.Init(UserDataManager.TimeIngameBooster, BoosterType.TIME_INGAME);
-        //hammerBoosterCount.Init(UserDataManager.HammerBooster, BoosterType.HAMMER);
-        //handMoveBoosterCount.Init(UserDataManager.HandMoveBooster, BoosterType.HAND_MOVE);
-        //suffleBoosterCount.Init(UserDataManager.SuffleBooster, BoosterType.SUFFLE);
+        addTrayBoosterCount.Init(UserDataManager.AddTrayBooster, BoosterType.ADD_TRAY);
+        shuffleBoosterCount.Init(UserDataManager.ShuffleBooster, BoosterType.SHUFFLE);
+        handMoveBoosterCount.Init(UserDataManager.HandBooster, BoosterType.HAND_MOVE);
+        superShootBoosterCount.Init(UserDataManager.SuperShootBooster, BoosterType.SUPER_SHOOT);
     }
 
     private void OnDisable()
@@ -106,14 +108,17 @@ public class InGameScreenUI : ScreenUI
     {
         switch (booster.BoosterType)
         {
-            case BoosterType.TIME_INGAME:
-                timeBoosterCount.UpdateTextCountBooster(currentCount);
+            case BoosterType.ADD_TRAY:
+                addTrayBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             case BoosterType.HAND_MOVE:
                 handMoveBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
-            case BoosterType.HAMMER:
-                hammerBoosterCount.UpdateTextCountBooster(currentCount);
+            case BoosterType.SHUFFLE:
+                shuffleBoosterCount.UpdateTextCountBooster(currentCount);
+                break;
+            case BoosterType.SUPER_SHOOT:
+                superShootBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             default:
                 break;
@@ -124,8 +129,15 @@ public class InGameScreenUI : ScreenUI
     {
         switch (booster.BoosterType)
         {
-            case BoosterType.TIME_INGAME:
-                timeBoosterTopUI.SetActive(false);
+            case BoosterType.ADD_TRAY:
+                break;
+            case BoosterType.HAND_MOVE:
+                boostersObj.gameObject.SetActive(true);
+                break;
+            case BoosterType.SHUFFLE:
+                break;
+            case BoosterType.SUPER_SHOOT:
+                boostersObj.gameObject.SetActive(true);
                 break;
             default:
                 break;
@@ -137,21 +149,34 @@ public class InGameScreenUI : ScreenUI
     {
         switch (booster.BoosterType)
         {
-            case BoosterType.TIME_INGAME:
-                timeBoosterTopUI.SetActive(true);
-                timeBoosterCount.UpdateTextCountBooster(currentCount);
+            case BoosterType.ADD_TRAY:
+                addTrayBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             case BoosterType.HAND_MOVE:
                 handMoveBoosterCount.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
-            case BoosterType.HAMMER:
-                hammerBoosterCount.UpdateTextCountBooster(currentCount);
+            case BoosterType.SHUFFLE:
+                shuffleBoosterCount.UpdateTextCountBooster(currentCount);
+                break;
+            case BoosterType.SUPER_SHOOT:
+                superShootBoosterCount.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
             default:
                 break;
         }
+    }
+    
+    private void OnAddTrayBoosterClick()
+    {
+        BoosterManager.Instance.AddTrayBooster.DoShowBooster((sucess) =>
+        {
+            if (sucess)
+            {
+                BoosterManager.Instance.AddTrayBooster.ActiveBooster();
+            }
+        });
     }
 
     private void HandMoveboosterClick()
@@ -164,37 +189,36 @@ public class InGameScreenUI : ScreenUI
                 var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.HAND_MOVE);
                 Image handMoveImg = handMoveBoosterBtn.GetComponent<VisualCountBooster>().Icon;
                 boosterConfirmUI.SetUIData(boosterData, handMoveImg);
+                boostersObj.gameObject.SetActive(false);
             }
         });
     }
-
-    private void SuffleBoosterClick()
+    
+    private void ShuffleBoosterClick()
     {
-        
-    }
-
-    private void OnTimeBoosterClick()
-    {
-        BoosterManager.Instance.TimeIngameBooster.DoShowBooster((sucess) =>
-        {
-            if (sucess)
-            {
-                BoosterManager.Instance.TimeIngameBooster.ActiveBooster();
-            }
-        });
-    }
-
-    private void HammerBoosterClick()
-    {
-
-        BoosterManager.Instance.HammerBooster.DoShowBooster((sucess) =>
+        BoosterManager.Instance.ShuffleBooster.DoShowBooster((sucess) =>
         {
             if (sucess)
             {
                 boosterConfirmUI.gameObject.SetActive(true);
-                var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.HAMMER);
-                Image hammerImg = hammerBtn.GetComponent<VisualCountBooster>().Icon;
+                var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.SHUFFLE);
+                Image hammerImg = shuffleBtn.GetComponent<VisualCountBooster>().Icon;
                 boosterConfirmUI.SetUIData(boosterData, hammerImg);
+            }
+        });
+    }
+
+    private void SuperShootBoosterClick()
+    {
+        BoosterManager.Instance.HandMoveBooster.DoShowBooster((sucess) =>
+        {
+            if (sucess)
+            {
+                boosterConfirmUI.gameObject.SetActive(true);
+                var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.SUPER_SHOOT);
+                Image superShootImg = handMoveBoosterBtn.GetComponent<VisualCountBooster>().Icon;
+                boosterConfirmUI.SetUIData(boosterData, superShootImg);
+                boostersObj.gameObject.SetActive(false);
             }
         });
     }
@@ -225,7 +249,7 @@ public class InGameScreenUI : ScreenUI
 
     public void UpdateUI()
     {
-        txt_Level.text = $"{LevelManager.Instance.CurrentLevel}";
+        txt_Level_Localize_Param.SetParameterValue(txt_Level_Localize_Param_String, LevelManager.Instance.CurrentLevel.ToString());
         UpdateTimeBar();
     }
 

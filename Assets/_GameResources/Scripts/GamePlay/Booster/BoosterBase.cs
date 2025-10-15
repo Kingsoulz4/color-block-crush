@@ -7,12 +7,12 @@ using UnityEngine;
 public enum BoosterType
 {
     NONE = -1,
-    TIME_INGAME = 0,
-    TIME_PRE = 1,
-    HAMMER = 2,
-    CISSOR = 3,
-    HAND_MOVE = 4,
-    SUFFLE = 5,
+    ADD_TRAY = 0,
+    SHUFFLE = 1,
+    HAND_MOVE = 2,
+    SUPER_SHOOT = 3,
+    REVIVAL = 4,
+    LIVES = 5
 }
 public abstract class BoosterBase : MonoBehaviour
 {
