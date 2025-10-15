@@ -15,12 +15,12 @@ public class UserDataManager : MonoBehaviour
         public int gold;
         public int heart;
         public bool removeAds;
-        public int timeIngameBooster;
+        public int addTrayBooster;
         public int timePreBooster;
-        public int hammerBooster;
+        public int shuffleBooster;
         public int cissorBooster;
-        public int suffleBooster;
-        public int handMoveBooster;
+        public int superShootBooster;
+        public int handBooster;
         public long lastTimeLogin;
         public string userName;
         public long firstTimeJoinGame;
@@ -225,68 +225,46 @@ public class UserDataManager : MonoBehaviour
         }
     }
 
-    public static int TimeIngameBooster
+    public static int AddTrayBooster
     {
-        get { return LoadUserData().timeIngameBooster; }
+        get { return LoadUserData().addTrayBooster; }
         set
         {
             UserData data = LoadUserData();
-            data.timeIngameBooster = value;
+            data.addTrayBooster = value;
             SaveUserData(data);
         }
     }
 
-    public static int TimePreBooster
+    public static int ShuffleBooster
     {
-        get { return LoadUserData().timePreBooster; }
+        get { return LoadUserData().shuffleBooster; }
         set
         {
             UserData data = LoadUserData();
-            data.timePreBooster = value;
+            data.shuffleBooster = value;
             SaveUserData(data);
         }
     }
 
-    public static int HammerBooster
+    public static int SuperShootBooster
     {
-        get { return LoadUserData().hammerBooster; }
+        get { return LoadUserData().superShootBooster; }
         set
         {
             UserData data = LoadUserData();
-            data.hammerBooster = value;
+            data.superShootBooster = value;
             SaveUserData(data);
         }
     }
 
-    public static int SuffleBooster
+    public static int HandBooster
     {
-        get { return LoadUserData().suffleBooster; }
+        get { return LoadUserData().handBooster; }
         set
         {
             UserData data = LoadUserData();
-            data.suffleBooster = value;
-            SaveUserData(data);
-        }
-    }
-
-    public static int HandMoveBooster
-    {
-        get { return LoadUserData().handMoveBooster; }
-        set
-        {
-            UserData data = LoadUserData();
-            data.handMoveBooster = value;
-            SaveUserData(data);
-        }
-    }
-
-    public static int CissorBooster
-    {
-        get { return LoadUserData().cissorBooster; }
-        set
-        {
-            UserData data = LoadUserData();
-            data.cissorBooster = value;
+            data.handBooster = value;
             SaveUserData(data);
         }
     }
@@ -295,20 +273,17 @@ public class UserDataManager : MonoBehaviour
     {
         switch(boosterType)
         {
-            case BoosterType.TIME_PRE:
-                TimePreBooster += quantity; 
+            case BoosterType.ADD_TRAY:
+                AddTrayBooster += quantity;
                 break;
-            case BoosterType.TIME_INGAME:
-                TimeIngameBooster += quantity;
-                break;
-            case BoosterType.HAMMER:
-                HammerBooster += quantity;
+            case BoosterType.SHUFFLE:
+                ShuffleBooster += quantity;
                 break;
             case BoosterType.HAND_MOVE:
-                HandMoveBooster += quantity;
+                HandBooster += quantity;
                 break;
-            case BoosterType.CISSOR:
-                CissorBooster += quantity;
+            case BoosterType.SUPER_SHOOT:
+                HandBooster += quantity;
                 break;
             default:
                 break;
@@ -343,8 +318,8 @@ public class UserDataManager : MonoBehaviour
             gold = 0,
             heart = 3,
             removeAds = false,
-            timeIngameBooster = 0,
-            hammerBooster = 0,
+            addTrayBooster = 0,
+            shuffleBooster = 0,
             cissorBooster = 0
         };
     }

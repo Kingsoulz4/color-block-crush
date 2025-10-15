@@ -7,9 +7,18 @@ using ColorBlockCrush.Tools;
 namespace ColorBlockCrush
 {
 
-    [CreateAssetMenu(fileName = "ListMaterialByColor", menuName = "ScriptableObjects/ListMaterialByColor", order = 1)]
+    [CreateAssetMenu(fileName = "ListMaterialByColor", menuName = "ScriptableObject/ListMaterialByColor", order = 1)]
     public class ListMaterialByColor : ScriptableObject
     {
         public SerializedDictionary<ColorType, Material> listMaterial;
+
+        public Material GetMaterial(ColorType colorType)
+        {
+            if (listMaterial.ContainsKey(colorType))
+            {
+                return listMaterial[colorType];
+            }
+            return null;
+        }
     }
 }

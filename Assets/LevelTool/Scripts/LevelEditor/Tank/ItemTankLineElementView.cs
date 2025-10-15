@@ -22,12 +22,10 @@ namespace ColorBlockCrush.Tools
         [SerializeField] private GameObject tunnelInfor;
         [SerializeField] private TextMeshProUGUI tankNumberValue;
         
-        
         [Header("Other")]
         public Button buttonDelete;
         public Button buttonSelected;
         public GameObject selectedObject;
-        
         
         public GunLineElementConfig elementConfig = new GunLineElementConfig();
         
@@ -105,6 +103,16 @@ namespace ColorBlockCrush.Tools
         public void AddUiLine(UiLine uiLine)
         {
             linesConnected.Add(uiLine);
+        }
+
+        public void UpdateUiLinePos()
+        {
+            if(linesConnected == null || linesConnected.Count == 0) return;
+            
+            foreach (var uiLine in linesConnected)
+            {
+                uiLine.UpdatePosFolloưElementEditorView();
+            }
         }
 
         public void ClearUiLine()

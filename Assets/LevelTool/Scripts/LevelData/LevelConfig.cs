@@ -12,7 +12,7 @@ namespace ColorBlockCrush.Tools
 
         public InputImageConfig imageConfig;
         public MapConfig mapConfig;
-        public List<GunLineConfig> tankLines = new List<GunLineConfig>();
+        public List<GunLineConfig> gunLines = new List<GunLineConfig>();
 
         public bool ValidateData()
         {

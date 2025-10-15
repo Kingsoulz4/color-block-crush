@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1046489559498283}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.06433725, z: 1.1506362}
+  m_LocalPosition: {x: 0, y: 0.06433725, z: 0.85}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -295,13 +295,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1272792153202162}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.8, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4451274559178849}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &33893613393818966
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -309,7 +309,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1272792153202162}
-  m_Mesh: {fileID: 5256924276574915431, guid: 43d5feee810130c4fadbe330820dbee2, type: 3}
+  m_Mesh: {fileID: 3204769080625911625, guid: 277d2f2cc8b983b49bfdca26275f286e, type: 3}
 --- !u!23 &23462752320407506
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -330,7 +330,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 17a174143e8741f4691a0daa346c5504, type: 2}
+  - {fileID: 2100000, guid: 931494e2ddb3cff468556bb422319259, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -385,6 +385,7 @@ Transform:
   m_Children:
   - {fileID: 4451274559178849}
   - {fileID: 4914916966116777}
+  - {fileID: 3575249297062889616}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
 --- !u!114 &769447249408881793
@@ -404,12 +405,16 @@ MonoBehaviour:
   bulletCountText: {fileID: 23198141706592332}
   bulletPrb: {fileID: 395657148022226912, guid: 01063d7c4dbbe6b4c8702d9c79d9492e, type: 3}
   bulletSpawnPos: {fileID: 4941286966147067}
-  turnDuration: 0.3
+  turnDuration: 0.25
   blockMask:
     serializedVersion: 2
     m_Bits: 8
   fireRate: 10
   colorReference: {fileID: 11400000, guid: 7de4625270019b345a309edc404aa0f7, type: 2}
+  moveToConveyorDuration: 0.5
+  moveToConveyorJumpForce: 5
+  moveToConveyorEase: 1
+  m_hiddenGun: {fileID: 8764903062490715236}
 --- !u!65 &8597390162283652098
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -592,7 +597,7 @@ MonoBehaviour:
   m_fontSizeBase: 10
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 10
+  m_fontSizeMin: 5
   m_fontSizeMax: 10
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -633,3 +638,48 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 23119740175010185}
   m_maskType: 0
+--- !u!1 &6299932957865095922
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3575249297062889616}
+  - component: {fileID: 8764903062490715236}
+  m_Layer: 9
+  m_Name: HiddenGun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3575249297062889616
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6299932957865095922}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4318052031373752}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8764903062490715236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6299932957865095922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4ef11230c52c504cb165f7454e21b46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_hiddenGunRendererPrefab: {fileID: 6287369863733127160, guid: 0c54bdf75c4a96e4d9baa608ca3942fd, type: 3}

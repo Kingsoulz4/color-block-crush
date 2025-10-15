@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,7 +23,6 @@ namespace ColorBlockCrush
         {
             m_buttonBuy.onClick.AddListener(OnClickBuy);
             m_buttonClose.onClick.AddListener(OnClickClose);
-
         }
 
         public void Show(BoosterType boosterType)
@@ -47,16 +44,21 @@ namespace ColorBlockCrush
         private void OnClickBuy()
         {
             Hide();
-            UserDataManager.AddBooster(boosterType, 3);
-            OnBought?.Invoke();
-
-            if (UserDataManager.Gold >= 900)
+            var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(boosterType);
+            if (UserDataManager.Gold >= boosterData.price)
             {
-                
+                UserDataManager.AddBooster(boosterType, 3);
+                UserDataManager.AddGold(-boosterData.price, "Buy Booster");
+                OnBought?.Invoke();
             }
             else
             {
-
+                OnClose?.Invoke();
+                UIManager.Instance.ShowPopup<PopupShop>(() =>
+                {
+                    GameManager.Instance.SetGameState(GameState.Playing);
+                });
+                GameManager.Instance.SetGameState(GameState.Paused);
             }
         }
     }
