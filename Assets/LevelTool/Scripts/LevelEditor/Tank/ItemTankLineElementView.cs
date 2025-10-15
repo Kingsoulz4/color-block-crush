@@ -67,7 +67,7 @@ namespace ColorBlockCrush.Tools
             elementConfig = new GunLineElementConfig();
             elementConfig.elementType = GunLineElementType.Tank;
             elementConfig.gunConfig = new GunConfig();
-            elementConfig.gunConfig.colorType = ColorType.Pink;
+            elementConfig.gunConfig.colorType = ColorType.PowderPink;
             elementConfig.gunConfig.bulletNumber = 10;
                 
             elementConfig.gunConfig.isHidden = false;

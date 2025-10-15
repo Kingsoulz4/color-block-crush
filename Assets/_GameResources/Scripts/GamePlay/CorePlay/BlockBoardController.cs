@@ -70,24 +70,30 @@ namespace ColorBlockCrush
                 {
                     var idx = c * _rows + r;
                     ColorType color = listBlock[idx].colorType;
-                    
-                    SpawnBlock(r, c, BlockType.Normal, listBlock[idx], false, true);
+
+                    if (color == ColorType.None)
+                    {
+                        continue;
+                    }
+
+                    SpawnBlock(r, c, BlockType.Normal, listBlock[idx]);
                 }
             }
         }
 
 
-        public Block SpawnBlock(int row, int col, BlockType type, BlockConfig blockData, bool isStatic, bool canDestroy)
+        public Block SpawnBlock(int row, int col, BlockType type, BlockConfig blockData)
         {
             if (!IsValidPosition(row, col)) return null;
 
+         
             GridNode node = gridController.GridNodes[row, col];
             Block block = Instantiate(blockPrefab, node.transform.position, Quaternion.identity, blockContainer);
-
+            calculatedBlockScale.y = 0.65f;
             block.transform.localScale = calculatedBlockScale;
 
             block.name = $"Block_{row}_{col}";
-            block.Init(type, blockData, isStatic, canDestroy);
+            block.Init(type, blockData);
             block.GridNode = node;
 
             PlaceBlock(row, col, block);
@@ -201,7 +207,7 @@ namespace ColorBlockCrush
 
             _blockStacks[row, col] = block;
 
-            if (!block.CanDestroy)
+            if (block.BlockData.blockType == BlockType.Stone)
             {
                 gridController.GridNodes[row, col].IsBlocked = true;
             }
@@ -209,7 +215,7 @@ namespace ColorBlockCrush
 
         private void CalculateDynamicScaleAndOffset(int rows, int columns)
         {
-            float spacingRatio = 0f;
+            float spacingRatio = -0.1f;
 
             // Tính scale c?n thi?t ?? fit trong bound
             float totalUnitsX = columns + (columns - 1) * spacingRatio;
