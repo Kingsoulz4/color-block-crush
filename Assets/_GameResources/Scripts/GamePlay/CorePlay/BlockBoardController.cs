@@ -1,6 +1,7 @@
 using ColorBlockCrush.Tools;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
@@ -19,16 +20,19 @@ namespace ColorBlockCrush
 
         [Header("Prefabs")]
         [SerializeField] private Block blockPrefab;
+        [SerializeField] private BlockKey blockKeyPrefab;
 
         [Header("References")]
         [SerializeField] private GridController gridController;
         [SerializeField] private Transform blockContainer;
+        [SerializeField] private Transform keyContainer;
 
         private int _rows;
         private int _columns;
-        private List<Block>[,] _blockStacks;
+        private Block[,] _blockStacks;
         private Vector3 calculatedBlockScale;
         private Vector3 calculatedBlockOffset;
+        private LevelConfig levelConfig;
 
         public int EndRow { get; private set; } = 0;
 
@@ -36,6 +40,7 @@ namespace ColorBlockCrush
         public void Init(LevelConfig levelConfig)
         {
             EndRow = 0;
+            this.levelConfig = levelConfig;
             _rows = levelConfig.mapConfig.mapSize.y;
             _columns = levelConfig.mapConfig.mapSize.x;
 
@@ -51,16 +56,10 @@ namespace ColorBlockCrush
                 calculatedBlockOffset  
             );
 
-            _blockStacks = new List<Block>[_rows, _columns];
-            for (int r = 0; r < _rows; r++)
-            {
-                for (int c = 0; c < _columns; c++)
-                {
-                    _blockStacks[r, c] = new List<Block>();
-                }
-            }
+            _blockStacks = new Block[_rows, _columns];
 
             SpawnBlockBoard(levelConfig);
+            SpawnKeys();
         }
         private void SpawnBlockBoard(LevelConfig levelConfig)
         {
@@ -95,6 +94,34 @@ namespace ColorBlockCrush
             block.OnBlockDestroyed += OnBlockDestroyed;
 
             return block;
+        }
+
+        private void SpawnKeys()
+        {
+            for(int i=0; i<levelConfig.mapConfig.keys.Count; i++)
+            {
+                SpawnKey(levelConfig.mapConfig.keys[i]);
+            }
+        }    
+
+        private void SpawnKey(KeyConfig keyConfig)
+        {
+            var newKey = Instantiate(blockKeyPrefab, keyContainer);
+            newKey.transform.position = CalculateCenter(keyConfig.blockId);
+            
+        }
+
+        private Vector3 CalculateCenter(List<int> listBlockId)
+        {
+            var sumPos = new Vector3();
+            for(int i=0; i<listBlockId.Count; i++)
+            {
+                var blockData = levelConfig.mapConfig.blocks[listBlockId[i]];
+                var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
+                sumPos += block.transform.position;
+            }
+
+            return sumPos / listBlockId.Count;
         }
 
         private void OnBlockDestroyed(Block block)
@@ -147,7 +174,7 @@ namespace ColorBlockCrush
         {
             if (!IsValidPosition(row, col)) return;
 
-            _blockStacks[row, col].Add(block);
+            _blockStacks[row, col] = block;
 
             if (!block.CanDestroy)
             {

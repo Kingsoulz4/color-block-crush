@@ -64,7 +64,7 @@ namespace ColorBlockCrush
 
         protected virtual void UpdateColors(ColorType colorType)
         {
-            if (_blockMeshRenderer != null && colorRef != null)
+            if (_blockMeshRenderer != null && colorRef != null && colorType != ColorType.None)
             {
                 int result = GetRandomByRatio(colorRate);
                 Material mat = colorRef.GetMaterial(ColorType, 0);
