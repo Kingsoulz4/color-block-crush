@@ -143,7 +143,7 @@ MonoBehaviour:
   m_text: 10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2878ecf5e42911945aea1b30a8f48376, type: 2}
-  m_sharedMaterial: {fileID: 6960021304601963633, guid: 2878ecf5e42911945aea1b30a8f48376, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 26233cb66e0b6e84c90752c5027592cd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -278,7 +278,7 @@ MonoBehaviour:
     bulletNumber: 0
     hasLock: 0
     isHidden: 0
-    tankConnect: 
+    gunConnect: 
   bulletNumber: {fileID: 5158809738347573104}
   buttonDelete: {fileID: 8579200364632826952}
 --- !u!114 &4199367164057589476
