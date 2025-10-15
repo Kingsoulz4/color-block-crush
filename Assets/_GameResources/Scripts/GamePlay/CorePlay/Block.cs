@@ -77,6 +77,7 @@ namespace ColorBlockCrush
             if (hitPoint <= 0)
             {
                 Destroy(gameObject);
+                OnBlockDestroyed?.Invoke(this);
             }
         }
 

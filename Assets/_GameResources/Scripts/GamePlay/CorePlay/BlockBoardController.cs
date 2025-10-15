@@ -108,7 +108,30 @@ namespace ColorBlockCrush
         {
             var newKey = Instantiate(blockKeyPrefab, keyContainer);
             newKey.transform.position = CalculateCenter(keyConfig.blockId);
-            
+            var directions = new List<Vector2Int>() { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right, Vector2Int.one, Vector2Int.one * -1, new Vector2Int(1, -1), new Vector2Int(-1, 1)};
+
+            for (int i = 0; i < keyConfig.blockId.Count; i++)
+            {
+                (ulong row, ulong col) = CantorPairing.Unpair((ulong)keyConfig.blockId[i]);
+                int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
+                var blockData = levelConfig.mapConfig.blocks[idReal];
+                var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
+                for(int j=0; j<directions.Count; j++)
+                {
+                    var dir = directions[j];
+                    var coordX = blockData.coordinate.x + dir.x;
+                    var coordY = blockData.coordinate.y + dir.y;
+                    if (coordX >= 0 && coordX < levelConfig.mapConfig.mapSize.x && coordY >= 0 && coordY < levelConfig.mapConfig.mapSize.y)
+                    {
+                        var blockNeighbor = _blockStacks[blockData.coordinate.x + dir.x, blockData.coordinate.y + dir.y];
+                        blockNeighbor.OnBlockDestroyed += (bl) =>
+                        {
+
+                        };
+                    }
+                }
+
+            }
         }
 
         private Vector3 CalculateCenter(List<int> listBlockId)
@@ -116,7 +139,9 @@ namespace ColorBlockCrush
             var sumPos = new Vector3();
             for(int i=0; i<listBlockId.Count; i++)
             {
-                var blockData = levelConfig.mapConfig.blocks[listBlockId[i]];
+                (ulong row, ulong col) = CantorPairing.Unpair((ulong)listBlockId[i]);
+                int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
+                var blockData = levelConfig.mapConfig.blocks[idReal];
                 var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
                 sumPos += block.transform.position;
             }
