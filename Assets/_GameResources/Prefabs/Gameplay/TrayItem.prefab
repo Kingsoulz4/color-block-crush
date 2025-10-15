@@ -51,7 +51,7 @@ MonoBehaviour:
   model: {fileID: 4739935737060379}
   splineAnimate: {fileID: 5991191196748580028}
   moveOutDuration: 0.15
-  moveInDuration: 0.2
+  moveInDuration: 0.1
   shiftEase: 6
 --- !u!114 &5991191196748580028
 MonoBehaviour:
