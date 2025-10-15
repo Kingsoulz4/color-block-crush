@@ -10,22 +10,22 @@ namespace ColorBlockCrush.Tools
     public enum ColorType
     {
         None = -1,
-        Red = 0,
-        Orange = 1,
-        Yellow = 2,
+        Yellow = 0,
+        Red = 1,
+        Blue = 2,
         Green = 3,
-        Blue = 4,
-        Violet = 5,
-        Pink = 6,
-        Brown = 7,
-        White = 8,
-        Black = 9,
-        Cyan = 10,
-        Grey = 11,
-        Purple = 12,
-        BabyPink = 13,
-        RedWine = 14,
-        Teal = 15
+        Lilac = 4,
+        Orange = 5,
+        Black = 6,
+        White = 7,
+        GypsyPink = 8,
+        Brick = 9,
+        Emerald = 10,
+        Turquoise = 11,
+        PowderPink = 12,
+        Sage = 13,
+        DarkBlue = 14,
+        Lavender = 15
     }
 
     public enum GunLineElementType
