@@ -25,6 +25,8 @@ public class InGameScreenUI : ScreenUI
 
     [Space, Header("Booster")]
     BoosterDataSO boosterDataSO;
+
+    [SerializeField] private GameObject boostersObj;
     [SerializeField] BoosterConfirmUI boosterConfirmUI;
 
     [Header("Booster Add Tray")]
@@ -128,7 +130,14 @@ public class InGameScreenUI : ScreenUI
         switch (booster.BoosterType)
         {
             case BoosterType.ADD_TRAY:
-                timeBoosterTopUI.SetActive(false);
+                break;
+            case BoosterType.HAND_MOVE:
+                boostersObj.gameObject.SetActive(true);
+                break;
+            case BoosterType.SHUFFLE:
+                break;
+            case BoosterType.SUPER_SHOOT:
+                boostersObj.gameObject.SetActive(true);
                 break;
             default:
                 break;
@@ -141,7 +150,6 @@ public class InGameScreenUI : ScreenUI
         switch (booster.BoosterType)
         {
             case BoosterType.ADD_TRAY:
-                timeBoosterTopUI.SetActive(true);
                 addTrayBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             case BoosterType.HAND_MOVE:
@@ -150,11 +158,25 @@ public class InGameScreenUI : ScreenUI
                 break;
             case BoosterType.SHUFFLE:
                 shuffleBoosterCount.UpdateTextCountBooster(currentCount);
+                break;
+            case BoosterType.SUPER_SHOOT:
+                superShootBoosterCount.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
             default:
                 break;
         }
+    }
+    
+    private void OnAddTrayBoosterClick()
+    {
+        BoosterManager.Instance.AddTrayBooster.DoShowBooster((sucess) =>
+        {
+            if (sucess)
+            {
+                BoosterManager.Instance.AddTrayBooster.ActiveBooster();
+            }
+        });
     }
 
     private void HandMoveboosterClick()
@@ -167,29 +189,13 @@ public class InGameScreenUI : ScreenUI
                 var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.HAND_MOVE);
                 Image handMoveImg = handMoveBoosterBtn.GetComponent<VisualCountBooster>().Icon;
                 boosterConfirmUI.SetUIData(boosterData, handMoveImg);
+                boostersObj.gameObject.SetActive(false);
             }
         });
     }
-
-    private void SuperShootBoosterClick()
-    {
-        
-    }
-
-    private void OnAddTrayBoosterClick()
-    {
-        BoosterManager.Instance.AddTrayBooster.DoShowBooster((sucess) =>
-        {
-            if (sucess)
-            {
-                BoosterManager.Instance.AddTrayBooster.ActiveBooster();
-            }
-        });
-    }
-
+    
     private void ShuffleBoosterClick()
     {
-
         BoosterManager.Instance.ShuffleBooster.DoShowBooster((sucess) =>
         {
             if (sucess)
@@ -198,6 +204,21 @@ public class InGameScreenUI : ScreenUI
                 var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.SHUFFLE);
                 Image hammerImg = shuffleBtn.GetComponent<VisualCountBooster>().Icon;
                 boosterConfirmUI.SetUIData(boosterData, hammerImg);
+            }
+        });
+    }
+
+    private void SuperShootBoosterClick()
+    {
+        BoosterManager.Instance.HandMoveBooster.DoShowBooster((sucess) =>
+        {
+            if (sucess)
+            {
+                boosterConfirmUI.gameObject.SetActive(true);
+                var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.SUPER_SHOOT);
+                Image superShootImg = handMoveBoosterBtn.GetComponent<VisualCountBooster>().Icon;
+                boosterConfirmUI.SetUIData(boosterData, superShootImg);
+                boostersObj.gameObject.SetActive(false);
             }
         });
     }

@@ -101,7 +101,7 @@ public class ConveyorController : MonoBehaviour
 
     public bool CanPlaceGuns(int count)
     {
-        return movingTrayItems.Count + count <= maxSlots;
+        return trayItemsFree.Count >= count;
     }
 
     public void AddTrayItem(TrayItem trayItem)
@@ -117,9 +117,9 @@ public class ConveyorController : MonoBehaviour
         if (gun.TrayItem != null)
         {
             MoveTrayIn(gun.TrayItem);
+            RemoveTrayItem(gun.TrayItem);
         }
 
-        RemoveTrayItem(gun.TrayItem);
         Destroy(gun.gameObject);
     }
 
@@ -156,10 +156,19 @@ public class ConveyorController : MonoBehaviour
             return false;
         }
 
+        if (!tray)
+        {
+            Debug.Log("tray null");
+            return false;
+        }
+
         tray.transform.SetParent(spawnParent);
-        trayItemsFree.Insert(0, tray);
         RemoveTrayItem(tray);
-        tray.ResetTray(GetTrayPosition(0), () => { ShiftTraysToRight(); });
+        tray.ResetTray(GetTrayPosition(0), () =>
+        {
+            trayItemsFree.Insert(0, tray);
+            ShiftTraysToRight();
+        });
         return true;
     }
 

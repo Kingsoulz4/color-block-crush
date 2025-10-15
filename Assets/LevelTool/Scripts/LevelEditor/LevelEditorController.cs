@@ -127,7 +127,7 @@ namespace ColorBlockCrush.Tools
             {
                 view.buttonCellGridColorChooses[i].Init(UpdateCurrentColorChoose);
             }
-            UpdateCurrentColorChoose(ColorType.Pink);
+            UpdateCurrentColorChoose(ColorType.PowderPink);
             
             for (int i = 0; i < view.buttonChooseDragTypes.Count; i++)
             {
@@ -193,14 +193,14 @@ namespace ColorBlockCrush.Tools
                 view.buttonTankColorChooses[i].Init(UpdateCurrentColorChooseTank);
             }
             
-            UpdateCurrentColorChooseTank(ColorType.Pink);
+            UpdateCurrentColorChooseTank(ColorType.PowderPink);
 
             for (int i = 0; i < view.buttonTankTunnelQueueColorChooses.Count; i++)
             {
                 view.buttonTankTunnelQueueColorChooses[i].Init(UpdateCurrentColorChooseTankTunnelQueue);
             }
             
-            UpdateCurrentColorChooseTankTunnelQueue(ColorType.Pink);
+            UpdateCurrentColorChooseTankTunnelQueue(ColorType.PowderPink);
             
             #endregion
         }

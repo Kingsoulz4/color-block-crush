@@ -10,7 +10,9 @@ public enum BoosterType
     ADD_TRAY = 0,
     SHUFFLE = 1,
     HAND_MOVE = 2,
-    SUPER_SHOOT = 5,
+    SUPER_SHOOT = 3,
+    REVIVAL = 4,
+    LIVES = 5
 }
 public abstract class BoosterBase : MonoBehaviour
 {

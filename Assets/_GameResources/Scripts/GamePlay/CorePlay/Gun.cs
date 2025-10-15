@@ -21,7 +21,7 @@ namespace ColorBlockCrush
         [SerializeField] private Transform bulletSpawnPos;
         [SerializeField] private float turnDuration = 0.4f;
         [SerializeField] private LayerMask blockMask;
-        [SerializeField] private ColorReference colorReference;
+        [SerializeField] private ListMaterialByColor colorReference;
 
         [Header("Move")]
         [SerializeField] private float moveToConveyorDuration = 0.4f;
@@ -180,6 +180,7 @@ namespace ColorBlockCrush
             UpdateBulletCountDisplay();
 
             Bullet bullet = Instantiate(bulletPrb, bulletSpawnPos.position, Quaternion.identity);
+            bullet.transform.SetParent(LevelController.Instance.transform);
             bullet.OnInit(this, target, (gun, block) =>
             {
                 target.TakeDamage(1);
@@ -229,13 +230,9 @@ namespace ColorBlockCrush
         public void Turn(RotationDirection direction, RotationDirection directionNonfire)
         {
             Vector3 newRotation;
-            if (!isFireFirstTime)
-            {
-                newRotation = GetTurnDirection(directionNonfire);
-            }
+            newRotation = GetTurnDirection(!isFireFirstTime ? directionNonfire : direction);
 
             isTurning = true;
-            newRotation = GetTurnDirection(direction);
             transform.DORotate(newRotation, turnDuration).OnComplete(() =>
             {
                 isTurning = false;
@@ -293,11 +290,12 @@ namespace ColorBlockCrush
         {
             for (int i = 0; i < meshRendererList.Count; i++)
             {
-                if (meshRendererList[i])
-                {
-                    Material mat = meshRendererList[i].material;
-                    mat.color = colorReference.GetColor(ColorType);
-                }
+                var renderer = meshRendererList[i];
+                if (!renderer) continue;
+
+                Material mat = colorReference.GetMaterial(ColorType);
+                if (mat != null && renderer.sharedMaterial != mat)
+                    renderer.sharedMaterial = mat;
             }
 
             UpdateBulletCountDisplay();

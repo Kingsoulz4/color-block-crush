@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.WebSockets;
@@ -14,6 +15,8 @@ namespace ColorBlockCrush
         [SerializeField] Button btn_backLevel;
         [SerializeField] InputField inputField;
         [SerializeField] InputField inputLevelSet;
+        [SerializeField] private Button btnTestLose;
+        [SerializeField] private Button btnTestWin;
 
         private void Update()
         {
@@ -61,6 +64,13 @@ namespace ColorBlockCrush
                     LevelManager.Instance.CurrentLevelSetID = int.Parse(inputLevelSet.text);
                 });
             }    
+            
+            btnTestLose.onClick.AddListener(LoseLevel);
+            
+            btnTestWin.onClick.AddListener(() =>
+            {
+                LevelEvent.OnWin?.Invoke(LevelManager.Instance.CurrentLevel);
+            });
         }
 
         private void LoadLevel()
@@ -78,6 +88,24 @@ namespace ColorBlockCrush
 
             LevelManager.Instance.CurrentLevel = int.Parse(inputField.text);
             LevelManager.Instance.StartCurrentLevel();
+        }
+
+        private void LoseLevel()
+        {
+            Action onClose = () =>
+            {
+                LevelEvent.OnLose?.Invoke(LevelManager.Instance.CurrentLevel);
+            };
+
+            Action onrevival = () =>
+            {
+
+            };
+            
+            var popupOutOfSpace = UIManager.Instance.ShowPopup<PopupOutOfSpace>(() => { });
+            popupOutOfSpace.Show();
+            popupOutOfSpace.OnClose = onClose;
+            popupOutOfSpace.OnKeepPlaying = onrevival;
         }
 
         private void AddRes()
