@@ -12,7 +12,7 @@ using static UnityEngine.UI.CanvasScaler;
 
 namespace ColorBlockCrush
 {
-    public class Gun : MonoBehaviour
+    public partial class Gun : MonoBehaviour
     {
         [Header("Visual")]
         [SerializeField] private List<MeshRenderer> meshRendererList;
@@ -71,6 +71,7 @@ namespace ColorBlockCrush
             victims = new HashSet<int>();
             gunData = gunDataP;
             UpdateVisuals();
+            InitMechanics();
         }
 
         private void Update()
@@ -308,6 +309,11 @@ namespace ColorBlockCrush
             {
                 bulletCountText.text = BulletCount.ToString();
             }
+        }
+
+        private void EnableTextBulletCount(bool enable)
+        {
+            bulletCountText.gameObject.SetActive(enable);
         }
 
         #region Move spline

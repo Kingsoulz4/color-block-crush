@@ -6,6 +6,6 @@ namespace ColorBlockCrush
 {
     public class MechanicRendererBase : MonoBehaviour
     {
-        
+        public virtual void Resolve() { }
     }
 }
