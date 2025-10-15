@@ -34,6 +34,7 @@ namespace ColorBlockCrush
 
         public void StartLevel()
         {
+            Application.targetFrameRate = 60;
             InitializeGame();
             GameManager.Instance.SetGameState(GameState.Playing);
 

@@ -12,7 +12,7 @@ using static UnityEngine.UI.CanvasScaler;
 
 namespace ColorBlockCrush
 {
-    public class Gun : MonoBehaviour
+    public partial class Gun : MonoBehaviour
     {
         [Header("Visual")]
         [SerializeField] private List<MeshRenderer> meshRendererList;
@@ -21,8 +21,7 @@ namespace ColorBlockCrush
         [SerializeField] private Transform bulletSpawnPos;
         [SerializeField] private float turnDuration = 0.4f;
         [SerializeField] private LayerMask blockMask;
-        [SerializeField] private float fireRate;
-        [SerializeField] private ColorReference colorReference;
+        [SerializeField] private ListMaterialByColor colorReference;
 
         [Header("Move")]
         [SerializeField] private float moveToConveyorDuration = 0.4f;
@@ -71,6 +70,7 @@ namespace ColorBlockCrush
             victims = new HashSet<int>();
             gunData = gunDataP;
             UpdateVisuals();
+            InitMechanics();
         }
 
         private void Update()
@@ -112,11 +112,11 @@ namespace ColorBlockCrush
             }
             else
             {
-                Debug.Log("Bỏ qua target " + target.name);
+                //Debug.Log("Bỏ qua target " + target.name);
                 return;
             }
 
-            Debug.Log("Fire target " + target.name);
+            //Debug.Log("Fire target " + target.name);
             Fire(target);
         }
 
@@ -223,18 +223,15 @@ namespace ColorBlockCrush
                 targetAngle = direction.z > 0 ? 0f : 180f; // Forward : Back
             }
 
-            transform.rotation = Quaternion.Euler(0, targetAngle, 0);
+            transform.DORotate(new Vector3(0, targetAngle, 0), 0);
         }
 
-        public void Turn(RotationDirection direction)
+        public void Turn(RotationDirection direction, RotationDirection directionNonfire)
         {
-            if (!isFireFirstTime)
-            {
-                return;
-            }
+            Vector3 newRotation;
+            newRotation = GetTurnDirection(!isFireFirstTime ? directionNonfire : direction);
 
             isTurning = true;
-            Vector3 newRotation = GetTurnDirection(direction);
             transform.DORotate(newRotation, turnDuration).OnComplete(() =>
             {
                 isTurning = false;
@@ -292,11 +289,12 @@ namespace ColorBlockCrush
         {
             for (int i = 0; i < meshRendererList.Count; i++)
             {
-                if (meshRendererList[i])
-                {
-                    Material mat = meshRendererList[i].material;
-                    mat.color = colorReference.GetColor(ColorType);
-                }
+                var renderer = meshRendererList[i];
+                if (!renderer) continue;
+
+                Material mat = colorReference.GetMaterial(ColorType);
+                if (mat != null && renderer.sharedMaterial != mat)
+                    renderer.sharedMaterial = mat;
             }
 
             UpdateBulletCountDisplay();
@@ -310,12 +308,18 @@ namespace ColorBlockCrush
             }
         }
 
+        private void EnableTextBulletCount(bool enable)
+        {
+            bulletCountText.gameObject.SetActive(enable);
+        }
+
         #region Move spline
         Tween moveToConveyorTw;
         Tween moveToSlotTw;
         Tween moveSortSlotTw;
         public void MoveToConeyor(Vector3 endPos, Action callback = null)
         {
+            isFireFirstTime = false;
             Sequence moveToConveyorSq = DOTween.Sequence();
             GunPos = GunPos.TWEEN_SORT;
             currentFireDir = RotationDirection.Up;
@@ -328,7 +332,7 @@ namespace ColorBlockCrush
 
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
-                
+
             });
 
             moveToConveyorSq.SetId(this);
@@ -355,6 +359,15 @@ namespace ColorBlockCrush
             moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
             {
                 GunPos = GunPos.ON_SLOT;
+            });
+            moveSortSlotSq.SetId(this);
+        }
+
+        public void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
+        {
+            Sequence moveSortSlotSq = DOTween.Sequence();
+            moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
+            {
             });
             moveSortSlotSq.SetId(this);
         }

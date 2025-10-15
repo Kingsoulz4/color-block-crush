@@ -139,7 +139,7 @@ namespace ColorBlockCrush
                 Vector3 newPos = new Vector3(
                      gun.transform.position.x, 0, gun.transform.position.z + rowSpacing);
 
-                gun.transform.position = newPos;
+                gun.MoveColumn(newPos, 0.2f, DG.Tweening.Ease.OutQuad);
             }
 
             UpdateFrontRowFlags(column);
@@ -155,6 +155,7 @@ namespace ColorBlockCrush
             {
                 // Front row is the last gun in the list (highest row)
                 columnGuns[i].IsFrontRow = (i == 0);
+                columnGuns[i].UpdateMechanics();
             }
         }
 

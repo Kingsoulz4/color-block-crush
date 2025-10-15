@@ -73,10 +73,11 @@ public class ConveyorController : MonoBehaviour
     {
         float normalizedTime = slotIndex * startMovingGunSpacing;
         Vector3 position = splineContainer.EvaluatePosition(normalizedTime);
+        tray.SplineAnimate.Container = splineContainer;
+        tray.SplineAnimate.Pause();
 
         tray.MoveToConeyor(position, () =>
         {
-            tray.SplineAnimate.Container = splineContainer;
             tray.SplineAnimate.NormalizedTime = normalizedTime;
         });
     }
@@ -86,25 +87,27 @@ public class ConveyorController : MonoBehaviour
         float normalizedTime = slotIndex * startMovingGunSpacing;
         Vector3 position = splineContainer.EvaluatePosition(normalizedTime);
 
+        gun.TrayItem = trayItem;
+        AddTrayItem(trayItem);
+
         gun.MoveToConeyor(position, () =>
         {
-            gun.TrayItem = trayItem;
+
+            gun.OnGunEmpty += OnGunEmpty;
             trayItem.SetChild(gun);
-            AddTrayItem(trayItem);
             trayItem.Move();
         });
     }
 
     public bool CanPlaceGuns(int count)
     {
-        return movingTrayItems.Count + count <= maxSlots;
+        return trayItemsFree.Count >= count;
     }
 
     public void AddTrayItem(TrayItem trayItem)
     {
         if (!movingTrayItems.Contains(trayItem))
         {
-            trayItem.MyGun.OnGunEmpty += OnGunEmpty;
             movingTrayItems.Add(trayItem);
         }
     }
@@ -114,9 +117,9 @@ public class ConveyorController : MonoBehaviour
         if (gun.TrayItem != null)
         {
             MoveTrayIn(gun.TrayItem);
+            RemoveTrayItem(gun.TrayItem);
         }
 
-        RemoveTrayItem(gun.TrayItem);
         Destroy(gun.gameObject);
     }
 
@@ -124,6 +127,7 @@ public class ConveyorController : MonoBehaviour
     {
         if (movingTrayItems.Contains(trayItem))
         {
+            trayItem.SplineAnimate.Pause();
             trayItem.MyGun.OnGunEmpty -= OnGunEmpty;
             movingTrayItems.Remove(trayItem);
             OnGunRemovedConveyor?.Invoke(trayItem.MyGun);
@@ -152,10 +156,19 @@ public class ConveyorController : MonoBehaviour
             return false;
         }
 
+        if (!tray)
+        {
+            Debug.Log("tray null");
+            return false;
+        }
+
         tray.transform.SetParent(spawnParent);
-        trayItemsFree.Insert(0, tray);
         RemoveTrayItem(tray);
-        tray.ResetTray(GetTrayPosition(0), () => { ShiftTraysToRight(); });
+        tray.ResetTray(GetTrayPosition(0), () =>
+        {
+            trayItemsFree.Insert(0, tray);
+            ShiftTraysToRight();
+        });
         return true;
     }
 
