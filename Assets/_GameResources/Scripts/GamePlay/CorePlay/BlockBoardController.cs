@@ -89,7 +89,7 @@ namespace ColorBlockCrush
          
             GridNode node = gridController.GridNodes[row, col];
             Block block = Instantiate(blockPrefab, node.transform.position, Quaternion.identity, blockContainer);
-
+            calculatedBlockScale.y = 0.65f;
             block.transform.localScale = calculatedBlockScale;
 
             block.name = $"Block_{row}_{col}";
@@ -190,7 +190,7 @@ namespace ColorBlockCrush
 
         private void CalculateDynamicScaleAndOffset(int rows, int columns)
         {
-            float spacingRatio = 0f;
+            float spacingRatio = -0.1f;
 
             // Tính scale c?n thi?t ?? fit trong bound
             float totalUnitsX = columns + (columns - 1) * spacingRatio;
