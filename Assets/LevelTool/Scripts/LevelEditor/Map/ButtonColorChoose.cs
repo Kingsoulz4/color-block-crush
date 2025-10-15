@@ -10,6 +10,7 @@ namespace ColorBlockCrush.Tools
 {
     public class ButtonColorChoose : MonoBehaviour
     {
+        [SerializeField] private Image image;
         [SerializeField]
         private ColorType colorType;
 
@@ -17,6 +18,11 @@ namespace ColorBlockCrush.Tools
         private GameObject vTick;
 
         private Action<ColorType> onClick;
+
+        private void Awake()
+        {
+            image.color = ColorReference.Instance.GetColor(colorType);
+        }
 
         public void Init(Action<ColorType> onClick)
         {

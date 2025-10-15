@@ -409,8 +409,7 @@ MonoBehaviour:
   blockMask:
     serializedVersion: 2
     m_Bits: 8
-  fireRate: 10
-  colorReference: {fileID: 11400000, guid: 7de4625270019b345a309edc404aa0f7, type: 2}
+  colorReference: {fileID: 11400000, guid: a7aae07bbea7b434fabac38c3f7b3efc, type: 2}
   moveToConveyorDuration: 0.5
   moveToConveyorJumpForce: 5
   moveToConveyorEase: 1

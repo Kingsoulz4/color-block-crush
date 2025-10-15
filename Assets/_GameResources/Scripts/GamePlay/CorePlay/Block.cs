@@ -1,9 +1,11 @@
+using AYellowpaper.SerializedCollections;
 using ColorBlockCrush.Tools;
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
+using Random = UnityEngine.Random;
 
 namespace ColorBlockCrush
 {
@@ -22,7 +24,8 @@ namespace ColorBlockCrush
         [Header("Renderer References")]
         [SerializeField] protected Transform centerPoint;
         [SerializeField] private MeshRenderer _blockMeshRenderer;
-        [SerializeField] private ColorReference colorRef;
+        [SerializeField] private ListMaterialsByColor colorRef;
+        public SerializedDictionary<int, int> colorRate;
 
         protected int maxHitPoint;
         protected int hitPoint;
@@ -35,8 +38,8 @@ namespace ColorBlockCrush
         public int GridHeight { get; set; }
         public bool CanDestroy { get; private set; }
         public bool IsAttacked { get; set; }
-        public BlockConfig BlockData { get => blockData;}
-        public int Id { get => id;}
+        public BlockConfig BlockData { get => blockData; }
+        public int Id { get => id; }
 
         public void Init(BlockType blockType, BlockConfig blockDataP, bool isStatic, bool canDestroy)
         {
@@ -61,10 +64,32 @@ namespace ColorBlockCrush
 
         protected virtual void UpdateColors(ColorType colorType)
         {
-            if (_blockMeshRenderer != null && colorRef != null)
+            if (_blockMeshRenderer != null && colorRef != null && colorType != ColorType.None)
             {
-                _blockMeshRenderer.material.color = colorRef.GetColor(colorType);
+                int result = GetRandomByRatio(colorRate);
+                Material mat = colorRef.GetMaterial(ColorType, 0);
+                if (mat != null && _blockMeshRenderer.sharedMaterial != mat)
+                    _blockMeshRenderer.sharedMaterial = mat;
             }
+        }
+
+        int GetRandomByRatio(Dictionary<int, int> ratioMap)
+        {
+            int total = 0;
+            foreach (var kv in ratioMap)
+                total += kv.Value;
+
+            int randomPoint = Random.Range(0, total);
+            int cumulative = 0;
+
+            foreach (var kv in ratioMap)
+            {
+                cumulative += kv.Value;
+                if (randomPoint <= cumulative)
+                    return kv.Key;
+            }
+
+            return 0;
         }
 
         public virtual void TakeDamage(int damageAmount)

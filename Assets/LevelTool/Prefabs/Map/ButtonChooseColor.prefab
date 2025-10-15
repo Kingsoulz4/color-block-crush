@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fb3f5b50fd07f34a80c9b95ce54cd36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  image: {fileID: 7650927613305931565}
   colorType: 6
   vTick: {fileID: 2247202495381736237}
 --- !u!114 &9213069566210387852

@@ -49,7 +49,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   centerPoint: {fileID: 4289695443016426}
   _blockMeshRenderer: {fileID: 23945417545486132}
-  colorRef: {fileID: 11400000, guid: 7de4625270019b345a309edc404aa0f7, type: 2}
+  colorRef: {fileID: 11400000, guid: 58e29ccb3985dee4482a8db47cc64ff1, type: 2}
+  colorRate:
+    _serializedList:
+    - Key: 0
+      Value: 80
+    - Key: 1
+      Value: 10
+    - Key: 2
+      Value: 10
 --- !u!65 &207611675957290789
 BoxCollider:
   m_ObjectHideFlags: 0

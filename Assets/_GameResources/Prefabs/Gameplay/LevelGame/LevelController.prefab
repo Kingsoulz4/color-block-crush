@@ -1918,6 +1918,37 @@ MonoBehaviour:
   gunPrefab: {fileID: 769447249408881793, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}
   gunContainer: {fileID: 4637696110757540719}
   conveyor: {fileID: 6226058982253706133}
+--- !u!1 &5596942596683886980
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4499429210029554757}
+  m_Layer: 0
+  m_Name: KeyContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4499429210029554757
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5596942596683886980}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9145982648320308014}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5638834876897411693
 GameObject:
   m_ObjectHideFlags: 0
@@ -2012,6 +2043,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4499429210029554757}
   - {fileID: 7546292740293972303}
   - {fileID: 1332189147923130460}
   - {fileID: 8105139565806595941}
@@ -2038,8 +2070,10 @@ MonoBehaviour:
   axisType: 1
   anchorType: 4
   blockPrefab: {fileID: 7708169521855786892, guid: 57aaf600ca7fdd24d9cddce4b20ac661, type: 3}
+  blockKeyPrefab: {fileID: 118782679763331951, guid: e567fba6d5d32f64cb34e6058cd591ad, type: 3}
   gridController: {fileID: 1346653134287712912}
   blockContainer: {fileID: 1332189147923130460}
+  keyContainer: {fileID: 4499429210029554757}
 --- !u!1 &6648344636809376776
 GameObject:
   m_ObjectHideFlags: 0

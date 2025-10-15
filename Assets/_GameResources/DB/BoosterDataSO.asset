@@ -37,19 +37,27 @@ MonoBehaviour:
     price: 900
     quantity: 3
     levelUnlock: 15
-  - boosterType: 1
+  - boosterType: 3
     title: Add Time
     description: Use "Add Time" booster to get +5 second at the start of the level
     icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
-    price: 900
+    price: 1200
     quantity: 1
-    levelUnlock: 16
-  - boosterType: 5
+    levelUnlock: 18
+  - boosterType: 4
     title: Super Shoot
     description: Use "Scissors" booster to shorten a random dog
     icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
-    price: 1200
-    quantity: 3
-    levelUnlock: 18
+    price: 900
+    quantity: 1
+    levelUnlock: 1
+  - boosterType: 5
+    title: 
+    description: 
+    icon: {fileID: 0}
+    iconBig: {fileID: 0}
+    price: 900
+    quantity: 1
+    levelUnlock: 1
