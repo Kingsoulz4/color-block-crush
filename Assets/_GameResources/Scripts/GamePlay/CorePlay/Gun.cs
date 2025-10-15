@@ -21,7 +21,6 @@ namespace ColorBlockCrush
         [SerializeField] private Transform bulletSpawnPos;
         [SerializeField] private float turnDuration = 0.4f;
         [SerializeField] private LayerMask blockMask;
-        [SerializeField] private float fireRate;
         [SerializeField] private ColorReference colorReference;
 
         [Header("Move")]
@@ -226,15 +225,16 @@ namespace ColorBlockCrush
             transform.DORotate(new Vector3(0, targetAngle, 0), 0);
         }
 
-        public void Turn(RotationDirection direction)
+        public void Turn(RotationDirection direction, RotationDirection directionNonfire)
         {
+            Vector3 newRotation;
             if (!isFireFirstTime)
             {
-                return;
+                newRotation = GetTurnDirection(directionNonfire);
             }
 
             isTurning = true;
-            Vector3 newRotation = GetTurnDirection(direction);
+            newRotation = GetTurnDirection(direction);
             transform.DORotate(newRotation, turnDuration).OnComplete(() =>
             {
                 isTurning = false;
