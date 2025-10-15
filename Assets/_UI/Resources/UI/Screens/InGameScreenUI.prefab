@@ -13377,6 +13377,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3364060536518951984}
     m_Modifications:
+    - target: {fileID: 1115493884027663104, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1799304157085138387, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_Name
       value: SuperShootBoosterBtn
@@ -13509,6 +13513,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3364060536518951984}
     m_Modifications:
+    - target: {fileID: 1115493884027663104, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1799304157085138387, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_Name
       value: ShuffleBoosterBtn
@@ -13783,6 +13791,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3364060536518951984}
     m_Modifications:
+    - target: {fileID: 1115493884027663104, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1799304157085138387, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_Name
       value: AddTrayBoosterBtn
@@ -13911,6 +13923,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3364060536518951984}
     m_Modifications:
+    - target: {fileID: 1115493884027663104, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1799304157085138387, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_Name
       value: HandBoosterBtn (1)
@@ -14051,10 +14067,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2419011263780319219, guid: f02a0e0423c1c1549837372d31414e00, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 30.000004
-      objectReference: {fileID: 0}
     - target: {fileID: 8213327597755121186, guid: f02a0e0423c1c1549837372d31414e00, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -14069,7 +14081,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8213327597755121186, guid: f02a0e0423c1c1549837372d31414e00, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8213327597755121186, guid: f02a0e0423c1c1549837372d31414e00, type: 3}
       propertyPath: m_AnchorMin.x
@@ -14085,7 +14097,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8213327597755121186, guid: f02a0e0423c1c1549837372d31414e00, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1918
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8213327597755121186, guid: f02a0e0423c1c1549837372d31414e00, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14121,7 +14133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8213327597755121186, guid: f02a0e0423c1c1549837372d31414e00, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 305
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8213327597755121186, guid: f02a0e0423c1c1549837372d31414e00, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

@@ -10,6 +10,9 @@ namespace ColorBlockCrush
     {
         [SerializeField] private Button m_buttonKeepPlaying;
         [SerializeField] private Button m_buttonClose;
+        [SerializeField] private Text m_textPrice;
+
+        private BoosterItemData boosterData; 
 
         public Action OnKeepPlaying { get; set; }
 
@@ -21,10 +24,28 @@ namespace ColorBlockCrush
             m_buttonKeepPlaying.onClick.AddListener(OnClickKeepPlaying);
         }
 
+        public void Show()
+        {
+            boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.REVIVAL);
+            m_textPrice.text = boosterData.price.ToString();
+        }
+
         private void OnClickKeepPlaying()
         {
-            Hide();
-            OnKeepPlaying?.Invoke();
+            if (UserDataManager.Gold >= boosterData.price)
+            {
+                UserDataManager.AddGold(-boosterData.price, "Revival");
+                Hide();
+                OnKeepPlaying?.Invoke();
+            }
+            else
+            {
+                UIManager.Instance.ShowPopup<PopupShop>(() =>
+                {
+                    GameManager.Instance.SetGameState(GameState.Playing);
+                });
+                GameManager.Instance.SetGameState(GameState.Paused);
+            }
         }
 
         private void OnClickClose()
@@ -32,7 +53,5 @@ namespace ColorBlockCrush
             Hide();
             OnClose?.Invoke();
         }
-
-        
     }
 }

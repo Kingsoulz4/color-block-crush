@@ -30,8 +30,27 @@ MonoBehaviour:
       TermType: 1
       Description: 
       Languages:
-      - MADE Waffle Soft PERSONAL USE
-      - MADE Waffle Soft PERSONAL USE
+      - TT Rounds Neue Trial Black
+      - R0C0I - LINOTTE HEAVY
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: OutOfSpace/txt_title
+      TermType: 0
+      Description: 
+      Languages:
+      - OUT OF SPACE
+      - "H\u1EBFt Ch\u1ED7"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: OutOfSpace/txt_out_of_space_des
+      TermType: 0
+      Description: 
+      Languages:
+      - Clear converyor and open up Slots to keep playing!
+      - "D\u1ECDn s\u1EA1ch b\u0103ng chuy\u1EC1n v\xE0 m\u1EDF c\xE1c \xF4 \u0111\u1EC3
+        ti\u1EBFp t\u1EE5c ch\u01A1i!"
       - 
       Flags: 000000
       Languages_Touch: []
@@ -377,7 +396,7 @@ MonoBehaviour:
     Google_WebServiceURL: https://script.google.com/macros/s/AKfycbxMqCXyTiN_PyFrLYDE1XF4owNSWUfvCq-gYA1uLUPVkyzqXdhMeBghVyGIw1q_QqN_iA/exec
     Google_SpreadsheetKey: 1tez-f603ElTwS8Yfqi72E0Wq-69JaMVmL_cORyXOWac
     Google_SpreadsheetName: I2Loc gec Localization
-    Google_LastUpdatedVersion: 1760429381103
+    Google_LastUpdatedVersion: 1760497178468
     Google_Password: change_this
     GoogleUpdateFrequency: 3
     GoogleInEditorCheckFrequency: 2

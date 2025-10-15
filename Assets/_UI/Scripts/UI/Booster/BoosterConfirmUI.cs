@@ -13,6 +13,9 @@ public class BoosterConfirmUI : MonoBehaviour
     [SerializeField] private Text descriptionTxt;
     [SerializeField] private Image iconImg;
     [SerializeField] private Button closeBtn;
+    [SerializeField] private RectTransform bgTooltip;
+    [SerializeField] private RectTransform toolTipHanPos;
+    [SerializeField] private RectTransform toolTipSuperShootPos;
     public BoosterType BoosterType = BoosterType.NONE;
 
     private void Start()
@@ -47,6 +50,15 @@ public class BoosterConfirmUI : MonoBehaviour
         if (iconImg != null)
         {
             iconImg.sprite = boosterItemData.icon;
+        }
+
+        if (BoosterType == BoosterType.HAND_MOVE)
+        {
+            bgTooltip.localPosition = toolTipHanPos.localPosition;
+        }
+        else
+        {
+            bgTooltip.localPosition = toolTipSuperShootPos.localPosition;
         }
     }
 }
