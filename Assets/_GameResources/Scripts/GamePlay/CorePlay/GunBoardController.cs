@@ -155,6 +155,7 @@ namespace ColorBlockCrush
             {
                 // Front row is the last gun in the list (highest row)
                 columnGuns[i].IsFrontRow = (i == 0);
+                columnGuns[i].UpdateMechanics();
             }
         }
 
