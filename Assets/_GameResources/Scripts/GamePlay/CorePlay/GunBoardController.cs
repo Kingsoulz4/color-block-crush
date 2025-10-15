@@ -18,6 +18,7 @@ namespace ColorBlockCrush
 
         [Header("Prefabs")]
         [SerializeField] private Gun gunPrefab;
+        [SerializeField] private LockObject lockPrefab;
 
         [Header("References")]
         [SerializeField] private Transform gunContainer;
@@ -65,6 +66,8 @@ namespace ColorBlockCrush
                 UpdateFrontRowFlags(col);
             }
         }
+
+        
 
         public Gun SpawnGun(int column, int row, GunConfig gunData, float centerOffsetX = 0f)
         {

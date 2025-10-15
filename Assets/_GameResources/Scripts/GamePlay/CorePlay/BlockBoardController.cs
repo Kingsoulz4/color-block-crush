@@ -108,6 +108,7 @@ namespace ColorBlockCrush
         {
             var newKey = Instantiate(blockKeyPrefab, keyContainer);
             newKey.transform.position = CalculateCenter(keyConfig.blockId);
+            newKey.Init(keyConfig);
             var directions = new List<Vector2Int>() { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right, Vector2Int.one, Vector2Int.one * -1, new Vector2Int(1, -1), new Vector2Int(-1, 1)};
 
             for (int i = 0; i < keyConfig.blockId.Count; i++)
@@ -124,9 +125,10 @@ namespace ColorBlockCrush
                     if (coordX >= 0 && coordX < levelConfig.mapConfig.mapSize.x && coordY >= 0 && coordY < levelConfig.mapConfig.mapSize.y)
                     {
                         var blockNeighbor = _blockStacks[blockData.coordinate.x + dir.x, blockData.coordinate.y + dir.y];
+                        newKey.AddBlock(blockNeighbor);
                         blockNeighbor.OnBlockDestroyed += (bl) =>
                         {
-
+                            newKey.CheckCanResolve();
                         };
                     }
                 }
@@ -151,7 +153,7 @@ namespace ColorBlockCrush
 
         private void OnBlockDestroyed(Block block)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         //private void CalculateDynamicScaleAndOffset(int rows, int columns)
