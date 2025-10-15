@@ -139,7 +139,9 @@ namespace ColorBlockCrush
                 Vector3 newPos = new Vector3(
                      gun.transform.position.x, 0, gun.transform.position.z + rowSpacing);
 
-                gun.transform.position = newPos;
+                gun.MoveSortSlot(newPos, 0.2f, DG.Tweening.Ease.OutQuad);
+
+                //gun.transform.position = newPos;
             }
 
             UpdateFrontRowFlags(column);
