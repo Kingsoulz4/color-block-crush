@@ -68,7 +68,7 @@ MonoBehaviour:
   m_text: Open
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2878ecf5e42911945aea1b30a8f48376, type: 2}
-  m_sharedMaterial: {fileID: 6960021304601963633, guid: 2878ecf5e42911945aea1b30a8f48376, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 26233cb66e0b6e84c90752c5027592cd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -200,7 +200,7 @@ MonoBehaviour:
   iconWarning: {fileID: 5473190947784238370}
   textLevel: {fileID: 8957748487220725665}
   buttonOpen: {fileID: 8347974105870925118}
-  buttonCopy: {fileID: 8560561633914670140}
+  buttonPlay: {fileID: 8560561633914670140}
   levelConfig: {fileID: 0}
 --- !u!114 &5616862358757334788
 MonoBehaviour:
@@ -297,10 +297,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Copy
+  m_text: Play
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2878ecf5e42911945aea1b30a8f48376, type: 2}
-  m_sharedMaterial: {fileID: 6960021304601963633, guid: 2878ecf5e42911945aea1b30a8f48376, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 26233cb66e0b6e84c90752c5027592cd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -324,7 +324,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33.75
+  m_fontSize: 46.35
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -513,7 +513,7 @@ GameObject:
   - component: {fileID: 3957026906171336313}
   - component: {fileID: 8560561633914670140}
   m_Layer: 0
-  m_Name: button_copy
+  m_Name: button_play
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -537,7 +537,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -202.7, y: 0}
-  m_SizeDelta: {x: 104.6, y: 68.4}
+  m_SizeDelta: {x: 120, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1926731788968065495
 CanvasRenderer:

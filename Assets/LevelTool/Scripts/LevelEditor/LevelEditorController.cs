@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace ColorBlockCrush.Tools
 {
@@ -44,6 +45,8 @@ namespace ColorBlockCrush.Tools
             view.textFolderPicturePath.text = string.IsNullOrEmpty(saveFolderPath) ? "EMPTY!!!" : saveFolderPath;
             view.levelSelectPanel.SetActive(true);
             view.levelEditPanel.SetActive(false);
+
+            LevelTestManager.Instance.currentLevelPlay = null;
         }
 
         private void InitButtons()
@@ -358,6 +361,13 @@ namespace ColorBlockCrush.Tools
             view.levelEditPanel.gameObject.SetActive(true);
         }
 
+        private void OnPlayLevel(LevelConfig levelConfig)
+        {
+            LevelTestManager.Instance.currentLevelPlay = levelConfig;
+            Screen.SetResolution(720, 1280, FullScreenMode.Windowed);
+            SceneManager.LoadScene(1);
+        }
+
         private void OnSaveLevel()
         {
             SaveLevelData();
@@ -513,11 +523,11 @@ namespace ColorBlockCrush.Tools
                 OnOpenLevel(itemLevelView.levelConfig);
             });
 
-            itemLevelView.buttonCopy.onClick.RemoveAllListeners();
-            // itemLevelView.buttonCopy.onClick.AddListener(() =>
-            // {
-            //     OnCopyLevel(itemLevelView.LevelConfig);
-            // });
+            itemLevelView.buttonPlay.onClick.RemoveAllListeners();
+            itemLevelView.buttonPlay.onClick.AddListener(() =>
+            {
+                OnPlayLevel(itemLevelView.levelConfig);
+            });
 
             itemLevelViews.Add(itemLevelView);
         }

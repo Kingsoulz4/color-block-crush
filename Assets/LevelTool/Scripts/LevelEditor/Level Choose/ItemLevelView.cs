@@ -10,7 +10,7 @@ namespace ColorBlockCrush.Tools
         public GameObject iconWarning;
         public TextMeshProUGUI textLevel;
         public Button buttonOpen;
-        public Button buttonCopy;
+        public Button buttonPlay;
         public LevelConfig levelConfig;
     }
 }
