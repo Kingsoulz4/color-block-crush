@@ -12,6 +12,7 @@ namespace ColorBlockCrush
         public override void Resolve()
         {
             base.Resolve();
+            gameObject.SetActive(false);
         }
 
         internal void Init(List<MeshRenderer> listMeshRenderer)
