@@ -12,7 +12,7 @@ using static UnityEngine.UI.CanvasScaler;
 
 namespace ColorBlockCrush
 {
-    public partial class Gun : MonoBehaviour
+    public partial class Gun : ObjectOnGunBoardColumn
     {
         [Header("Visual")]
         [SerializeField] private List<MeshRenderer> meshRendererList;
@@ -83,6 +83,18 @@ namespace ColorBlockCrush
         {
             transform.DOKill(this);
             victims.Clear();
+        }
+
+        public override void UpdateWhenColumnChange()
+        {
+            base.UpdateWhenColumnChange();
+            UpdateMechanics();
+        }
+
+        public override void SetIndex(int index)
+        {
+            base.SetIndex(index);
+            IsFrontRow = index == 0;    
         }
 
         private void CheckFire()
@@ -317,7 +329,7 @@ namespace ColorBlockCrush
         #region Move spline
         Tween moveToConveyorTw;
         Tween moveToSlotTw;
-        Tween moveSortSlotTw;
+
         public void MoveToConeyor(Vector3 endPos, Action callback = null)
         {
             isFireFirstTime = false;
@@ -364,7 +376,7 @@ namespace ColorBlockCrush
             moveSortSlotSq.SetId(this);
         }
 
-        public void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
+        public override void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
         {
             Sequence moveSortSlotSq = DOTween.Sequence();
             moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>

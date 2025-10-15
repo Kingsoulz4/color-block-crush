@@ -71,10 +71,10 @@ namespace ColorBlockCrush
                     var idx = c * _rows + r;
                     ColorType color = listBlock[idx].colorType;
 
-                    if (color == ColorType.None)
-                    {
-                        continue;
-                    }
+                    //if (color == ColorType.None)
+                    //{
+                    //    continue;
+                    //}
 
                     SpawnBlock(r, c, BlockType.Normal, listBlock[idx]);
                 }

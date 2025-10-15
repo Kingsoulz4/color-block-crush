@@ -61,3 +61,6 @@ MonoBehaviour:
   - colorType: 15
     color: {r: 0.5294118, g: 0.57254905, b: 0.81568635, a: 1}
     detectColor: {r: 0.5294118, g: 0.57254905, b: 0.81568635, a: 0}
+  - colorType: -1
+    color: {r: 0, g: 0, b: 0, a: 0}
+    detectColor: {r: 0, g: 0, b: 0, a: 0}

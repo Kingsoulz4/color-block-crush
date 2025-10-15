@@ -41,6 +41,11 @@ namespace ColorBlockCrush
         public void Resolve()
         {
             Debug.Log("Key Resolved");
+            var pendingLock = LevelManager.Instance.LevelGame.GunBoardController.GetPenndingLock();
+            if (pendingLock != null)
+            {
+                pendingLock.Resolve();
+            }
         }
             
     }
