@@ -76,13 +76,13 @@ namespace ColorBlockCrush
                         continue;
                     }
 
-                    SpawnBlock(r, c, BlockType.Normal, listBlock[idx], false, true);
+                    SpawnBlock(r, c, BlockType.Normal, listBlock[idx]);
                 }
             }
         }
 
 
-        public Block SpawnBlock(int row, int col, BlockType type, BlockConfig blockData, bool isStatic, bool canDestroy)
+        public Block SpawnBlock(int row, int col, BlockType type, BlockConfig blockData)
         {
             if (!IsValidPosition(row, col)) return null;
 
@@ -93,7 +93,7 @@ namespace ColorBlockCrush
             block.transform.localScale = calculatedBlockScale;
 
             block.name = $"Block_{row}_{col}";
-            block.Init(type, blockData, isStatic, canDestroy);
+            block.Init(type, blockData);
             block.GridNode = node;
 
             PlaceBlock(row, col, block);
@@ -182,7 +182,7 @@ namespace ColorBlockCrush
 
             _blockStacks[row, col] = block;
 
-            if (!block.CanDestroy)
+            if (block.BlockData.blockType == BlockType.Stone)
             {
                 gridController.GridNodes[row, col].IsBlocked = true;
             }

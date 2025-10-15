@@ -13,6 +13,7 @@ namespace ColorBlockCrush
     public enum BlockType
     {
         Normal,
+        Stone
     }
 
     public class Block : MonoBehaviour
@@ -30,6 +31,7 @@ namespace ColorBlockCrush
         protected int maxHitPoint;
         protected int hitPoint;
         protected int hitPointRaycast;
+        protected Vector3 originScale;
         private int id;
         private BlockConfig blockData;
         public BlockType BlockType { get; private set; }
@@ -41,7 +43,7 @@ namespace ColorBlockCrush
         public BlockConfig BlockData { get => blockData; }
         public int Id { get => id; }
 
-        public void Init(BlockType blockType, BlockConfig blockDataP, bool isStatic, bool canDestroy)
+        public void Init(BlockType blockType, BlockConfig blockDataP)
         {
             BlockType = blockType;
             ColorType = blockDataP.colorType;
@@ -49,9 +51,9 @@ namespace ColorBlockCrush
             maxHitPoint = 1;
             hitPoint = 1;
             hitPointRaycast = 1;
-            CanDestroy = canDestroy;
             IsAttacked = false;
             blockData = blockDataP;
+            originScale = transform.localScale;
 
             StartBlock();
             OnBlockInitialized?.Invoke(this);
@@ -94,24 +96,41 @@ namespace ColorBlockCrush
 
         public virtual void TakeDamage(int damageAmount)
         {
-            if (!CanDestroy) return;
-
             hitPoint -= damageAmount;
             OnBlockTakeDamage?.Invoke(damageAmount, this);
 
             if (hitPoint <= 0)
             {
-                Destroy(gameObject);
+                DestroyBlock(() =>
+                {
+                    gameObject.SetActive(false);
+                });
             }
         }
 
         public virtual void TakeDamageRaycast(int damageAmount)
         {
-            if (!CanDestroy) return;
             if (hitPointRaycast > 0)
             {
                 hitPointRaycast -= damageAmount;
             }
+        }
+
+        private void OnDisable()
+        {
+            DOTween.Kill(this);
+        }
+
+        private void DestroyBlock(Action callback = null)
+        {
+            var sq = DOTween.Sequence();
+            sq.Append(transform.DOScale(originScale * 1.3f, 0.1f).SetEase(Ease.InOutExpo));
+            sq.Append(transform.DOScale(0f, 0.1f).SetEase(Ease.InQuint));
+            sq.OnComplete(() =>
+            {
+                callback?.Invoke();
+            });
+            sq.SetId(this);
         }
 
         public bool CanBeRaycastHit()
