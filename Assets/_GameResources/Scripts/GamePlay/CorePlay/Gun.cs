@@ -229,13 +229,9 @@ namespace ColorBlockCrush
         public void Turn(RotationDirection direction, RotationDirection directionNonfire)
         {
             Vector3 newRotation;
-            if (!isFireFirstTime)
-            {
-                newRotation = GetTurnDirection(directionNonfire);
-            }
+            newRotation = GetTurnDirection(!isFireFirstTime ? directionNonfire : direction);
 
             isTurning = true;
-            newRotation = GetTurnDirection(direction);
             transform.DORotate(newRotation, turnDuration).OnComplete(() =>
             {
                 isTurning = false;
