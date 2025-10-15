@@ -224,7 +224,7 @@ namespace ColorBlockCrush
                 targetAngle = direction.z > 0 ? 0f : 180f; // Forward : Back
             }
 
-            transform.rotation = Quaternion.Euler(0, targetAngle, 0);
+            transform.DORotate(new Vector3(0, targetAngle, 0), 0);
         }
 
         public void Turn(RotationDirection direction)
@@ -322,6 +322,7 @@ namespace ColorBlockCrush
         Tween moveSortSlotTw;
         public void MoveToConeyor(Vector3 endPos, Action callback = null)
         {
+            isFireFirstTime = false;
             Sequence moveToConveyorSq = DOTween.Sequence();
             GunPos = GunPos.TWEEN_SORT;
             currentFireDir = RotationDirection.Up;
@@ -329,12 +330,14 @@ namespace ColorBlockCrush
             moveToConveyorTw = moveToConveyorSq.Append(
                 transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration)).SetEase(moveToConveyorEase).OnComplete(() =>
             {
+                Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
+                transform.DORotate(newRotation, 0f).SetId(this);
+
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
+
             });
 
-            Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
-            //moveToConveyorSq.Join(transform.DORotate(newRotation, 0.3f));
             moveToConveyorSq.SetId(this);
         }
 
@@ -359,6 +362,15 @@ namespace ColorBlockCrush
             moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
             {
                 GunPos = GunPos.ON_SLOT;
+            });
+            moveSortSlotSq.SetId(this);
+        }
+
+        public void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
+        {
+            Sequence moveSortSlotSq = DOTween.Sequence();
+            moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
+            {
             });
             moveSortSlotSq.SetId(this);
         }

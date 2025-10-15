@@ -12,7 +12,7 @@ namespace ColorBlockCrush
         protected Block block;
         protected Action<Gun, Block> onHit;
 
-        private float speed = 10;
+        [SerializeField] private float speed = 10;
         private Vector3 endPos;
         private bool isMoving = false;
         // set bullet data for bullet

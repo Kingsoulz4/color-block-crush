@@ -51,7 +51,6 @@ namespace ColorBlockCrush
                 listGunColumn.Add(new List<Gun>());
 
                 List<GunLineElementConfig> columnData = new List<GunLineElementConfig>(gunBoardData.gunLines[col].gunLineElementConfigs);
-                columnData.Reverse();
 
                 for (int i = 0; i < columnData.Count; i++)
                 {
@@ -140,7 +139,7 @@ namespace ColorBlockCrush
                 Vector3 newPos = new Vector3(
                      gun.transform.position.x, 0, gun.transform.position.z + rowSpacing);
 
-                gun.transform.position = newPos;
+                gun.MoveColumn(newPos, 0.2f, DG.Tweening.Ease.OutQuad);
             }
 
             UpdateFrontRowFlags(column);

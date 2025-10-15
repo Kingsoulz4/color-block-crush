@@ -15,7 +15,7 @@ namespace ColorBlockCrush
         [SerializeField] private Transform gunContainer;
 
         [Header("Animation")]
-        [SerializeField] private float _shiftDuration = 0.3f;
+        [SerializeField] private float _shiftDuration = 0.2f;
         [SerializeField] private Ease _shiftEase = Ease.OutQuad;
 
         private List<Gun> _gunsInSlots;

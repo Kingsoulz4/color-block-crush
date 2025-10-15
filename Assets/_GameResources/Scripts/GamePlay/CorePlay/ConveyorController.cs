@@ -86,12 +86,11 @@ public class ConveyorController : MonoBehaviour
         float normalizedTime = slotIndex * startMovingGunSpacing;
         Vector3 position = splineContainer.EvaluatePosition(normalizedTime);
 
-        gun.TrayItem = trayItem;
-        trayItem.SetChild(gun);
-        AddTrayItem(trayItem);
-
         gun.MoveToConeyor(position, () =>
         {
+            gun.TrayItem = trayItem;
+            trayItem.SetChild(gun);
+            AddTrayItem(trayItem);
             trayItem.Move();
         });
     }
