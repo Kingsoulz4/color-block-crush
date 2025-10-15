@@ -26,11 +26,19 @@ namespace ColorBlockCrush.Tools
         public Button buttonDelete;
         public Button buttonSelected;
         public GameObject selectedObject;
+        public TextMeshProUGUI elementIdText;
         
         public GunLineElementConfig elementConfig = new GunLineElementConfig();
         
         private Action onUpdateSeatQuantity;
         private Action<int> onChangeIndex;
+
+
+        public void SetElementId(int elementId)
+        {
+            elementConfig.elementId = elementId;
+            elementIdText.text = elementId.ToString();
+        }
         
         public void Init(int elementId, Action<ItemTankLineElementView> onSelectElement, GunLineElementConfig elementConfig = null, 
             Action onDetete = null, Action onUpdateSeatQuantity = null, Action<int> onChangeIndex = null)
@@ -41,7 +49,7 @@ namespace ColorBlockCrush.Tools
                 SetElementConfigDefault();
             }
 
-            this.elementConfig.elementId = elementId;
+            SetElementId(elementId);
             
             this.onUpdateSeatQuantity = onUpdateSeatQuantity;
             buttonDelete.onClick.RemoveAllListeners();
@@ -111,8 +119,13 @@ namespace ColorBlockCrush.Tools
             
             foreach (var uiLine in linesConnected)
             {
-                uiLine.UpdatePosFolloưElementEditorView();
+                uiLine.UpdatePosFollowElementEditorView();
             }
+        }
+
+        public void RemoveUiLine(UiLine uiLine)
+        {
+            linesConnected.Remove(uiLine);
         }
 
         public void ClearUiLine()

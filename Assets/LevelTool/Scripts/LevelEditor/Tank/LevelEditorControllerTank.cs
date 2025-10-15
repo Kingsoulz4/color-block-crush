@@ -28,17 +28,23 @@ namespace ColorBlockCrush.Tools
         {
             if (index < 0 && index >= view.tankLineViews.Count) return;
 
-            Action onDelete = () =>
+            Action<int> onDelete = (lineId) =>
             {
                 UpdateTankLinesInfor();
                 UpdateLevelState();
+                ReUpdateElementId(lineId);
+            };
+
+            Action<int> onChangeIndex = (lineId) =>
+            {
+                ReUpdateElementId(lineId);
             };
 
             ItemTankLineElementView newElement =
                 Instantiate(model.tankLineElementPrefab).GetComponent<ItemTankLineElementView>();
             newElement.GetComponent<DraggableTankLineElementItem>().dragCanvas = canvas;
             view.tankLineViews[index].AddElementToLine(newElement, SelectTankLineElement, 
-                onDelete, elementConfig);
+                onDelete, onChangeIndex, elementConfig);
             
             ClearAllTankLineELementSelected();
             SelectTankLineElement(newElement);
@@ -73,7 +79,7 @@ namespace ColorBlockCrush.Tools
             }
 
             Debug.Log($"Tank Has Connect Count: {tankHasConnect.Count}");
-            DOVirtual.DelayedCall(.6f, () =>
+            DOVirtual.DelayedCall(1.2f, () =>
             {
                 if (tankHasConnect.Count > 0)
                 {
@@ -100,6 +106,34 @@ namespace ColorBlockCrush.Tools
                     }
                 }
             });
+        }
+
+        private void ReUpdateElementId(int lineId)
+        {
+            TankLineEditorView tankLineEditorView = view.tankLineViews[lineId];
+            List<ItemTankLineElementView> itemTankLineElementViews = tankLineEditorView.GetElementView();
+            List<int> connectIds = new List<int>();
+
+            for (int i = 0; i < itemTankLineElementViews.Count; i++)
+            {
+                int oldElementId = itemTankLineElementViews[i].elementConfig.elementId;
+                int newElementId = (int)CantorPairing.MakeId((ulong)lineId, (ulong)i);
+                itemTankLineElementViews[i].SetElementId(newElementId);
+
+                if (itemTankLineElementViews[i].elementConfig.elementType == GunLineElementType.Tank)
+                {
+                    connectIds = itemTankLineElementViews[i].elementConfig.gunConfig.gunConnect;
+                    if (connectIds != null && connectIds.Count > 0)
+                    {
+                        foreach (var idConnect in connectIds)
+                        {
+                            ItemTankLineElementView tankConnect = GetTankLineElementViewById(idConnect);
+                            tankConnect.elementConfig.gunConfig.gunConnect.Remove(oldElementId);
+                            tankConnect.elementConfig.gunConfig.gunConnect.Add(newElementId);
+                        }
+                    }   
+                }
+            }
         }
 
         private void SelectTankLineElement(ItemTankLineElementView elementSelect)
@@ -155,18 +189,22 @@ namespace ColorBlockCrush.Tools
         {
             if (currentTankLineElementSelected == null) return;
 
-            currentTankLineElementSelected.elementConfig.elementType = GunLineElementType.Tank;
+            foreach (var currentElementSelected in tankLinesELementSelected)
+            {
+                currentElementSelected.elementConfig.elementType = GunLineElementType.Tank;
 
-            if (currentTankLineElementSelected.elementConfig.gunConfig == null)
-                currentTankLineElementSelected.elementConfig.gunConfig = new GunConfig();
+                if (currentElementSelected.elementConfig.gunConfig == null)
+                    currentElementSelected.elementConfig.gunConfig = new GunConfig();
 
-            currentTankLineElementSelected.elementConfig.gunConfig.colorType = currentTankColor;
-            currentTankLineElementSelected.elementConfig.gunConfig.bulletNumber =
-                int.Parse(view.bulletInputField.text);
-            currentTankLineElementSelected.elementConfig.gunConfig.hasLock = view.toggleTankLock.isOn;
-            currentTankLineElementSelected.elementConfig.gunConfig.isHidden = view.toggleTankHidden.isOn;
+                currentElementSelected.elementConfig.gunConfig.colorType = currentTankColor;
+                currentElementSelected.elementConfig.gunConfig.bulletNumber =
+                    int.Parse(view.bulletInputField.text);
+                currentElementSelected.elementConfig.gunConfig.hasLock = view.toggleTankLock.isOn;
+                currentElementSelected.elementConfig.gunConfig.isHidden = view.toggleTankHidden.isOn;
 
-            currentTankLineElementSelected.UpdateUI();
+                currentElementSelected.UpdateUI();   
+            }
+            
             UpdateTankLinesInfor();
             
             UpdateLevelState();
@@ -177,6 +215,8 @@ namespace ColorBlockCrush.Tools
         {
             if (currentTankLineElementSelected == null) return;
 
+            DelConnectLine();
+            
             currentTankLineElementSelected.SetElementConfigDefault();
             currentTankLineElementSelected.UpdateUI();
             UpdateTankLineElementPropertiesInfor(currentTankLineElementSelected.elementConfig);
@@ -249,11 +289,13 @@ namespace ColorBlockCrush.Tools
                 if (currentLineViewConnect != null)
                 {
                     uiLines.Remove(currentLineViewConnect);
+                    tankConnect.RemoveUiLine(currentLineViewConnect);
                     Destroy(currentLineViewConnect.gameObject);
                 }
             }
 
             currentTankLineElementSelected.elementConfig.gunConfig.gunConnect = new List<int>();
+            currentTankLineElementSelected.ClearUiLine();
 
             UpdateTankLinesInfor();
             UpdateLevelState();
