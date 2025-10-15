@@ -223,7 +223,7 @@ namespace ColorBlockCrush
                 targetAngle = direction.z > 0 ? 0f : 180f; // Forward : Back
             }
 
-            transform.rotation = Quaternion.Euler(0, targetAngle, 0);
+            transform.DORotate(new Vector3(0, targetAngle, 0), 0);
         }
 
         public void Turn(RotationDirection direction)
@@ -316,6 +316,7 @@ namespace ColorBlockCrush
         Tween moveSortSlotTw;
         public void MoveToConeyor(Vector3 endPos, Action callback = null)
         {
+            isFireFirstTime = false;
             Sequence moveToConveyorSq = DOTween.Sequence();
             GunPos = GunPos.TWEEN_SORT;
             currentFireDir = RotationDirection.Up;
@@ -328,7 +329,7 @@ namespace ColorBlockCrush
 
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
-                
+
             });
 
             moveToConveyorSq.SetId(this);
