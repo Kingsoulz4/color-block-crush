@@ -38,7 +38,6 @@ namespace ColorBlockCrush
         {
             splineAnimate.Pause();
             myGun = null;
-            SplineAnimate.Container = null;
 
             if (moveToConveyorSq != null && moveToConveyorSq.IsPlaying())
             {
