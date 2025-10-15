@@ -61,7 +61,7 @@ namespace ColorBlockCrush
 
         protected virtual void UpdateColors(ColorType colorType)
         {
-            if (_blockMeshRenderer != null && colorRef != null)
+            if (_blockMeshRenderer != null && colorRef != null && colorType != ColorType.None)
             {
                 _blockMeshRenderer.material.color = colorRef.GetColor(colorType);
             }
