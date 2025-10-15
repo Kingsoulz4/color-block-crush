@@ -43,7 +43,16 @@ namespace ColorBlockCrush
 
         public void Execute(Action callback)
         {
-            callback?.Invoke();
+            var boosterUnlock = BoosterManager.Instance.BoosterData.boosterItemDatas.Find(x => x.levelUnlock == LevelManager.Instance.CurrentLevel);
+            if (boosterUnlock != null)
+            {
+                base.Show(callback);
+                SetData(boosterUnlock.title, boosterUnlock.description, boosterUnlock.icon);
+            }
+            else
+            {
+                callback?.Invoke();
+            }    
         }
     }
 }

@@ -8,18 +8,17 @@ public class BoosterManager : SingletonMono<BoosterManager>
 {
     [SerializeField] private BoosterDataSO boosterData;
     [SerializeField] private List<BoosterBase> boosters;
-    [SerializeField] private BoosterBase timeInGameBooster;
-    [SerializeField] private BoosterBase timePreBooster;
+    [SerializeField] private BoosterBase addTrayBooster;
     [SerializeField] private BoosterBase shuffleBooster;
-    [SerializeField] private BoosterBase scissorBooster;
+    [SerializeField] private BoosterBase magnetBooster;
     [SerializeField] private BoosterBase handMoveBooster;
-    [SerializeField] private BoosterBase suffleBooster;
-    public BoosterBase AddTrayBooster { get => timeInGameBooster; set => timeInGameBooster = value; }
+    public BoosterBase AddTrayBooster { get => addTrayBooster; set => addTrayBooster = value; }
     public BoosterBase ShuffleBooster { get => shuffleBooster; set => shuffleBooster = value; }
+    public BoosterBase HandMoveBooster { get => handMoveBooster; set => handMoveBooster = value; }
+    public BoosterBase MagnetBooster {get => magnetBooster; set => magnetBooster = value; }
+
     public BoosterDataSO BoosterData { get => boosterData; }
     public List<BoosterBase> Boosters { get => boosters; }
-    public BoosterBase HandMoveBooster { get => handMoveBooster; set => handMoveBooster = value; }
-    public BoosterBase SuffleBooster { get => suffleBooster; set => suffleBooster = value; }
 
     private void Start()
     {

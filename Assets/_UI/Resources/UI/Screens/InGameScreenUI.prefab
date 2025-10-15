@@ -7382,6 +7382,7 @@ MonoBehaviour:
       Value: {fileID: 719788747409971746}
     - Key: 2
       Value: {fileID: 3431146883748438236}
+  boostersObj: {fileID: 0}
   boosterConfirmUI: {fileID: 8130145382502525666}
   addTrayBoosterCount: {fileID: 7098277358945087847}
   addTrayBoosterBtn: {fileID: 7296947526419545314}
@@ -7391,8 +7392,8 @@ MonoBehaviour:
   handMoveBoosterCount: {fileID: 7909343388458004987}
   shuffleBtn: {fileID: 2456173652876527656}
   shuffleBoosterCount: {fileID: 2726866179038201261}
-  superShootBoosterBtn: {fileID: 4463177734920085188}
-  superShootBoosterCount: {fileID: 4193333096245908289}
+  magnetBoosterBtn: {fileID: 4463177734920085188}
+  magnetBoosterCount: {fileID: 4193333096245908289}
   m_iconClock: {fileID: 4070635629960487446}
   rect_Top: {fileID: 7548274029939510473}
 --- !u!222 &3508880465791921251
@@ -13383,7 +13384,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1799304157085138387, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_Name
-      value: SuperShootBoosterBtn
+      value: MagnetBoosterBtn
       objectReference: {fileID: 0}
     - target: {fileID: 1845148848640810924, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_Sprite
@@ -13929,7 +13930,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1799304157085138387, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_Name
-      value: HandBoosterBtn (1)
+      value: HandBoosterBtn
       objectReference: {fileID: 0}
     - target: {fileID: 1845148848640810924, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_Sprite
