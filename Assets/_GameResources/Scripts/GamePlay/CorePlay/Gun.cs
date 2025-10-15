@@ -359,6 +359,15 @@ namespace ColorBlockCrush
             moveSortSlotSq.SetId(this);
         }
 
+        public void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
+        {
+            Sequence moveSortSlotSq = DOTween.Sequence();
+            moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
+            {
+            });
+            moveSortSlotSq.SetId(this);
+        }
+
         public void Destroy()
         {
 
