@@ -36,21 +36,21 @@ namespace ColorBlockCrush
         {
             if (gunBoardData == null) return;
 
-            int totalColumns = gunBoardData.tankLines.Where(x => x.gunLineElementConfigs.Count > 0).Count();
+            int totalColumns = gunBoardData.gunLines.Where(x => x.gunLineElementConfigs.Count > 0).Count();
 
             float totalWidth = (totalColumns - 1) * columnSpacing;
             float centerOffsetX = -totalWidth / 2f;
 
             for (int col = 0; col < totalColumns; col++)
             {
-                if (gunBoardData.tankLines[col].gunLineElementConfigs.Count == 0)
+                if (gunBoardData.gunLines[col].gunLineElementConfigs.Count == 0)
                 {
                     continue;
                 }
 
                 listGunColumn.Add(new List<Gun>());
 
-                List<GunLineElementConfig> columnData = new List<GunLineElementConfig>(gunBoardData.tankLines[col].gunLineElementConfigs);
+                List<GunLineElementConfig> columnData = new List<GunLineElementConfig>(gunBoardData.gunLines[col].gunLineElementConfigs);
                 columnData.Reverse();
 
                 for (int i = 0; i < columnData.Count; i++)
