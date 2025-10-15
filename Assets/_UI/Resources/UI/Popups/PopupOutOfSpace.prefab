@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 1848519056784977380}
   - component: {fileID: 7433920313753869935}
   m_Layer: 5
-  m_Name: PopupTimeIsUp
+  m_Name: PopupOutOfSpace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -963,7 +963,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 6923702425093231153}
   eventOnPointDown:
     m_PersistentCalls:
@@ -1451,7 +1451,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 8291975589297084698}
   eventOnPointDown:
     m_PersistentCalls:

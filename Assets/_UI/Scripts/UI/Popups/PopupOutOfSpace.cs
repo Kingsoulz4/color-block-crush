@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace ColorBlockCrush
 {
-    public class PopupTimeIsUp : PopupUI
+    public class PopupOutOfSpace : PopupUI
     {
         [SerializeField] private Button m_buttonKeepPlaying;
         [SerializeField] private Button m_buttonClose;

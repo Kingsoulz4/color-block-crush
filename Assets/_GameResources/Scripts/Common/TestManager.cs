@@ -14,6 +14,8 @@ namespace ColorBlockCrush
         [SerializeField] Button btn_backLevel;
         [SerializeField] InputField inputField;
         [SerializeField] InputField inputLevelSet;
+        [SerializeField] private Button btnTestLose;
+        [SerializeField] private Button btnTestWin;
 
         private void Update()
         {
@@ -61,6 +63,16 @@ namespace ColorBlockCrush
                     LevelManager.Instance.CurrentLevelSetID = int.Parse(inputLevelSet.text);
                 });
             }    
+            
+            btnTestLose.onClick.AddListener(() =>
+            {
+                LevelEvent.OnLose?.Invoke(LevelManager.Instance.CurrentLevel);
+            });
+            
+            btnTestWin.onClick.AddListener(() =>
+            {
+                LevelEvent.OnWin?.Invoke(LevelManager.Instance.CurrentLevel);
+            });
         }
 
         private void LoadLevel()
