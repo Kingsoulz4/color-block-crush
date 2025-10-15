@@ -368,12 +368,12 @@ MonoBehaviour:
   elementConfig:
     elementId: 0
     elementType: 0
-    tankConfig:
+    gunConfig:
       colorType: 0
       bulletNumber: 0
       hasLock: 0
       isHidden: 0
-      tankConnect: 
+      gunConnect: 
     tunnelConfig:
       tankNumber: 0
       tanks: []
@@ -411,7 +411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragCanvas: {fileID: 0}
   holdThreshold: 0.7
-  isBottomToTop: 1
+  isBottomToTop: 0
   autoScrollSpeed: 5
   edgeThreshold: 0.1
   canDrag: 0
@@ -514,7 +514,7 @@ MonoBehaviour:
   m_text: 12
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2878ecf5e42911945aea1b30a8f48376, type: 2}
-  m_sharedMaterial: {fileID: 6960021304601963633, guid: 2878ecf5e42911945aea1b30a8f48376, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 26233cb66e0b6e84c90752c5027592cd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

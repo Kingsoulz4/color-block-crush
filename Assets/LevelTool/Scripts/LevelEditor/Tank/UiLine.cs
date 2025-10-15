@@ -9,6 +9,8 @@ namespace ColorBlockCrush.Tools
         public RectTransform parent;
         public RectTransform lineRect;
         [Header("Config")] public float thickness = 3f;
+        public ItemTankLineElementView elementConnectA;
+        public ItemTankLineElementView elementConnectB;
 
         void Reset()
         {
@@ -24,6 +26,17 @@ namespace ColorBlockCrush.Tools
                 img.raycastTarget = false;
                 img.color = Color.white;
             }
+        }
+
+        public void SetElementConnect(ItemTankLineElementView configA, ItemTankLineElementView configB)
+        {
+            elementConnectA = configA;
+            elementConnectB = configB;
+        }
+
+        public void UpdatePosFolloưElementEditorView()
+        {
+            SetPoints(elementConnectA.GetComponent<RectTransform>(), elementConnectB.GetComponent<RectTransform>());
         }
         
         public void SetPoints(RectTransform a, RectTransform b)

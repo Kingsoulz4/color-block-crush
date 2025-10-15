@@ -83,23 +83,12 @@ namespace ColorBlockCrush.Tools
             
             view.buttonSaveLevel.onClick.AddListener(() =>
             {
-                SaveLevelData();
-                currentLevelConfig = null;
-                
-                ClearAllMap();
-                ClearAllTankLines();
-                view.levelSelectPanel.gameObject.SetActive(true);
-                view.levelEditPanel.gameObject.SetActive(false);
+               OnSaveLevel();
             });
             
             view.buttonExitLevel.onClick.AddListener(() =>
             {
-                currentLevelConfig = null;
-                
-                ClearAllMap();
-                ClearAllTankLines();
-                view.levelSelectPanel.gameObject.SetActive(true);
-                view.levelEditPanel.gameObject.SetActive(false);
+                OnExitLevel();
             });
             
             view.inputLevelId.onEndEdit.AddListener((string value) =>
@@ -367,6 +356,24 @@ namespace ColorBlockCrush.Tools
             
             view.levelSelectPanel.gameObject.SetActive(false);
             view.levelEditPanel.gameObject.SetActive(true);
+        }
+
+        private void OnSaveLevel()
+        {
+            SaveLevelData();
+           OnExitLevel();
+        }
+
+        private void OnExitLevel()
+        {
+            currentLevelConfig = null;
+                
+            ClearAllMap();
+            ClearAllTankLinesInfor();
+            view.levelSelectPanel.gameObject.SetActive(true);
+            view.levelEditPanel.gameObject.SetActive(false);
+            
+            UpdateItemLevel();
         }
         
         private void SaveLevelData()

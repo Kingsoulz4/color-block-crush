@@ -23,6 +23,8 @@ namespace ColorBlockCrush.Tools
         [Tooltip("Proportion of viewport height defining edge threshold (0-0.5)")]
         public float edgeThreshold = 0.1f;
 
+        private ItemTankLineElementView _itemTankLineElementView;
+
         private RectTransform rectTransform;
         private CanvasGroup canvasGroup;
         private Transform originalParent;
@@ -42,6 +44,7 @@ namespace ColorBlockCrush.Tools
                 else
                     Debug.LogError("DraggableItem: No Canvas found at the root of the hierarchy.");
             }
+            _itemTankLineElementView = GetComponent<ItemTankLineElementView>();
 
             rectTransform = GetComponent<RectTransform>();
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
@@ -134,9 +137,11 @@ namespace ColorBlockCrush.Tools
             }
 
             // Determine new sibling index in original parent
+            VerticalLayoutGroup verticalLayoutGroup = originalParent.GetComponent<VerticalLayoutGroup>();
             int newIndex = 0;
             for (int i = 0; i < originalParent.childCount; i++)
             {
+                int childIndex = verticalLayoutGroup.reverseArrangement ? i : originalParent.childCount - 1 - i;
                 var child = originalParent.GetChild(i);
                 //if (child == placeholder.transform) continue;
 
@@ -149,6 +154,7 @@ namespace ColorBlockCrush.Tools
             }
 
             placeholder.transform.SetSiblingIndex(newIndex);
+            _itemTankLineElementView.UpdateUiLinePos();
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -159,7 +165,7 @@ namespace ColorBlockCrush.Tools
             transform.SetParent(originalParent);
             int finalIndex = placeholder.transform.GetSiblingIndex();
             transform.SetSiblingIndex(finalIndex);
-            GetComponent<ItemTankLineElementView>().ChangeIndex(finalIndex);
+            _itemTankLineElementView.ChangeIndex(finalIndex);
             // Cleanup
             Destroy(placeholder);
             canvasGroup.blocksRaycasts = true;
