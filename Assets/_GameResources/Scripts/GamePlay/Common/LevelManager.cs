@@ -86,6 +86,9 @@ namespace ColorBlockCrush
         public void StartLevel(int level, int levelSetID = 0)
         {
             var levelData = LoadLevel(level, levelSetID);
+            if (LevelTestManager.Instance)
+                if (LevelTestManager.Instance.currentLevelPlay != null)
+                    levelData = LevelTestManager.Instance.currentLevelPlay;
             //#if !UNITY_EDITOR
             Destroy(LevelGame.gameObject);
             LevelGame = Instantiate(m_levelGameOriginal);

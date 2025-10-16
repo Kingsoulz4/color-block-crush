@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NewFeatureSO
   m_EditorClassIdentifier: 
   newFeatureItemDatas:
-  - level: 12
+  - level: 10
     icon: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
     title: Surprise Shooter
     des: Put stacked dogs to the holes in order

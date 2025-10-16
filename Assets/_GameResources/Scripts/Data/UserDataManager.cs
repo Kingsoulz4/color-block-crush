@@ -19,7 +19,7 @@ public class UserDataManager : MonoBehaviour
         public int timePreBooster;
         public int shuffleBooster;
         public int cissorBooster;
-        public int superShootBooster;
+        public int magnetBooster;
         public int handBooster;
         public long lastTimeLogin;
         public string userName;
@@ -247,13 +247,13 @@ public class UserDataManager : MonoBehaviour
         }
     }
 
-    public static int SuperShootBooster
+    public static int MagnetBooster
     {
-        get { return LoadUserData().superShootBooster; }
+        get { return LoadUserData().magnetBooster; }
         set
         {
             UserData data = LoadUserData();
-            data.superShootBooster = value;
+            data.magnetBooster = value;
             SaveUserData(data);
         }
     }
@@ -282,7 +282,7 @@ public class UserDataManager : MonoBehaviour
             case BoosterType.HAND_MOVE:
                 HandBooster += quantity;
                 break;
-            case BoosterType.SUPER_SHOOT:
+            case BoosterType.MAGNET:
                 HandBooster += quantity;
                 break;
             default:

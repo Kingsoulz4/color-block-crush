@@ -33,6 +33,7 @@ namespace ColorBlockCrush
             m_imageBoosterIcon.sprite = iconSprite;
             m_textPrice.text = boosterData.price + "";
             m_textTitle.text = boosterData.title;
+            m_textDes.text = boosterData.description;
         }
 
         private void OnClickClose()

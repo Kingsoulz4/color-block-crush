@@ -10,9 +10,6 @@ namespace ColorBlockCrush.Tools
         [Header("Base Infor")]
         public ColorType colorType;
         public int bulletNumber;
-
-        [Header("Lock")]
-        public bool hasLock = false;
         
         [Header("Hidden")]
         public bool isHidden = false;

@@ -15,7 +15,7 @@ public class BoosterConfirmUI : MonoBehaviour
     [SerializeField] private Button closeBtn;
     [SerializeField] private RectTransform bgTooltip;
     [SerializeField] private RectTransform toolTipHanPos;
-    [SerializeField] private RectTransform toolTipSuperShootPos;
+    [SerializeField] private RectTransform toolTipMagnetPos;
     public BoosterType BoosterType = BoosterType.NONE;
 
     private void Start()
@@ -58,7 +58,7 @@ public class BoosterConfirmUI : MonoBehaviour
         }
         else
         {
-            bgTooltip.localPosition = toolTipSuperShootPos.localPosition;
+            bgTooltip.localPosition = toolTipMagnetPos.localPosition;
         }
     }
 }

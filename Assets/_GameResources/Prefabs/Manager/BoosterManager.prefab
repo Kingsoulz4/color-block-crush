@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8576036070549581444}
+  - component: {fileID: 130207889246998500}
   m_Layer: 0
-  m_Name: ScissorBooster
+  m_Name: MagnetBooster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,51 +33,19 @@ Transform:
   - {fileID: 7186091768816987362}
   m_Father: {fileID: 6386734015373583055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2546502368117706213
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6565216164205687712}
-  - component: {fileID: 2959119882975584505}
-  m_Layer: 0
-  m_Name: SuffleBooster
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6565216164205687712
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2546502368117706213}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6386734015373583055}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2959119882975584505
+--- !u!114 &130207889246998500
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2546502368117706213}
+  m_GameObject: {fileID: 796862612698015822}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd7d28dbe7706254bb76f15eb7b38cca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boosterType: 5
+  boosterType: 3
 --- !u!1 &2747553025833055162
 GameObject:
   m_ObjectHideFlags: 0
@@ -86,8 +55,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1985442583020615908}
+  - component: {fileID: 4439173133010605132}
   m_Layer: 0
-  m_Name: TimeIngameBooster
+  m_Name: AddTrayBooster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108,70 +78,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6386734015373583055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3812769672611777619
-GameObject:
+--- !u!114 &4439173133010605132
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4934659890583029000}
-  m_Layer: 0
-  m_Name: SpawnPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4934659890583029000
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3812769672611777619}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.35, y: 4.74, z: -20.37}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2706403351556748834}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4107647228201337623
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2706403351556748834}
-  m_Layer: 0
-  m_Name: TimePreBooster
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2706403351556748834
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4107647228201337623}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4934659890583029000}
-  - {fileID: 6287565007949385066}
-  m_Father: {fileID: 6386734015373583055}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 2747553025833055162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f19a53a32b955a43a11e6c060f03228, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boosterType: 0
 --- !u!1 &4674836085133187285
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51a5e3681791b0646b0c6ee92f224bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boosterType: 4
+  boosterType: 2
 --- !u!1 &5931702196088051768
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,7 +147,7 @@ GameObject:
   - component: {fileID: 6073655861747539234}
   - component: {fileID: 4683005929746910059}
   m_Layer: 0
-  m_Name: HammerBooster
+  m_Name: ShuffleBooster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -261,7 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43e38febac327fc4ca2ac9001a45fadd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boosterType: 2
+  boosterType: 1
   hammerPrefab: {fileID: 0}
 --- !u!1 &6018013672586842931
 GameObject:
@@ -297,8 +216,6 @@ Transform:
   - {fileID: 8576036070549581444}
   - {fileID: 6073655861747539234}
   - {fileID: 492222430143507859}
-  - {fileID: 6565216164205687712}
-  - {fileID: 2706403351556748834}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6086238603286923893
@@ -315,18 +232,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boosterData: {fileID: 11400000, guid: 55705ad30119ab94a967803154fac2b8, type: 2}
   boosters:
+  - {fileID: 4439173133010605132}
   - {fileID: 8744219414392260340}
-  - {fileID: 2959119882975584505}
   - {fileID: 4683005929746910059}
-  - {fileID: 8744219414392260340}
-  - {fileID: 2959119882975584505}
-  - {fileID: 0}
-  timeInGameBooster: {fileID: 0}
-  timePreBooster: {fileID: 0}
-  hammerBooster: {fileID: 4683005929746910059}
-  scissorBooster: {fileID: 0}
+  - {fileID: 130207889246998500}
+  addTrayBooster: {fileID: 4439173133010605132}
+  shuffleBooster: {fileID: 4683005929746910059}
+  magnetBooster: {fileID: 130207889246998500}
   handMoveBooster: {fileID: 8744219414392260340}
-  suffleBooster: {fileID: 2959119882975584505}
 --- !u!1 &7139980177684193534
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,35 +270,4 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8576036070549581444}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8101833649048895053
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6287565007949385066}
-  m_Layer: 0
-  m_Name: TargetPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6287565007949385066
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8101833649048895053}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.3, y: 9.4, z: -20.37}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2706403351556748834}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -34,7 +34,7 @@ namespace ColorBlockCrush.Tools
             elementConnectB = configB;
         }
 
-        public void UpdatePosFolloưElementEditorView()
+        public void UpdatePosFollowElementEditorView()
         {
             SetPoints(elementConnectA.GetComponent<RectTransform>(), elementConnectB.GetComponent<RectTransform>());
         }

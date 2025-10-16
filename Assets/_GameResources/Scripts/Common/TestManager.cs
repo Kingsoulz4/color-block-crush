@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.WebSockets;
+using ColorBlockCrush.Tools;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace ColorBlockCrush
@@ -17,6 +19,7 @@ namespace ColorBlockCrush
         [SerializeField] InputField inputLevelSet;
         [SerializeField] private Button btnTestLose;
         [SerializeField] private Button btnTestWin;
+        [SerializeField] private Button btnExit;
 
         private void Update()
         {
@@ -71,6 +74,8 @@ namespace ColorBlockCrush
             {
                 LevelEvent.OnWin?.Invoke(LevelManager.Instance.CurrentLevel);
             });
+            
+            btnExit.onClick.AddListener(ReturnLevelEditor);
         }
 
         private void LoadLevel()
@@ -106,6 +111,16 @@ namespace ColorBlockCrush
             popupOutOfSpace.Show();
             popupOutOfSpace.OnClose = onClose;
             popupOutOfSpace.OnKeepPlaying = onrevival;
+        }
+
+        private void ReturnLevelEditor()
+        {
+            if (LevelTestManager.Instance.currentLevelPlay != null)
+            {
+                LevelTestManager.Instance.currentLevelPlay = null;
+                Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
+                SceneManager.LoadScene(0);
+            }
         }
 
         private void AddRes()
