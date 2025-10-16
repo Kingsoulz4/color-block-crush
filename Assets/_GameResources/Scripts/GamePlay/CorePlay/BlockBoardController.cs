@@ -110,7 +110,10 @@ namespace ColorBlockCrush
         {
             for(int i=0; i<levelConfig.mapConfig.keys.Count; i++)
             {
-                listKey.Add(SpawnKey(levelConfig.mapConfig.keys[i]));
+                if (levelConfig.mapConfig.keys[i].blockId.Count > 0)
+                {
+                    listKey.Add(SpawnKey(levelConfig.mapConfig.keys[i]));
+                }
             }
         }    
 

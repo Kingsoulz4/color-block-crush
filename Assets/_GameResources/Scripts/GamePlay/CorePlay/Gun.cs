@@ -34,17 +34,15 @@ namespace ColorBlockCrush
         private TrayItem trayItem;
         private GunPos gunPos;
         private RotationDirection currentFireDir = RotationDirection.Up;
-        private GunConfig gunData;
         private HashSet<int> victims;
         private List<int> victims1;
 
+        public int ID { get; set; }
+        public GunConfig GunData { get; private set; }
         public int BulletCount { get; private set; }
         public ColorType ColorType { get; private set; }
-
         public bool IsFrontRow { get; set; }
-
-        public List<Gun> ConnectedGuns { get; private set; }
-
+        public List<Gun> ConnectedGuns { get => ConnectedGunHandler.ListGun; }
         public Block CurrentTarget { get; set; }
         public TrayItem TrayItem { get => trayItem; set => trayItem = value; }
         public GunPos GunPos { get => gunPos; set => gunPos = value; }
@@ -53,14 +51,15 @@ namespace ColorBlockCrush
         public Action<Gun> OnGunFired;
         public Action<Gun> OnGunEmpty;
 
-        public void Init(GunConfig gunDataP, int column)
+        public void Init(GunConfig gunDataP, int column, int id)
         {
+            ID = id;
             GunPos = GunPos.ON_GUN_BOARD;
             currentFireDir = RotationDirection.Up;
             OnGunFired = null;
             OnGunEmpty = null;
             CurrentTarget = null;
-            ConnectedGuns = new List<Gun>();
+            //ConnectedGuns = new List<Gun>();
             ColorType = gunDataP.colorType;
             BulletCount = gunDataP.bulletNumber;
             ColumnIndex = column;
@@ -68,7 +67,7 @@ namespace ColorBlockCrush
             isFireFirstTime = false;
             isTurning = false;
             victims = new HashSet<int>();
-            gunData = gunDataP;
+            GunData = gunDataP;
             UpdateVisuals();
             InitMechanics();
         }
