@@ -391,18 +391,23 @@ namespace ColorBlockCrush
 
         #endregion
 
-        public void CheckDestroy()
+        public bool CheckDestroy()
         {
             if(ConnectedGuns.Count <= 0)
             {
-                Destroy(gameObject);
+                return true;
             }    
             else
             {
                 for(int i=0; i<ConnectedGuns.Count; i++)
                 {
-                    //if (ConnectedGuns[i])
-                }    
+                    if (ConnectedGuns[i].BulletCount > 0)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
             }    
         }
             
