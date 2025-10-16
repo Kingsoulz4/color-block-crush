@@ -280,6 +280,7 @@ namespace ColorBlockCrush.Tools
                     
                     int cellIndex = cellSelection[i].Col * currentLevelConfig.mapConfig.mapSize.y
                                     + cellSelection[i].Row;
+                    currentLevelConfig.mapConfig.blocks[cellIndex].colorType = ColorType.None;
                     currentLevelConfig.mapConfig.blocks[cellIndex].keyId = keyConfig.keyId;
                     keyConfig.blockId.Add(currentLevelConfig.mapConfig.blocks[cellIndex].id);
                 }

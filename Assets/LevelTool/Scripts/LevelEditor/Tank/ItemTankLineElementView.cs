@@ -31,10 +31,9 @@ namespace ColorBlockCrush.Tools
         
         public GunLineElementConfig elementConfig = new GunLineElementConfig();
         
-        private Action onUpdateSeatQuantity;
+        private Action onDelete;
         private Action<int> onChangeIndex;
-
-
+        
         public void SetElementId(int elementId)
         {
             elementConfig.elementId = elementId;
@@ -52,7 +51,7 @@ namespace ColorBlockCrush.Tools
 
             SetElementId(elementId);
             
-            this.onUpdateSeatQuantity = onUpdateSeatQuantity;
+            this.onDelete = onDetete;
             buttonDelete.onClick.RemoveAllListeners();
             buttonDelete.onClick.AddListener(() => {
                 onDetete?.Invoke();
@@ -114,6 +113,11 @@ namespace ColorBlockCrush.Tools
                 lockIcon.SetActive(true);                
             }
             
+        }
+
+        public void DeleteElement()
+        {
+            onDelete?.Invoke();;
         }
 
         public void AddConnectLine(UiLine uiLine, ItemTankLineElementView tankConnect)
