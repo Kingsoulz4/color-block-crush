@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7c7e805b1912a4044a70f1fc579158c0
+guid: 08182de6e0558074a9e25649f4332c07
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Color
-    second: {fileID: 2100000, guid: 140089b60bd84d544a9d3b0923095859, type: 2}
+      name: Ege
+    second: {fileID: 2100000, guid: 60eb985fd31508e47afaefa9ca7ef124, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
