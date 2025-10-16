@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 5a055a8dce71ee44d8e9b5bb4374f0fa
+guid: 509d219cfcf88d545998d4a4081ec94f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Ham
+    second: {fileID: 2100000, guid: a1361b3258bf56e4f846316934307b52, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

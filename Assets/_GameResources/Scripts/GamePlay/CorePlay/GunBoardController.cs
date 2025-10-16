@@ -18,12 +18,13 @@ namespace ColorBlockCrush
 
         [Header("Prefabs")]
         [SerializeField] private Gun gunPrefab;
+        [SerializeField] private LockObject lockPrefab;
 
         [Header("References")]
         [SerializeField] private Transform gunContainer;
         [SerializeField] private ConveyorController conveyor;
 
-        private List<List<Gun>> listGunColumn = new List<List<Gun>>();
+        private List<List<ObjectOnGunBoardColumn>> listGunColumn = new List<List<ObjectOnGunBoardColumn>>();
 
         public Action<Gun> OnGunTapped;
 
@@ -48,22 +49,51 @@ namespace ColorBlockCrush
                     continue;
                 }
 
-                listGunColumn.Add(new List<Gun>());
+                listGunColumn.Add(new List<ObjectOnGunBoardColumn>());
 
                 List<GunLineElementConfig> columnData = new List<GunLineElementConfig>(gunBoardData.gunLines[col].gunLineElementConfigs);
 
                 for (int i = 0; i < columnData.Count; i++)
                 {
                     GunLineElementConfig data = columnData[i];
-                    var gun = SpawnGun(col, i, data.gunConfig, centerOffsetX);
-                    if (gun != null)
+
+                    if (data.elementType == GunLineElementType.Lock && lockPrefab != null)
                     {
-                        listGunColumn[col].Add(gun);
+                        var lockObj = SpawnLock(col, i, data.gunConfig, centerOffsetX);
+                        if (lockObj != null)
+                        {
+                            listGunColumn[col].Add(lockObj);
+                        }
+                    }
+                    else if(data.elementType == GunLineElementType.Tank)
+                    {
+                        var gun = SpawnGun(col, i, data.gunConfig, centerOffsetX);
+                        if (gun != null)
+                        {
+                            listGunColumn[col].Add(gun);
+                        }
                     }
                 }
 
                 UpdateFrontRowFlags(col);
             }
+        }
+
+        public LockObject SpawnLock(int column, int row, GunConfig gunData, float centerOffsetX = 0f)
+        {
+            if (!IsValidColumn(column)) return null;
+
+            Vector3 worldPos = spawnOrigin + new Vector3(
+                (column * columnSpacing) + centerOffsetX,
+                0,
+                row * -rowSpacing
+            );
+
+            LockObject lockObj = Instantiate(lockPrefab, worldPos, Quaternion.identity, gunContainer);
+            lockObj.Init(column);
+            lockObj.name = $"Gun_{column}_{row}";
+
+            return lockObj;
         }
 
         public Gun SpawnGun(int column, int row, GunConfig gunData, float centerOffsetX = 0f)
@@ -111,14 +141,35 @@ namespace ColorBlockCrush
             foreach (Gun g in gunsToPush)
             {
                 int col = g.ColumnIndex;
-                RemoveGunFromColumn(g);
+                RemoveObjectFromColumn(g);
                 ShiftColumn(col);
             }
 
             OnGunTapped?.Invoke(gun);
         }
 
-        private void RemoveGunFromColumn(Gun gun)
+        public void ResolveLock(LockObject lockObject)
+        {
+            RemoveObjectFromColumn(lockObject);
+            ShiftColumn(lockObject.ColumnIndex);
+        }
+
+        public LockObject GetPenndingLock()
+        {
+            LockObject lockObject = null;
+
+            for(int i=0; i<listGunColumn.Count; i++)
+            {
+                if (listGunColumn[i].Count > 0 && listGunColumn[i][0] is LockObject lockObj && !lockObj.IsResolved)
+                {
+                    return lockObj;
+                }
+            }
+
+            return lockObject;
+        }
+
+        private void RemoveObjectFromColumn(ObjectOnGunBoardColumn gun)
         {
             if (!IsValidColumn(gun.ColumnIndex)) return;
 
@@ -129,17 +180,23 @@ namespace ColorBlockCrush
         {
             if (!IsValidColumn(column)) return;
 
-            List<Gun> columnGuns = listGunColumn[column];
+            List<ObjectOnGunBoardColumn> columnGuns = listGunColumn[column];
 
             // Update positions for all remaining guns
             for (int i = 0; i < columnGuns.Count; i++)
             {
-                Gun gun = columnGuns[i];
+                ObjectOnGunBoardColumn objOnColumn = columnGuns[i];
 
-                Vector3 newPos = new Vector3(
-                     gun.transform.position.x, 0, gun.transform.position.z + rowSpacing);
+                Vector3 newPos = new Vector3(objOnColumn.transform.position.x, 0, objOnColumn.transform.position.z + rowSpacing);
 
-                gun.MoveColumn(newPos, 0.2f, DG.Tweening.Ease.OutQuad);
+                if (objOnColumn is Gun gun)
+                {
+                    gun.MoveColumn(newPos, 0.2f, DG.Tweening.Ease.OutQuad);
+                }
+                else if(objOnColumn is LockObject lockObject)
+                {
+                    lockObject.MoveColumn(newPos, 0.2f, DG.Tweening.Ease.OutQuad);
+                }
             }
 
             UpdateFrontRowFlags(column);
@@ -149,13 +206,13 @@ namespace ColorBlockCrush
         {
             if (!IsValidColumn(column)) return;
 
-            List<Gun> columnGuns = listGunColumn[column];
+            List<ObjectOnGunBoardColumn> columnGuns = listGunColumn[column];
 
             for (int i = 0; i < columnGuns.Count; i++)
             {
                 // Front row is the last gun in the list (highest row)
-                columnGuns[i].IsFrontRow = (i == 0);
-                columnGuns[i].UpdateMechanics();
+                columnGuns[i].SetIndex(i);
+                columnGuns[i].UpdateWhenColumnChange();
             }
         }
 

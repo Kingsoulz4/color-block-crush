@@ -12,7 +12,7 @@ using static UnityEngine.UI.CanvasScaler;
 
 namespace ColorBlockCrush
 {
-    public partial class Gun : MonoBehaviour
+    public partial class Gun : ObjectOnGunBoardColumn
     {
         [Header("Visual")]
         [SerializeField] private List<MeshRenderer> meshRendererList;
@@ -40,7 +40,7 @@ namespace ColorBlockCrush
 
         public int BulletCount { get; private set; }
         public ColorType ColorType { get; private set; }
-        public int ColumnIndex { get; set; }
+
         public bool IsFrontRow { get; set; }
 
         public List<Gun> ConnectedGuns { get; private set; }
@@ -73,9 +73,8 @@ namespace ColorBlockCrush
             InitMechanics();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            //victims1 = new List<int>(victims);
             CheckFire();
         }
 
@@ -83,6 +82,18 @@ namespace ColorBlockCrush
         {
             transform.DOKill(this);
             victims.Clear();
+        }
+
+        public override void UpdateWhenColumnChange()
+        {
+            base.UpdateWhenColumnChange();
+            UpdateMechanics();
+        }
+
+        public override void SetIndex(int index)
+        {
+            base.SetIndex(index);
+            IsFrontRow = index == 0;    
         }
 
         private void CheckFire()
@@ -112,11 +123,11 @@ namespace ColorBlockCrush
             }
             else
             {
-                //Debug.Log("Bỏ qua target " + target.name);
+                Debug.Log("Bỏ qua target " + target.name);
                 return;
             }
 
-            //Debug.Log("Fire target " + target.name);
+            Debug.Log("Fire target " + target.name);
             Fire(target);
         }
 
@@ -180,6 +191,7 @@ namespace ColorBlockCrush
             UpdateBulletCountDisplay();
 
             Bullet bullet = Instantiate(bulletPrb, bulletSpawnPos.position, Quaternion.identity);
+            bullet.transform.SetParent(LevelController.Instance.transform);
             bullet.OnInit(this, target, (gun, block) =>
             {
                 target.TakeDamage(1);
@@ -316,7 +328,7 @@ namespace ColorBlockCrush
         #region Move spline
         Tween moveToConveyorTw;
         Tween moveToSlotTw;
-        Tween moveSortSlotTw;
+
         public void MoveToConeyor(Vector3 endPos, Action callback = null)
         {
             isFireFirstTime = false;
@@ -363,7 +375,7 @@ namespace ColorBlockCrush
             moveSortSlotSq.SetId(this);
         }
 
-        public void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
+        public override void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
         {
             Sequence moveSortSlotSq = DOTween.Sequence();
             moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
