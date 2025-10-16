@@ -71,7 +71,7 @@ namespace ColorBlockCrush
             if (_blockMeshRenderer != null && colorRef != null && colorType != ColorType.None)
             {
                 int result = GetRandomByRatio(colorRate);
-                Material mat = colorRef.GetMaterial(ColorType, 0);
+                Material mat = colorRef.GetMaterial(ColorType, result);
                 if (mat != null && _blockMeshRenderer.sharedMaterial != mat)
                     _blockMeshRenderer.sharedMaterial = mat;
             }
