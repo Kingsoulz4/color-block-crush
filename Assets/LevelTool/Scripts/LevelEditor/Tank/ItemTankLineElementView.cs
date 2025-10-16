@@ -17,6 +17,7 @@ namespace ColorBlockCrush.Tools
         [SerializeField] private GameObject hidden;
         [SerializeField] private GameObject lockIcon;
         [SerializeField] private List<UiLine> linesConnected = new List<UiLine>();
+        [SerializeField] private List<ItemTankLineElementView> tankConnects = new List<ItemTankLineElementView>();
         
         [Header("Tunnel Infor")]
         [SerializeField] private GameObject tunnelInfor;
@@ -26,11 +27,19 @@ namespace ColorBlockCrush.Tools
         public Button buttonDelete;
         public Button buttonSelected;
         public GameObject selectedObject;
+        public TextMeshProUGUI elementIdText;
         
         public GunLineElementConfig elementConfig = new GunLineElementConfig();
         
         private Action onUpdateSeatQuantity;
         private Action<int> onChangeIndex;
+
+
+        public void SetElementId(int elementId)
+        {
+            elementConfig.elementId = elementId;
+            elementIdText.text = elementId.ToString();
+        }
         
         public void Init(int elementId, Action<ItemTankLineElementView> onSelectElement, GunLineElementConfig elementConfig = null, 
             Action onDetete = null, Action onUpdateSeatQuantity = null, Action<int> onChangeIndex = null)
@@ -41,7 +50,7 @@ namespace ColorBlockCrush.Tools
                 SetElementConfigDefault();
             }
 
-            this.elementConfig.elementId = elementId;
+            SetElementId(elementId);
             
             this.onUpdateSeatQuantity = onUpdateSeatQuantity;
             buttonDelete.onClick.RemoveAllListeners();
@@ -71,7 +80,6 @@ namespace ColorBlockCrush.Tools
             elementConfig.gunConfig.bulletNumber = 10;
                 
             elementConfig.gunConfig.isHidden = false;
-            elementConfig.gunConfig.hasLock = false;
             
             elementConfig.tunnelConfig = new TunnelConfig();
         }
@@ -82,27 +90,36 @@ namespace ColorBlockCrush.Tools
             {
                 tankInfor.SetActive(true);
                 tunnelInfor.SetActive(false);
+                lockIcon.SetActive(false);  
                 
                 GunConfig tankConfig = elementConfig.gunConfig;
                 tankColorBg.color = ColorReference.Instance.GetColor(tankConfig.colorType);
                 tankBulletTxtValue.text = tankConfig.bulletNumber.ToString();
                 
                 hidden.SetActive(tankConfig.isHidden);
-                lockIcon.SetActive(tankConfig.hasLock);
             }
-            else
+            else if(elementConfig.elementType == GunLineElementType.Tunnel)
             {
                 tankInfor.SetActive(false);
                 tunnelInfor.SetActive(true);
+                lockIcon.SetActive(false);       
                 
                 TunnelConfig tunnelConfig = elementConfig.tunnelConfig;
                 tankNumberValue.text = tunnelConfig.tankNumber.ToString();
             }
+            else if(elementConfig.elementType == GunLineElementType.Lock)
+            {
+                tankInfor.SetActive(false);
+                tunnelInfor.SetActive(false);
+                lockIcon.SetActive(true);                
+            }
+            
         }
 
-        public void AddUiLine(UiLine uiLine)
+        public void AddConnectLine(UiLine uiLine, ItemTankLineElementView tankConnect)
         {
             linesConnected.Add(uiLine);
+            tankConnects.Add(tankConnect);
         }
 
         public void UpdateUiLinePos()
@@ -111,13 +128,22 @@ namespace ColorBlockCrush.Tools
             
             foreach (var uiLine in linesConnected)
             {
-                uiLine.UpdatePosFolloưElementEditorView();
+                uiLine.UpdatePosFollowElementEditorView();
             }
         }
 
-        public void ClearUiLine()
+        public void RemoveConnectLine(UiLine uiLine, ItemTankLineElementView tankConnect)
+        {
+            linesConnected.Remove(uiLine);
+            tankConnects.Remove(tankConnect);
+        }
+
+        public void ClearConnectLine()
         {
             linesConnected.Clear();
+            tankConnects.Clear();
         }
+
+        public List<ItemTankLineElementView> GetTanksConnect() => tankConnects;
     }
 }

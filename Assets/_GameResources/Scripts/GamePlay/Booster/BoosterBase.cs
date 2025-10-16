@@ -10,7 +10,7 @@ public enum BoosterType
     ADD_TRAY = 0,
     SHUFFLE = 1,
     HAND_MOVE = 2,
-    SUPER_SHOOT = 3,
+    MAGNET = 3,
     REVIVAL = 4,
     LIVES = 5
 }

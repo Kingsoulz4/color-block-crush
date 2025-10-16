@@ -43,9 +43,9 @@ public class InGameScreenUI : ScreenUI
     [SerializeField] Button shuffleBtn;
     [SerializeField] VisualCountBooster shuffleBoosterCount;
 
-    [Header("Booster Super Shoot")]
-    [SerializeField] Button superShootBoosterBtn;
-    [SerializeField] VisualCountBooster superShootBoosterCount;
+    [Header("Booster Magnet")]
+    [SerializeField] Button magnetBoosterBtn;
+    [SerializeField] VisualCountBooster magnetBoosterCount;
     
     [Header("Booster Time")]
     [SerializeField] private GameObject m_iconClock;
@@ -67,7 +67,7 @@ public class InGameScreenUI : ScreenUI
         addTrayBoosterBtn.onClick.AddListener(OnAddTrayBoosterClick);
         handMoveBoosterBtn.onClick.AddListener(HandMoveboosterClick);
         shuffleBtn.onClick.AddListener(ShuffleBoosterClick);
-        superShootBoosterBtn.onClick.AddListener(SuperShootBoosterClick);
+        magnetBoosterBtn.onClick.AddListener(MagnetBoosterClick);
         btn_pause.onClick.AddListener(OnPauseClick);
         btn_Replay.onClick.AddListener(OnReplayClick);
 
@@ -83,7 +83,7 @@ public class InGameScreenUI : ScreenUI
         addTrayBoosterCount.Init(UserDataManager.AddTrayBooster, BoosterType.ADD_TRAY);
         shuffleBoosterCount.Init(UserDataManager.ShuffleBooster, BoosterType.SHUFFLE);
         handMoveBoosterCount.Init(UserDataManager.HandBooster, BoosterType.HAND_MOVE);
-        superShootBoosterCount.Init(UserDataManager.SuperShootBooster, BoosterType.SUPER_SHOOT);
+        magnetBoosterCount.Init(UserDataManager.MagnetBooster, BoosterType.MAGNET);
     }
 
     private void OnDisable()
@@ -117,8 +117,8 @@ public class InGameScreenUI : ScreenUI
             case BoosterType.SHUFFLE:
                 shuffleBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
-            case BoosterType.SUPER_SHOOT:
-                superShootBoosterCount.UpdateTextCountBooster(currentCount);
+            case BoosterType.MAGNET:
+                magnetBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             default:
                 break;
@@ -136,7 +136,7 @@ public class InGameScreenUI : ScreenUI
                 break;
             case BoosterType.SHUFFLE:
                 break;
-            case BoosterType.SUPER_SHOOT:
+            case BoosterType.MAGNET:
                 boostersObj.gameObject.SetActive(true);
                 break;
             default:
@@ -159,8 +159,8 @@ public class InGameScreenUI : ScreenUI
             case BoosterType.SHUFFLE:
                 shuffleBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
-            case BoosterType.SUPER_SHOOT:
-                superShootBoosterCount.UpdateTextCountBooster(currentCount);
+            case BoosterType.MAGNET:
+                magnetBoosterCount.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
             default:
@@ -201,23 +201,20 @@ public class InGameScreenUI : ScreenUI
             if (sucess)
             {
                 boosterConfirmUI.gameObject.SetActive(true);
-                var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.SHUFFLE);
-                Image hammerImg = shuffleBtn.GetComponent<VisualCountBooster>().Icon;
-                boosterConfirmUI.SetUIData(boosterData, hammerImg);
             }
         });
     }
 
-    private void SuperShootBoosterClick()
+    private void MagnetBoosterClick()
     {
-        BoosterManager.Instance.HandMoveBooster.DoShowBooster((sucess) =>
+        BoosterManager.Instance.MagnetBooster.DoShowBooster((sucess) =>
         {
             if (sucess)
             {
                 boosterConfirmUI.gameObject.SetActive(true);
-                var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.SUPER_SHOOT);
-                Image superShootImg = handMoveBoosterBtn.GetComponent<VisualCountBooster>().Icon;
-                boosterConfirmUI.SetUIData(boosterData, superShootImg);
+                var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.MAGNET);
+                Image magnetImg = magnetBoosterBtn.GetComponent<VisualCountBooster>().Icon;
+                boosterConfirmUI.SetUIData(boosterData, magnetImg);
                 boostersObj.gameObject.SetActive(false);
             }
         });
@@ -265,8 +262,10 @@ public class InGameScreenUI : ScreenUI
     private void PoupNewFeature()
     {
         //return;
+        Debug.Log("New Feature");
         var feature = NewFeatureManager.Instance.GetNewFeatureInProgress();
-        if (feature != null && LevelManager.Instance.CurrentLevel == feature.level && UserDataManager.LastFeatureCount < feature.level)
+        Debug.Log($"feature: {feature != null} {LevelManager.Instance.CurrentLevel} {feature.level}");
+        if (feature != null && LevelManager.Instance.CurrentLevel == feature.level /* && UserDataManager.LastFeatureCount < feature.level*/)
         {
             if (feature.displayType == NewFeatureTutDisplayType.POPOP_VID)
             {

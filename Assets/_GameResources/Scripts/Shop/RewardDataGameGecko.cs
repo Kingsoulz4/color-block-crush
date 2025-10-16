@@ -28,7 +28,7 @@ namespace ColorBlockCrush
                     UserDataManager.ShuffleBooster += quantity;
                     break;
                 case ItemType.BOOSTER_4:
-                    UserDataManager.SuperShootBooster += quantity;
+                    UserDataManager.MagnetBooster += quantity;
                     break;
             }
         }

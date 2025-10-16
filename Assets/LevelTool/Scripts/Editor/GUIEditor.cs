@@ -15,10 +15,6 @@ public static class GUIEditor
 
     private static void DrawCustomButtons()
     {
-        // if (GUILayout.Button("First Scene", GUILayout.Width(100)))
-        // {
-        //     OpenScene("Assets/Scenes/FirstScene.unity");
-        // }
         if (GUILayout.Button("GamePlay UI", GUILayout.Width(100)))
         {
             OpenScene("Assets/_GameResources/Scenes/GameSceneUI.unity");
@@ -30,6 +26,10 @@ public static class GUIEditor
         if (GUILayout.Button("Level Editor", GUILayout.Width(100)))
         {
             OpenScene("Assets/_GameResources/Scenes/LevelEditor.unity");
+        }
+        if (GUILayout.Button("Level Test", GUILayout.Width(100)))
+        {
+            OpenScene("Assets/_GameResources/Scenes/LevelTest.unity");
         }
     }
 
