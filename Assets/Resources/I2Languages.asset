@@ -17,6 +17,295 @@ MonoBehaviour:
     UserAgreesToHaveItInsideThePluginsFolder: 0
     GoogleLiveSyncIsUptoDate: 1
     mTerms:
+    - Term: LANGUAGE
+      TermType: 0
+      Description: 
+      Languages:
+      - Language
+      - "Ng\xF4n Ng\u1EEF"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: fonts
+      TermType: 1
+      Description: 
+      Languages:
+      - MADE Tommy Soft ExtraBold PERSONAL USE
+      - MADE Tommy Soft ExtraBold PERSONAL USE
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Refill/txt_get
+      TermType: 0
+      Description: 
+      Languages:
+      - Get
+      - "L\u1EA5y"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Refill/txt_next_life_in
+      TermType: 0
+      Description: 
+      Languages:
+      - 'Next life in:'
+      - "Cu\u1ED9c s\u1ED1ng ti\u1EBFp theo trong:"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Refill/txt_refill_des
+      TermType: 0
+      Description: 
+      Languages:
+      - Get more lives to continue playing
+      - "Nh\u1EADn th\xEAm m\u1EA1ng \u0111\u1EC3 ti\u1EBFp t\u1EE5c ch\u01A1i"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Refill/txt_refill_now
+      TermType: 0
+      Description: 
+      Languages:
+      - Refill Now!
+      - "N\u1EA1p Ti\u1EC1n Ngay!"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Refill/txt_title
+      TermType: 0
+      Description: 
+      Languages:
+      - Refill Your Hearts!
+      - "H\xE3y L\u1EA5p \u0110\u1EA7y Tr\xE1i Tim B\u1EA1n!"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Booster/txt_add_tray_des
+      TermType: 0
+      Description: 
+      Languages:
+      - Add extra tray to conveyor!
+      - "Th\xEAm khay v\xE0o b\u0103ng t\u1EA3i!"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Booster/txt_add_tray_title
+      TermType: 0
+      Description: 
+      Languages:
+      - Add Tray
+      - "Th\xEAm khay"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Booster/txt_hand_des
+      TermType: 0
+      Description: 
+      Languages:
+      - Pick any Shooter in the queue
+      - "Ch\u1ECDn b\u1EA5t k\u1EF3 game b\u1EAFn s\xFAng n\xE0o trong h\xE0ng \u0111\u1EE3i"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Booster/txt_hand_title
+      TermType: 0
+      Description: 
+      Languages:
+      - Hand
+      - Tay
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Booster/txt_shuffle_des
+      TermType: 0
+      Description: 
+      Languages:
+      - Shuffle the shooters in queues!
+      - "X\xE1o tr\u1ED9n c\xE1c x\u1EA1 th\u1EE7 trong h\xE0ng \u0111\u1EE3i!"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Booster/txt_shuffle_title
+      TermType: 0
+      Description: 
+      Languages:
+      - Shuffle
+      - "Tr\u1ED9n b\xE0i"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Booster/txt_magnet_des
+      TermType: 0
+      Description: 
+      Languages:
+      - Select a color to remove from the level
+      - "Ch\u1ECDn m\u1ED9t m\xE0u \u0111\u1EC3 x\xF3a kh\u1ECFi c\u1EA5p \u0111\u1ED9"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Booster/txt_magnet_title
+      TermType: 0
+      Description: 
+      Languages:
+      - Magnet
+      - "Nam Ch\xE2m"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_new_feature
+      TermType: 0
+      Description: 
+      Languages:
+      - New Feature
+      - "T\xEDnh N\u0103ng M\u1EDBi"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_surprise_shooter_title
+      TermType: 0
+      Description: 
+      Languages:
+      - Shooter with hidden features!
+      - "Th\xEAm khay v\xE0o b\u0103ng t\u1EA3i!"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_surprise_shooter_des
+      TermType: 0
+      Description: 
+      Languages:
+      - Surprise Shooter
+      - "Th\xEAm khay"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_connected_shooter_title
+      TermType: 0
+      Description: 
+      Languages:
+      - Connected Shooter
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_connect_shooter_des
+      TermType: 0
+      Description: 
+      Languages:
+      - They move together!
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_shooter_valut_title
+      TermType: 0
+      Description: 
+      Languages:
+      - Shooter Vault
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_shooter_valut_des
+      TermType: 0
+      Description: 
+      Languages:
+      - Holds hidden shooters inside!
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_key_lock_title
+      TermType: 0
+      Description: 
+      Languages:
+      - Key & Lock
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_key_lock_des
+      TermType: 0
+      Description: 
+      Languages:
+      - Find the key to unlock it.
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_hard_pixel_title
+      TermType: 0
+      Description: 
+      Languages:
+      - Hard Pixels
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_hard_pixel_des
+      TermType: 0
+      Description: 
+      Languages:
+      - Takes more hits to destroy!
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_pixel_snake_title
+      TermType: 0
+      Description: 
+      Languages:
+      - Pixel Snake
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_pixel_snake_des
+      TermType: 0
+      Description: 
+      Languages:
+      - 'Takes more hits to destroy!                '
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_tunnel_area_title
+      TermType: 0
+      Description: 
+      Languages:
+      - Pixels Vault
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: Feature/txt_tunnel_area_des
+      TermType: 0
+      Description: 
+      Languages:
+      - Spits out pixels around it!
+      - 
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: OutOfSpace/txt_out_of_space_des
+      TermType: 0
+      Description: 
+      Languages:
+      - Clear converyor and open up Slots to keep playing!
+      - "D\u1ECDn s\u1EA1ch b\u0103ng chuy\u1EC1n v\xE0 m\u1EDF c\xE1c \xF4 \u0111\u1EC3
+        ti\u1EBFp t\u1EE5c ch\u01A1i!"
+      - 
+      Flags: 000000
+      Languages_Touch: []
+    - Term: OutOfSpace/txt_title
+      TermType: 0
+      Description: 
+      Languages:
+      - OUT OF SPACE
+      - "H\u1EBFt Ch\u1ED7"
+      - 
+      Flags: 000000
+      Languages_Touch: []
     - Term: Game/btn_cancel
       TermType: 0
       Description: 
@@ -143,6 +432,15 @@ MonoBehaviour:
       - 
       Flags: 000000
       Languages_Touch: []
+    - Term: Game/txt_level_failed_value
+      TermType: 0
+      Description: 
+      Languages:
+      - LEVEL FAILED
+      - "M\xE0n Ch\u01A1i Th\u1EA5t B\u1EA1i"
+      - 
+      Flags: 000000
+      Languages_Touch: []
     - Term: Game/txt_not_enough_coin
       TermType: 0
       Description: 
@@ -197,6 +495,15 @@ MonoBehaviour:
       - 
       Flags: 000000
       Languages_Touch: []
+    - Term: Game/txt_try_again
+      TermType: 0
+      Description: 
+      Languages:
+      - Try Again
+      - "Th\u1EED L\u1EA1i"
+      - 
+      Flags: 000000
+      Languages_Touch: []
     - Term: Game/txt_unlock
       TermType: 0
       Description: 
@@ -230,34 +537,6 @@ MonoBehaviour:
       Languages:
       - Video not available!
       - "Qu\u1EA3ng c\xE1o kh\xF4ng c\xF3 s\u1EB5n!"
-      - 
-      Flags: 000000
-      Languages_Touch: []
-    - Term: LANGUAGE
-      TermType: 0
-      Description: 
-      Languages:
-      - Language
-      - "Ng\xF4n Ng\u1EEF"
-      - 
-      Flags: 000000
-      Languages_Touch: []
-    - Term: OutOfSpace/txt_out_of_space_des
-      TermType: 0
-      Description: 
-      Languages:
-      - Clear converyor and open up Slots to keep playing!
-      - "D\u1ECDn s\u1EA1ch b\u0103ng chuy\u1EC1n v\xE0 m\u1EDF c\xE1c \xF4 \u0111\u1EC3
-        ti\u1EBFp t\u1EE5c ch\u01A1i!"
-      - 
-      Flags: 000000
-      Languages_Touch: []
-    - Term: OutOfSpace/txt_title
-      TermType: 0
-      Description: 
-      Languages:
-      - OUT OF SPACE
-      - "H\u1EBFt Ch\u1ED7"
       - 
       Flags: 000000
       Languages_Touch: []
@@ -369,12 +648,12 @@ MonoBehaviour:
       - 
       Flags: 000000
       Languages_Touch: []
-    - Term: fonts
-      TermType: 1
+    - Term: Feature/txt_unlocked
+      TermType: 0
       Description: 
       Languages:
-      - MADE Tommy Soft ExtraBold PERSONAL USE
-      - MADE Tommy Soft ExtraBold PERSONAL USE
+      - Unlocked!
+      - "\u0110\xE3 M\u1EDF Kh\xF3a!"
       - 
       Flags: 000000
       Languages_Touch: []
@@ -396,7 +675,7 @@ MonoBehaviour:
     Google_WebServiceURL: https://script.google.com/macros/s/AKfycbxMqCXyTiN_PyFrLYDE1XF4owNSWUfvCq-gYA1uLUPVkyzqXdhMeBghVyGIw1q_QqN_iA/exec
     Google_SpreadsheetKey: 1tez-f603ElTwS8Yfqi72E0Wq-69JaMVmL_cORyXOWac
     Google_SpreadsheetName: I2Loc gec Localization
-    Google_LastUpdatedVersion: 1760497191778
+    Google_LastUpdatedVersion: 1760606982836
     Google_Password: change_this
     GoogleUpdateFrequency: 3
     GoogleInEditorCheckFrequency: 2

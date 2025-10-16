@@ -29,7 +29,11 @@ namespace ColorBlockCrush
 
         private int _rows;
         private int _columns;
+
+
         private Block[,] _blockStacks;
+        private List<BlockKey> listKey = new();
+
         private Vector3 calculatedBlockScale;
         private Vector3 calculatedBlockOffset;
         private LevelConfig levelConfig;
@@ -76,13 +80,13 @@ namespace ColorBlockCrush
                         continue;
                     }
 
-                    SpawnBlock(r, c, BlockType.Normal, listBlock[idx], false, true);
+                    SpawnBlock(r, c, BlockType.Normal, listBlock[idx]);
                 }
             }
         }
 
 
-        public Block SpawnBlock(int row, int col, BlockType type, BlockConfig blockData, bool isStatic, bool canDestroy)
+        public Block SpawnBlock(int row, int col, BlockType type, BlockConfig blockData)
         {
             if (!IsValidPosition(row, col)) return null;
 
@@ -93,7 +97,7 @@ namespace ColorBlockCrush
             block.transform.localScale = calculatedBlockScale;
 
             block.name = $"Block_{row}_{col}";
-            block.Init(type, blockData, isStatic, canDestroy);
+            block.Init(type, blockData);
             block.GridNode = node;
 
             PlaceBlock(row, col, block);
@@ -106,15 +110,42 @@ namespace ColorBlockCrush
         {
             for(int i=0; i<levelConfig.mapConfig.keys.Count; i++)
             {
-                SpawnKey(levelConfig.mapConfig.keys[i]);
+                listKey.Add(SpawnKey(levelConfig.mapConfig.keys[i]));
             }
         }    
 
-        private void SpawnKey(KeyConfig keyConfig)
+        private BlockKey SpawnKey(KeyConfig keyConfig)
         {
             var newKey = Instantiate(blockKeyPrefab, keyContainer);
             newKey.transform.position = CalculateCenter(keyConfig.blockId);
-            
+            newKey.Init(keyConfig);
+            var directions = new List<Vector2Int>() { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right, Vector2Int.one, Vector2Int.one * -1, new Vector2Int(1, -1), new Vector2Int(-1, 1)};
+
+            for (int i = 0; i < keyConfig.blockId.Count; i++)
+            {
+                (ulong row, ulong col) = CantorPairing.Unpair((ulong)keyConfig.blockId[i]);
+                int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
+                var blockData = levelConfig.mapConfig.blocks[idReal];
+                var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
+                for(int j=0; j<directions.Count; j++)
+                {
+                    var dir = directions[j];
+                    var coordX = blockData.coordinate.x + dir.x;
+                    var coordY = blockData.coordinate.y + dir.y;
+                    if (coordX >= 0 && coordX < levelConfig.mapConfig.mapSize.x && coordY >= 0 && coordY < levelConfig.mapConfig.mapSize.y)
+                    {
+                        var blockNeighbor = _blockStacks[blockData.coordinate.x + dir.x, blockData.coordinate.y + dir.y];
+                        newKey.AddBlock(blockNeighbor);
+                        blockNeighbor.OnBlockDestroyed += (bl) =>
+                        {
+                            newKey.CheckCanResolve();
+                        };
+                    }
+                }
+
+            }
+
+            return newKey;
         }
 
         private Vector3 CalculateCenter(List<int> listBlockId)
@@ -122,7 +153,9 @@ namespace ColorBlockCrush
             var sumPos = new Vector3();
             for(int i=0; i<listBlockId.Count; i++)
             {
-                var blockData = levelConfig.mapConfig.blocks[listBlockId[i]];
+                (ulong row, ulong col) = CantorPairing.Unpair((ulong)listBlockId[i]);
+                int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
+                var blockData = levelConfig.mapConfig.blocks[idReal];
                 var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
                 sumPos += block.transform.position;
             }
@@ -130,9 +163,14 @@ namespace ColorBlockCrush
             return sumPos / listBlockId.Count;
         }
 
+        public BlockKey GetPendingKey()
+        {
+            return listKey.Find(x => !x.IsResolved && x.IsUnBlocked);
+        }
+
         private void OnBlockDestroyed(Block block)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         //private void CalculateDynamicScaleAndOffset(int rows, int columns)
@@ -182,7 +220,7 @@ namespace ColorBlockCrush
 
             _blockStacks[row, col] = block;
 
-            if (!block.CanDestroy)
+            if (block.BlockData.blockType == BlockType.Stone)
             {
                 gridController.GridNodes[row, col].IsBlocked = true;
             }

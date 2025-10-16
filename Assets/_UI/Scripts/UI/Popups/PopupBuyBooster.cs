@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using I2.Loc;
 
 namespace ColorBlockCrush
 {
@@ -29,11 +30,11 @@ namespace ColorBlockCrush
         {
             this.boosterType = boosterType;
             var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(boosterType);
-            var iconSprite = Resources.Load<Sprite>($"BoosterIcons/{(int)boosterType}");
+            var iconSprite = boosterData.icon;
             m_imageBoosterIcon.sprite = iconSprite;
             m_textPrice.text = boosterData.price + "";
-            m_textTitle.text = boosterData.title;
-            m_textDes.text = boosterData.description;
+            m_textTitle.text = LocalizationManager.GetTranslation(boosterData.title);
+            m_textDes.text = LocalizationManager.GetTranslation(boosterData.description);
         }
 
         private void OnClickClose()
