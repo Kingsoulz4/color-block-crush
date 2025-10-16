@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 4647897832741129}
   - component: {fileID: 33041931892995686}
   - component: {fileID: 23945417545486132}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mesh-Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
