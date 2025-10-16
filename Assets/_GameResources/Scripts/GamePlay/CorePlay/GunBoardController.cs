@@ -57,7 +57,7 @@ namespace ColorBlockCrush
                 {
                     GunLineElementConfig data = columnData[i];
 
-                    if (data.gunConfig.hasLock && lockPrefab != null)
+                    if (data.elementType == GunLineElementType.Lock && lockPrefab != null)
                     {
                         var lockObj = SpawnLock(col, i, data.gunConfig, centerOffsetX);
                         if (lockObj != null)
@@ -65,7 +65,7 @@ namespace ColorBlockCrush
                             listGunColumn[col].Add(lockObj);
                         }
                     }
-                    else if(!data.gunConfig.hasLock)
+                    else if(data.elementType == GunLineElementType.Tank)
                     {
                         var gun = SpawnGun(col, i, data.gunConfig, centerOffsetX);
                         if (gun != null)
@@ -90,7 +90,7 @@ namespace ColorBlockCrush
             );
 
             LockObject lockObj = Instantiate(lockPrefab, worldPos, Quaternion.identity, gunContainer);
-            //gun.Init(gunData, column);
+            lockObj.Init(column);
             lockObj.name = $"Gun_{column}_{row}";
 
             return lockObj;
@@ -141,11 +141,17 @@ namespace ColorBlockCrush
             foreach (Gun g in gunsToPush)
             {
                 int col = g.ColumnIndex;
-                RemoveGunFromColumn(g);
+                RemoveObjectFromColumn(g);
                 ShiftColumn(col);
             }
 
             OnGunTapped?.Invoke(gun);
+        }
+
+        public void ResolveLock(LockObject lockObject)
+        {
+            RemoveObjectFromColumn(lockObject);
+            ShiftColumn(lockObject.ColumnIndex);
         }
 
         public LockObject GetPenndingLock()
@@ -154,7 +160,7 @@ namespace ColorBlockCrush
 
             for(int i=0; i<listGunColumn.Count; i++)
             {
-                if (listGunColumn[i][0] is LockObject lockObj)
+                if (listGunColumn[i].Count > 0 && listGunColumn[i][0] is LockObject lockObj && !lockObj.IsResolved)
                 {
                     return lockObj;
                 }
@@ -163,7 +169,7 @@ namespace ColorBlockCrush
             return lockObject;
         }
 
-        private void RemoveGunFromColumn(Gun gun)
+        private void RemoveObjectFromColumn(ObjectOnGunBoardColumn gun)
         {
             if (!IsValidColumn(gun.ColumnIndex)) return;
 
@@ -181,12 +187,15 @@ namespace ColorBlockCrush
             {
                 ObjectOnGunBoardColumn objOnColumn = columnGuns[i];
 
+                Vector3 newPos = new Vector3(objOnColumn.transform.position.x, 0, objOnColumn.transform.position.z + rowSpacing);
+
                 if (objOnColumn is Gun gun)
                 {
-                    Vector3 newPos = new Vector3(
-                         gun.transform.position.x, 0, gun.transform.position.z + rowSpacing);
-
                     gun.MoveColumn(newPos, 0.2f, DG.Tweening.Ease.OutQuad);
+                }
+                else if(objOnColumn is LockObject lockObject)
+                {
+                    lockObject.MoveColumn(newPos, 0.2f, DG.Tweening.Ease.OutQuad);
                 }
             }
 

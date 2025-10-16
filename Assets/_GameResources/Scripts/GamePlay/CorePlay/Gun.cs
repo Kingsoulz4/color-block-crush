@@ -40,7 +40,7 @@ namespace ColorBlockCrush
 
         public int BulletCount { get; private set; }
         public ColorType ColorType { get; private set; }
-        public int ColumnIndex { get; set; }
+
         public bool IsFrontRow { get; set; }
 
         public List<Gun> ConnectedGuns { get; private set; }

@@ -7,17 +7,20 @@ namespace ColorBlockCrush
 {
     public class ObjectOnGunBoardColumn : MonoBehaviour
     {
-        private int index = 0;
+        public int ColumnIndex { get; set; }
+
+        public int Index { get; private set; } = 0;
+
         protected Tween moveSortSlotTw;
 
         public virtual void SetIndex(int index)
         {
-            this.index = index;
+            Index = index;
         }
 
         public virtual void UpdateWhenColumnChange()
         {
-
+           
         }
 
         public virtual void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)

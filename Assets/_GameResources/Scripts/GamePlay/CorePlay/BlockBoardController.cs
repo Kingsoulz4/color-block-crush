@@ -29,7 +29,11 @@ namespace ColorBlockCrush
 
         private int _rows;
         private int _columns;
+
+
         private Block[,] _blockStacks;
+        private List<BlockKey> listKey = new();
+
         private Vector3 calculatedBlockScale;
         private Vector3 calculatedBlockOffset;
         private LevelConfig levelConfig;
@@ -106,11 +110,11 @@ namespace ColorBlockCrush
         {
             for(int i=0; i<levelConfig.mapConfig.keys.Count; i++)
             {
-                SpawnKey(levelConfig.mapConfig.keys[i]);
+                listKey.Add(SpawnKey(levelConfig.mapConfig.keys[i]));
             }
         }    
 
-        private void SpawnKey(KeyConfig keyConfig)
+        private BlockKey SpawnKey(KeyConfig keyConfig)
         {
             var newKey = Instantiate(blockKeyPrefab, keyContainer);
             newKey.transform.position = CalculateCenter(keyConfig.blockId);
@@ -140,6 +144,8 @@ namespace ColorBlockCrush
                 }
 
             }
+
+            return newKey;
         }
 
         private Vector3 CalculateCenter(List<int> listBlockId)
@@ -155,6 +161,11 @@ namespace ColorBlockCrush
             }
 
             return sumPos / listBlockId.Count;
+        }
+
+        public BlockKey GetPendingKey()
+        {
+            return listKey.Find(x => !x.IsResolved && x.IsUnBlocked);
         }
 
         private void OnBlockDestroyed(Block block)
