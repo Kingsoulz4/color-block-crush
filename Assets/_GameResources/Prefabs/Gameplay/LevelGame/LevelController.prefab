@@ -362,7 +362,7 @@ MonoBehaviour:
     - Position:
         x: 4
         y: 0.36
-        z: -2.83
+        z: -2.93
       TangentIn:
         x: 0
         y: 0
@@ -384,17 +384,17 @@ MonoBehaviour:
       TangentIn:
         x: -0
         y: -0
-        z: -0.25472334
+        z: -0.2651879
       TangentOut:
         x: 0
         y: 0
-        z: 0.23587613
+        z: 0.24124895
       Rotation:
         value:
-          x: 0.000017258975
-          y: 0.5036375
-          z: 0.000029615076
-          w: 0.863915
+          x: 0.000016398553
+          y: 0.47886023
+          z: 0.000030063356
+          w: 0.8778912
     - Position:
         x: 5.3
         y: 0.36
@@ -402,19 +402,19 @@ MonoBehaviour:
       TangentIn:
         x: -0
         y: -0
-        z: -0.21601401
+        z: -0.2230001
       TangentOut:
         x: 0
         y: 0
-        z: 0.20035027
+        z: 0.21090046
       Rotation:
         value:
-          x: 0.000015243584
-          y: 0.23540632
-          z: 0.00006290559
-          w: 0.97189707
+          x: 0.000017635508
+          y: 0.27326646
+          z: 0.00006207176
+          w: 0.9619383
     - Position:
-        x: 5.4
+        x: 5.5
         y: 0.36
         z: -1.53
       TangentIn:
@@ -506,7 +506,7 @@ MonoBehaviour:
     - Position:
         x: -3.21
         y: 0.36
-        z: 10.33
+        z: 10.35
       TangentIn:
         x: 0
         y: 0
@@ -528,17 +528,17 @@ MonoBehaviour:
       TangentIn:
         x: -0
         y: -0
-        z: -0.36320898
+        z: -0.36439925
       TangentOut:
         x: 0
         y: 0
-        z: 0.32870677
+        z: 0.3296243
       Rotation:
         value:
-          x: -0.000009942119
-          y: 0.8202292
-          z: 0.0000069377447
-          w: -0.572035
+          x: -0.000009970481
+          y: 0.82259744
+          z: 0.0000068961385
+          w: -0.56862414
     - Position:
         x: -5.19
         y: 0.36
@@ -2064,7 +2064,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnOrigin: {x: 0, y: 0, z: 3.5}
   maxBlockScale: {x: 1, y: 1, z: 1}
-  maxGridWidth: 7
+  maxGridWidth: 8
   maxGridHeight: 8
   _minBlockScale: 0.2
   axisType: 1
