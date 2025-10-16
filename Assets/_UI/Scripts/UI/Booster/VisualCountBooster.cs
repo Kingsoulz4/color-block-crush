@@ -22,6 +22,9 @@ namespace ColorBlockCrush
             if (obj_BoosterActive == null || obj_BoosterAdd == null) { return; }
             btn_AddBooster.onClick.AddListener(ShowPopupAddBooster);
             bool isActive = count > 0;
+            var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(boosterType);
+            var iconSprite = boosterData.icon;
+            Icon.sprite = iconSprite;
             obj_BoosterActive.SetActive(isActive);
             obj_BoosterAdd.SetActive(!isActive);
             UpdateText(count);

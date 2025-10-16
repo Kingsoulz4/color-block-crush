@@ -267,23 +267,14 @@ public class InGameScreenUI : ScreenUI
         Debug.Log($"feature: {feature != null} {LevelManager.Instance.CurrentLevel} {feature.level}");
         if (feature != null && LevelManager.Instance.CurrentLevel == feature.level /* && UserDataManager.LastFeatureCount < feature.level*/)
         {
-            if (feature.displayType == NewFeatureTutDisplayType.POPOP_VID)
-            {
-                var pop = UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
-                pop.SetData(feature.title, feature.desInTutorial, feature.icon);
-                UserDataManager.LastFeatureCount = feature.level;
-            }
-            else
-            {
-                var pop = UIManager.Instance.ShowPopup<PopupTutorialTextNewFeature>(null);
-                pop.SetData(feature);
-            }
+            var pop = UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
+            pop.SetData(feature);
         }
     }
 
     private void HideAllTuts()
     {
-        var popupTut = UIManager.Instance.GetPopupActive<PopupTutorialTextNewFeature>();
+        var popupTut = UIManager.Instance.GetPopupActive<PopupTutorialNewFeature>();
         if(popupTut != null)
         {
             popupTut.Hide();
