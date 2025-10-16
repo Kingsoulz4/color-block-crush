@@ -40,6 +40,8 @@ namespace ColorBlockCrush
         public int GridHeight { get; set; }
         public bool CanDestroy { get; private set; }
         public bool IsAttacked { get; set; }
+        public bool IsDestroyed { get; set; }
+
         public BlockConfig BlockData { get => blockData; }
         public int Id { get => id; }
 
@@ -101,9 +103,12 @@ namespace ColorBlockCrush
 
             if (hitPoint <= 0)
             {
+                
                 DestroyBlock(() =>
                 {
+                    IsDestroyed = true;
                     gameObject.SetActive(false);
+                    OnBlockDestroyed?.Invoke(this);
                 });
             }
         }

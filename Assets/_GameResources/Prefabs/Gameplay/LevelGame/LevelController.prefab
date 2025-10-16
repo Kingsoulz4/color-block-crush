@@ -1916,6 +1916,7 @@ MonoBehaviour:
   columnSpacing: 3
   rowSpacing: 2.5
   gunPrefab: {fileID: 769447249408881793, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}
+  lockPrefab: {fileID: 4719912956732493574, guid: 5d73177f82cd7f845b768f6c1551bc09, type: 3}
   gunContainer: {fileID: 4637696110757540719}
   conveyor: {fileID: 6226058982253706133}
 --- !u!1 &5596942596683886980
