@@ -17,8 +17,8 @@ namespace ColorBlockCrush
         {
             this.mainGun = mainGun;
             this.connectedGun = connectedGun;
-            m_mainRope.materials[0] = m_listMat.listMaterial[mainGun.ColorType];
-            m_mainRope.materials[1] = m_listMat.listMaterial[connectedGun.ColorType];
+            var listMat = new Material[] { m_listMat.listMaterial[connectedGun.ColorType], m_listMat.listMaterial[mainGun.ColorType] };
+            m_mainRope.materials = listMat;
         }
 
         private void Update()

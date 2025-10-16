@@ -745,6 +745,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 769447249408881793}
     - target: {fileID: 5425231162146973140, guid: 6029b97f901140c4796cf3748ba8b100, type: 3}
+      propertyPath: m_colorReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 2ccb4a355d5e88e45b9541281c70d074, type: 2}
+    - target: {fileID: 5425231162146973140, guid: 6029b97f901140c4796cf3748ba8b100, type: 3}
       propertyPath: m_connectionPoint
       value: 
       objectReference: {fileID: 2753717960558641105}

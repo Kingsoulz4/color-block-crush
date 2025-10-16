@@ -22,6 +22,7 @@ namespace ColorBlockCrush
         public void Init()
         {
             var listIdLinkGun = m_selfGun.GunData.gunConnect;
+            m_ropeSelfConnect.material = m_colorReference.listMaterial[m_selfGun.ColorType];
             for (int i = 0; i < listIdLinkGun.Count; i++)
             {
                 var gun = LevelManager.Instance.LevelGame.GunBoardController.GetGunByID(listIdLinkGun[i]);
