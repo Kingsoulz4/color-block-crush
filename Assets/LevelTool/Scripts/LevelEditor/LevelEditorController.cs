@@ -151,7 +151,10 @@ namespace ColorBlockCrush.Tools
             view.buttonClearAllTankSelected.onClick.AddListener(ClearAllTankLineELementSelected);
             
             view.buttonSetLineConnect.onClick.AddListener(SetConnectLine);
-            view.buttonDelLineConnect.onClick.AddListener(DelConnectLine);
+            view.buttonDelLineConnect.onClick.AddListener(() =>
+            {
+                DelConnectLine();
+            });
             
             view.buttonAddTunnelItemQueue.onClick.AddListener(() =>
             {
@@ -173,7 +176,6 @@ namespace ColorBlockCrush.Tools
                 newTankConfig.bulletNumber = bulletNumber;
                 newTankConfig.colorType = currentTankTunnelQueueColor;
                 newTankConfig.isHidden = false;
-                newTankConfig.hasLock = false;
                 
                 OnAddTankQueueToTunnel(newTankConfig);
             });

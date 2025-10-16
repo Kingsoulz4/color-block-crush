@@ -28,11 +28,13 @@ namespace ColorBlockCrush.Tools
         {
             if (index < 0 && index >= view.tankLineViews.Count) return;
 
-            Action<int> onDelete = (lineId) =>
+            Action<ItemTankLineElementView> onDelete = (itemLevelView) =>
             {
+                (ulong lineId, ulong itemIndex) = CantorPairing.Unpair((ulong)itemLevelView.elementConfig.elementId);
+                DelConnectLine(itemLevelView);
                 UpdateTankLinesInfor();
                 UpdateLevelState();
-                ReUpdateElementId(lineId);
+                ReUpdateElementId((int)lineId);
             };
 
             Action<int> onChangeIndex = (lineId) =>
@@ -112,27 +114,25 @@ namespace ColorBlockCrush.Tools
         {
             TankLineEditorView tankLineEditorView = view.tankLineViews[lineId];
             List<ItemTankLineElementView> itemTankLineElementViews = tankLineEditorView.GetElementView();
-            List<int> connectIds = new List<int>();
+            List<ItemTankLineElementView> tanksConnect = new List<ItemTankLineElementView>();
 
             for (int i = 0; i < itemTankLineElementViews.Count; i++)
             {
                 int oldElementId = itemTankLineElementViews[i].elementConfig.elementId;
                 int newElementId = (int)CantorPairing.MakeId((ulong)lineId, (ulong)i);
-                itemTankLineElementViews[i].SetElementId(newElementId);
-
                 if (itemTankLineElementViews[i].elementConfig.elementType == GunLineElementType.Tank)
                 {
-                    connectIds = itemTankLineElementViews[i].elementConfig.gunConfig.gunConnect;
-                    if (connectIds != null && connectIds.Count > 0)
+                    tanksConnect = itemTankLineElementViews[i].GetTanksConnect();
+                    if (tanksConnect != null && tanksConnect.Count > 0)
                     {
-                        foreach (var idConnect in connectIds)
+                        foreach (var itemTankConnect in tanksConnect.ToList())
                         {
-                            ItemTankLineElementView tankConnect = GetTankLineElementViewById(idConnect);
-                            tankConnect.elementConfig.gunConfig.gunConnect.Remove(oldElementId);
-                            tankConnect.elementConfig.gunConfig.gunConnect.Add(newElementId);
+                            itemTankConnect.elementConfig.gunConfig.gunConnect.Remove(oldElementId);
+                            itemTankConnect.elementConfig.gunConfig.gunConnect.Add(newElementId);
                         }
                     }   
                 }
+                itemTankLineElementViews[i].SetElementId(newElementId);
             }
         }
 
@@ -164,15 +164,16 @@ namespace ColorBlockCrush.Tools
                 GunConfig tankConfig = elementConfig.gunConfig;
 
                 view.bulletInputField.text = tankConfig.bulletNumber.ToString();
-                view.toggleTankLock.isOn = tankConfig.hasLock;
                 view.toggleTankHidden.isOn = tankConfig.isHidden;
 
                 UpdateCurrentColorChooseTank(tankConfig.colorType);
             }
-            else
+            else if(elementConfig.elementType == GunLineElementType.Tunnel)
             {
                 UpdateTunnelHumanQueue();
             }
+            
+            view.toggleTankLock.isOn = elementConfig.elementType == GunLineElementType.Lock;
         }
 
         private void UpdateCurrentColorChooseTank(ColorType colorChoose)
@@ -191,7 +192,8 @@ namespace ColorBlockCrush.Tools
 
             foreach (var currentElementSelected in tankLinesELementSelected)
             {
-                currentElementSelected.elementConfig.elementType = GunLineElementType.Tank;
+                currentElementSelected.elementConfig.elementType = view.toggleTankLock.isOn ?
+                    GunLineElementType.Lock : GunLineElementType.Tank;
 
                 if (currentElementSelected.elementConfig.gunConfig == null)
                     currentElementSelected.elementConfig.gunConfig = new GunConfig();
@@ -199,7 +201,6 @@ namespace ColorBlockCrush.Tools
                 currentElementSelected.elementConfig.gunConfig.colorType = currentTankColor;
                 currentElementSelected.elementConfig.gunConfig.bulletNumber =
                     int.Parse(view.bulletInputField.text);
-                currentElementSelected.elementConfig.gunConfig.hasLock = view.toggleTankLock.isOn;
                 currentElementSelected.elementConfig.gunConfig.isHidden = view.toggleTankHidden.isOn;
 
                 currentElementSelected.UpdateUI();   
@@ -214,8 +215,6 @@ namespace ColorBlockCrush.Tools
         private void DellTankInfor()
         {
             if (currentTankLineElementSelected == null) return;
-
-            DelConnectLine();
             
             currentTankLineElementSelected.SetElementConfigDefault();
             currentTankLineElementSelected.UpdateUI();
@@ -268,13 +267,17 @@ namespace ColorBlockCrush.Tools
             UpdateLevelState();
         }
 
-        private void DelConnectLine()
+        private void DelConnectLine(ItemTankLineElementView tankLineElementView = null)
         {
-            if (currentTankLineElementSelected == null) return;
-            if (currentTankLineElementSelected.elementConfig.elementType != GunLineElementType.Tank) return;
+            ItemTankLineElementView tankLineDelele = tankLineElementView != null
+                ? tankLineElementView
+                : currentTankLineElementSelected;
+            
+            if (tankLineDelele == null) return;
+            if (tankLineDelele.elementConfig.elementType != GunLineElementType.Tank) return;
 
-            int currentElementId = currentTankLineElementSelected.elementConfig.elementId;
-            foreach (var gunIdConnect in currentTankLineElementSelected.elementConfig.gunConfig.gunConnect)
+            int currentElementId = tankLineDelele.elementConfig.elementId;
+            foreach (var gunIdConnect in tankLineDelele.elementConfig.gunConfig.gunConnect)
             {
                 ItemTankLineElementView tankConnect =
                     GetTankLineElementViewById(gunIdConnect);
@@ -289,13 +292,13 @@ namespace ColorBlockCrush.Tools
                 if (currentLineViewConnect != null)
                 {
                     uiLines.Remove(currentLineViewConnect);
-                    tankConnect.RemoveUiLine(currentLineViewConnect);
+                    tankConnect.RemoveConnectLine(currentLineViewConnect, tankLineDelele);
                     Destroy(currentLineViewConnect.gameObject);
                 }
             }
 
-            currentTankLineElementSelected.elementConfig.gunConfig.gunConnect = new List<int>();
-            currentTankLineElementSelected.ClearUiLine();
+            tankLineDelele.elementConfig.gunConfig.gunConnect = new List<int>();
+            tankLineDelele.ClearConnectLine();
 
             UpdateTankLinesInfor();
             UpdateLevelState();
@@ -307,8 +310,8 @@ namespace ColorBlockCrush.Tools
             uiLine.canvas = canvas;
             uiLine.SetPoints(a.GetComponent<RectTransform>(), b.GetComponent<RectTransform>());
             uiLine.SetElementConnect(a, b);
-            a.AddUiLine(uiLine);
-            b.AddUiLine(uiLine);
+            a.AddConnectLine(uiLine, b);
+            b.AddConnectLine(uiLine, a);
             uiLines.Add(uiLine);
         }
 
@@ -524,7 +527,6 @@ namespace ColorBlockCrush.Tools
                     {
                         tankNumber++;
                         if (elementConfig.gunConfig.isHidden) tankHidden++;
-                        if (elementConfig.gunConfig.hasLock) tankLock++;
                         
                         colors.Add(elementConfig.gunConfig.colorType);
                     }
@@ -537,6 +539,10 @@ namespace ColorBlockCrush.Tools
                         {
                             colors.Add(tankConfig.colorType);
                         }
+                    }
+                    else if(elementConfig.elementType == GunLineElementType.Lock)
+                    {
+                        tankLock++;
                     }
                 }
             }

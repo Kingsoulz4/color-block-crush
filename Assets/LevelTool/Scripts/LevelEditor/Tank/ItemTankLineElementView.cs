@@ -17,6 +17,7 @@ namespace ColorBlockCrush.Tools
         [SerializeField] private GameObject hidden;
         [SerializeField] private GameObject lockIcon;
         [SerializeField] private List<UiLine> linesConnected = new List<UiLine>();
+        [SerializeField] private List<ItemTankLineElementView> tankConnects = new List<ItemTankLineElementView>();
         
         [Header("Tunnel Infor")]
         [SerializeField] private GameObject tunnelInfor;
@@ -79,7 +80,6 @@ namespace ColorBlockCrush.Tools
             elementConfig.gunConfig.bulletNumber = 10;
                 
             elementConfig.gunConfig.isHidden = false;
-            elementConfig.gunConfig.hasLock = false;
             
             elementConfig.tunnelConfig = new TunnelConfig();
         }
@@ -90,27 +90,36 @@ namespace ColorBlockCrush.Tools
             {
                 tankInfor.SetActive(true);
                 tunnelInfor.SetActive(false);
+                lockIcon.SetActive(false);  
                 
                 GunConfig tankConfig = elementConfig.gunConfig;
                 tankColorBg.color = ColorReference.Instance.GetColor(tankConfig.colorType);
                 tankBulletTxtValue.text = tankConfig.bulletNumber.ToString();
                 
                 hidden.SetActive(tankConfig.isHidden);
-                lockIcon.SetActive(tankConfig.hasLock);
             }
-            else
+            else if(elementConfig.elementType == GunLineElementType.Tunnel)
             {
                 tankInfor.SetActive(false);
                 tunnelInfor.SetActive(true);
+                lockIcon.SetActive(false);       
                 
                 TunnelConfig tunnelConfig = elementConfig.tunnelConfig;
                 tankNumberValue.text = tunnelConfig.tankNumber.ToString();
             }
+            else if(elementConfig.elementType == GunLineElementType.Lock)
+            {
+                tankInfor.SetActive(false);
+                tunnelInfor.SetActive(false);
+                lockIcon.SetActive(true);                
+            }
+            
         }
 
-        public void AddUiLine(UiLine uiLine)
+        public void AddConnectLine(UiLine uiLine, ItemTankLineElementView tankConnect)
         {
             linesConnected.Add(uiLine);
+            tankConnects.Add(tankConnect);
         }
 
         public void UpdateUiLinePos()
@@ -123,14 +132,18 @@ namespace ColorBlockCrush.Tools
             }
         }
 
-        public void RemoveUiLine(UiLine uiLine)
+        public void RemoveConnectLine(UiLine uiLine, ItemTankLineElementView tankConnect)
         {
             linesConnected.Remove(uiLine);
+            tankConnects.Remove(tankConnect);
         }
 
-        public void ClearUiLine()
+        public void ClearConnectLine()
         {
             linesConnected.Clear();
+            tankConnects.Clear();
         }
+
+        public List<ItemTankLineElementView> GetTanksConnect() => tankConnects;
     }
 }

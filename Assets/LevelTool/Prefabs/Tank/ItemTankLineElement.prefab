@@ -30,7 +30,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6079133471102744176}
-  - {fileID: 2768323275177089621}
   - {fileID: 3249427738277368879}
   m_Father: {fileID: 2688939764100893398}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -323,6 +322,7 @@ RectTransform:
   m_Children:
   - {fileID: 5717307620256911971}
   - {fileID: 3142797534953243935}
+  - {fileID: 2768323275177089621}
   - {fileID: 476285085388955070}
   - {fileID: 6217114652004811696}
   - {fileID: 5694137736222601323}
@@ -361,6 +361,7 @@ MonoBehaviour:
   hidden: {fileID: 4007659103245302301}
   lockIcon: {fileID: 8663870230581856249}
   linesConnected: []
+  tankConnects: []
   tunnelInfor: {fileID: 595049202671929828}
   tankNumberValue: {fileID: 1343052216647179034}
   buttonDelete: {fileID: 5653382206789143637}
@@ -373,7 +374,6 @@ MonoBehaviour:
     gunConfig:
       colorType: 0
       bulletNumber: 0
-      hasLock: 0
       isHidden: 0
       gunConnect: 
     tunnelConfig:
@@ -1325,17 +1325,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8663870230581856249}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5717307620256911971}
+  m_Father: {fileID: 2688939764100893398}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -21.9075, y: -8.5}
-  m_SizeDelta: {x: 20.691, y: 26.6169}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 36.1129, y: 40.8232}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1893401470285343781
 CanvasRenderer:
@@ -1365,7 +1365,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f93d283e06052b341b603843d74904f2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e30cb30d5ff0b78478d4e920eac6ec0f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

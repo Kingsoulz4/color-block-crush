@@ -31,6 +31,7 @@ namespace ColorBlockCrush.Tools
     public enum GunLineElementType
     {
         Tank,
-        Tunnel
+        Tunnel,
+        Lock
     }
 }
