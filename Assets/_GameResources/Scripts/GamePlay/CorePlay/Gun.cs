@@ -73,9 +73,8 @@ namespace ColorBlockCrush
             InitMechanics();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            //victims1 = new List<int>(victims);
             CheckFire();
         }
 
@@ -112,11 +111,11 @@ namespace ColorBlockCrush
             }
             else
             {
-                //Debug.Log("Bỏ qua target " + target.name);
+                Debug.Log("Bỏ qua target " + target.name);
                 return;
             }
 
-            //Debug.Log("Fire target " + target.name);
+            Debug.Log("Fire target " + target.name);
             Fire(target);
         }
 
