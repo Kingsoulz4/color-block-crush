@@ -276,6 +276,8 @@ namespace ColorBlockCrush.Tools
                 
                 for (int i = 0; i < cellSelection.Count; i++)
                 {
+                    cellSelection[i].DeleteColor();
+                    
                     int cellIndex = cellSelection[i].Col * currentLevelConfig.mapConfig.mapSize.y
                                     + cellSelection[i].Row;
                     currentLevelConfig.mapConfig.blocks[cellIndex].keyId = keyConfig.keyId;
@@ -315,7 +317,6 @@ namespace ColorBlockCrush.Tools
                 
                 foreach (var cellMapView in cellSelection)
                 {
-                    cellMapView.DeleteColor();
                     currentLevelConfig.mapConfig.blocks[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
                                                        + cellMapView.Row].colorType = ColorType.None;
                     if (cellMapView.cellConfig.bigBlockId != -1 

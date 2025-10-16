@@ -40,6 +40,8 @@ namespace ColorBlockCrush
         public int GridHeight { get; set; }
         public bool CanDestroy { get; private set; }
         public bool IsAttacked { get; set; }
+        public bool IsDestroyed { get; set; }
+
         public BlockConfig BlockData { get => blockData; }
         public int Id { get => id; }
 
@@ -69,7 +71,7 @@ namespace ColorBlockCrush
             if (_blockMeshRenderer != null && colorRef != null && colorType != ColorType.None)
             {
                 int result = GetRandomByRatio(colorRate);
-                Material mat = colorRef.GetMaterial(ColorType, 0);
+                Material mat = colorRef.GetMaterial(ColorType, result);
                 if (mat != null && _blockMeshRenderer.sharedMaterial != mat)
                     _blockMeshRenderer.sharedMaterial = mat;
             }
@@ -101,9 +103,12 @@ namespace ColorBlockCrush
 
             if (hitPoint <= 0)
             {
+                
                 DestroyBlock(() =>
                 {
+                    IsDestroyed = true;
                     gameObject.SetActive(false);
+                    OnBlockDestroyed?.Invoke(this);
                 });
             }
         }
@@ -124,8 +129,10 @@ namespace ColorBlockCrush
         private void DestroyBlock(Action callback = null)
         {
             var sq = DOTween.Sequence();
-            sq.Append(transform.DOScale(originScale * 1.3f, 0.1f).SetEase(Ease.InOutExpo));
-            sq.Append(transform.DOScale(0f, 0.1f).SetEase(Ease.InQuint));
+            var targetScale = originScale * 1.3f;
+            targetScale.y = originScale.y * 1.5f;
+            sq.Append(transform.DOScale(targetScale, 0.08f));
+            sq.Append(transform.DOScale(0f, 0.06f).SetEase(Ease.InQuint));
             sq.OnComplete(() =>
             {
                 callback?.Invoke();
