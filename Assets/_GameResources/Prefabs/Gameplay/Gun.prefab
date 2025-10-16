@@ -378,7 +378,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1368227192826055}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.16969351, z: 0, w: 0.98549694}
   m_LocalPosition: {x: -2.9, y: 0, z: -9.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -387,7 +387,7 @@ Transform:
   - {fileID: 4914916966116777}
   - {fileID: 3575249297062889616}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
+  m_LocalEulerAnglesHint: {x: 0, y: 19.54, z: -0}
 --- !u!114 &769447249408881793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,6 +410,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   colorReference: {fileID: 11400000, guid: a7aae07bbea7b434fabac38c3f7b3efc, type: 2}
+  fireRate: 50
+  raycastPos: {fileID: 4644129007114109}
   moveToConveyorDuration: 0.5
   moveToConveyorJumpForce: 5
   moveToConveyorEase: 1
@@ -460,7 +462,7 @@ Transform:
   m_GameObject: {fileID: 1439063917404319}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.154, z: 0}
+  m_LocalPosition: {x: 0, y: 0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
