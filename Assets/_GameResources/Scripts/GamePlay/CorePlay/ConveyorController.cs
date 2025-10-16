@@ -120,7 +120,8 @@ public class ConveyorController : MonoBehaviour
             RemoveTrayItem(gun.TrayItem);
         }
 
-        Destroy(gun.gameObject);
+        gun.CheckDestroy();
+        //Destroy(gun.gameObject);
     }
 
     public void RemoveTrayItem(TrayItem trayItem)

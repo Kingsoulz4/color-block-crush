@@ -387,7 +387,26 @@ namespace ColorBlockCrush
         {
 
         }
+
+
         #endregion
+
+        public void CheckDestroy()
+        {
+            if(ConnectedGuns.Count <= 0)
+            {
+                Destroy(gameObject);
+            }    
+            else
+            {
+                for(int i=0; i<ConnectedGuns.Count; i++)
+                {
+                    //if (ConnectedGuns[i])
+                }    
+            }    
+        }
+            
+
     }
 
     public enum GunPos
