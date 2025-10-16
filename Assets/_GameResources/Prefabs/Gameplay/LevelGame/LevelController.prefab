@@ -2065,7 +2065,7 @@ MonoBehaviour:
   spawnOrigin: {x: 0, y: 0, z: 3.5}
   maxBlockScale: {x: 1, y: 1, z: 1}
   maxGridWidth: 8
-  maxGridHeight: 8
+  maxGridHeight: 9
   _minBlockScale: 0.2
   axisType: 1
   anchorType: 4
