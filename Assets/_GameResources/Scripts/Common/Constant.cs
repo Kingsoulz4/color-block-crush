@@ -18,6 +18,13 @@ public class Constant
         public const string BLOCK = "Block";
     }
 
+    public class Layer
+    {
+        public const string GUN = "Gun";
+        public const string BLOCK_RAY0 = "BlockRay0";
+        public const string BLOCK = "Block";
+    }
+
     public class PlayerPrefs
     {
         public const string USER_DATA = "UserData";
