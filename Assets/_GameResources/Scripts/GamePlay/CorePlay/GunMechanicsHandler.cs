@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace ColorBlockCrush
 {
@@ -10,6 +11,8 @@ namespace ColorBlockCrush
         [SerializeField] private ConnectedGuns m_connectedGuns;
 
         public ConnectedGuns ConnectedGunHandler => m_connectedGuns;
+
+        public UnityEvent OnHiddenResolved { get; set; } = new();
 
         public void InitMechanics()
         {
@@ -48,6 +51,7 @@ namespace ColorBlockCrush
                 UpdateVisuals();
                 EnableTextBulletCount(true);
                 m_hiddenGun.Resolve();
+                OnHiddenResolved?.Invoke();
             }
 
         }

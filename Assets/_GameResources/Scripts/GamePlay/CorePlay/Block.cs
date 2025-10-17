@@ -76,6 +76,10 @@ namespace ColorBlockCrush
                 if (mat != null && _blockMeshRenderer.sharedMaterial != mat)
                     _blockMeshRenderer.sharedMaterial = mat;
             }
+            else
+            {
+                _blockMeshRenderer.gameObject.SetActive(false);
+            }    
         }
 
         int GetRandomByRatio(Dictionary<int, int> ratioMap)
