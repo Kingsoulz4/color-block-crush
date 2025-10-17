@@ -57,12 +57,28 @@ namespace ColorBlockCrush.Tools
                 {
                     currentTankLineElementSelected.DeleteElement();
                 }
-                DeleteColorSelected();
+                else
+                {
+                    DeleteColorSelected();   
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 ClearAllTankLineELementSelected();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                if (currentTankLineElementSelected != null)
+                {
+                    SetTankInfor();
+                }
+                else
+                {
+                    SetColorSelected();
+                }
+                
             }
         }
 

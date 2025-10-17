@@ -108,6 +108,8 @@ namespace ColorBlockCrush.Tools
                     }
                 }
             });
+            
+            ClearAllTankLineELementSelected();
         }
 
         private void ReUpdateElementId(int lineId)
