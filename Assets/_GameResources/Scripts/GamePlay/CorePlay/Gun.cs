@@ -151,14 +151,16 @@ namespace ColorBlockCrush
                 ;
         }
 
+        private const float raycastSpacing = 0.15f;
+        private const int maxRaycastSteps = 65;
         public void GetTargetBock()
         {
             var dir = GetFireDirection(currentFireDir);
             var dirMove = GetFireDirection(currentMoveFireDir);
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < maxRaycastSteps; i++)
             {
-                var startPos = raycastPos.position + dirMove * 0.1f * i;
-                Debug.DrawRay(startPos, dir * 12, UnityEngine.Color.red, 3);
+                var startPos = raycastPos.position + dirMove * raycastSpacing * i;
+                Debug.DrawRay(startPos, dir * 12, UnityEngine.Color.red, 1);
 
                 Ray ray = new Ray(startPos, dir);
                 if (Physics.Raycast(ray, out RaycastHit hit, 12, blockMask))
@@ -417,18 +419,22 @@ namespace ColorBlockCrush
         }
 
        
-        private const float maxShootingAngle = 23f;
+        private const float maxShootingAngle = 5f;
         public bool IsBlockInShootingAngle(Block block)
         {
             Vector3 gunPos = transform.position;
             Vector3 blockPos = block.transform.position;
 
+            gunPos.y = 0;
+            blockPos.y = 0;
+
             Vector3 toBlock = blockPos - gunPos;
             Vector3 shootDir = GetFireDirection(currentFireDir);
 
-            float angle = Vector3.Angle(shootDir, toBlock);
-            Debug.Log("angle " + angle);
+            shootDir.y = 0;
+            shootDir.Normalize();
 
+            float angle = Vector3.Angle(shootDir, toBlock);
 
             bool isInAngle = angle <= maxShootingAngle;
             return isInAngle;
