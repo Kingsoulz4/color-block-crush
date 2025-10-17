@@ -26,6 +26,8 @@ namespace ColorBlockCrush
 
         private List<List<ObjectOnGunBoardColumn>> listGunColumn = new List<List<ObjectOnGunBoardColumn>>();
 
+        private Dictionary<int, Gun> dictGun = new();
+
         public Action<Gun> OnGunTapped;
 
         public void Init(LevelConfig levelConfig)
@@ -67,10 +69,11 @@ namespace ColorBlockCrush
                     }
                     else if(data.elementType == GunLineElementType.Tank)
                     {
-                        var gun = SpawnGun(col, i, data.gunConfig, centerOffsetX);
+                        var gun = SpawnGun(col, i, data.gunConfig, data.elementId, centerOffsetX);
                         if (gun != null)
                         {
                             listGunColumn[col].Add(gun);
+                            dictGun[data.elementId] = gun;
                         }
                     }
                 }
@@ -96,7 +99,7 @@ namespace ColorBlockCrush
             return lockObj;
         }
 
-        public Gun SpawnGun(int column, int row, GunConfig gunData, float centerOffsetX = 0f)
+        public Gun SpawnGun(int column, int row, GunConfig gunData,int id, float centerOffsetX = 0f)
         {
             if (!IsValidColumn(column)) return null;
 
@@ -107,7 +110,7 @@ namespace ColorBlockCrush
             );
 
             Gun gun = Instantiate(gunPrefab, worldPos, Quaternion.identity, gunContainer);
-            gun.Init(gunData, column);
+            gun.Init(gunData, column, id);
             gun.name = $"Gun_{column}_{row}";
 
             return gun;
@@ -219,6 +222,11 @@ namespace ColorBlockCrush
         private bool IsValidColumn(int column)
         {
             return column >= 0 && column < listGunColumn.Count;
+        }
+
+        public Gun GetGunByID(int id)
+        {
+            return dictGun[id];
         }
     }
 }
