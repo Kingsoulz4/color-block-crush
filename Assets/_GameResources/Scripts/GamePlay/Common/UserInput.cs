@@ -62,6 +62,8 @@ namespace ColorBlockCrush
                 return;
             }
 
+            gun.PlayAnim(Constant.GunAnimation.CLICK);
+
             if (gun.GunPos == GunPos.ON_GUN_BOARD)
             {
                 LevelController.Instance.GunBoardController.OnTapGun(gun);

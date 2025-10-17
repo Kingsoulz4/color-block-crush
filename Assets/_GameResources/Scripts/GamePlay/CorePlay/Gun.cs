@@ -25,6 +25,7 @@ namespace ColorBlockCrush
         [SerializeField] private ListMaterialByColor colorReference;
         [SerializeField] private float fireRate = 3f;
         [SerializeField] private Transform raycastPos;
+        [SerializeField] private GunAnim anim;
 
         [Header("Move")]
         [SerializeField] private float moveToConveyorDuration = 0.4f;
@@ -101,6 +102,11 @@ namespace ColorBlockCrush
         {
             base.SetIndex(index);
             IsFrontRow = index == 0;
+
+            if (index == 0)
+            {
+                PlayAnim(Constant.GunAnimation.IDLE);
+            }
         }
 
         private void CheckFire()
@@ -187,7 +193,7 @@ namespace ColorBlockCrush
 
             RotateToFire(target.transform);
             BulletCount--;
-
+            PlayAnim(Constant.GunAnimation.SHOOT);
             UpdateBulletCountDisplay();
 
             Bullet bullet = Instantiate(bulletPrb, bulletSpawnPos.position, Quaternion.identity);
@@ -203,6 +209,7 @@ namespace ColorBlockCrush
             if (BulletCount == 0)
             {
                 CurrentTarget = null;
+                PlayAnim(Constant.GunAnimation.DISSAPEAR);
                 OnGunEmpty?.Invoke(this);
             }
         }
@@ -438,6 +445,11 @@ namespace ColorBlockCrush
 
             bool isInAngle = angle <= maxShootingAngle;
             return isInAngle;
+        }
+
+        public void PlayAnim(string name)
+        {
+            anim.PlayAnim(name);
         }
     }
 

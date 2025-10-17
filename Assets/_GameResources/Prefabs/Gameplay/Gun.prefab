@@ -364,6 +364,7 @@ GameObject:
   - component: {fileID: 4318052031373752}
   - component: {fileID: 769447249408881793}
   - component: {fileID: 8597390162283652098}
+  - component: {fileID: 2012378433343466974}
   m_Layer: 9
   m_Name: Gun
   m_TagString: Gun
@@ -414,6 +415,7 @@ MonoBehaviour:
   colorReference: {fileID: 11400000, guid: a7aae07bbea7b434fabac38c3f7b3efc, type: 2}
   fireRate: 50
   raycastPos: {fileID: 4644129007114109}
+  anim: {fileID: 2012378433343466974}
   moveToConveyorDuration: 0.5
   moveToConveyorJumpForce: 5
   moveToConveyorEase: 1
@@ -440,6 +442,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2012378433343466974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1368227192826055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9363ec03ea75b043b20a9e88b60f3f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunAnimator: {fileID: 4997923869993352107}
 --- !u!1 &1439063917404319
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,33 +774,23 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: -3367486051229055265, guid: 7f72e6fe233201148b6d0f7dd9d6fb3f, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7f72e6fe233201148b6d0f7dd9d6fb3f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6397902517755649944}
+      addedObject: {fileID: 4997923869993352107}
   m_SourcePrefab: {fileID: 100100000, guid: 7f72e6fe233201148b6d0f7dd9d6fb3f, type: 3}
---- !u!4 &894597428499264553 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7f72e6fe233201148b6d0f7dd9d6fb3f, type: 3}
-  m_PrefabInstance: {fileID: 855832236167025602}
-  m_PrefabAsset: {fileID: 0}
---- !u!137 &2551074033136027307 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -6302863874230348439, guid: 7f72e6fe233201148b6d0f7dd9d6fb3f, type: 3}
-  m_PrefabInstance: {fileID: 855832236167025602}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6531573668688467229 stripped
+--- !u!1 &513954837170056851 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: -3367486051229055265, guid: 7f72e6fe233201148b6d0f7dd9d6fb3f, type: 3}
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 7f72e6fe233201148b6d0f7dd9d6fb3f, type: 3}
   m_PrefabInstance: {fileID: 855832236167025602}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &6397902517755649944
+--- !u!95 &4997923869993352107
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6531573668688467229}
+  m_GameObject: {fileID: 513954837170056851}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 7a0a2eb1e2376e6408cdb35e9860fc9f, type: 2}
@@ -799,6 +804,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &894597428499264553 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7f72e6fe233201148b6d0f7dd9d6fb3f, type: 3}
+  m_PrefabInstance: {fileID: 855832236167025602}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &2551074033136027307 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -6302863874230348439, guid: 7f72e6fe233201148b6d0f7dd9d6fb3f, type: 3}
+  m_PrefabInstance: {fileID: 855832236167025602}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1132736002782350386
 PrefabInstance:
   m_ObjectHideFlags: 0
