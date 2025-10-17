@@ -122,8 +122,7 @@ namespace ColorBlockCrush
 
             if (gun.IsConnectedGroup())
             {
-                gunsToPush.Add(gun);
-                gunsToPush.AddRange(gun.ConnectedGuns);
+                AddAllGunToPush(gunsToPush, gun);
             }
             else
             {
@@ -156,6 +155,27 @@ namespace ColorBlockCrush
             RemoveObjectFromColumn(lockObject);
             ShiftColumn(lockObject.ColumnIndex);
         }
+
+        private void AddAllGunToPush(List<Gun> listGunToPush, Gun gun)
+        {
+            var stack = new Stack<Gun>();
+            stack.Push(gun);
+            List<Gun> visited = new();
+            while(stack.Count > 0)
+            {
+                var gunTemp = stack.Pop();
+                listGunToPush.Add(gunTemp);
+                for(int i=0; i< gunTemp.ConnectedGuns.Count; i++)
+                {
+                    var linkGun = gunTemp.ConnectedGuns[i];
+                    if(!listGunToPush.Contains(linkGun))
+                    {
+                        stack.Push(linkGun);
+                    }
+                }
+            }
+        }
+            
 
         public LockObject GetPenndingLock()
         {

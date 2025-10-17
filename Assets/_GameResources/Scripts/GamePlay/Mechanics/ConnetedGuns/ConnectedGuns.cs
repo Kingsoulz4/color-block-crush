@@ -31,7 +31,7 @@ namespace ColorBlockCrush
 
                 if (!gun.ConnectedGunHandler.HasConnected(m_selfGun.ID))
                 {
-                    var newRope = Instantiate(m_ropeConnectOthersPrefab, transform);
+                    var newRope = Instantiate(m_ropeConnectOthersPrefab, m_listRopeContainer);
                     newRope.Init(m_selfGun, gun);
                     dictRope[gun.ID] = newRope;
                 }

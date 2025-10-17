@@ -136,7 +136,9 @@ public class ConveyorController : MonoBehaviour
 
     public void RemoveTrayItem(TrayItem trayItem)
     {
-        if (movingTrayItems.Contains(trayItem))
+        if (trayItem == null) return;
+
+        if (movingTrayItems!= null && movingTrayItems.Contains(trayItem))
         {
             trayItem.SplineAnimate.Pause();
             trayItem.MyGun.OnGunEmpty -= OnGunEmpty;
