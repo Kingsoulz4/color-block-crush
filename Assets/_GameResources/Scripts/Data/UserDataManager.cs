@@ -16,9 +16,7 @@ public class UserDataManager : MonoBehaviour
         public int heart;
         public bool removeAds;
         public int addTrayBooster;
-        public int timePreBooster;
         public int shuffleBooster;
-        public int cissorBooster;
         public int magnetBooster;
         public int handBooster;
         public long lastTimeLogin;
@@ -315,12 +313,13 @@ public class UserDataManager : MonoBehaviour
         return new UserData
         {
             level = 1,
-            gold = 0,
-            heart = 3,
+            gold = 5000,
+            heart = 5,
             removeAds = false,
             addTrayBooster = 0,
             shuffleBooster = 0,
-            cissorBooster = 0
+            magnetBooster = 0,
+            handBooster = 0,
         };
     }
 }

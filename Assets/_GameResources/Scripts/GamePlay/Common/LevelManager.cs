@@ -199,7 +199,7 @@ namespace ColorBlockCrush
 
             CheckShowTutorials();
 
-            var popupTutNewFeature = UIManager.Instance.GetPopup<PopupTutorialNewFeature>();
+            var popupTutNewFeature = UIManager.Instance.GetPopup<PopupTutorialNewBooster>();
             InjectToFlowStartGame(popupTutNewFeature, 1);
             var popupWarningDifficultLevel = UIManager.Instance.GetPopup<PopupWarningDifficultLevel>();
             InjectToFlowStartGame(popupWarningDifficultLevel, 0);

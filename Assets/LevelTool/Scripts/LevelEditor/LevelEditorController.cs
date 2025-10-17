@@ -49,6 +49,39 @@ namespace ColorBlockCrush.Tools
             LevelTestManager.Instance.currentLevelPlay = null;
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                if (currentTankLineElementSelected != null)
+                {
+                    currentTankLineElementSelected.DeleteElement();
+                }
+                else
+                {
+                    DeleteColorSelected();   
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ClearAllTankLineELementSelected();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                if (currentTankLineElementSelected != null)
+                {
+                    SetTankInfor();
+                }
+                else
+                {
+                    SetColorSelected();
+                }
+                
+            }
+        }
+
         private void InitButtons()
         {
             #region ChooseLevel
