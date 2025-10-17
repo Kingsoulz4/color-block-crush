@@ -219,11 +219,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7249409862865497552}
   - component: {fileID: 3198471977426123377}
-  - component: {fileID: 774490003632326436}
+  - component: {fileID: 4892909055954563607}
   - component: {fileID: 4199367164057589476}
   - component: {fileID: 5263177936007307216}
   m_Layer: 5
-  m_Name: ItemTunnelQueue
+  m_Name: ItemTunnelAreaQueue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -259,7 +259,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3691993951628212733}
   m_CullTransparentMesh: 1
---- !u!114 &774490003632326436
+--- !u!114 &4892909055954563607
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -268,17 +268,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3691993951628212733}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6d4ef73ff02fa34487dc7e6bb629d89, type: 3}
+  m_Script: {fileID: 11500000, guid: 0740e44b2efbad14689788e5a612c071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rectTransform: {fileID: 7249409862865497552}
   IconColor: {fileID: 1142557555302267867}
-  tankConfig:
-    colorType: 0
-    bulletNumber: 0
-    isHidden: 0
-    gunConnect: 
-  bulletNumber: {fileID: 5158809738347573104}
+  elementConfig:
+    elementColor: 0
+    health: 0
+  healthNumber: {fileID: 5158809738347573104}
   buttonDelete: {fileID: 8579200364632826952}
 --- !u!114 &4199367164057589476
 MonoBehaviour:

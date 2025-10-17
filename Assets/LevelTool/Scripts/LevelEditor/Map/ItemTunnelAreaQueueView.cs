@@ -1,16 +1,16 @@
-using UnityEngine;
 using UnityEngine.UI;
-using System;
+using UnityEngine;
 using TMPro;
+using System;
 
 namespace ColorBlockCrush.Tools
 {
-    public class ItemTunnelQueueView : ItemQueueViewBase
+    public class ItemTunnelAreaQueueView : ItemQueueViewBase
     {
         public RectTransform rectTransform;
         public Image IconColor;
-        public GunConfig tankConfig;
-        public TextMeshProUGUI bulletNumber;
+        public TunnelAreaElementConfig elementConfig;
+        public TextMeshProUGUI healthNumber;
         public Button buttonDelete;
 
         private Action<int, int> onChangeIndex;
@@ -18,8 +18,10 @@ namespace ColorBlockCrush.Tools
         public override void Init(Action<int> onDetete = null, Action<int, int> onChangeIndex = null)
         {
             base.Init(onDetete, onChangeIndex);
-            buttonDelete.onClick.AddListener(() => { onDetete?.Invoke(transform.GetSiblingIndex()); });
-            
+            buttonDelete.onClick.AddListener(() => {
+                onDetete?.Invoke(transform.GetSiblingIndex());
+            });
         }
+        
     }
 }

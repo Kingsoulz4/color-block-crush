@@ -11,7 +11,8 @@ namespace ColorBlockCrush.Tools
         public List<BlockConfig> blocks = new List<BlockConfig>();
         public List<BigBlockConfig> bigBlocks = new List<BigBlockConfig>();
         public List<KeyConfig> keys = new List<KeyConfig>();
-        
+        public List<TunnelAreaConfig> tunnelsArea = new List<TunnelAreaConfig>();
+        public List<PixelSnakeConfig> pixelSnakes = new List<PixelSnakeConfig>();
 
         public MapConfig()
         {
@@ -19,6 +20,8 @@ namespace ColorBlockCrush.Tools
             blocks = new List<BlockConfig>();
             bigBlocks = new List<BigBlockConfig>();
             keys = new List<KeyConfig>();
+            tunnelsArea = new List<TunnelAreaConfig>();
+            pixelSnakes = new List<PixelSnakeConfig>();
         }
     }
 }

@@ -208,7 +208,7 @@ namespace ColorBlockCrush.Tools
                 isDragging = true;
                 startPos = eventData.position;
             }
-            else if(currentDragType == DragType.Key)
+            else if(currentDragType == DragType.Key || currentDragType == DragType.TunnelArea || currentDragType == DragType.PixelSnake)
             {
                 CurrentlySelectedCells.Clear();
                 if (FinalSelectedCells.Count > 0)
@@ -286,7 +286,8 @@ namespace ColorBlockCrush.Tools
                 );
 
                 HighlightCellsInRect(selectionRect);
-            }else if (currentDragType == DragType.Key)
+            }else if (currentDragType == DragType.Key
+                      || currentDragType == DragType.TunnelArea || currentDragType == DragType.PixelSnake)
             {
                 Vector2 endPos = eventData.position;
 
@@ -337,7 +338,8 @@ namespace ColorBlockCrush.Tools
                     cell.UpdateSelectingColor();
                 }   
             }
-            else if(currentDragType == DragType.Key)
+            else if(currentDragType == DragType.Key
+                    || currentDragType == DragType.TunnelArea || currentDragType == DragType.PixelSnake)
             {
                 foreach (var cell in CurrentlySelectedCells)
                 {
