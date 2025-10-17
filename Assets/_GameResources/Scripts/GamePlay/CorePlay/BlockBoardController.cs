@@ -107,6 +107,8 @@ namespace ColorBlockCrush
             return block;
         }
 
+        
+
         private void SpawnKeys()
         {
             for(int i=0; i<levelConfig.mapConfig.keys.Count; i++)
