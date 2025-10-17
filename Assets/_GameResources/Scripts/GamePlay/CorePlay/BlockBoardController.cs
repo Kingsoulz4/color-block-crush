@@ -75,10 +75,11 @@ namespace ColorBlockCrush
                     var idx = c * _rows + r;
                     ColorType color = listBlock[idx].colorType;
 
-                    if (color == ColorType.None)
-                    {
-                        continue;
-                    }
+                    //Still gen block but block empty
+                    //if (color == ColorType.None)
+                    //{
+                    //    continue;
+                    //}
 
                     SpawnBlock(r, c, BlockType.Normal, listBlock[idx]);
                 }
