@@ -1,7 +1,4 @@
-using ColorBlockCrush;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using I2.Loc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,12 +36,12 @@ public class BoosterConfirmUI : MonoBehaviour
 
         if (titleTxt != null)
         {
-            titleTxt.text = boosterItemData.title;
+            titleTxt.text =  LocalizationManager.GetTranslation(boosterItemData.title);
         }
 
         if (descriptionTxt != null)
         {
-            descriptionTxt.text = boosterItemData.description;
+            descriptionTxt.text = LocalizationManager.GetTranslation(boosterItemData.description);
         }
 
         if (iconImg != null)
