@@ -89,7 +89,7 @@ namespace ColorBlockCrush
 
             if (_fireTimer >= fireInterval)
             {
-                _fireTimer = 0f; 
+                _fireTimer = 0f;
                 CheckFire();
             }
         }
@@ -167,16 +167,14 @@ namespace ColorBlockCrush
             {
                 Debug.Log("!GetTargetBock " + 1);
                 var startPos = raycastPos.position + dirMove * 0.1f * i;
-                Debug.DrawRay(startPos , dir * 12, UnityEngine.Color.red, 3);
+                Debug.DrawRay(startPos, dir * 12, UnityEngine.Color.red, 3);
 
                 Ray ray = new Ray(startPos, dir);
                 if (Physics.Raycast(ray, out RaycastHit hit, 12, blockMask))
                 {
+
                     hit.transform.TryGetComponent(out Block block);
-                    if (!block)
-                    {
-                        Debug.Log("null");
-                    }
+                    Debug.Log("1122 " + block);
 
                     if (!block.CanBeRaycastHit() || block.ColorType != ColorType)
                     {
@@ -197,6 +195,8 @@ namespace ColorBlockCrush
                         targetQueue.Enqueue(block);
                     }
                 }
+                else
+                    Debug.Log("!GetTargetBock");
             }
         }
 
@@ -358,6 +358,7 @@ namespace ColorBlockCrush
             Sequence moveToConveyorSq = DOTween.Sequence();
             GunPos = GunPos.TWEEN_SORT;
             currentFireDir = RotationDirection.Up;
+            currentMoveFireDir = RotationDirection.Right;
 
             moveToConveyorTw = moveToConveyorSq.Append(
                 transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration)).SetEase(moveToConveyorEase).OnComplete(() =>
