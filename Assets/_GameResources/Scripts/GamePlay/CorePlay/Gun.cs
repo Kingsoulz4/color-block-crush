@@ -40,7 +40,6 @@ namespace ColorBlockCrush
         private RotationDirection currentMoveFireDir = RotationDirection.Right;
         private GunConfig gunData;
         private Queue<Block> targetQueue;
-        private float _fireTimer = 0f;
 
         public int ID { get; set; }
         public GunConfig GunData => gunData;
@@ -83,15 +82,7 @@ namespace ColorBlockCrush
 
         void Update()
         {
-            _fireTimer += Time.deltaTime;
-
-            float fireInterval = 1f / fireRate; // 10 shots/s = 0.1s interval
-
-            if (_fireTimer >= fireInterval)
-            {
-                _fireTimer = 0f; 
-                CheckFire();
-            }
+            CheckFire();
         }
 
         private void OnDisable()
@@ -114,16 +105,16 @@ namespace ColorBlockCrush
 
         private void CheckFire()
         {
-            if (!CanFire())
+            if (targetQueue.Count == 0)
+                return;
+
+            Block nextBlock = targetQueue.Peek(); 
+            if (!nextBlock || !CanFire(nextBlock))
             {
                 return;
             }
 
-            var target = targetQueue.Count > 0 ? targetQueue.Dequeue() : null;
-            if (!target) return;
-
-            Debug.Log("Fire target " + target.name);
-            Fire(target);
+            Fire(targetQueue.Dequeue());
         }
 
 
@@ -152,10 +143,11 @@ namespace ColorBlockCrush
         }
 
 
-        public bool CanFire()
+        public bool CanFire(Block target)
         {
             return !isTurning && BulletCount > 0
                 && GunPos == GunPos.ON_CONVEYOR
+                && IsBlockInShootingAngle(target)
                 ;
         }
 
@@ -165,28 +157,16 @@ namespace ColorBlockCrush
             var dirMove = GetFireDirection(currentMoveFireDir);
             for (int i = 0; i < 100; i++)
             {
-                Debug.Log("!GetTargetBock " + 1);
                 var startPos = raycastPos.position + dirMove * 0.1f * i;
-                Debug.DrawRay(startPos , dir * 12, UnityEngine.Color.red, 3);
+                Debug.DrawRay(startPos, dir * 12, UnityEngine.Color.red, 3);
 
                 Ray ray = new Ray(startPos, dir);
                 if (Physics.Raycast(ray, out RaycastHit hit, 12, blockMask))
                 {
                     hit.transform.TryGetComponent(out Block block);
-                    if (!block)
-                    {
-                        Debug.Log("null");
-                    }
 
-                    if (!block.CanBeRaycastHit() || block.ColorType != ColorType)
+                    if (!block.CanBeRaycastHit() || block.ColorType != ColorType || targetQueue.Contains(block))
                     {
-                        Debug.Log("!CanBeRaycastHit " + (block ? block.name : "null"));
-                        continue;
-                    }
-
-                    if (targetQueue.Contains(block))
-                    {
-                        Debug.Log("!GetTargetBock targetQueue.Contains " + 1);
                         continue;
                     }
 
@@ -202,7 +182,6 @@ namespace ColorBlockCrush
 
         public void Fire(Block target)
         {
-            if (!CanFire()) return;
 
             RotateToFire(target.transform);
             BulletCount--;
@@ -358,6 +337,7 @@ namespace ColorBlockCrush
             Sequence moveToConveyorSq = DOTween.Sequence();
             GunPos = GunPos.TWEEN_SORT;
             currentFireDir = RotationDirection.Up;
+            currentMoveFireDir = RotationDirection.Right;
 
             moveToConveyorTw = moveToConveyorSq.Append(
                 transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration)).SetEase(moveToConveyorEase).OnComplete(() =>
@@ -418,13 +398,13 @@ namespace ColorBlockCrush
 
         public bool CheckDestroy()
         {
-            if(ConnectedGuns.Count <= 0)
+            if (ConnectedGuns.Count <= 0)
             {
                 return true;
-            }    
+            }
             else
             {
-                for(int i=0; i<ConnectedGuns.Count; i++)
+                for (int i = 0; i < ConnectedGuns.Count; i++)
                 {
                     if (ConnectedGuns[i].BulletCount > 0)
                     {
@@ -433,10 +413,26 @@ namespace ColorBlockCrush
                 }
 
                 return true;
-            }    
+            }
         }
-            
 
+       
+        private const float maxShootingAngle = 23f;
+        public bool IsBlockInShootingAngle(Block block)
+        {
+            Vector3 gunPos = transform.position;
+            Vector3 blockPos = block.transform.position;
+
+            Vector3 toBlock = blockPos - gunPos;
+            Vector3 shootDir = GetFireDirection(currentFireDir);
+
+            float angle = Vector3.Angle(shootDir, toBlock);
+            Debug.Log("angle " + angle);
+
+
+            bool isInAngle = angle <= maxShootingAngle;
+            return isInAngle;
+        }
     }
 
     public enum GunPos
