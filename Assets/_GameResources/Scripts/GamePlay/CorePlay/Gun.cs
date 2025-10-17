@@ -16,7 +16,7 @@ namespace ColorBlockCrush
     public partial class Gun : ObjectOnGunBoardColumn
     {
         [Header("Visual")]
-        [SerializeField] private List<MeshRenderer> meshRendererList;
+        [SerializeField] private List<Renderer> meshRendererList;
         [SerializeField] private TextMeshPro bulletCountText;
         [SerializeField] private Bullet bulletPrb;
         [SerializeField] private Transform bulletSpawnPos;
