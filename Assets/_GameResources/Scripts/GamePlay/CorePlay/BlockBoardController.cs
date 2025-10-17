@@ -75,10 +75,11 @@ namespace ColorBlockCrush
                     var idx = c * _rows + r;
                     ColorType color = listBlock[idx].colorType;
 
-                    if (color == ColorType.None)
-                    {
-                        continue;
-                    }
+                    //Still gen block but block empty
+                    //if (color == ColorType.None)
+                    //{
+                    //    continue;
+                    //}
 
                     SpawnBlock(r, c, BlockType.Normal, listBlock[idx]);
                 }
@@ -110,7 +111,10 @@ namespace ColorBlockCrush
         {
             for(int i=0; i<levelConfig.mapConfig.keys.Count; i++)
             {
-                listKey.Add(SpawnKey(levelConfig.mapConfig.keys[i]));
+                if (levelConfig.mapConfig.keys[i].blockId.Count > 0)
+                {
+                    listKey.Add(SpawnKey(levelConfig.mapConfig.keys[i]));
+                }
             }
         }    
 

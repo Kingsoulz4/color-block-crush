@@ -26,6 +26,7 @@ namespace ColorBlockCrush
         [SerializeField] protected Transform centerPoint;
         [SerializeField] private MeshRenderer _blockMeshRenderer;
         [SerializeField] private ListMaterialsByColor colorRef;
+        [SerializeField] private LayerMask blockRay0;
         public SerializedDictionary<int, int> colorRate;
 
         protected int maxHitPoint;
@@ -75,6 +76,10 @@ namespace ColorBlockCrush
                 if (mat != null && _blockMeshRenderer.sharedMaterial != mat)
                     _blockMeshRenderer.sharedMaterial = mat;
             }
+            else
+            {
+                _blockMeshRenderer.gameObject.SetActive(false);
+            }    
         }
 
         int GetRandomByRatio(Dictionary<int, int> ratioMap)
@@ -118,6 +123,13 @@ namespace ColorBlockCrush
             if (hitPointRaycast > 0)
             {
                 hitPointRaycast -= damageAmount;
+                if (hitPointRaycast <= 0)
+                {
+                    this.Wait(Time.deltaTime, () =>
+                    {
+                        gameObject.layer = LayerMask.NameToLayer(Constant.Layer.BLOCK_RAY0);
+                    });
+                }
             }
         }
 

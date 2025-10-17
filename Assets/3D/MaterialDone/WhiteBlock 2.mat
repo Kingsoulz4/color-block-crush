@@ -145,7 +145,7 @@ Material:
     - _UseSpecular: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.7, g: 0.7, b: 0.7, a: 1}
+    - _BaseColor: {r: 0.65300006, g: 0.65300006, b: 0.65300006, a: 1}
     - _Color: {r: 0.9063317, g: 0.9063317, b: 0.9063317, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _HColor: {r: 1, g: 1, b: 1, a: 1}
@@ -156,4 +156,3 @@ Material:
     - _SColor: {r: 0.20125782, g: 0.20125782, b: 0.20125782, a: 1}
     - _SpecularColor: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
   m_BuildTextureStacks: []
-  m_AllowLocking: 0

@@ -62,6 +62,7 @@ namespace ColorBlockCrush
         {
             myGun = gun;
             gun.transform.SetParent(gunParent);
+            gun.transform.localPosition = Vector3.zero;
         }
 
         public void MoveToConeyor(Vector3 endPos, Action callback = null)
