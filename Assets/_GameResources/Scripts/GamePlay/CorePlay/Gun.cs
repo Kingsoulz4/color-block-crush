@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Splines;
 using UnityEngine.TextCore.Text;
+using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.GridBrushBase;
 using static UnityEngine.UI.CanvasScaler;
 
@@ -22,6 +23,8 @@ namespace ColorBlockCrush
         [SerializeField] private float turnDuration = 0.4f;
         [SerializeField] private LayerMask blockMask;
         [SerializeField] private ListMaterialByColor colorReference;
+        [SerializeField] private float fireRate = 3f;
+        [SerializeField] private Transform raycastPos;
 
         [Header("Move")]
         [SerializeField] private float moveToConveyorDuration = 0.4f;
@@ -34,11 +37,15 @@ namespace ColorBlockCrush
         private TrayItem trayItem;
         private GunPos gunPos;
         private RotationDirection currentFireDir = RotationDirection.Up;
+        private RotationDirection currentMoveFireDir = RotationDirection.Right;
+        private GunConfig gunData;
         private HashSet<int> victims;
         private List<int> victims1;
+        private Queue<Block> targetQueue;
+        private float _fireTimer = 0f;
 
         public int ID { get; set; }
-        public GunConfig GunData { get; private set; }
+        public GunConfig GunData => gunData;
         public int BulletCount { get; private set; }
         public ColorType ColorType { get; private set; }
         public bool IsFrontRow { get; set; }
@@ -47,6 +54,7 @@ namespace ColorBlockCrush
         public TrayItem TrayItem { get => trayItem; set => trayItem = value; }
         public GunPos GunPos { get => gunPos; set => gunPos = value; }
         public RotationDirection CurrentFireDir { get => currentFireDir; set => currentFireDir = value; }
+        public RotationDirection CurrentMoveFireDir { get => currentMoveFireDir; set => currentMoveFireDir = value; }
 
         public Action<Gun> OnGunFired;
         public Action<Gun> OnGunEmpty;
@@ -67,20 +75,31 @@ namespace ColorBlockCrush
             isFireFirstTime = false;
             isTurning = false;
             victims = new HashSet<int>();
-            GunData = gunDataP;
+            gunData = gunDataP;
+            targetQueue = new Queue<Block>();
             UpdateVisuals();
             InitMechanics();
         }
 
-        private void FixedUpdate()
+
+        void Update()
         {
-            CheckFire();
+            _fireTimer += Time.deltaTime;
+
+            float fireInterval = 1f / fireRate; // 10 shots/s = 0.1s interval
+
+            if (_fireTimer >= fireInterval)
+            {
+                _fireTimer = 0f; 
+                CheckFire();
+            }
         }
 
         private void OnDisable()
         {
             transform.DOKill(this);
             victims.Clear();
+            targetQueue.Clear();
         }
 
         public override void UpdateWhenColumnChange()
@@ -92,7 +111,7 @@ namespace ColorBlockCrush
         public override void SetIndex(int index)
         {
             base.SetIndex(index);
-            IsFrontRow = index == 0;    
+            IsFrontRow = index == 0;
         }
 
         private void CheckFire()
@@ -102,13 +121,8 @@ namespace ColorBlockCrush
                 return;
             }
 
-            var target = GetTargetBock();
+            var target = targetQueue.Count > 0 ? targetQueue.Dequeue() : null;
             if (!target) return;
-
-            if (!target.CanBeRaycastHit())
-            {
-                return;
-            }
 
             if (target.ColorType != ColorType)
             {
@@ -159,24 +173,37 @@ namespace ColorBlockCrush
         public bool CanFire()
         {
             return !isTurning && BulletCount > 0
-                //&& Time.time >= nextFireTime
                 && GunPos == GunPos.ON_CONVEYOR
                 ;
         }
 
-        public Block GetTargetBock()
+        public void GetTargetBock()
         {
             var dir = GetFireDirection(currentFireDir);
-            Debug.DrawRay(bulletSpawnPos.position, dir * 10, UnityEngine.Color.red, 10);
-
-            Ray ray = new Ray(bulletSpawnPos.position, dir);
-            if (Physics.Raycast(ray, out RaycastHit hit, 10, blockMask))
+            var dirMove = GetFireDirection(currentMoveFireDir);
+            for (int i = 0; i < 100; i++)
             {
-                hit.transform.TryGetComponent(out Block block);
-                return block;
-            }
 
-            return null;
+                var startPos = raycastPos.position + dirMove * 0.1f * i;
+                Debug.DrawRay(startPos , dir * 12, UnityEngine.Color.red, 3);
+
+                Ray ray = new Ray(startPos, dir);
+                if (Physics.Raycast(ray, out RaycastHit hit, 12, blockMask))
+                {
+                    hit.transform.TryGetComponent(out Block block);
+                    if (!block.CanBeRaycastHit())
+                    {
+                        Debug.Log("!CanBeRaycastHit " + (block ? block.name : "null"));
+                        continue;
+                    }
+
+                    if (targetQueue.Contains(block))
+                    {
+                        continue;
+                    }
+                    targetQueue.Enqueue(block);
+                }
+            }
         }
 
         public void Fire(Block target)
@@ -185,7 +212,6 @@ namespace ColorBlockCrush
 
             RotateToFire(target.transform);
             BulletCount--;
-            //nextFireTime = Time.time + (1f / fireRate);
 
             UpdateBulletCountDisplay();
 
@@ -241,11 +267,12 @@ namespace ColorBlockCrush
         {
             Vector3 newRotation;
             newRotation = GetTurnDirection(!isFireFirstTime ? directionNonfire : direction);
-
+            currentMoveFireDir = directionNonfire;
             isTurning = true;
             transform.DORotate(newRotation, turnDuration).OnComplete(() =>
             {
                 isTurning = false;
+                GetTargetBock();
             }).SetId(this);
         }
 
@@ -343,6 +370,7 @@ namespace ColorBlockCrush
 
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
+                GetTargetBock();
 
             });
 
