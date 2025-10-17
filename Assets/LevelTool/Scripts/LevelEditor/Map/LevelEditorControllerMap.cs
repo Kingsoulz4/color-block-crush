@@ -198,7 +198,8 @@ namespace ColorBlockCrush.Tools
                         Instantiate(model.blockInforPrefab).GetComponent<BlockInforEditorView>();
                     blockInforView.UpdateInfor(i, view.mapFeatureParent, 
                         cellGridBlockList.ConvertAll(cell => cell.transform as RectTransform), 
-                        canvas, mapConfig.bigBlocks[i].blockHealth, mapConfig.bigBlocks[i].colorType);
+                        canvas, mapConfig.bigBlocks[i].blockHealth, mapConfig.bigBlocks[i].isHidden, 
+                        mapConfig.bigBlocks[i].colorType);
                     _blockInforEditorViews.Add(blockInforView);
                     currentColorSet.Add(mapConfig.bigBlocks[i].colorType);
                 }
@@ -246,6 +247,7 @@ namespace ColorBlockCrush.Tools
                 blockConfig.bigBlockId = currentLevelConfig.mapConfig.bigBlocks.Count;
                 blockConfig.colorType = currentColorChoose;
                 blockConfig.blockHealth = int.Parse(blockHealth);
+                blockConfig.isHidden = view.toggleBlockHidden.isOn;
                 
                 for (int i = 0; i < cellSelection.Count; i++)
                 {
@@ -264,7 +266,7 @@ namespace ColorBlockCrush.Tools
                     Instantiate(model.blockInforPrefab).GetComponent<BlockInforEditorView>();
                 blockInforView.UpdateInfor(blockConfig.bigBlockId, view.mapFeatureParent, 
                     cellSelection.ConvertAll(cell => cell.transform as RectTransform), 
-                    canvas, int.Parse(blockHealth), currentColorChoose);
+                    canvas, int.Parse(blockHealth), blockConfig.isHidden, currentColorChoose);
                 _blockInforEditorViews.Add(blockInforView);
                 
                 currentColorSet.Add(currentColorChoose);

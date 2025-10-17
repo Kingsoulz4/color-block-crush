@@ -617,6 +617,8 @@ namespace ColorBlockCrush.Tools
     {
         Normal,
         Key,
-        Block
+        Block,
+        TunnelArea,
+        PixelSnake
     }
 }

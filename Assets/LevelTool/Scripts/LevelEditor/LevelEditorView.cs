@@ -41,6 +41,7 @@ namespace ColorBlockCrush.Tools
         public List<ButtonChooseDragType> buttonChooseDragTypes;
         public RectTransform mapFeatureParent;
         public TMP_InputField blockHealthInputField;
+        public Toggle toggleBlockHidden;
         public List<ButtonColorChoose> buttonCellGridColorChooses =  new List<ButtonColorChoose>();
         public List<BlockBulletValidateEditorView> blockBulletValidateEditorViews = new List<BlockBulletValidateEditorView>();
         

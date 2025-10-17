@@ -11,15 +11,17 @@ namespace ColorBlockCrush.Tools
         [SerializeField] private TextMeshProUGUI blockHealthTextValue;
         [SerializeField] private Image blockBg;
         [SerializeField] private int blockId;
+        [SerializeField] private GameObject hidden;
 
         public void UpdateInfor(int id, RectTransform selectionParent, IList<RectTransform> cells, 
-            Canvas rootCanvas, int health, ColorType colorType)
+            Canvas rootCanvas, int health, bool isHidden, ColorType colorType)
         {
             blockId = id;
             UiBoundsFitter.FitFrameToTargets(rectTransform, selectionParent,
                 cells, Vector2.zero, rootCanvas);
             blockHealthTextValue.text = health.ToString();
             blockBg.color = ColorReference.Instance.GetColor(colorType);
+            hidden.SetActive(isHidden);
         }
 
         public int GetKeyId() => blockId;
