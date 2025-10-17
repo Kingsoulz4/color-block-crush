@@ -130,4 +130,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_listMat: {fileID: 11400000, guid: 2ccb4a355d5e88e45b9541281c70d074, type: 2}
+  m_hiddenMat: {fileID: 2100000, guid: ff7df1bbeaafe3840b70631aa566e869, type: 2}
   m_mainRope: {fileID: 6696838569454855192}
