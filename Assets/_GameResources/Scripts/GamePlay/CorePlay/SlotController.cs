@@ -142,6 +142,11 @@ namespace ColorBlockCrush
             LevelController.Instance.ConveyorController.MoveGunIn(gunsToPush);
 
             RemoveGun(gun);
+
+            foreach(var g in gun.ConnectedGuns)
+            {
+                RemoveGun(g);
+            }
         }
 
         public void RemoveGun(Gun gun)

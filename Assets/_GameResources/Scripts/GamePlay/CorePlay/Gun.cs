@@ -42,14 +42,13 @@ namespace ColorBlockCrush
         private Queue<Block> targetQueue;
         private float _fireTimer = 0f;
 
+        public int ID { get; set; }
+        public GunConfig GunData => gunData;
         public int BulletCount { get; private set; }
         public int BulletRayCount { get; private set; }
         public ColorType ColorType { get; private set; }
-
         public bool IsFrontRow { get; set; }
-
-        public List<Gun> ConnectedGuns { get; private set; }
-
+        public List<Gun> ConnectedGuns { get => ConnectedGunHandler.ListGun; }
         public Block CurrentTarget { get; set; }
         public TrayItem TrayItem { get => trayItem; set => trayItem = value; }
         public GunPos GunPos { get => gunPos; set => gunPos = value; }
@@ -59,14 +58,15 @@ namespace ColorBlockCrush
         public Action<Gun> OnGunFired;
         public Action<Gun> OnGunEmpty;
 
-        public void Init(GunConfig gunDataP, int column)
+        public void Init(GunConfig gunDataP, int column, int id)
         {
+            ID = id;
             GunPos = GunPos.ON_GUN_BOARD;
             currentFireDir = RotationDirection.Up;
             OnGunFired = null;
             OnGunEmpty = null;
             CurrentTarget = null;
-            ConnectedGuns = new List<Gun>();
+            //ConnectedGuns = new List<Gun>();
             ColorType = gunDataP.colorType;
             BulletCount = gunDataP.bulletNumber;
             BulletRayCount = gunDataP.bulletNumber;
@@ -89,7 +89,7 @@ namespace ColorBlockCrush
 
             if (_fireTimer >= fireInterval)
             {
-                _fireTimer = 0f;
+                _fireTimer = 0f; 
                 CheckFire();
             }
         }
@@ -167,14 +167,16 @@ namespace ColorBlockCrush
             {
                 Debug.Log("!GetTargetBock " + 1);
                 var startPos = raycastPos.position + dirMove * 0.1f * i;
-                Debug.DrawRay(startPos, dir * 12, UnityEngine.Color.red, 3);
+                Debug.DrawRay(startPos , dir * 12, UnityEngine.Color.red, 3);
 
                 Ray ray = new Ray(startPos, dir);
                 if (Physics.Raycast(ray, out RaycastHit hit, 12, blockMask))
                 {
-
                     hit.transform.TryGetComponent(out Block block);
-                    Debug.Log("1122 " + block);
+                    if (!block)
+                    {
+                        Debug.Log("null");
+                    }
 
                     if (!block.CanBeRaycastHit() || block.ColorType != ColorType)
                     {
@@ -195,8 +197,6 @@ namespace ColorBlockCrush
                         targetQueue.Enqueue(block);
                     }
                 }
-                else
-                    Debug.Log("!GetTargetBock");
             }
         }
 
@@ -358,7 +358,6 @@ namespace ColorBlockCrush
             Sequence moveToConveyorSq = DOTween.Sequence();
             GunPos = GunPos.TWEEN_SORT;
             currentFireDir = RotationDirection.Up;
-            currentMoveFireDir = RotationDirection.Right;
 
             moveToConveyorTw = moveToConveyorSq.Append(
                 transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration)).SetEase(moveToConveyorEase).OnComplete(() =>
@@ -413,7 +412,31 @@ namespace ColorBlockCrush
         {
 
         }
+
+
         #endregion
+
+        public bool CheckDestroy()
+        {
+            if(ConnectedGuns.Count <= 0)
+            {
+                return true;
+            }    
+            else
+            {
+                for(int i=0; i<ConnectedGuns.Count; i++)
+                {
+                    if (ConnectedGuns[i].BulletCount > 0)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }    
+        }
+            
+
     }
 
     public enum GunPos

@@ -58,6 +58,14 @@ namespace ColorBlockCrush.Tools
 
         private int nextDrawIndexCounter = 0;
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ClearOnlySelection();
+            }
+        }
+
         // ===================== Init =====================
         public void Init(int width, int height, RectTransform gridContainer, List<GridCellMapView> gridCellList,
             Action<List<GridCellMapView>> onUpdateSelection, Action<List<GridCellMapView>> onDeleteSelection)

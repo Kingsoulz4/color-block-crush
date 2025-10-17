@@ -114,18 +114,31 @@ public class ConveyorController : MonoBehaviour
 
     private void OnGunEmpty(Gun gun)
     {
-        if (gun.TrayItem != null)
-        {
-            MoveTrayIn(gun.TrayItem);
-            RemoveTrayItem(gun.TrayItem);
-        }
 
-        Destroy(gun.gameObject);
+        if(gun.CheckDestroy())
+        {
+            if (gun.TrayItem != null)
+            {
+                MoveTrayIn(gun.TrayItem);
+                RemoveTrayItem(gun.TrayItem);
+            }
+
+            foreach(var g in gun.ConnectedGuns)
+            {
+                if (g.TrayItem != null)
+                {
+                    MoveTrayIn(g.TrayItem);
+                    RemoveTrayItem(g.TrayItem);
+                }
+            }
+        }
     }
 
     public void RemoveTrayItem(TrayItem trayItem)
     {
-        if (movingTrayItems.Contains(trayItem))
+        if (trayItem == null) return;
+
+        if (movingTrayItems!= null && movingTrayItems.Contains(trayItem))
         {
             trayItem.SplineAnimate.Pause();
             trayItem.MyGun.OnGunEmpty -= OnGunEmpty;
