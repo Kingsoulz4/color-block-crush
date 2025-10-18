@@ -69,6 +69,7 @@ namespace ColorBlockCrush
         {
             LevelEvent.OnWin += OnWinGame;
             LevelEvent.OnLose += OnLoseGame;
+            LevelEvent.OnRevive += OnReviveGame;
 
         }
 
@@ -76,6 +77,7 @@ namespace ColorBlockCrush
         {
             LevelEvent.OnWin -= OnWinGame;
             LevelEvent.OnLose -= OnLoseGame;
+            LevelEvent.OnRevive -= OnReviveGame;
         }
 
         public void StartCurrentLevel()
@@ -129,7 +131,12 @@ namespace ColorBlockCrush
 
         public void OnLoseGame(int level)
         {
-            if (BoosterManager.Instance.BoosterData.boosterItemDatas.First().levelUnlock > CurrentLevel)
+            if (GameManager.GameState == GameState.Lose)
+            {
+                return;
+            }
+            GameManager.Instance.SetGameState(GameState.Lose);
+            if (!LevelController.Instance.CheckCanRevive())
             {
                 var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
 
@@ -143,13 +150,11 @@ namespace ColorBlockCrush
             }
             else
             {
-                var popupLose = UIManager.Instance.ShowPopup<PopupLoseHaveSelectBooster>(null);
+                var popupLose = UIManager.Instance.ShowPopup<PopupOutOfSpace>(null);
                 popupLose.OnClose = () =>
                 {
                     UIManager.Instance.ShowScreen<MainScreenUI>();
                 };
-                popupLose.OnRetry = OnRetryGame;
-
             }
         }
 
@@ -174,16 +179,21 @@ namespace ColorBlockCrush
             }
         }
 
-        public void OnReviveGame()
+        public void OnReviveGame(int price)
         {
-            if (UserDataManager.Gold >= priceRevive)
+            if (UserDataManager.Gold >= price)
             {
-                UserDataManager.AddGold(-priceRevive, "Revive");
-
+                UserDataManager.AddGold(-price, "Revival");
+                LevelController.Instance.ReviveLevel(price);
             }
             else
             {
+                GameManager.Instance.SetGameState(GameState.Paused);
 
+                UIManager.Instance.ShowPopup<PopupShop>(() =>
+                {
+                    GameManager.Instance.SetGameState(GameState.Playing);
+                });
             }
         }
 
