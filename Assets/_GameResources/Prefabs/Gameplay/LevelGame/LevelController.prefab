@@ -902,7 +902,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.4, y: 0.45, z: -2.85}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.76, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2025404531411057438}
@@ -1023,6 +1023,9 @@ MonoBehaviour:
   maxSlots: 5
   startPos: {fileID: 5707933120642198670}
   startMovingGunSpacing: 0.1
+  trayMoveDuration: 5
+  trayMoveDurationFast: 2.5
+  endPointConveyor: {fileID: 9217796885872078684}
   trayPrefab: {fileID: 7864664086401441334, guid: b0fe6a15e27bbf049bcdbde5b85cbab7, type: 3}
   spawnParent: {fileID: 7078067749853631460}
   startPosition: {x: -0.25, y: -0.3, z: 3}
@@ -1059,7 +1062,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.273, y: 0.61, z: -1.834}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.76, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5208454386302340361}
@@ -1206,7 +1209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxSlots: 5
-  _slotStartPosition: {x: -4, y: 0, z: -8}
+  _slotStartPosition: {x: -4, y: 0, z: -7}
   _slotSpacing: 2
   slotItemPrb: {fileID: 1432112894508569, guid: 4957b2bd496e38944937d092d5ff0842, type: 3}
   gunContainer: {fileID: 4320968164407314973}
@@ -1506,7 +1509,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.71, y: 0.45, z: 10.08}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.76, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7767286409675957161}
@@ -1959,8 +1962,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnOrigin: {x: 0, y: 0, z: -10.5}
-  columnSpacing: 3
-  rowSpacing: 2.5
+  columnSpacing: 2
+  rowSpacing: 3
   gunPrefab: {fileID: 769447249408881793, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}
   lockPrefab: {fileID: 4719912956732493574, guid: 5d73177f82cd7f845b768f6c1551bc09, type: 3}
   gunContainer: {fileID: 4637696110757540719}
@@ -2758,7 +2761,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.2, y: 0.45, z: 8.61}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.76, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7815645781100214595}

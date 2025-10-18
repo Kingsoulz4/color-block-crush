@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace ColorBlockCrush
 {
@@ -20,18 +21,27 @@ namespace ColorBlockCrush
         private Vector3 originRotation = new Vector3(0, 0, -90);
         private Vector3 targetRotation = Vector3.zero;
         private Sequence moveToConveyorSq;
+        private float fastModeDuration;
 
         public SplineAnimate SplineAnimate { get => splineAnimate; set => splineAnimate = value; }
         public Gun MyGun { get => myGun; set => myGun = value; }
 
-        public void Init()
+        public void Init(float duration, float fastModeDurationP)
         {
-            model.transform.Rotate(originRotation);
+            splineAnimate.Duration = duration;
+            fastModeDuration = fastModeDurationP;
+            LevelEvent.OnFastMode += OnFastMode;
+        }
+
+        private void OnFastMode()
+        {
+            SplineAnimate.Duration = fastModeDuration;
         }
 
         private void OnDisable()
         {
             DOTween.Kill(this);
+            LevelEvent.OnFastMode -= OnFastMode;
         }
 
         public void ResetTray(Vector3 endPos, Action callback = null)

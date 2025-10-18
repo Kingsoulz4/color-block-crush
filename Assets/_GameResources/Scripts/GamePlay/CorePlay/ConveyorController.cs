@@ -12,6 +12,9 @@ public class ConveyorController : MonoBehaviour
     [SerializeField] private int maxSlots = 5;
     [SerializeField] private Transform startPos;
     [SerializeField] private float startMovingGunSpacing = 0.1f;
+    [SerializeField] private float trayMoveDuration = 5f;
+    [SerializeField] private float trayMoveDurationFast = 3f;
+    [SerializeField] private EndPointConveyor endPointConveyor;
 
     [Header("Tray Spawn Settings")]
     [SerializeField] private TrayItem trayPrefab;
@@ -34,9 +37,21 @@ public class ConveyorController : MonoBehaviour
 
     public void Init()
     {
+        endPointConveyor.gameObject.SetActive(true);
         movingTrayItems = new List<TrayItem>();
         movingTrayItems.Clear();
         InitTray();
+        LevelEvent.OnFastMode += OnFastMode;
+    }
+
+    private void OnDisable()
+    {
+        LevelEvent.OnFastMode -= OnFastMode;
+    }
+
+    private void OnFastMode()
+    {
+        endPointConveyor.gameObject.SetActive(false);
     }
 
     public void MoveGunIn(List<Gun> guns)
@@ -194,7 +209,7 @@ public class ConveyorController : MonoBehaviour
         }
 
         TrayItem newTray = Instantiate(trayPrefab, spawnParent);
-
+        newTray.Init(trayMoveDuration, trayMoveDurationFast);
         trayItemsFree.Insert(0, newTray);
 
         ShiftTraysToRight();

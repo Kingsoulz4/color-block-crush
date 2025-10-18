@@ -415,9 +415,9 @@ MonoBehaviour:
   fireRate: 50
   raycastPos: {fileID: 4644129007114109}
   anim: {fileID: 2012378433343466974}
-  moveToConveyorDuration: 0.5
-  moveToConveyorJumpForce: 5
-  moveToConveyorEase: 1
+  moveToConveyorDuration: 0.3
+  moveToConveyorJumpForce: 6
+  moveToConveyorEase: 5
   m_hiddenGun: {fileID: 8764903062490715236}
   m_connectedGuns: {fileID: 7885081760027138658}
 --- !u!65 &8597390162283652098
