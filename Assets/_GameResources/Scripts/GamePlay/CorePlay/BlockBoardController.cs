@@ -66,6 +66,7 @@ namespace ColorBlockCrush
 
             SpawnBlockBoard(levelConfig);
             SpawnKeys();
+            SpawnBigBlocks();
         }
         private void SpawnBlockBoard(LevelConfig levelConfig)
         {
@@ -102,11 +103,24 @@ namespace ColorBlockCrush
             return block;
         }
 
+        private void SpawnBigBlocks()
+        {
+            if (levelConfig.mapConfig.bigBlocks.Count <= 0) return;
+            for(int i=0; i<levelConfig.mapConfig.bigBlocks.Count; i++)
+            {
+                SpawnBigBlock(levelConfig.mapConfig.bigBlocks[i]);
+            }
+        }
+
         public BigBlock SpawnBigBlock(BigBlockConfig bigBlockConfig)
         {
             BigBlock newBigBlock = Instantiate(bigBlockPrefab, bigBlockContainer);
 
             newBigBlock.Init(bigBlockConfig);
+
+            newBigBlock.transform.position = CalculateCenter(bigBlockConfig.blocksId);
+
+            newBigBlock.transform.localScale = calculatedBlockScale;
 
             return newBigBlock;
         }
