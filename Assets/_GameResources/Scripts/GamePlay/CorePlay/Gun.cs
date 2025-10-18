@@ -208,7 +208,13 @@ namespace ColorBlockCrush
             if (BulletCount == 0)
             {
                 CurrentTarget = null;
-                PlayAnim(Constant.GunAnimation.DISSAPEAR);
+                PlayAnim(Constant.GunAnimation.DISAPPEAR);
+
+                this.Wait(0.2f, () =>
+                {
+                    gameObject.SetActive(false);
+                });
+
                 OnGunEmpty?.Invoke(this);
             }
         }

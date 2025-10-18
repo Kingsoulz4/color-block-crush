@@ -111,6 +111,7 @@ namespace ColorBlockCrush
 
             Gun gun = Instantiate(gunPrefab, worldPos, Quaternion.identity, gunContainer);
             gun.Init(gunData, column, id);
+            gun.OnGunEmpty += OnGunEmty;
             gun.name = $"Gun_{column}_{row}";
 
             return gun;
@@ -247,6 +248,11 @@ namespace ColorBlockCrush
         public Gun GetGunByID(int id)
         {
             return dictGun[id];
+        }
+
+        private void OnGunEmty(Gun gun)
+        {
+            gun.transform.SetParent(gunContainer);
         }
     }
 }

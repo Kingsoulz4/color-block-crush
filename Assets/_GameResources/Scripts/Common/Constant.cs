@@ -37,7 +37,7 @@ public class Constant
         public const string SHOOT = "Shoot";
         public const string IDLE = "Idle";
         public const string CLICK = "Click";
-        public const string DISSAPEAR = "Dissapear";
+        public const string DISAPPEAR = "Disappear";
     }
 
 }

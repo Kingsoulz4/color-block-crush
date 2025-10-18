@@ -121,10 +121,6 @@ public class ConveyorController : MonoBehaviour
             {
                 MoveTrayIn(gun.TrayItem);
                 RemoveTrayItem(gun.TrayItem);
-                this.Wait(0.3f, () =>
-                {
-                    gun.gameObject.SetActive(false);
-                });
             }
 
             foreach(var g in gun.ConnectedGuns)
@@ -133,10 +129,6 @@ public class ConveyorController : MonoBehaviour
                 {
                     MoveTrayIn(g.TrayItem);
                     RemoveTrayItem(g.TrayItem);
-                    this.Wait(0.3f, () =>
-                    {
-                        g.gameObject.SetActive(false);
-                    });
                 }
             }
         }
