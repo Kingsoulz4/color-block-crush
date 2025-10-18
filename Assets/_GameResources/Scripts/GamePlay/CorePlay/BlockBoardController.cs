@@ -21,11 +21,13 @@ namespace ColorBlockCrush
         [Header("Prefabs")]
         [SerializeField] private Block blockPrefab;
         [SerializeField] private BlockKey blockKeyPrefab;
+        [SerializeField] private BigBlock bigBlockPrefab;
 
         [Header("References")]
         [SerializeField] private GridController gridController;
         [SerializeField] private Transform blockContainer;
         [SerializeField] private Transform keyContainer;
+        [SerializeField] private Transform bigBlockContainer;
 
         private int _rows;
         private int _columns;
@@ -107,7 +109,14 @@ namespace ColorBlockCrush
             return block;
         }
 
-        
+        public BigBlock SpawnBigBlock(BigBlockConfig bigBlockConfig)
+        {
+            BigBlock newBigBlock = Instantiate(bigBlockPrefab, bigBlockContainer);
+
+            newBigBlock.Init(bigBlockConfig);
+
+            return newBigBlock;
+        }
 
         private void SpawnKeys()
         {
@@ -172,6 +181,15 @@ namespace ColorBlockCrush
         public BlockKey GetPendingKey()
         {
             return listKey.Find(x => !x.IsResolved && x.IsUnBlocked);
+        }
+
+        public Block GetBlockByID(int id)
+        {
+            (ulong row, ulong col) = CantorPairing.Unpair((ulong)id);
+            int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
+            var blockData = levelConfig.mapConfig.blocks[idReal];
+            var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
+            return block;
         }
 
         private void OnBlockDestroyed(Block block)
