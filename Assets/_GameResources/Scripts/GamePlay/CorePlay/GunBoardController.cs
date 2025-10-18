@@ -269,6 +269,12 @@ namespace ColorBlockCrush
         private void OnGunDissapear(Gun gun)
         {
             totalGunCount -= 1;
+
+            if (totalGunCount <= 5)
+            {
+                LevelEvent.OnFastMode?.Invoke();
+            }
+
             if (totalGunCount <= 0)
             {
                 this.Wait(0.2f, () =>
