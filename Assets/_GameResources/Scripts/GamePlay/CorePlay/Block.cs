@@ -43,6 +43,7 @@ namespace ColorBlockCrush
         public bool CanDestroy { get; private set; }
         public bool IsAttacked { get; set; }
         public bool IsDestroyed { get; set; }
+        public Vector2Int Size { get; set; } = new Vector2Int(1, 1);
 
         public BlockConfig BlockData { get => blockData; }
         public int Id { get => id; }

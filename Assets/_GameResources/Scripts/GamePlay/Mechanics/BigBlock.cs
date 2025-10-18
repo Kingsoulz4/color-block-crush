@@ -34,6 +34,7 @@ namespace ColorBlockCrush
             hitPoint = bigBlockConfig.blockHealth;
             hitPointRaycast = bigBlockConfig.blockHealth;
             IsAttacked = false;
+            
 
             ResizeBlock();
 
@@ -45,6 +46,8 @@ namespace ColorBlockCrush
         private void ResizeBlock()
         {
             var blockSize = CalculateSize();
+            Size = new Vector2Int(blockSize.x, blockSize.y);
+
             if(blockSize.x > 1)
             {
                 var deltaX = ((blockSize.x - 1) * sizeScaleFactor) / 2;
