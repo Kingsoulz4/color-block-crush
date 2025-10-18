@@ -123,6 +123,14 @@ namespace ColorBlockCrush
 
         public void OnTapGun(Gun gun)
         {
+            if (gun.IsFrontRow)
+            {
+                this.Wait(0.15f, () =>
+                {
+                    gun.PlayAnim(Constant.GunAnimation.IDLE);
+                });
+            }
+
             List<Gun> gunsToPush = new List<Gun>();
 
             if (gun.IsConnectedGroup())
