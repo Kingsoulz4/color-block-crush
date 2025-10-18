@@ -458,8 +458,33 @@ namespace ColorBlockCrush
         {
             anim.PlayAnim(name);
         }
-    }
 
+        public void OnGunClicked(Gun gun)
+        {
+            if (!gun.CanPushToConveyor())
+            {
+                return;
+            }
+
+            if (gun.GunPos == GunPos.ON_GUN_BOARD)
+            {
+                gun.PlayAnim(Constant.GunAnimation.CLICK);
+                if (IsFrontRow)
+                {
+                    this.Wait(0.15f, () =>
+                    {
+                        gun.PlayAnim(Constant.GunAnimation.IDLE);
+                    });
+                }
+                LevelController.Instance.GunBoardController.OnTapGun(gun);
+            }
+
+            if (gun.GunPos == GunPos.ON_SLOT)
+            {
+                LevelController.Instance.SlotController.OnTapGun(gun);
+            }
+        }
+    }
     public enum GunPos
     {
         ON_GUN_BOARD = 0,

@@ -117,6 +117,8 @@ namespace ColorBlockCrush
 
         public void OnTapGun(Gun gun)
         {
+            gun.PlayAnim(Constant.GunAnimation.CLICK);
+
             List<Gun> gunsToPush = new List<Gun>();
 
             if (gun.IsConnectedGroup())
@@ -133,6 +135,10 @@ namespace ColorBlockCrush
 
             if (!LevelController.Instance.ConveyorController.CanPlaceGuns(requiredSlots))
             {
+                this.Wait(0.15f, () =>
+                {
+                    gun.PlayAnim(Constant.GunAnimation.IDLE);
+                });
                 Debug.Log("Not enough slots available");
                 return;
             }
@@ -143,7 +149,7 @@ namespace ColorBlockCrush
 
             RemoveGun(gun);
 
-            foreach(var g in gun.ConnectedGuns)
+            foreach (var g in gun.ConnectedGuns)
             {
                 RemoveGun(g);
             }
@@ -175,11 +181,6 @@ namespace ColorBlockCrush
             if (index >= 0 && index < _gunsInSlots.Count)
                 return _gunsInSlots[index];
             return null;
-        }
-
-        public int GetGunCountInSlot()
-        {
-            return _gunsInSlots.Count;
         }
     }
 }
