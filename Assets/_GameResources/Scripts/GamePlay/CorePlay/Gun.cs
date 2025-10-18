@@ -461,6 +461,7 @@ namespace ColorBlockCrush
 
         public void OnGunClicked(Gun gun)
         {
+            gun.PlayAnim(Constant.GunAnimation.CLICK);
             if (!gun.CanPushToConveyor())
             {
                 return;
@@ -468,14 +469,6 @@ namespace ColorBlockCrush
 
             if (gun.GunPos == GunPos.ON_GUN_BOARD)
             {
-                gun.PlayAnim(Constant.GunAnimation.CLICK);
-                if (IsFrontRow)
-                {
-                    this.Wait(0.15f, () =>
-                    {
-                        gun.PlayAnim(Constant.GunAnimation.IDLE);
-                    });
-                }
                 LevelController.Instance.GunBoardController.OnTapGun(gun);
             }
 

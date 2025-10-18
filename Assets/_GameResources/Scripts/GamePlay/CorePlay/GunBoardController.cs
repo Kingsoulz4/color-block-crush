@@ -123,7 +123,6 @@ namespace ColorBlockCrush
 
         public void OnTapGun(Gun gun)
         {
-            gun.PlayAnim(Constant.GunAnimation.CLICK);
             if (gun.IsFrontRow)
             {
                 this.Wait(0.15f, () =>

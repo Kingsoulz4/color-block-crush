@@ -117,8 +117,6 @@ namespace ColorBlockCrush
 
         public void OnTapGun(Gun gun)
         {
-            gun.PlayAnim(Constant.GunAnimation.CLICK);
-
             List<Gun> gunsToPush = new List<Gun>();
 
             if (gun.IsConnectedGroup())
