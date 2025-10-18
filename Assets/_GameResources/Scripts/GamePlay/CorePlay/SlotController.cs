@@ -62,41 +62,41 @@ namespace ColorBlockCrush
 
         public bool CanPlaceGuns(int count)
         {
+            Debug.Log("CanPlaceGuns" + _gunsInSlots.Count + count);
             return _gunsInSlots.Count + count <= _maxSlots;
         }
 
-        // Thêm gun vào slot (tự động thêm vào cuối - bên phải nhất)
-        public void MoveGunsIn(List<Gun> guns)
-        {
-            if (!CanPlaceGuns(guns.Count))
-            {
-                return;
-            }
+        //public void MoveGunsIn(List<Gun> guns)
+        //{
+        //    if (!CanPlaceGuns(guns.Count))
+        //    {
+        //        return;
+        //    }
 
-            foreach (Gun gun in guns)
-            {
-                _gunsInSlots.Add(gun);
+        //    foreach (Gun gun in guns)
+        //    {
+        //        _gunsInSlots.Add(gun);
 
-                int slotIndex = _gunsInSlots.Count - 1;
-                Vector3 targetPos = GetSlotPosition(slotIndex);
-                gun.transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase);
+        //        int slotIndex = _gunsInSlots.Count - 1;
+        //        Vector3 targetPos = GetSlotPosition(slotIndex);
+        //        gun.transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase);
 
-                OnGunAddedToSlot?.Invoke(gun);
-            }
-        }
+        //        OnGunAddedToSlot?.Invoke(gun);
+        //    }
+        //}
         public void MoveGunIn(Gun gun)
         {
             if (gun.ConnectedGuns.Count > 1)
             {
                 if (!CanPlaceGuns(gun.ConnectedGuns.Count))
                 {
-                    // Lose
+                    LevelController.Instance.LoseLevel();
                     return;
                 }
             }
             else if (!CanPlaceGuns(1))
             {
-                // Lose
+                LevelController.Instance.LoseLevel();
                 return;
             }
 
