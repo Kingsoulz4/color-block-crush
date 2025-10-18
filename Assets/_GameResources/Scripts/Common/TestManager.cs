@@ -108,7 +108,7 @@ namespace ColorBlockCrush
             };
             
             var popupOutOfSpace = UIManager.Instance.ShowPopup<PopupOutOfSpace>(() => { });
-            popupOutOfSpace.Show();
+            popupOutOfSpace.Show(null);
             popupOutOfSpace.OnClose = onClose;
             popupOutOfSpace.OnKeepPlaying = onrevival;
         }

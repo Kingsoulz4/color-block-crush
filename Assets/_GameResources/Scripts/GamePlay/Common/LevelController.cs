@@ -15,6 +15,7 @@ namespace ColorBlockCrush
         [SerializeField] private BlockBoardController blockBoardController;
         [SerializeField] private GunBoardController gunBoardController;
         [SerializeField] private SlotController slotController;
+        [SerializeField] private BonusSlotController bonusSlotController;
         [SerializeField] private ConveyorController conveyorController;
         [SerializeField] private TutorialHandGuide m_tutorialHandGuide;
 
@@ -26,6 +27,7 @@ namespace ColorBlockCrush
         public GunBoardController GunBoardController { get => gunBoardController; }
         public SlotController SlotController { get => slotController; }
         public ConveyorController ConveyorController { get => conveyorController; }
+        public BonusSlotController BonusSlotController { get => bonusSlotController; }
 
         public void SetLevelData(LevelConfig gameLevelData)
         {
@@ -58,8 +60,14 @@ namespace ColorBlockCrush
             LevelEvent.OnLose?.Invoke(levelData.levelId);
         }
 
-        public void ReviveLevel()
+        public void ReviveLevel(int price)
         {
+            LevelEvent.OnRevive?.Invoke(price);
+        }
+
+        public bool CheckCanRevive()
+        {
+            return bonusSlotController.CanPlaceGuns(ConveyorController.GetMovingTrayCount());
         }
 
 

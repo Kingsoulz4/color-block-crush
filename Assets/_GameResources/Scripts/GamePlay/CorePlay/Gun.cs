@@ -99,10 +99,10 @@ namespace ColorBlockCrush
         void Update()
         {
             CheckFire();
-            if (targetQueu1e.Count > 0)
-            {
-                targetQueu1e = new List<Block>(targetQueu1e);
-            }
+            //if (targetQueu1e.Count > 0)
+            //{
+            //    targetQueu1e = new List<Block>(targetQueu1e);
+            //}
         }
 
         private void OnDisable()
@@ -378,7 +378,7 @@ namespace ColorBlockCrush
             {
                 Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
                 transform.DORotate(newRotation, 0f);
-               
+
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
                 GetTargetBock();
@@ -406,6 +406,20 @@ namespace ColorBlockCrush
             moveToSlotSq.SetId(this);
         }
 
+        public void MoveToBonusSlot(Vector3 endPos, Action callback = null)
+        {
+            Sequence moveToSlotSq = DOTween.Sequence();
+
+            GunPos = GunPos.ON_SLOT;
+            moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.Linear).OnComplete(() =>
+            {
+                callback?.Invoke();
+                PlayAnim(Constant.GunAnimation.IDLE);
+            });
+            moveToSlotSq.Join(transform.DORotate(Vector3.zero, 0.3f));
+            moveToSlotSq.SetId(this);
+        }
+
         public void MoveSortSlot(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
         {
             GunPos = GunPos.TWEEN_SORT;
@@ -428,6 +442,13 @@ namespace ColorBlockCrush
         }
 
         #endregion
+
+        public void Scale(Vector3 scaleTarget, float duration)
+        {
+            Sequence scaleSq = DOTween.Sequence();
+            scaleSq.Append(transform.DOScale(scaleTarget, duration));
+            scaleSq.SetId(this);
+        }
 
         public bool CheckDestroy()
         {
