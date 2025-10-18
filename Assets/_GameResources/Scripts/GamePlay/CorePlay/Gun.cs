@@ -32,6 +32,9 @@ namespace ColorBlockCrush
         [SerializeField] private float moveToConveyorJumpForce = 2;
         [SerializeField] private Ease moveToConveyorEase = Ease.OutQuad;
 
+        private const float raycastSpacing = 0.15f;
+        private const int maxRaycastSteps = 65;
+        private const float maxShootingAngle = 5f;
 
         private bool isTurning;
         private bool isFireFirstTime = false;
@@ -80,7 +83,6 @@ namespace ColorBlockCrush
             InitMechanics();
         }
 
-
         void Update()
         {
             CheckFire();
@@ -123,7 +125,6 @@ namespace ColorBlockCrush
             Fire(targetQueue.Dequeue());
         }
 
-
         public bool IsConnectedGroup()
         {
             return ConnectedGuns.Count > 0;
@@ -148,7 +149,6 @@ namespace ColorBlockCrush
             return true;
         }
 
-
         public bool CanFire(Block target)
         {
             return !isTurning && BulletCount > 0
@@ -157,8 +157,7 @@ namespace ColorBlockCrush
                 ;
         }
 
-        private const float raycastSpacing = 0.15f;
-        private const int maxRaycastSteps = 65;
+
         public void GetTargetBock()
         {
             var dir = GetFireDirection(currentFireDir);
@@ -303,11 +302,6 @@ namespace ColorBlockCrush
             return newRotation;
         }
 
-        public Vector3 GetSlotPosition()
-        {
-            return transform.position;
-        }
-
         private void UpdateVisuals()
         {
             for (int i = 0; i < meshRendererList.Count; i++)
@@ -371,6 +365,7 @@ namespace ColorBlockCrush
             moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.Linear).OnComplete(() =>
             {
                 callback?.Invoke();
+                PlayAnim(Constant.GunAnimation.IDLE);
             });
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, 0.3f));
             moveToSlotSq.SetId(this);
@@ -397,12 +392,6 @@ namespace ColorBlockCrush
             moveSortSlotSq.SetId(this);
         }
 
-        public void Destroy()
-        {
-
-        }
-
-
         #endregion
 
         public bool CheckDestroy()
@@ -425,8 +414,6 @@ namespace ColorBlockCrush
             }
         }
 
-       
-        private const float maxShootingAngle = 5f;
         public bool IsBlockInShootingAngle(Block block)
         {
             Vector3 gunPos = transform.position;
