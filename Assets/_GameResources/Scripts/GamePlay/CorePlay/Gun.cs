@@ -366,15 +366,18 @@ namespace ColorBlockCrush
                 transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration)).SetEase(moveToConveyorEase).OnComplete(() =>
             {
                 Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
-                transform.DORotate(newRotation, 0f).SetId(this);
-
+                transform.DORotate(newRotation, 0f);
+               
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
                 GetTargetBock();
 
             });
-
+            moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration));
+            moveToConveyorSq.Append(transform.DOScale(Vector3.one * 1f, 0.1f));
+            moveToConveyorSq.Append(transform.DOScale(Vector3.one * 0.85f, 0.05f));
             moveToConveyorSq.SetId(this);
+
         }
 
         public void MoveToSlot(Vector3 endPos, Action callback = null)
@@ -388,6 +391,7 @@ namespace ColorBlockCrush
                 PlayAnim(Constant.GunAnimation.IDLE);
             });
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, 0.3f));
+            moveToSlotSq.Join(transform.DOScale(Vector3.one, 0.25f));
             moveToSlotSq.SetId(this);
         }
 
