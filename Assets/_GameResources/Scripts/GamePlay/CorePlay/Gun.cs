@@ -60,6 +60,7 @@ namespace ColorBlockCrush
 
         public Action<Gun> OnGunFired;
         public Action<Gun> OnGunEmpty;
+        public Action<Gun> OnGunDissapear;
 
         public void Init(GunConfig gunDataP, int column, int id)
         {
@@ -68,6 +69,7 @@ namespace ColorBlockCrush
             currentFireDir = RotationDirection.Up;
             OnGunFired = null;
             OnGunEmpty = null;
+            OnGunDissapear = null;
             CurrentTarget = null;
             //ConnectedGuns = new List<Gun>();
             ColorType = gunDataP.colorType;
@@ -213,6 +215,7 @@ namespace ColorBlockCrush
                 this.Wait(0.2f, () =>
                 {
                     gameObject.SetActive(false);
+                    OnGunDissapear?.Invoke(this);
                 });
 
                 OnGunEmpty?.Invoke(this);

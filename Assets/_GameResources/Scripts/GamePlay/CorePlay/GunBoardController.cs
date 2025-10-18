@@ -27,11 +27,14 @@ namespace ColorBlockCrush
         private List<List<ObjectOnGunBoardColumn>> listGunColumn = new List<List<ObjectOnGunBoardColumn>>();
 
         private Dictionary<int, Gun> dictGun = new();
+        private int totalGunCount = 0;
 
-        public Action<Gun> OnGunTapped;
+        public int TotalGunCount { get => totalGunCount; }
 
         public void Init(LevelConfig levelConfig)
         {
+            totalGunCount = 0;
+            dictGun.Clear();
             SpawnGunBoard(levelConfig);
         }
 
@@ -67,7 +70,7 @@ namespace ColorBlockCrush
                             listGunColumn[col].Add(lockObj);
                         }
                     }
-                    else if(data.elementType == GunLineElementType.Tank)
+                    else if (data.elementType == GunLineElementType.Tank)
                     {
                         var gun = SpawnGun(col, i, data.gunConfig, data.elementId, centerOffsetX);
                         if (gun != null)
@@ -77,7 +80,7 @@ namespace ColorBlockCrush
                         }
                     }
                 }
-
+                totalGunCount = GetGunCountInBoard();
                 UpdateFrontRowFlags(col);
             }
         }
@@ -99,7 +102,7 @@ namespace ColorBlockCrush
             return lockObj;
         }
 
-        public Gun SpawnGun(int column, int row, GunConfig gunData,int id, float centerOffsetX = 0f)
+        public Gun SpawnGun(int column, int row, GunConfig gunData, int id, float centerOffsetX = 0f)
         {
             if (!IsValidColumn(column)) return null;
 
@@ -112,6 +115,7 @@ namespace ColorBlockCrush
             Gun gun = Instantiate(gunPrefab, worldPos, Quaternion.identity, gunContainer);
             gun.Init(gunData, column, id);
             gun.OnGunEmpty += OnGunEmty;
+            gun.OnGunDissapear += OnGunDissapear;
             gun.name = $"Gun_{column}_{row}";
 
             return gun;
@@ -147,13 +151,12 @@ namespace ColorBlockCrush
                 RemoveObjectFromColumn(g);
                 ShiftColumn(col);
             }
-
-            OnGunTapped?.Invoke(gun);
         }
 
         public void ResolveLock(LockObject lockObject)
         {
             RemoveObjectFromColumn(lockObject);
+            totalGunCount--;
             ShiftColumn(lockObject.ColumnIndex);
         }
 
@@ -162,27 +165,27 @@ namespace ColorBlockCrush
             var stack = new Stack<Gun>();
             stack.Push(gun);
             List<Gun> visited = new();
-            while(stack.Count > 0)
+            while (stack.Count > 0)
             {
                 var gunTemp = stack.Pop();
                 listGunToPush.Add(gunTemp);
-                for(int i=0; i< gunTemp.ConnectedGuns.Count; i++)
+                for (int i = 0; i < gunTemp.ConnectedGuns.Count; i++)
                 {
                     var linkGun = gunTemp.ConnectedGuns[i];
-                    if(!listGunToPush.Contains(linkGun))
+                    if (!listGunToPush.Contains(linkGun))
                     {
                         stack.Push(linkGun);
                     }
                 }
             }
         }
-            
+
 
         public LockObject GetPenndingLock()
         {
             LockObject lockObject = null;
 
-            for(int i=0; i<listGunColumn.Count; i++)
+            for (int i = 0; i < listGunColumn.Count; i++)
             {
                 if (listGunColumn[i].Count > 0 && listGunColumn[i][0] is LockObject lockObj && !lockObj.IsResolved)
                 {
@@ -217,7 +220,7 @@ namespace ColorBlockCrush
                 {
                     gun.MoveColumn(newPos, 0.2f, DG.Tweening.Ease.OutQuad);
                 }
-                else if(objOnColumn is LockObject lockObject)
+                else if (objOnColumn is LockObject lockObject)
                 {
                     lockObject.MoveColumn(newPos, 0.2f, DG.Tweening.Ease.OutQuad);
                 }
@@ -253,6 +256,28 @@ namespace ColorBlockCrush
         private void OnGunEmty(Gun gun)
         {
             gun.transform.SetParent(gunContainer);
+        }
+
+        private void OnGunDissapear(Gun gun)
+        {
+            totalGunCount -= 1;
+            if (totalGunCount <= 0)
+            {
+                this.Wait(0.2f, () =>
+                {
+                    LevelController.Instance.WinLevel();
+                });
+            }
+        }
+
+        public int GetGunCountInBoard()
+        {
+            int count = 0;
+            for (int i = 0; i < listGunColumn.Count; i++)
+            {
+                count += listGunColumn[i].Count;
+            }
+            return count;
         }
     }
 }

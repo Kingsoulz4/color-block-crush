@@ -35,12 +35,12 @@ namespace ColorBlockCrush
         public void StartLevel()
         {
             Application.targetFrameRate = 60;
-            InitializeGame();
+            Init();
             GameManager.Instance.SetGameState(GameState.Playing);
 
         }
 
-        private void InitializeGame()
+        private void Init()
         {
             blockBoardController.Init(levelData);
             gunBoardController.Init(levelData);
@@ -48,26 +48,20 @@ namespace ColorBlockCrush
             conveyorController.Init();
         }
 
-        private void WinLevel()
+        public void WinLevel()
         {
             LevelEvent.OnWin?.Invoke(levelData.levelId);
         }
 
-        private void LoseLevel()
+        public void LoseLevel()
         {
             LevelEvent.OnLose?.Invoke(levelData.levelId);
         }
 
-        private void ReviveLevel()
+        public void ReviveLevel()
         {
         }
 
-        public void RestartGame()
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(
-                UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
-            );
-        }
 
         #region Boosters
 
