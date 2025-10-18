@@ -54,6 +54,7 @@ MonoBehaviour:
   blockRay0:
     serializedVersion: 2
     m_Bits: 1024
+  mCollider: {fileID: 207611675957290789}
   colorRate:
     _serializedList:
     - Key: 0

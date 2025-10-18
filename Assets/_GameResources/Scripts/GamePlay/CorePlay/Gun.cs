@@ -44,6 +44,7 @@ namespace ColorBlockCrush
         private RotationDirection currentMoveFireDir = RotationDirection.Right;
         private GunConfig gunData;
         private Queue<Block> targetQueue;
+        private List<Block> targetQueu1e = new List<Block>();
 
         public int ID { get; set; }
         public GunConfig GunData => gunData;
@@ -88,6 +89,10 @@ namespace ColorBlockCrush
         void Update()
         {
             CheckFire();
+            if (targetQueu1e.Count > 0)
+            {
+                targetQueu1e = new List<Block>(targetQueu1e);
+            }
         }
 
         private void OnDisable()
@@ -118,7 +123,7 @@ namespace ColorBlockCrush
             if (targetQueue.Count == 0)
                 return;
 
-            Block nextBlock = targetQueue.Peek(); 
+            Block nextBlock = targetQueue.Peek();
             if (!nextBlock || !CanFire(nextBlock))
             {
                 return;
@@ -174,6 +179,10 @@ namespace ColorBlockCrush
                 {
                     hit.transform.TryGetComponent(out Block block);
 
+                    //Debug.Log(block.name);
+                    //Debug.Log("CanBeRaycastHit " + block.CanBeRaycastHit());
+                    //Debug.Log("Contains " + targetQueue.Contains(block));
+                    //Debug.Log("ColorType" + block.ColorType);
                     if (!block.CanBeRaycastHit() || block.ColorType != ColorType || targetQueue.Contains(block))
                     {
                         continue;
@@ -186,6 +195,8 @@ namespace ColorBlockCrush
                         targetQueue.Enqueue(block);
                     }
                 }
+                //else 
+                //    Debug.Log("!Physics.Raycast");
             }
         }
 
