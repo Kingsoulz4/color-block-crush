@@ -21,6 +21,7 @@ namespace ColorBlockCrush.Tools
         public GameObject keyInforPrefab;
         public GameObject tunnelAreaInforPrefab;
         public GameObject itemTunnelAreaQueuePrefab;
+        public GameObject pixelSnakeInforPrefab;
 
         [Header("Tank")] 
         public GameObject tankLineElementPrefab;

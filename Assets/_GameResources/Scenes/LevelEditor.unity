@@ -4688,6 +4688,7 @@ MonoBehaviour:
   _gridCellMapViews: []
   _blockInforEditorViews: []
   _keyInforEditorViews: []
+  _pixelSnakeInforEditorViews: []
   listIconTunnelAreaQueue: []
   _tunnelAreaInforEditorViews: []
   currentTunnelAreaQueueColor: 1
@@ -8629,8 +8630,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 243655967}
   m_HandleRect: {fileID: 243655966}
   m_Direction: 0
-  m_Value: 0.99999267
-  m_Size: 0.97386795
+  m_Value: 1
+  m_Size: 0.48693964
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13158,7 +13159,9 @@ MonoBehaviour:
   rows: 32
   cols: 32
   currentDragType: 0
+  startPos: {x: 0, y: 0}
   selectionOrder: []
+  startCell: {fileID: 0}
 --- !u!114 &927095397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18638,7 +18641,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -163.15495, y: 27}
+  m_AnchoredPosition: {x: -163.155, y: 27}
   m_SizeDelta: {x: 318, y: 53.905}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1321698060
@@ -29011,6 +29014,7 @@ MonoBehaviour:
   keyInforPrefab: {fileID: 7695283979827477339, guid: 0a46de77339e39449888866cc20609a9, type: 3}
   tunnelAreaInforPrefab: {fileID: 7695283979827477339, guid: 82b64fad898cc2647a76cab7d3ec61d7, type: 3}
   itemTunnelAreaQueuePrefab: {fileID: 3691993951628212733, guid: 3b59f6ff8ad383a45a7058c867d3dfcb, type: 3}
+  pixelSnakeInforPrefab: {fileID: 7695283979827477339, guid: dccd19b78b1d24d43bb204deb39cca4a, type: 3}
   tankLineElementPrefab: {fileID: 934970666903990046, guid: 0bd1e89e655439e4eb01e508cc334ed8, type: 3}
   itemTunnelQueuePrefab: {fileID: 3691993951628212733, guid: 1e654c157dfb59845aac693b89a85469, type: 3}
   uiLinePrefab: {fileID: 2807155186677956982, guid: 01e93d33dc4306c4d947f60359f33dc3, type: 3}

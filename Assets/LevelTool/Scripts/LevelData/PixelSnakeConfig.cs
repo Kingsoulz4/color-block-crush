@@ -11,6 +11,7 @@ namespace ColorBlockCrush.Tools
         public int pixelSnakeId;
         public ColorType colorType;
         public int health;
+        public int headBlockId;
         public List<int> blocksId;
 
         public PixelSnakeConfig()

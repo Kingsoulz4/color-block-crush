@@ -22,6 +22,7 @@ namespace ColorBlockCrush.Tools
         [SerializeField] private List<GridCellMapView> _gridCellMapViews = new List<GridCellMapView>();
         [SerializeField] private List<BlockInforEditorView> _blockInforEditorViews = new List<BlockInforEditorView>();
         [SerializeField] private List<KeyInforEditorView> _keyInforEditorViews = new List<KeyInforEditorView>();
+        [SerializeField] private List<PixelSnakeInforEditorView> _pixelSnakeInforEditorViews = new List<PixelSnakeInforEditorView>();
 
         private void ValidateMapWidth(string value)
         {
@@ -231,6 +232,24 @@ namespace ColorBlockCrush.Tools
                         currentColorSet.Add(tunnelAreaElementConfig.elementColor);
                     }
                 }
+                
+                for (int i = 0; i < mapConfig.pixelSnakes.Count; i++)
+                {
+                    cellGridBlockList.Clear();
+                    cellGridBlockList = _gridCellMapViews
+                        .Where(cell => mapConfig.pixelSnakes[i].blocksId.Contains(cell.cellConfig.id)).ToList();
+                    GridCellMapView headCell = _gridCellMapViews.FirstOrDefault(cell =>
+                        mapConfig.pixelSnakes[i].headBlockId == cell.cellConfig.id);
+                    PixelSnakeInforEditorView pixelSnakeInforView =
+                        Instantiate(model.pixelSnakeInforPrefab).GetComponent<PixelSnakeInforEditorView>();
+                    pixelSnakeInforView.UpdateInfor(i, view.mapFeatureParent,
+                        cellGridBlockList.ConvertAll(cell => cell.transform as RectTransform),
+                        headCell.GetComponent<RectTransform>(),
+                        canvas, mapConfig.pixelSnakes[i].health,
+                        mapConfig.pixelSnakes[i].colorType);
+                    _pixelSnakeInforEditorViews.Add(pixelSnakeInforView);
+                    currentColorSet.Add(mapConfig.pixelSnakes[i].colorType);
+                }
 
                 UpdateLevelState();
             });
@@ -318,7 +337,41 @@ namespace ColorBlockCrush.Tools
             }
             else if(currentDragType == DragType.PixelSnake)
             {
-                
+                string snakeHealth = view.blockHealthInputField.text;
+                if (string.IsNullOrEmpty(snakeHealth))
+                {
+                    Debug.LogError("Invalid Snake Health");
+                    return;
+                }
+
+                PixelSnakeConfig pixelSnakeConfig = new PixelSnakeConfig();
+                pixelSnakeConfig.pixelSnakeId = currentLevelConfig.mapConfig.pixelSnakes.Count;
+                pixelSnakeConfig.colorType = currentColorChoose;
+                pixelSnakeConfig.health = int.Parse(snakeHealth);
+                pixelSnakeConfig.headBlockId = cellSelection[0].cellConfig.id;
+
+                for (int i = 0; i < cellSelection.Count; i++)
+                {
+                    cellSelection[i].DeleteColor();
+
+                    int cellIndex = cellSelection[i].Col * currentLevelConfig.mapConfig.mapSize.y
+                                    + cellSelection[i].Row;
+                    currentLevelConfig.mapConfig.blocks[cellIndex].colorType = ColorType.None;
+                    currentLevelConfig.mapConfig.blocks[cellIndex].pixelSnakeId = pixelSnakeConfig.pixelSnakeId;
+                    pixelSnakeConfig.blocksId.Add(currentLevelConfig.mapConfig.blocks[cellIndex].id);
+                }
+
+                currentLevelConfig.mapConfig.pixelSnakes.Add(pixelSnakeConfig);
+
+                PixelSnakeInforEditorView pixelSnakeInforView =
+                    Instantiate(model.pixelSnakeInforPrefab).GetComponent<PixelSnakeInforEditorView>();
+                pixelSnakeInforView.UpdateInfor(pixelSnakeConfig.pixelSnakeId, view.mapFeatureParent,
+                    cellSelection.ConvertAll(cell => cell.transform as RectTransform), 
+                    cellSelection[0].GetComponent<RectTransform>(), canvas, 
+                    int.Parse(snakeHealth), currentColorChoose);
+                _pixelSnakeInforEditorViews.Add(pixelSnakeInforView);
+
+                currentColorSet.Add(currentColorChoose);
             }
 
             UpdateLevelState();
@@ -434,7 +487,53 @@ namespace ColorBlockCrush.Tools
             }
             else if (currentDragType == DragType.PixelSnake)
             {
-                
+                HashSet<int> pixelRemoved = new HashSet<int>();
+                List<PixelSnakeConfig> pixelSnakeConfigsRemove = new List<PixelSnakeConfig>();
+
+                foreach (var cellMapView in cellSelection)
+                {
+                    currentLevelConfig.mapConfig.blocks[cellMapView.Col * currentLevelConfig.mapConfig.mapSize.y
+                                                        + cellMapView.Row].colorType = ColorType.None;
+                    if (cellMapView.cellConfig.pixelSnakeId != -1
+                        && !pixelRemoved.Contains(cellMapView.cellConfig.pixelSnakeId))
+                    {
+                        colorDelete.Add(currentLevelConfig.mapConfig.pixelSnakes[cellMapView.cellConfig.pixelSnakeId]
+                            .colorType);
+                        pixelRemoved.Add(cellMapView.cellConfig.pixelSnakeId);
+                        PixelSnakeInforEditorView pixcelSnakeInforViewRemove =
+                            _pixelSnakeInforEditorViews.FirstOrDefault(pixelRemoved =>
+                                pixelRemoved.GetPixcelSnakeId() == cellMapView.cellConfig.pixelSnakeId);
+                        if (pixcelSnakeInforViewRemove != null)
+                        {
+                            _pixelSnakeInforEditorViews.Remove(pixcelSnakeInforViewRemove);
+                            Destroy(pixcelSnakeInforViewRemove.gameObject);
+                            Debug.Log($"Remove Pixel Snake {cellMapView.cellConfig.pixelSnakeId}");
+                        }
+
+                        PixelSnakeConfig pixelSnakeConfigRenove =
+                            currentLevelConfig.mapConfig.pixelSnakes[cellMapView.cellConfig.pixelSnakeId];
+                        currentLevelConfig.mapConfig.pixelSnakes.Remove(pixelSnakeConfigRenove);
+                        pixelSnakeConfigsRemove.Add(pixelSnakeConfigRenove);
+                    }
+                }
+
+                ReUpdatePixcelSnakeIdInLevel();
+
+                Debug.Log("Pixcel Sanke Config Count " + pixelRemoved.Count);
+                if (pixelSnakeConfigsRemove.Count > 0)
+                {
+                    foreach (var pixcelSnakeConfig in pixelSnakeConfigsRemove)
+                    {
+                        foreach (var cellId in pixcelSnakeConfig.blocksId)
+                        {
+                            (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                            int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
+                                            + (int)row;
+                            Debug.Log("Cell Index " + cellIndex);
+                            _gridCellMapViews[cellIndex].cellConfig.pixelSnakeId = -1;
+                        }
+                    }
+                }
             }
 
             if (colorDelete.Count > 0)
@@ -784,7 +883,15 @@ namespace ColorBlockCrush.Tools
 
         private void ClearAllPixelSnake()
         {
-            
+            for (int i = _pixelSnakeInforEditorViews.Count - 1; i >= 0; i--)
+            {
+                PixelSnakeInforEditorView pixcelSnakeEditorView = _pixelSnakeInforEditorViews[i];
+                _pixelSnakeInforEditorViews.RemoveAt(i);
+
+                Destroy(pixcelSnakeEditorView.gameObject);
+            }
+
+            _pixelSnakeInforEditorViews.Clear();
         }
 
         private void ClearAllColor()
@@ -852,6 +959,24 @@ namespace ColorBlockCrush.Tools
                                     + (int)row;
                     _gridCellMapViews[cellIndex].cellConfig.keyId = i;
                     currentLevelConfig.mapConfig.blocks[cellIndex].keyId = i;
+                }
+            }
+        }
+        
+        private void ReUpdatePixcelSnakeIdInLevel()
+        {
+            for (int i = 0; i < currentLevelConfig.mapConfig.pixelSnakes.Count; i++)
+            {
+                PixelSnakeConfig pixeclSnakeConfig = currentLevelConfig.mapConfig.pixelSnakes[i];
+                currentLevelConfig.mapConfig.pixelSnakes[i].pixelSnakeId = i;
+
+                foreach (var cellId in pixeclSnakeConfig.blocksId)
+                {
+                    (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                    int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
+                                    + (int)row;
+                    _gridCellMapViews[cellIndex].cellConfig.keyId = i;
+                    currentLevelConfig.mapConfig.blocks[cellIndex].pixelSnakeId = i;
                 }
             }
         }

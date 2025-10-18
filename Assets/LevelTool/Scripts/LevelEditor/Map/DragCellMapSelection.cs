@@ -35,7 +35,7 @@ namespace ColorBlockCrush.Tools
         private float stepX, stepY;
         private Vector2 originLocal;
 
-        private Vector2 startPos;
+        [SerializeField] private Vector2 startPos;
 
         private GridCellMapView[,] grid;
         private Dictionary<GridCellMapView, Vector2Int> cellToRC;
@@ -57,6 +57,8 @@ namespace ColorBlockCrush.Tools
         [SerializeField] private readonly SortedSet<int> freedIndices = new SortedSet<int>();
 
         private int nextDrawIndexCounter = 0;
+
+        [SerializeField] private GridCellMapView startCell;
 
         private void Update()
         {
@@ -165,7 +167,7 @@ namespace ColorBlockCrush.Tools
             var cam = eventData.pressEventCamera; // Overlay => null
             Debug.Log("Pointer down");
 
-            if (currentDragType == DragType.Normal)
+            if (currentDragType == DragType.Normal || currentDragType == DragType.PixelSnake)
             {
                 if (!ScreenToRC(eventData.position, cam, out var rcStart))
                 {
@@ -177,7 +179,7 @@ namespace ColorBlockCrush.Tools
                     return;
                 }
             
-                var startCell = GetCell(rcStart.x, rcStart.y);
+                startCell = GetCell(rcStart.x, rcStart.y);
                 if (startCell == null)
                 {
                     if (FinalSelectedCells.Count > 0)
@@ -208,7 +210,7 @@ namespace ColorBlockCrush.Tools
                 isDragging = true;
                 startPos = eventData.position;
             }
-            else if(currentDragType == DragType.Key || currentDragType == DragType.TunnelArea || currentDragType == DragType.PixelSnake)
+            else if(currentDragType == DragType.Key || currentDragType == DragType.TunnelArea)
             {
                 CurrentlySelectedCells.Clear();
                 if (FinalSelectedCells.Count > 0)
@@ -224,7 +226,7 @@ namespace ColorBlockCrush.Tools
         {
             if (!isDragging) return;
 
-            if (currentDragType == DragType.Normal)
+            if (currentDragType == DragType.Normal || currentDragType == DragType.PixelSnake)
             {
                 var cam = eventData.pressEventCamera;
                 if (!ScreenToRC(eventData.position, cam, out var currRC))
@@ -287,7 +289,7 @@ namespace ColorBlockCrush.Tools
 
                 HighlightCellsInRect(selectionRect);
             }else if (currentDragType == DragType.Key
-                      || currentDragType == DragType.TunnelArea || currentDragType == DragType.PixelSnake)
+                      || currentDragType == DragType.TunnelArea)
             {
                 Vector2 endPos = eventData.position;
 
@@ -312,7 +314,7 @@ namespace ColorBlockCrush.Tools
 
             isDragging = false;
 
-            if (currentDragType == DragType.Normal)
+            if (currentDragType == DragType.Normal || currentDragType == DragType.PixelSnake)
             {
                 hasLastPointerRC = false;
 
@@ -324,7 +326,7 @@ namespace ColorBlockCrush.Tools
 
                     cell.IsSelecting = false;
                     cell.UpdateSelectingColor();
-                }   
+                }
             }
             else if (currentDragType == DragType.Block)
             {
@@ -339,7 +341,7 @@ namespace ColorBlockCrush.Tools
                 }   
             }
             else if(currentDragType == DragType.Key
-                    || currentDragType == DragType.TunnelArea || currentDragType == DragType.PixelSnake)
+                    || currentDragType == DragType.TunnelArea)
             {
                 foreach (var cell in CurrentlySelectedCells)
                 {
@@ -475,6 +477,9 @@ namespace ColorBlockCrush.Tools
                     FinalSelectedCells.Add(cell);
                 }
             }
+            
+            FinalSelectedCells.Remove(startCell);
+            FinalSelectedCells.Insert(0, startCell);
         }
 
         private void ClearOnlySelection()
