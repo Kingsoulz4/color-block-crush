@@ -34,8 +34,8 @@ namespace ColorBlockCrush
 
         private const float raycastSpacing = 0.15f;
         private const int maxRaycastSteps = 65;
-        private const float maxShootingAngle = 5f;
 
+        private float maxShootingAngle = 5f;
         private bool isTurning;
         private bool isFireFirstTime = false;
         private TrayItem trayItem;
@@ -84,6 +84,16 @@ namespace ColorBlockCrush
             targetQueue = new Queue<Block>();
             UpdateVisuals();
             InitMechanics();
+            LevelEvent.OnFastMode += OnFastMode;
+
+        }
+
+        private void OnFastMode()
+        {
+            if (gameObject.activeInHierarchy)
+            {
+                maxShootingAngle = 15;
+            }
         }
 
         void Update()
@@ -99,6 +109,7 @@ namespace ColorBlockCrush
         {
             transform.DOKill(this);
             targetQueue.Clear();
+            LevelEvent.OnFastMode -= OnFastMode;
         }
 
         public override void UpdateWhenColumnChange()
