@@ -27,6 +27,7 @@ namespace ColorBlockCrush
         [SerializeField] private MeshRenderer _blockMeshRenderer;
         [SerializeField] private ListMaterialsByColor colorRef;
         [SerializeField] private LayerMask blockRay0;
+        [SerializeField] private Collider mCollider;
         public SerializedDictionary<int, int> colorRate;
 
         protected int maxHitPoint;
@@ -79,6 +80,7 @@ namespace ColorBlockCrush
             else
             {
                 _blockMeshRenderer.gameObject.SetActive(false);
+                mCollider.enabled = false;
             }    
         }
 

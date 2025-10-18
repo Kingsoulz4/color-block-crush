@@ -177,9 +177,9 @@ namespace ColorBlockCrush
             return null;
         }
 
-        public bool IsFull()
+        public int GetGunCountInSlot()
         {
-            return _gunsInSlots.Count >= _maxSlots;
+            return _gunsInSlots.Count;
         }
     }
 }

@@ -57,12 +57,28 @@ namespace ColorBlockCrush.Tools
                 {
                     currentTankLineElementSelected.DeleteElement();
                 }
-                DeleteColorSelected();
+                else
+                {
+                    DeleteColorSelected();   
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 ClearAllTankLineELementSelected();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                if (currentTankLineElementSelected != null)
+                {
+                    SetTankInfor();
+                }
+                else
+                {
+                    SetColorSelected();
+                }
+                
             }
         }
 
@@ -142,6 +158,39 @@ namespace ColorBlockCrush.Tools
             view.buttonClearAll.onClick.AddListener(ClearAllColor);
             view.buttonSetColor.onClick.AddListener(SetColorSelected);
             view.buttonDel.onClick.AddListener(DeleteColorSelected);
+            
+            view.buttonAddTunnelAreaItemQueue.onClick.AddListener(() =>
+            {
+                if (string.IsNullOrEmpty(view.healthElementTunnelAreaQueueInputField.text))
+                {
+                    Debug.LogError("Invalid health number");
+                    return;
+                }
+                
+                int healthNumber = int.Parse(view.healthElementTunnelAreaQueueInputField.text);
+
+                if (healthNumber <= 0)
+                {
+                    Debug.LogError("Invalid health number");
+                    return;
+                }
+
+                TunnelAreaElementConfig newElementConfig = new TunnelAreaElementConfig();
+                newElementConfig.health = healthNumber;
+                newElementConfig.elementColor = currentTunnelAreaQueueColor;
+                
+                OnAddColorQueueToTunnelArea(newElementConfig);
+            });
+            view.buttonSetTunnelAreaInfor.onClick.AddListener(SetTunnelArea);
+            view.buttonDelTunnelArea.onClick.AddListener(DeleteTunnelArea);
+            view.buttonClearSelect.onClick.AddListener(ButtonClearSelect);
+            
+            for (int i = 0; i < view.buttonTankTunnelAreaQueueColorChooses.Count; i++)
+            {
+                view.buttonTankTunnelAreaQueueColorChooses[i].Init(UpdateCurrentColorChooseTunnelAreaQueue);
+            }
+            
+            UpdateCurrentColorChooseTunnelAreaQueue(ColorType.PowderPink);
 
             for (int i = 0; i < view.buttonCellGridColorChooses.Count; i++)
             {

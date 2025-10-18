@@ -9,112 +9,112 @@ namespace ColorBlockCrush
 {
     public class PopupShop : PopupUI
     {
-        // [Header("Prefabs")]
-        // [SerializeField] private BundlePack m_bundlePackPrefab;
-        // [SerializeField] private CoinPack m_coinPackPrefab;
-        //
-        // [Header("Data")]
-        // [SerializeField] private ShopData m_listBundlePacks;
-        // [SerializeField] private ShopData m_listCoinPacks;
-        //
-        // [Header("Containers")]
-        // [SerializeField] private Transform m_listShopCoinPackContainer;
-        // [SerializeField] private Transform m_listPackContainer;
-        // [SerializeField] private Transform m_listBundlePackContainer;
-        //
-        // [Header("Others Packs")]
-        // [SerializeField] private Button m_buttonRemoveAdsPacks;
-        // [SerializeField] private GameObject m_removeAdsPacks;
-        // [SerializeField] private FreeCoinPack m_freeCoinPack;
-        //
-        // [Header("UI")]
-        // [SerializeField] private GoldDisplay m_goldBar;
-        // [SerializeField] private Button m_buttonClose;
-        //
-        // [Header("")]
-        // [SerializeField] private ContentSizeFitter m_mainContentSizeFitter;
-        //
-        // private void Awake()
-        // {
-        //     m_buttonRemoveAdsPacks.onClick.AddListener(OnClickRemoveAdPacks);
-        //     m_buttonClose.onClick.AddListener(Hide);
-        //
-        //     Init();
-        // }
-        //
-        // private void OnClickRemoveAdPacks()
-        // {
-        //     UIManager.Instance.ShowPopup<PopupRemoveAds>(null);
-        // }
-        //
-        // private void OnEnable()
-        // {
-        //     UIManager.Instance.OnRefeshBannerAndAds += UpdateUI;
-        //     UpdateUI();
-        // }
-        //
-        // private void OnDisable()
-        // {
-        //     UIManager.Instance.OnRefeshBannerAndAds -= UpdateUI;
-        // }
-        //
-        // private void UpdateUI()
-        // {
-        //     m_removeAdsPacks.gameObject.SetActive(!ShopManager.Instance.HasPurchasedNoAdsPack);
-        // }
-        //
-        // private async void UpdateContainer()
-        // {
-        //     m_mainContentSizeFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
-        //     await Task.Delay(100);
-        //     m_mainContentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-        // }
-        //
-        // public void Init()
-        // {
-        //     MyUlti.RemoveAllChilds(m_listBundlePackContainer);
-        //     foreach(var pack in m_listBundlePacks.listShopPack)
-        //     {
-        //         if (ShopManager.Instance.ListPurchasedPacks.Contains(pack.id)) continue;
-        //
-        //         var newPack = Instantiate(m_bundlePackPrefab, m_listBundlePackContainer);
-        //         newPack.SetData(pack);
-        //         newPack.OnPurchased = () =>
-        //         {
-        //             UpdateContainer();
-        //             var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
-        //             var goldQuantity = pack.listReward.Find(x => x.type == ItemType.GOLD).quantity;
-        //             popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity, () =>
-        //             {
-        //                 m_goldBar.SetText(UserDataManager.Gold);
-        //             });
-        //         };
-        //     }
-        //     //MyUlti.RemoveAllChilds(m_listShopCoinPackContainer);
-        //     var listCoinPack = m_listShopCoinPackContainer.GetComponentsInChildren<CoinPack>();
-        //     for(int i=0; i<m_listCoinPacks.listShopPack.Count; i++)
-        //     {
-        //         var pack = m_listCoinPacks.listShopPack[i];
-        //         var newCoinPack = listCoinPack[i];
-        //         newCoinPack.SetData(pack);
-        //         newCoinPack.OnPurchased = () =>
-        //         {
-        //             var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
-        //             var goldQuantity = pack.listReward.Find(x => x.type == ItemType.GOLD).quantity;
-        //             popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity, () =>
-        //             {
-        //                 m_goldBar.SetText(UserDataManager.Gold);
-        //             });
-        //         };
-        //     }
-        //     m_freeCoinPack.OnGotCoin = (val) => {
-        //         var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
-        //         popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, val, () =>
-        //         {
-        //             m_goldBar.SetText(UserDataManager.Gold);
-        //         });
-        //     };
-        //
-        // }
+        [Header("Prefabs")]
+        [SerializeField] private BundlePack m_bundlePackPrefab;
+        [SerializeField] private CoinPack m_coinPackPrefab;
+
+        [Header("Data")]
+        [SerializeField] private ShopData m_listBundlePacks;
+        [SerializeField] private ShopData m_listCoinPacks;
+
+        [Header("Containers")]
+        [SerializeField] private Transform m_listShopCoinPackContainer;
+        [SerializeField] private Transform m_listPackContainer;
+        [SerializeField] private Transform m_listBundlePackContainer;
+
+        [Header("Others Packs")]
+        [SerializeField] private Button m_buttonRemoveAdsPacks;
+        [SerializeField] private GameObject m_removeAdsPacks;
+        [SerializeField] private FreeCoinPack m_freeCoinPack;
+
+        [Header("UI")]
+        [SerializeField] private GoldDisplay m_goldBar;
+        [SerializeField] private Button m_buttonClose;
+
+        [Header("")]
+        [SerializeField] private ContentSizeFitter m_mainContentSizeFitter;
+
+        private void Awake()
+        {
+            m_buttonRemoveAdsPacks.onClick.AddListener(OnClickRemoveAdPacks);
+            m_buttonClose.onClick.AddListener(Hide);
+
+            Init();
+        }
+
+        private void OnClickRemoveAdPacks()
+        {
+            UIManager.Instance.ShowPopup<PopupRemoveAds>(null);
+        }
+
+        private void OnEnable()
+        {
+            //UIManager.Instance.OnRefeshBannerAndAds += UpdateUI;
+            UpdateUI();
+        }
+
+        private void OnDisable()
+        {
+            //UIManager.Instance.OnRefeshBannerAndAds -= UpdateUI;
+        }
+
+        private void UpdateUI()
+        {
+            m_removeAdsPacks.gameObject.SetActive(!ShopManager.Instance.HasPurchasedNoAdsPack);
+        }
+
+        private async void UpdateContainer()
+        {
+            m_mainContentSizeFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            await Task.Delay(100);
+            m_mainContentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        }
+
+        public void Init()
+        {
+            MyUlti.RemoveAllChilds(m_listBundlePackContainer);
+            foreach(var pack in m_listBundlePacks.listShopPack)
+            {
+                if (ShopManager.Instance.ListPurchasedPacks.Contains(pack.id)) continue;
+
+                var newPack = Instantiate(m_bundlePackPrefab, m_listBundlePackContainer);
+                newPack.SetData(pack);
+                newPack.OnPurchased = () =>
+                {
+                    UpdateContainer();
+                    var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
+                    var goldQuantity = pack.listReward.Find(x => x.type == ItemType.GOLD).quantity;
+                    popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity, () =>
+                    {
+                        m_goldBar.SetText(UserDataManager.Gold);
+                    });
+                };
+            }
+            //MyUlti.RemoveAllChilds(m_listShopCoinPackContainer);
+            var listCoinPack = m_listShopCoinPackContainer.GetComponentsInChildren<CoinPack>();
+            for(int i=0; i<m_listCoinPacks.listShopPack.Count; i++)
+            {
+                var pack = m_listCoinPacks.listShopPack[i];
+                var newCoinPack = listCoinPack[i];
+                newCoinPack.SetData(pack);
+                newCoinPack.OnPurchased = () =>
+                {
+                    var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
+                    var goldQuantity = pack.listReward.Find(x => x.type == ItemType.GOLD).quantity;
+                    popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity, () =>
+                    {
+                        m_goldBar.SetText(UserDataManager.Gold);
+                    });
+                };
+            }
+            m_freeCoinPack.OnGotCoin = (val) => {
+                var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
+                popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, val, () =>
+                {
+                    m_goldBar.SetText(UserDataManager.Gold);
+                });
+            };
+
+        }
     }
 }

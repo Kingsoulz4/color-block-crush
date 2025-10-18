@@ -153,7 +153,7 @@ namespace ColorBlockCrush.Tools
         int finalIndex = placeholder.transform.GetSiblingIndex();
         transform.SetSiblingIndex(finalIndex);
         transform.localScale = Vector3.one;
-        GetComponent<ItemTunnelQueueView>().ChangeIndex(oldIndex, finalIndex);
+        GetComponent<ItemQueueViewBase>().ChangeIndex(oldIndex, finalIndex);
         // Cleanup
         Destroy(placeholder);
         canvasGroup.blocksRaycasts = true;

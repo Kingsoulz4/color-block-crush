@@ -16,7 +16,6 @@ public class PopupSetting : PopupUI
     [SerializeField] Button btn_Close;
     [SerializeField] Button btn_Restore;
     [SerializeField] Button m_buttonExitGame;
-    [SerializeField] Button m_buttonRemoveAds;
 
     private void Awake()
     {
@@ -36,7 +35,6 @@ public class PopupSetting : PopupUI
     public void SetType(PopupSettingType type)
     {
         m_buttonExitGame.gameObject.SetActive(type == PopupSettingType.IN_GAME);
-        m_buttonRemoveAds.gameObject.SetActive(type == PopupSettingType.HOME);
     }
 
     public override void Initialize(UIManager manager)

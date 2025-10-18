@@ -10,7 +10,7 @@ namespace ColorBlockCrush
 
         private HiddenGunRenderer hiddenGunRenderer;
 
-        public void Init(List<MeshRenderer> listMeshRenderer)
+        public void Init(List<Renderer> listMeshRenderer)
         {
             hiddenGunRenderer = Instantiate(m_hiddenGunRendererPrefab, transform);
             hiddenGunRenderer.Init(listMeshRenderer);

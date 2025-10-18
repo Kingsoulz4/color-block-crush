@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using I2.Loc;
 
 [CreateAssetMenu(fileName = "BoosterDataSO", menuName = "ScriptableObject/BoosterDataSO", order = 1)]
 public class BoosterDataSO : ScriptableObject
@@ -19,8 +20,8 @@ public class BoosterDataSO : ScriptableObject
 public class BoosterItemData
 {
     public BoosterType boosterType;
-    public string title;
-    public string description;
+    [TermsPopup] public string title;
+    [TermsPopup] public string description;
     public Sprite icon;
     public Sprite iconBig;
     public int price;

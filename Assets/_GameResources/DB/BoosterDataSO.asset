@@ -14,34 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boosterItemDatas:
   - boosterType: 0
-    title: Add Tray
-    description: Add extra tray to conveyor!
-    icon: {fileID: 21300000, guid: 77695f78dff86fd47bc37a323a96affe, type: 3}
-    iconBig: {fileID: 21300000, guid: 77695f78dff86fd47bc37a323a96affe, type: 3}
+    title: Booster/txt_add_tray_title
+    description: Booster/txt_add_tray_des
+    icon: {fileID: 21300000, guid: b28502ff1569fc24a96a08142f2f610f, type: 3}
+    iconBig: {fileID: 21300000, guid: b28502ff1569fc24a96a08142f2f610f, type: 3}
     price: 300
     quantity: 3
     levelUnlock: 7
   - boosterType: 2
-    title: Hand
-    description: Pick any Shooter in the queue
-    icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
-    iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
+    title: Booster/txt_hand_title
+    description: Booster/txt_hand_des
+    icon: {fileID: 21300000, guid: 580302b89e6e11d41bb2af96311eb3a6, type: 3}
+    iconBig: {fileID: 21300000, guid: 580302b89e6e11d41bb2af96311eb3a6, type: 3}
     price: 1200
     quantity: 3
     levelUnlock: 12
   - boosterType: 1
-    title: Shuffle
-    description: Shuffle the shooters in queues!
-    icon: {fileID: 21300000, guid: df0c0932fc9e2394c823dbc589e20fb0, type: 3}
-    iconBig: {fileID: 21300000, guid: df0c0932fc9e2394c823dbc589e20fb0, type: 3}
+    title: Booster/txt_shuffle_title
+    description: Booster/txt_shuffle_des
+    icon: {fileID: 21300000, guid: 5ca0e79d76f2d734184fdf5b977355b0, type: 3}
+    iconBig: {fileID: 21300000, guid: 5ca0e79d76f2d734184fdf5b977355b0, type: 3}
     price: 900
     quantity: 3
     levelUnlock: 15
   - boosterType: 3
-    title: Super Shooter
-    description: Select a color to remove from the level
-    icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
-    iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
+    title: Booster/txt_magnet_title
+    description: Booster/txt_magnet_des
+    icon: {fileID: 21300000, guid: 010b5d3b459c9ce4da6d0fd55eaa027a, type: 3}
+    iconBig: {fileID: 21300000, guid: 010b5d3b459c9ce4da6d0fd55eaa027a, type: 3}
     price: 1200
     quantity: 1
     levelUnlock: 18

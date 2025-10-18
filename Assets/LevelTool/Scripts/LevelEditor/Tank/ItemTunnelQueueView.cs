@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using System;
 using TMPro;
 
-namespace  ColorBlockCrush.Tools
+namespace ColorBlockCrush.Tools
 {
-    public class ItemTunnelQueueView : MonoBehaviour
+    public class ItemTunnelQueueView : ItemQueueViewBase
     {
         public RectTransform rectTransform;
         public Image IconColor;
@@ -15,18 +15,11 @@ namespace  ColorBlockCrush.Tools
 
         private Action<int, int> onChangeIndex;
 
-        public void Init(Action<int> onDetete = null, Action<int, int> onChangeIndex = null)
+        public override void Init(Action<int> onDetete = null, Action<int, int> onChangeIndex = null)
         {
-            buttonDelete.onClick.AddListener(() => {
-                onDetete?.Invoke(transform.GetSiblingIndex());
-            });
-            this.onChangeIndex = onChangeIndex;
+            base.Init(onDetete, onChangeIndex);
+            buttonDelete.onClick.AddListener(() => { onDetete?.Invoke(transform.GetSiblingIndex()); });
+            
         }
-
-        public void ChangeIndex(int oldIndex, int newIndex)
-        {
-            onChangeIndex?.Invoke(oldIndex, newIndex);
-        }
-
     }
 }

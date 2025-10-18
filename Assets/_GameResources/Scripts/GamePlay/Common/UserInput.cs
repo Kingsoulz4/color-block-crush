@@ -57,10 +57,13 @@ namespace ColorBlockCrush
 
         private void OnGunClicked(Gun gun)
         {
+            gun.PlayAnim(Constant.GunAnimation.CLICK);
+
             if (!gun.CanPushToConveyor())
             {
                 return;
             }
+
 
             if (gun.GunPos == GunPos.ON_GUN_BOARD)
             {

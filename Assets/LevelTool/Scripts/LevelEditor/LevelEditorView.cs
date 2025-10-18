@@ -37,12 +37,24 @@ namespace ColorBlockCrush.Tools
         public Button buttonClearAll;
         public Button buttonDel;
 
-        [Header("Properties Map")] 
+        [Header("Properties Map")]
+        public Button buttonClearSelect;
         public List<ButtonChooseDragType> buttonChooseDragTypes;
         public RectTransform mapFeatureParent;
         public TMP_InputField blockHealthInputField;
+        public Toggle toggleBlockHidden;
         public List<ButtonColorChoose> buttonCellGridColorChooses =  new List<ButtonColorChoose>();
+        public GameObject blockBulletValidatePanel;
         public List<BlockBulletValidateEditorView> blockBulletValidateEditorViews = new List<BlockBulletValidateEditorView>();
+
+        public GameObject tunnelAreaPanel;
+        public TextMeshProUGUI tankTunnelAreaQueueNumber;
+        public List<ButtonColorChoose> buttonTankTunnelAreaQueueColorChooses =  new List<ButtonColorChoose>();
+        public TMP_InputField healthElementTunnelAreaQueueInputField;
+        public Button buttonAddTunnelAreaItemQueue;
+        public Transform tunnelAreaElementQueueParent;
+        public Button buttonSetTunnelAreaInfor;
+        public Button buttonDelTunnelArea;
         
         [Header("Choose Image Area")]
         public Button ButtonChooseImage;

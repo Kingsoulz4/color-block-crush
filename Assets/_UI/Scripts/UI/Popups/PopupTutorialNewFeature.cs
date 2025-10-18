@@ -1,58 +1,26 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using I2.Loc;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ColorBlockCrush
 {
-    public class PopupTutorialNewFeature : PopupUI, IFlowCallback
+    public class PopupTutorialNewFeature : PopupUI
     {
-        [SerializeField] private Button m_buttonGotIt;
-        [SerializeField] private Text m_textFeatureName;
+        [SerializeField] private Button m_continue;
+        [SerializeField] private Text m_textFeatureTitle;
         [SerializeField] private Text m_textFeatureDes;
-        [SerializeField] private Image m_imageFeatureIcon;
+        [SerializeField] private Image m_imageFeature;
 
-        private void Awake()
+        public override void Initialize(UIManager uiManager)
         {
-            m_buttonGotIt.onClick.AddListener(OnClickGotIt);
+            m_continue.onClick.AddListener(Hide);
         }
-
-        private void OnEnable()
+        
+        public void SetData(NewFeatureItemData newFeatureData)
         {
-            //var feature = NewFeatureManager.Instance.GetNewFeatureInProgress();
-            //if (feature != null )
-            //{
-            //    m_textFeatureDes.text = feature.des;
-            //    m_imageFeatureIcon.sprite = feature.icon;
-            //    m_textFeatureName.text = feature.title;
-            //}
-        }
-
-        public void SetData(string name, string des, Sprite icon)
-        {
-            m_textFeatureDes.text = des;
-            m_imageFeatureIcon.sprite = icon;
-            m_textFeatureName.text = name;
-        }    
-
-        private void OnClickGotIt()
-        {
-            Hide();
-        }
-
-        public void Execute(Action callback)
-        {
-            var boosterUnlock = BoosterManager.Instance.BoosterData.boosterItemDatas.Find(x => x.levelUnlock == LevelManager.Instance.CurrentLevel);
-            if (boosterUnlock != null)
-            {
-                base.Show(callback);
-                SetData(boosterUnlock.title, boosterUnlock.description, boosterUnlock.icon);
-            }
-            else
-            {
-                callback?.Invoke();
-            }    
+            m_textFeatureTitle.text = LocalizationManager.GetTranslation(newFeatureData.title);
+            m_textFeatureDes.text = LocalizationManager.GetTranslation(newFeatureData.desInTutorial);
+            m_imageFeature.sprite = newFeatureData.icon;
         }
     }
 }
