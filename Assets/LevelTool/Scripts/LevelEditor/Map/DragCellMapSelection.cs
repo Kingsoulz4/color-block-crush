@@ -92,6 +92,8 @@ namespace ColorBlockCrush.Tools
             {
                 ClearOnlySelection();
             }
+
+            startCell = null;
         }
 
         private void CacheLayoutParams()
@@ -477,9 +479,12 @@ namespace ColorBlockCrush.Tools
                     FinalSelectedCells.Add(cell);
                 }
             }
-            
-            FinalSelectedCells.Remove(startCell);
-            FinalSelectedCells.Insert(0, startCell);
+
+            if (startCell != null)
+            {
+                FinalSelectedCells.Remove(startCell);
+                FinalSelectedCells.Insert(0, startCell);   
+            }
         }
 
         private void ClearOnlySelection()

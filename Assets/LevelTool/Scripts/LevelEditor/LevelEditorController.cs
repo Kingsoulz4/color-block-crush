@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine.SceneManagement;
 
 namespace ColorBlockCrush.Tools
@@ -832,6 +833,20 @@ namespace ColorBlockCrush.Tools
             UpdateButtonChooseTankColor();
             UpdateButtonChooseTunnelQueueColor();
             UpdateBlockBulletValidate();
+        }
+
+        [Button]
+        public int CantorParing(int i, int j)
+        {
+            return (int)CantorPairing.MakeId((ulong)i, (ulong)j);
+        }
+        
+        [Button]
+        public (int i, int j) CantorParingInvert(int id)
+        {
+            (ulong x, ulong y) = (CantorPairing.Unpair((ulong)id));
+            
+            return ((int)x, (int)y);
         }
     }
 }

@@ -82,9 +82,9 @@ namespace ColorBlockCrush.Tools
             currentLevelConfig.mapConfig = new MapConfig();
             currentLevelConfig.mapConfig.mapSize = new Vector2Int(mapWidth, mapHeight);
 
-            for (int i = 0; i < mapHeight; i++)
+            for (int i = 0; i < mapWidth; i++)
             {
-                for (int j = 0; j < mapWidth; j++)
+                for (int j = 0; j < mapHeight; j++)
                 {
                     BlockConfig cellConfig = new BlockConfig();
                     cellConfig.id = (int)CantorPairing.MakeId((ulong)i, (ulong)j);
@@ -431,7 +431,7 @@ namespace ColorBlockCrush.Tools
                     {
                         foreach (var cellId in blockConfig.blocksId)
                         {
-                            (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                            (ulong col, ulong row) = CantorPairing.Unpair((ulong)cellId);
                             int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
                                             + (int)row;
                             Debug.Log("Cell Index " + cellIndex);
@@ -476,7 +476,7 @@ namespace ColorBlockCrush.Tools
                     {
                         foreach (var cellId in keyConfig.blockId)
                         {
-                            (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                            (ulong col, ulong row) = CantorPairing.Unpair((ulong)cellId);
                             int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
                                             + (int)row;
 
@@ -519,17 +519,17 @@ namespace ColorBlockCrush.Tools
 
                 ReUpdatePixcelSnakeIdInLevel();
 
-                Debug.Log("Pixcel Sanke Config Count " + pixelRemoved.Count);
+                Debug.Log("Pixel Snake Config Count " + pixelRemoved.Count);
                 if (pixelSnakeConfigsRemove.Count > 0)
                 {
                     foreach (var pixcelSnakeConfig in pixelSnakeConfigsRemove)
                     {
                         foreach (var cellId in pixcelSnakeConfig.blocksId)
                         {
-                            (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                            (ulong col, ulong row) = CantorPairing.Unpair((ulong)cellId);
                             int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
                                             + (int)row;
-                            Debug.Log("Cell Index " + cellIndex);
+                            Debug.Log($"Cell Index {cellIndex} {cellId} {col} {row}");
                             _gridCellMapViews[cellIndex].cellConfig.pixelSnakeId = -1;
                         }
                     }
@@ -820,7 +820,7 @@ namespace ColorBlockCrush.Tools
 
                 foreach (var cellId in tunnelAreaConfig.blocksId)
                 {
-                    (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                    (ulong col, ulong row) = CantorPairing.Unpair((ulong)cellId);
                     int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
                                     + (int)row;
                     _gridCellMapViews[cellIndex].cellConfig.tunnelAreaId = i;
@@ -936,7 +936,7 @@ namespace ColorBlockCrush.Tools
 
                 foreach (var cellId in blockConfig.blocksId)
                 {
-                    (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                    (ulong col, ulong row) = CantorPairing.Unpair((ulong)cellId);
                     int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
                                     + (int)row;
                     _gridCellMapViews[cellIndex].cellConfig.bigBlockId = i;
@@ -954,7 +954,7 @@ namespace ColorBlockCrush.Tools
 
                 foreach (var cellId in keyConfig.blockId)
                 {
-                    (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                    (ulong col, ulong row) = CantorPairing.Unpair((ulong)cellId);
                     int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
                                     + (int)row;
                     _gridCellMapViews[cellIndex].cellConfig.keyId = i;
@@ -972,10 +972,10 @@ namespace ColorBlockCrush.Tools
 
                 foreach (var cellId in pixeclSnakeConfig.blocksId)
                 {
-                    (ulong row, ulong col) = CantorPairing.Unpair((ulong)cellId);
+                    (ulong col, ulong row) = CantorPairing.Unpair((ulong)cellId);
                     int cellIndex = (int)col * currentLevelConfig.mapConfig.mapSize.y
                                     + (int)row;
-                    _gridCellMapViews[cellIndex].cellConfig.keyId = i;
+                    _gridCellMapViews[cellIndex].cellConfig.pixelSnakeId = i;
                     currentLevelConfig.mapConfig.blocks[cellIndex].pixelSnakeId = i;
                 }
             }
