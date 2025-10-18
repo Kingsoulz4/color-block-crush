@@ -24,6 +24,6 @@ namespace ColorBlockCrush.Tools
             hidden.SetActive(isHidden);
         }
 
-        public int GetKeyId() => blockId;
+        public int GetBlockId() => blockId;
     }
 }

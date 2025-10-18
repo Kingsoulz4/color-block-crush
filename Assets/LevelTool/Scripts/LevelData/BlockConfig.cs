@@ -17,14 +17,22 @@ namespace ColorBlockCrush.Tools
         [Header("Key")]
         public int keyId;
 
-        [Header("Block")] 
+        [Header("Big Block")] 
         public int bigBlockId;
+        
+        [Header("Tunnel Area")]
+        public int tunnelAreaId;
+        
+        [Header("Pixel Snake")]
+        public int pixelSnakeId;
 
         public BlockConfig()
         {
             colorType = ColorType.None;
             keyId = -1;
             bigBlockId = -1;
+            tunnelAreaId = -1;
+            pixelSnakeId = -1;
         }
     }
 }
