@@ -62,7 +62,6 @@ namespace ColorBlockCrush
 
         public bool CanPlaceGuns(int count)
         {
-            Debug.Log("CanPlaceGuns" + _gunsInSlots.Count + count);
             return _gunsInSlots.Count + count <= _maxSlots;
         }
 
