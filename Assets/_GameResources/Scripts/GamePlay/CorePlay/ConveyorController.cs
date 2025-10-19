@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -19,6 +20,7 @@ public class ConveyorController : MonoBehaviour
 
     [Header("Tray Spawn Settings")]
     [SerializeField] private TrayItem trayPrefab;
+    [SerializeField] private TextMeshPro trayText;
     [SerializeField] private Transform spawnParent;
     [SerializeField] private Vector3 startPosition; // Vị trí tray đầu tiên (bên trái)
     [SerializeField] private float spaceOffsetX = 0.3f; // Khoảng cách giữa các tray
@@ -41,6 +43,7 @@ public class ConveyorController : MonoBehaviour
         endPointConveyor.gameObject.SetActive(true);
         movingTrayItems = new List<TrayItem>();
         movingTrayItems.Clear();
+        UpdateTrayText();
         InitTray();
         LevelEvent.OnFastMode += OnFastMode;
         LevelEvent.OnRevive += OnRevive;
@@ -75,7 +78,7 @@ public class ConveyorController : MonoBehaviour
 
         gun.TrayItem = trayItem;
         AddTrayItem(trayItem);
-
+        UpdateTrayText();
         gun.MoveToConeyor(position, () =>
         {
 
@@ -93,7 +96,7 @@ public class ConveyorController : MonoBehaviour
     private void OnGunEmpty(Gun gun)
     {
 
-        if(gun.CheckCanDisappear())
+        if (gun.CheckCanDisappear())
         {
             if (gun.TrayItem != null)
             {
@@ -101,7 +104,7 @@ public class ConveyorController : MonoBehaviour
                 RemoveTrayItem(gun.TrayItem);
             }
 
-            foreach(var g in gun.ConnectedGuns)
+            foreach (var g in gun.ConnectedGuns)
             {
                 if (g.TrayItem != null)
                 {
@@ -110,9 +113,10 @@ public class ConveyorController : MonoBehaviour
                 }
             }
         }
+        UpdateTrayText();
     }
 
-  
+
     [Button("OnRevive")]
     public void OnRevive(int level)
     {
@@ -142,6 +146,11 @@ public class ConveyorController : MonoBehaviour
             prepairTrayItems.Add(tray);
             SetTrayStartPosition(tray, i);
         }
+    }
+
+    public void WarnTrayText()
+    {
+        trayText.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
     }
 
     public void SetTrayStartPosition(TrayItem tray, int slotIndex)
@@ -213,6 +222,11 @@ public class ConveyorController : MonoBehaviour
             ShiftTraysToRight();
         });
         return true;
+    }
+
+    private void UpdateTrayText()
+    {
+        trayText.text = $@"{movingTrayItems.Count}/{maxSlots}";
     }
 
     public TrayItem SpawnTrayAtLeft()
