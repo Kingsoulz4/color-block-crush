@@ -422,8 +422,7 @@ namespace ColorBlockCrush
 
             });
             moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration));
-            moveToConveyorSq.Append(transform.DOScale(Vector3.one * 1f, 0.1f));
-            moveToConveyorSq.Append(transform.DOScale(Vector3.one * 0.85f, 0.05f));
+            moveToConveyorSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration));
             moveToConveyorSq.SetId(this);
 
         }
@@ -440,6 +439,7 @@ namespace ColorBlockCrush
             });
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
             moveToSlotSq.Join(transform.DOScale(Vector3.one, moveToSlotDuration));
+            moveToSlotSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration));
             moveToSlotSq.SetId(this);
         }
 
