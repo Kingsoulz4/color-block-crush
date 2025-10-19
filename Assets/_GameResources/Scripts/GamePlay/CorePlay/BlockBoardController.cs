@@ -22,12 +22,14 @@ namespace ColorBlockCrush
         [SerializeField] private Block blockPrefab;
         [SerializeField] private BlockKey blockKeyPrefab;
         [SerializeField] private BigBlock bigBlockPrefab;
+        [SerializeField] private BlockBarrier blockBarrierPrefab;
 
         [Header("References")]
         [SerializeField] private GridController gridController;
         [SerializeField] private Transform blockContainer;
         [SerializeField] private Transform keyContainer;
         [SerializeField] private Transform bigBlockContainer;
+        [SerializeField] private Transform blockBarrierContainer;
 
         private int _rows;
         private int _columns;
@@ -67,6 +69,7 @@ namespace ColorBlockCrush
             SpawnBlockBoard(levelConfig);
             SpawnKeys();
             SpawnBigBlocks();
+            SpawnBlockBarriers();
         }
         private void SpawnBlockBoard(LevelConfig levelConfig)
         {
@@ -123,6 +126,25 @@ namespace ColorBlockCrush
             newBigBlock.transform.localScale = calculatedBlockScale;
 
             return newBigBlock;
+        }
+
+        private void SpawnBlockBarriers()
+        {
+            if (levelConfig.mapConfig.pixelSnakes.Count <= 0) return;
+
+            for(int i=0; i<levelConfig.mapConfig.pixelSnakes.Count; i++)
+            {
+                SpawnBlockBarrier(levelConfig.mapConfig.pixelSnakes[i]);
+            }
+        }
+
+        private BlockBarrier SpawnBlockBarrier(PixelSnakeConfig blockBarrierData)
+        {
+            BlockBarrier newBlockBarrier = Instantiate(blockBarrierPrefab, blockBarrierContainer);
+            newBlockBarrier.transform.position = CalculateCenter(blockBarrierData.blocksId);
+            newBlockBarrier.Init(blockBarrierData);
+            newBlockBarrier.transform.localScale = calculatedBlockScale;
+            return newBlockBarrier;
         }
 
         private void SpawnKeys()
