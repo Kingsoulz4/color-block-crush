@@ -244,6 +244,8 @@ namespace ColorBlockCrush
             currentTopY = rect_Top.anchoredPosition.y;
             UpdateUI();
             PoupNewFeature();
+            AudioManager.Instance.StopMusic("BG_Home");
+            AudioManager.Instance.PlayMusic("BG_Gameplay", 1, true);
         }
 
         public void UpdateUI()

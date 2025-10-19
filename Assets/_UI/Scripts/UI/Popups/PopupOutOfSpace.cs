@@ -12,7 +12,9 @@ namespace ColorBlockCrush
         [SerializeField] private Button m_buttonClose;
         [SerializeField] private Text m_textPrice;
 
-        private BoosterItemData boosterData; 
+        private BoosterItemData boosterData;
+
+        [SerializeField] private AudioClip failSfx;
 
         public Action OnKeepPlaying { get; set; }
 
@@ -29,6 +31,7 @@ namespace ColorBlockCrush
             base.Show(onClose);
             boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.REVIVAL);
             m_textPrice.text = boosterData.price.ToString();
+            AudioManager.Instance.PlayOneShot(failSfx, 1);
         }
         private void OnClickRevive()
         {

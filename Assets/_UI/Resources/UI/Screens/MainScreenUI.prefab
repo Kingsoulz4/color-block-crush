@@ -353,7 +353,7 @@ MonoBehaviour:
   timeMoveCoinBack: 0.6
   timeMoveCoinUp: 1
   clip_SpawnItem: {fileID: 8300000, guid: df1102c579a01ce4d812b97e3ecd9f7b, type: 3}
-  clip_GoldEnd: {fileID: 8300000, guid: 9c234a97c8eff734d87637ae6742e90a, type: 3}
+  clip_GoldEnd: {fileID: 8300000, guid: 5ef7df8eed91a54449a1ae7dcf0dfffc, type: 3}
   rect_TargetHeartPos: {fileID: 9202327270911389756}
   rect_TargetBoosterPos: {fileID: 6439577925040059918}
 --- !u!1 &8843026669445852160

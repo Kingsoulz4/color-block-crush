@@ -150,10 +150,18 @@ namespace ColorBlockCrush
             }
             else
             {
-                var popupLose = UIManager.Instance.ShowPopup<PopupOutOfSpace>(null);
-                popupLose.OnClose = () =>
+                var popupRevival = UIManager.Instance.ShowPopup<PopupOutOfSpace>(null);
+                popupRevival.OnClose = () =>
                 {
-                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                    var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
+
+                    HeartManager.UseHeart(1);
+
+                    popupLose.OnClose = () =>
+                    {
+                        UIManager.Instance.ShowScreen<MainScreenUI>();
+                    };
+                    popupLose.OnRetry = OnRetryGame;
                 };
             }
         }
@@ -233,9 +241,15 @@ namespace ColorBlockCrush
             var popupWin = UIManager.Instance.ShowPopup<PopupWin>(null);
             popupWin.OnClaimedReward = (val) =>
             {
-                NextLevel();
-                var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
-                mainScreen.ShowClaimReward(val);
+                if (UserDataManager.Level < 10)
+                {
+                    NextLevel();   
+                }
+                else
+                {
+                    var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
+                    mainScreen.ShowClaimReward(val);   
+                }
             };
         }
 
