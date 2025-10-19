@@ -136,7 +136,8 @@ namespace ColorBlockCrush
                 return;
             }
             GameManager.Instance.SetGameState(GameState.Lose);
-            if (!LevelController.Instance.CheckCanRevive())
+            //if (!LevelController.Instance.CheckCanRevive())
+            if (true)
             {
                 var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
 
