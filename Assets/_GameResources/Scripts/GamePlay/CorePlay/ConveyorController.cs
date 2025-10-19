@@ -93,7 +93,7 @@ public class ConveyorController : MonoBehaviour
     private void OnGunEmpty(Gun gun)
     {
 
-        if(gun.CheckDestroy())
+        if(gun.CheckCanDisappear())
         {
             if (gun.TrayItem != null)
             {

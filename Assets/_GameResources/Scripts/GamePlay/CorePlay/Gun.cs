@@ -199,11 +199,33 @@ namespace ColorBlockCrush
                         continue;
                     }
 
-                    if (BulletRayCount > 0)
+                    int timeTakeDamage = 1;
+                    if (currentFireDir == RotationDirection.Up || currentFireDir == RotationDirection.Down)
                     {
-                        BulletRayCount--;
-                        block.TakeDamageRaycast(1);
-                        targetQueue.Enqueue(block);
+                        timeTakeDamage = block.Size.x;
+                    }
+                    else if(currentFireDir == RotationDirection.Left || currentFireDir == RotationDirection.Right)
+                    {
+                        timeTakeDamage = block.Size.y;
+                    }
+
+                    if(timeTakeDamage > 1)
+                    {
+                        Debug.Log("Fire > 1 times here");
+                    }
+
+                    for (int j = 0; j < timeTakeDamage; j++)
+                    {
+                        if (BulletRayCount > 0)
+                        {
+                            BulletRayCount--;
+                            block.TakeDamageRaycast(1);
+                            targetQueue.Enqueue(block);
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
                 //else 
@@ -232,6 +254,17 @@ namespace ColorBlockCrush
             if (BulletCount == 0)
             {
                 CurrentTarget = null;
+
+                CheckDisappear();
+
+                OnGunEmpty?.Invoke(this);
+            }
+        }
+
+        private void CheckDisappear()
+        {
+            if (CheckCanDisappear())
+            {
                 PlayAnim(Constant.GunAnimation.DISAPPEAR);
 
                 this.Wait(0.2f, () =>
@@ -239,8 +272,6 @@ namespace ColorBlockCrush
                     gameObject.SetActive(false);
                     OnGunDissapear?.Invoke(this);
                 });
-
-                OnGunEmpty?.Invoke(this);
             }
         }
 
@@ -450,7 +481,7 @@ namespace ColorBlockCrush
             scaleSq.SetId(this);
         }
 
-        public bool CheckDestroy()
+        public bool CheckCanDisappear()
         {
             if (ConnectedGuns.Count <= 0)
             {

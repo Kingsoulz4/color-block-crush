@@ -24,17 +24,17 @@ namespace ColorBlockCrush
 
         [Header("Renderer References")]
         [SerializeField] protected Transform centerPoint;
-        [SerializeField] private MeshRenderer _blockMeshRenderer;
+        [SerializeField] private Renderer _blockMeshRenderer;
         [SerializeField] private ListMaterialsByColor colorRef;
         [SerializeField] private LayerMask blockRay0;
-        [SerializeField] private Collider mCollider;
+        [SerializeField] protected Collider mCollider;
         public SerializedDictionary<int, int> colorRate;
 
         protected int maxHitPoint;
         protected int hitPoint;
         protected int hitPointRaycast;
         protected Vector3 originScale;
-        private int id;
+        protected int id;
         private BlockConfig blockData;
         public BlockType BlockType { get; private set; }
         public ColorType ColorType { get; protected set; }
@@ -43,6 +43,7 @@ namespace ColorBlockCrush
         public bool CanDestroy { get; private set; }
         public bool IsAttacked { get; set; }
         public bool IsDestroyed { get; set; }
+        public Vector2Int Size { get; set; } = new Vector2Int(1, 1);
 
         public BlockConfig BlockData { get => blockData; }
         public int Id { get => id; }
