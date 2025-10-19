@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace ColorBlockCrush
 {
-    public class SlotController : MonoBehaviour
+    public class BonusSlotController : MonoBehaviour
     {
         [Header("Settings")]
-        [SerializeField] private int _maxSlots = 5;
-        [SerializeField] private Vector3 _slotStartPosition = new Vector3(-2f, 0f, 0);
-        [SerializeField] private float _slotSpacing = 1f;
+        [SerializeField] private int _maxSlots = 6;
+        [SerializeField] private Vector3 _slotStartPosition = new Vector3(-3.5f, 0f, -5);
+        [SerializeField] private float _slotSpacing = 0.95f;
         [SerializeField] private GameObject slotItemPrb;
         [SerializeField] private Transform gunContainer;
 
@@ -19,38 +19,15 @@ namespace ColorBlockCrush
         [SerializeField] private Ease _shiftEase = Ease.OutQuad;
 
         private List<Gun> _gunsInSlots;
-        private List<GameObject> _slotItems;
-
 
         private void Awake()
         {
             _gunsInSlots = new List<Gun>();
-            _slotItems = new List<GameObject>();
         }
 
         public void Init()
         {
             _gunsInSlots.Clear();
-            SpawnSlotItem();
-        }
-
-        private void SpawnSlotItem()
-        {
-            // Clear old slots
-            foreach (var slot in _slotItems)
-            {
-                if (slot != null) Destroy(slot);
-            }
-            _slotItems.Clear();
-
-            // Spawn new slots
-            for (int i = 0; i < _maxSlots; i++)
-            {
-                Vector3 slotPos = GetSlotPosition(i);
-                var slotItem = Instantiate(slotItemPrb, transform);
-                slotItem.transform.position = slotPos;
-                _slotItems.Add(slotItem);
-            }
         }
 
         private Vector3 GetSlotPosition(int index)
@@ -63,24 +40,6 @@ namespace ColorBlockCrush
             return _gunsInSlots.Count + count <= _maxSlots;
         }
 
-        //public void MoveGunsIn(List<Gun> guns)
-        //{
-        //    if (!CanPlaceGuns(guns.Count))
-        //    {
-        //        return;
-        //    }
-
-        //    foreach (Gun gun in guns)
-        //    {
-        //        _gunsInSlots.Add(gun);
-
-        //        int slotIndex = _gunsInSlots.Count - 1;
-        //        Vector3 targetPos = GetSlotPosition(slotIndex);
-        //        gun.transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase);
-
-        //        OnGunAddedToSlot?.Invoke(gun);
-        //    }
-        //}
         public void MoveGunIn(Gun gun)
         {
             if (gun.ConnectedGuns.Count > 1)
@@ -100,11 +59,10 @@ namespace ColorBlockCrush
             _gunsInSlots.Add(gun);
             gun.transform.SetParent(gunContainer);
 
-            // Move gun tới vị trí slot mới
             int slotIndex = _gunsInSlots.Count - 1;
             Vector3 targetPos = GetSlotPosition(slotIndex);
 
-            gun.MoveToSlot(targetPos, () =>
+            gun.MoveToBonusSlot(targetPos, () =>
             {
                 ShiftAllToTheLeft();
             });

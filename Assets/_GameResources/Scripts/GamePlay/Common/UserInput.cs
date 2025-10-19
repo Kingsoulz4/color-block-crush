@@ -50,28 +50,9 @@ namespace ColorBlockCrush
 
                 if (gun != null)
                 {
-                    OnGunClicked(gun);
+                    gun.OnGunClicked(gun);
                 }
             }
-        }
-
-        private void OnGunClicked(Gun gun)
-        {
-            if (!gun.CanPushToConveyor())
-            {
-                return;
-            }
-
-            if (gun.GunPos == GunPos.ON_GUN_BOARD)
-            {
-                LevelController.Instance.GunBoardController.OnTapGun(gun);
-            }
-
-            if (gun.GunPos == GunPos.ON_SLOT)
-            {
-                LevelController.Instance.SlotController.OnTapGun(gun);
-            }
-
         }
     }
 }

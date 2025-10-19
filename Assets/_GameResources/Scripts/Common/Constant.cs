@@ -32,4 +32,12 @@ public class Constant
         public const string NEW_FEATURE = "NewFeature";
     }
 
+    public class GunAnimation
+    {
+        public const string SHOOT = "Shoot";
+        public const string IDLE = "Idle";
+        public const string CLICK = "Click";
+        public const string DISAPPEAR = "Disappear";
+    }
+
 }
