@@ -11,7 +11,7 @@ namespace ColorBlockCrush
         [SerializeField] private int _maxSlots = 5;
         [SerializeField] private Vector3 _slotStartPosition = new Vector3(-2f, 0f, 0);
         [SerializeField] private float _slotSpacing = 1f;
-        [SerializeField] private GameObject slotItemPrb;
+        [SerializeField] private ShooterSlot slotItemPrb;
         [SerializeField] private Transform gunContainer;
 
         [Header("Animation")]
@@ -19,19 +19,35 @@ namespace ColorBlockCrush
         [SerializeField] private Ease _shiftEase = Ease.OutQuad;
 
         private List<Gun> _gunsInSlots;
-        private List<GameObject> _slotItems;
+        private List<ShooterSlot> _slotItems;
 
 
         private void Awake()
         {
             _gunsInSlots = new List<Gun>();
-            _slotItems = new List<GameObject>();
+            _slotItems = new List<ShooterSlot>();
         }
 
         public void Init()
         {
             _gunsInSlots.Clear();
             SpawnSlotItem();
+        }
+
+        public void Warn()
+        {
+            for (int i = 0; i < _slotItems.Count; i++)
+            {
+                _slotItems[i].StartWarning();
+            }
+        }
+
+        public void StopWarn()
+        {
+            for (int i = 0; i < _slotItems.Count; i++)
+            {
+                _slotItems[i].StopWarning();
+            }
         }
 
         private void SpawnSlotItem()
@@ -100,6 +116,11 @@ namespace ColorBlockCrush
             _gunsInSlots.Add(gun);
             gun.transform.SetParent(gunContainer);
 
+            if (_gunsInSlots.Count >= _maxSlots)
+            {
+                Warn();
+            }
+
             // Move gun tới vị trí slot mới
             int slotIndex = _gunsInSlots.Count - 1;
             Vector3 targetPos = GetSlotPosition(slotIndex);
@@ -151,6 +172,12 @@ namespace ColorBlockCrush
         public void RemoveGun(Gun gun)
         {
             int removedIndex = _gunsInSlots.IndexOf(gun);
+
+            if (_gunsInSlots.Count == _maxSlots)
+            {
+                StopWarn();
+            }
+
 
             if (_gunsInSlots.Remove(gun))
             {

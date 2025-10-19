@@ -472,6 +472,7 @@ namespace ColorBlockCrush
         public override void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
         {
             Sequence moveSortSlotSq = DOTween.Sequence();
+            moveSortSlotTw.Kill();
             moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
             {
             });

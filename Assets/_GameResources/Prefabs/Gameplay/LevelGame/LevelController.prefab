@@ -805,7 +805,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7815645781100214595
 Transform:
   m_ObjectHideFlags: 0
@@ -1211,7 +1211,7 @@ MonoBehaviour:
   _maxSlots: 5
   _slotStartPosition: {x: -4, y: 0, z: -7.5}
   _slotSpacing: 2
-  slotItemPrb: {fileID: 1432112894508569, guid: 4957b2bd496e38944937d092d5ff0842, type: 3}
+  slotItemPrb: {fileID: 8942555809478992828, guid: 4957b2bd496e38944937d092d5ff0842, type: 3}
   gunContainer: {fileID: 4320968164407314973}
   _shiftDuration: 0.2
   _shiftEase: 6
@@ -1231,7 +1231,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5208454386302340361
 Transform:
   m_ObjectHideFlags: 0
@@ -1655,7 +1655,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2025404531411057438
 Transform:
   m_ObjectHideFlags: 0
@@ -2654,7 +2654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7767286409675957161
 Transform:
   m_ObjectHideFlags: 0
