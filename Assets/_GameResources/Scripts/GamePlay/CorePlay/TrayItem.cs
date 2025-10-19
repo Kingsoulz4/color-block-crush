@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace ColorBlockCrush
 {
