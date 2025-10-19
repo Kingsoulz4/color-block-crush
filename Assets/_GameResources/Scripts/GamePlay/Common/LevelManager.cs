@@ -136,8 +136,7 @@ namespace ColorBlockCrush
                 return;
             }
             GameManager.Instance.SetGameState(GameState.Lose);
-            //if (!LevelController.Instance.CheckCanRevive())
-            if (true)
+            if (!LevelController.Instance.CheckCanRevive())
             {
                 var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
 
@@ -185,7 +184,6 @@ namespace ColorBlockCrush
             if (UserDataManager.Gold >= price)
             {
                 UserDataManager.AddGold(-price, "Revival");
-                LevelController.Instance.ReviveLevel(price);
             }
             else
             {
