@@ -202,7 +202,7 @@ namespace ColorBlockCrush
             {
                 if (sucess)
                 {
-                    boosterConfirmUI.gameObject.SetActive(true);
+                    BoosterManager.Instance.ShuffleBooster.ActiveBooster();
                 }
             });
         }
