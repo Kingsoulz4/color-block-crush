@@ -31,6 +31,7 @@ namespace ColorBlockCrush
         [SerializeField] private float moveToConveyorDuration = 0.4f;
         [SerializeField] private float moveToConveyorJumpForce = 2;
         [SerializeField] private Ease moveToConveyorEase = Ease.OutQuad;
+        [SerializeField] private float moveToSlotDuration = 0.25f;
 
         private const float raycastSpacing = 0.15f;
         private const int maxRaycastSteps = 65;
@@ -92,7 +93,7 @@ namespace ColorBlockCrush
         {
             if (gameObject.activeInHierarchy)
             {
-                maxShootingAngle = 15;
+                maxShootingAngle = 20;
             }
         }
 
@@ -427,13 +428,13 @@ namespace ColorBlockCrush
             Sequence moveToSlotSq = DOTween.Sequence();
 
             GunPos = GunPos.ON_SLOT;
-            moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.Linear).OnComplete(() =>
+            moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, moveToSlotDuration)).SetEase(Ease.Linear).OnComplete(() =>
             {
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
             });
-            moveToSlotSq.Join(transform.DORotate(Vector3.zero, 0.3f));
-            moveToSlotSq.Join(transform.DOScale(Vector3.one, 0.25f));
+            moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
+            moveToSlotSq.Join(transform.DOScale(Vector3.one, moveToSlotDuration));
             moveToSlotSq.SetId(this);
         }
 
@@ -442,12 +443,12 @@ namespace ColorBlockCrush
             Sequence moveToSlotSq = DOTween.Sequence();
 
             GunPos = GunPos.ON_SLOT;
-            moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.Linear).OnComplete(() =>
+            moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, moveToSlotDuration)).SetEase(Ease.Linear).OnComplete(() =>
             {
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
             });
-            moveToSlotSq.Join(transform.DORotate(Vector3.zero, 0.3f));
+            moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
             moveToSlotSq.SetId(this);
         }
 
