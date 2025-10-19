@@ -20,6 +20,11 @@ namespace ColorBlockCrush
 
         private void Update()
         {
+            if (GameManager.GameState != GameState.Playing)
+            {
+                return;
+            }
+
             HandleInput();
         }
 

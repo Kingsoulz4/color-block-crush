@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace ColorBlockCrush
 {
@@ -99,6 +98,11 @@ namespace ColorBlockCrush
         public void Move()
         {
             splineAnimate.Play();
+        }
+
+        public void Pause()
+        {
+            splineAnimate.Pause();
         }
     }
 }

@@ -146,6 +146,7 @@ namespace ColorBlockCrush
             if (!conveyor.CanPlaceGuns(requiredSlots))
             {
                 Debug.Log("Not enough slots available");
+                conveyor.WarnTrayText();
                 return;
             }
 

@@ -208,6 +208,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4128005943167158}
+  - component: {fileID: 8942555809478992828}
   m_Layer: 0
   m_Name: Shooter Slot
   m_TagString: Untagged
@@ -232,6 +233,22 @@ Transform:
   - {fileID: 4254834390241601}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8942555809478992828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1432112894508569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a65fb09ff86be214883c77943f9d5ba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeDuration: 0.5
+  minAlpha: 0
+  maxAlpha: 1
+  spriteRenderer: {fileID: 212322008963461742}
 --- !u!1 &1511797773950090
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,7 +275,7 @@ Transform:
   m_GameObject: {fileID: 1511797773950090}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.6, z: 0}
   m_LocalScale: {x: 0.17, y: 0.18, z: 0.18}
   m_ConstrainProportionsScale: 0
   m_Children:

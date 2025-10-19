@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,46 +9,39 @@ namespace ColorBlockCrush
     public class AddTrayBooster : BoosterBase
     {
         protected override int CurrentCount { get => UserDataManager.AddTrayBooster; set => UserDataManager.AddTrayBooster = value; }
-
-        private void Update()
-        {
-            if (IsShowConfirm && Input.GetMouseButton(0))
-            {
-                StartCoroutine(DoBooster());
-            }
-        }
+        private int maxTrayCount = 5;
+        private int currentCount = 0;
 
         public override void Init()
         {
             base.Init();
-            CurrentCount = UserDataManager.AddTrayBooster;
+            LevelEvent.OnLevelStart += OnLevelStart;
         }
 
-        public override void CancelBooster()
+        private void OnDisable()
         {
-            base.CancelBooster();
-            IsShowConfirm = false;
+            LevelEvent.OnLevelStart -= OnLevelStart;
         }
 
+        private void OnLevelStart(int obj)
+        {
+            currentCount = 0;
+        }
+
+        protected override bool CanShowBooster()
+        {
+            return base.CanShowBooster() && currentCount < maxTrayCount;
+        }
+
+        [Button]
         public override void ActiveBooster()
         {
             base.ActiveBooster();
-            UpdateVisualBooster();
-            IsShowConfirm = false;
             OnStartUseBooster?.Invoke(this, CurrentCount);
-        }
-
-        private IEnumerator DoBooster()
-        {
-            ActiveBooster();
-            yield return null;
+            currentCount += 1;
+            LevelController.Instance.ConveyorController.BoosterAddTrayItem();
+            LevelController.Instance.ConveyorController.WarnTrayText();
             Done();
-        }
-
-        protected override void ShowBooster()
-        {
-            base.ShowBooster();
-            IsShowConfirm = true;
         }
 
         protected override void Done()

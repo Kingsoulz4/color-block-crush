@@ -184,7 +184,7 @@ namespace ColorBlockCrush
             if (UserDataManager.Gold >= price)
             {
                 UserDataManager.AddGold(-price, "Revival");
-                LevelController.Instance.ReviveLevel(price);
+                GameManager.Instance.SetGameState(GameState.Playing);
             }
             else
             {
@@ -216,6 +216,7 @@ namespace ColorBlockCrush
 
             ExecuteNextFlowStep();
 
+            LevelEvent.OnLevelStart?.Invoke(level);
         }
 
         private void CheckShowTutorials()

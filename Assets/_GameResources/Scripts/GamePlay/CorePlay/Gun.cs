@@ -1,5 +1,6 @@
 ﻿using ColorBlockCrush.Tools;
 using DG.Tweening;
+using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace ColorBlockCrush
         [SerializeField] private float moveToConveyorDuration = 0.4f;
         [SerializeField] private float moveToConveyorJumpForce = 2;
         [SerializeField] private Ease moveToConveyorEase = Ease.OutQuad;
+        [SerializeField] private float moveToSlotDuration = 0.25f;
 
         private const float raycastSpacing = 0.15f;
         private const int maxRaycastSteps = 65;
@@ -92,17 +94,17 @@ namespace ColorBlockCrush
         {
             if (gameObject.activeInHierarchy)
             {
-                maxShootingAngle = 15;
+                maxShootingAngle = 20;
             }
         }
 
         void Update()
         {
             CheckFire();
-            //if (targetQueu1e.Count > 0)
-            //{
-            //    targetQueu1e = new List<Block>(targetQueu1e);
-            //}
+            if (targetQueu1e.Count > 0)
+            {
+                targetQueu1e = new List<Block>(targetQueue);
+            }
         }
 
         private void OnDisable()
@@ -199,11 +201,33 @@ namespace ColorBlockCrush
                         continue;
                     }
 
-                    if (BulletRayCount > 0)
+                    int timeTakeDamage = 1;
+                    if (currentFireDir == RotationDirection.Up || currentFireDir == RotationDirection.Down)
                     {
-                        BulletRayCount--;
-                        block.TakeDamageRaycast(1);
-                        targetQueue.Enqueue(block);
+                        timeTakeDamage = block.Size.x;
+                    }
+                    else if (currentFireDir == RotationDirection.Left || currentFireDir == RotationDirection.Right)
+                    {
+                        timeTakeDamage = block.Size.y;
+                    }
+
+                    if (timeTakeDamage > 1)
+                    {
+                        Debug.Log("Fire > 1 times here");
+                    }
+
+                    for (int j = 0; j < timeTakeDamage; j++)
+                    {
+                        if (BulletRayCount > 0)
+                        {
+                            BulletRayCount--;
+                            block.TakeDamageRaycast(1);
+                            targetQueue.Enqueue(block);
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                 }
                 //else 
@@ -232,6 +256,17 @@ namespace ColorBlockCrush
             if (BulletCount == 0)
             {
                 CurrentTarget = null;
+
+                CheckDisappear();
+
+                OnGunEmpty?.Invoke(this);
+            }
+        }
+
+        private void CheckDisappear()
+        {
+            if (CheckCanDisappear())
+            {
                 PlayAnim(Constant.GunAnimation.DISAPPEAR);
 
                 this.Wait(0.2f, () =>
@@ -239,8 +274,6 @@ namespace ColorBlockCrush
                     gameObject.SetActive(false);
                     OnGunDissapear?.Invoke(this);
                 });
-
-                OnGunEmpty?.Invoke(this);
             }
         }
 
@@ -277,6 +310,11 @@ namespace ColorBlockCrush
 
         public void Turn(RotationDirection direction, RotationDirection directionNonfire)
         {
+            if (GunPos != GunPos.ON_CONVEYOR)
+            {
+                return;
+            }
+
             Vector3 newRotation;
             newRotation = GetTurnDirection(!isFireFirstTime ? directionNonfire : direction);
             currentMoveFireDir = directionNonfire;
@@ -385,8 +423,7 @@ namespace ColorBlockCrush
 
             });
             moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration));
-            moveToConveyorSq.Append(transform.DOScale(Vector3.one * 1f, 0.1f));
-            moveToConveyorSq.Append(transform.DOScale(Vector3.one * 0.85f, 0.05f));
+            moveToConveyorSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration));
             moveToConveyorSq.SetId(this);
 
         }
@@ -396,13 +433,14 @@ namespace ColorBlockCrush
             Sequence moveToSlotSq = DOTween.Sequence();
 
             GunPos = GunPos.ON_SLOT;
-            moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.Linear).OnComplete(() =>
+            moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, moveToSlotDuration)).SetEase(Ease.Linear).OnComplete(() =>
             {
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
             });
-            moveToSlotSq.Join(transform.DORotate(Vector3.zero, 0.3f));
-            moveToSlotSq.Join(transform.DOScale(Vector3.one, 0.25f));
+            moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
+            moveToSlotSq.Join(transform.DOScale(Vector3.one, moveToSlotDuration));
+            moveToSlotSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration));
             moveToSlotSq.SetId(this);
         }
 
@@ -410,24 +448,24 @@ namespace ColorBlockCrush
         {
             Sequence moveToSlotSq = DOTween.Sequence();
 
-            GunPos = GunPos.ON_SLOT;
-            moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, 0.3f)).SetEase(Ease.Linear).OnComplete(() =>
+            GunPos = GunPos.ON_BONUS_SLOT;
+            moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, moveToSlotDuration)).SetEase(Ease.Linear).OnComplete(() =>
             {
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
             });
-            moveToSlotSq.Join(transform.DORotate(Vector3.zero, 0.3f));
+            moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
             moveToSlotSq.SetId(this);
         }
 
-        public void MoveSortSlot(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
+        public void MoveSortSlot(Vector3 targetPos, float _shiftDuration, Ease _shiftEase, GunPos gunPosOnDone)
         {
             GunPos = GunPos.TWEEN_SORT;
             Sequence moveSortSlotSq = DOTween.Sequence();
 
             moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
             {
-                GunPos = GunPos.ON_SLOT;
+                GunPos = gunPosOnDone;
             });
             moveSortSlotSq.SetId(this);
         }
@@ -435,6 +473,7 @@ namespace ColorBlockCrush
         public override void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
         {
             Sequence moveSortSlotSq = DOTween.Sequence();
+            moveSortSlotTw.Kill();
             moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
             {
             });
@@ -450,7 +489,7 @@ namespace ColorBlockCrush
             scaleSq.SetId(this);
         }
 
-        public bool CheckDestroy()
+        public bool CheckCanDisappear()
         {
             if (ConnectedGuns.Count <= 0)
             {
@@ -503,15 +542,30 @@ namespace ColorBlockCrush
                 return;
             }
 
-            if (gun.GunPos == GunPos.ON_GUN_BOARD)
+            switch (gun.GunPos)
             {
-                LevelController.Instance.GunBoardController.OnTapGun(gun);
+                case GunPos.ON_GUN_BOARD:
+                    LevelController.Instance.GunBoardController.OnTapGun(gun);
+                    break;
+                case GunPos.ON_SLOT:
+                    LevelController.Instance.SlotController.OnTapGun(gun);
+                    break;
+                case GunPos.ON_BONUS_SLOT:
+                    LevelController.Instance.BonusSlotController.OnTapGun(gun);
+                    break;
+                default:
+                    break;
             }
+        }
 
-            if (gun.GunPos == GunPos.ON_SLOT)
+        public void OnRevive()
+        {
+            foreach (Block block in targetQueue)
             {
-                LevelController.Instance.SlotController.OnTapGun(gun);
+                block.OnGunRevive();
             }
+            BulletRayCount = BulletCount;
+            targetQueue.Clear();
         }
     }
     public enum GunPos
@@ -520,5 +574,6 @@ namespace ColorBlockCrush
         ON_SLOT = 1,
         ON_CONVEYOR = 2,
         TWEEN_SORT = 3,
+        ON_BONUS_SLOT = 4,
     }
 }

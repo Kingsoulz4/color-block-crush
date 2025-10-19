@@ -42,19 +42,21 @@ namespace ColorBlockCrush
 
         public void MoveGunIn(Gun gun)
         {
-            if (gun.ConnectedGuns.Count > 1)
-            {
-                if (!CanPlaceGuns(gun.ConnectedGuns.Count))
-                {
-                    LevelController.Instance.LoseLevel();
-                    return;
-                }
-            }
-            else if (!CanPlaceGuns(1))
-            {
-                LevelController.Instance.LoseLevel();
-                return;
-            }
+            //if (gun.ConnectedGuns.Count > 1)
+            //{
+            //    if (!CanPlaceGuns(gun.ConnectedGuns.Count))
+            //    {
+            //        LevelController.Instance.ConveyorController.PauseAllTray();
+            //        LevelController.Instance.LoseLevel();
+            //        return;
+            //    }
+            //}
+            //else if (!CanPlaceGuns(1))
+            //{
+            //    LevelController.Instance.ConveyorController.PauseAllTray();
+            //    LevelController.Instance.LoseLevel();
+            //    return;
+            //}
 
             _gunsInSlots.Add(gun);
             gun.transform.SetParent(gunContainer);
@@ -121,7 +123,7 @@ namespace ColorBlockCrush
             for (int i = fromIndex; i < _gunsInSlots.Count; i++)
             {
                 Vector3 targetPos = GetSlotPosition(i);
-                _gunsInSlots[i].MoveSortSlot(targetPos, _shiftDuration, _shiftEase);
+                _gunsInSlots[i].MoveSortSlot(targetPos, _shiftDuration, _shiftEase, GunPos.ON_BONUS_SLOT);
             }
         }
     }
