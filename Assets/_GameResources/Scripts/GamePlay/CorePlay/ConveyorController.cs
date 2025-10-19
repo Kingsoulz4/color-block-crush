@@ -11,7 +11,7 @@ using UnityEngine.Splines;
 public class ConveyorController : MonoBehaviour
 {
     [Header("Conveyor Settings")]
-    [SerializeField] private int maxSlots = 5;
+    [SerializeField] private int initMaxSlot = 5;
     [SerializeField] private Transform startPos;
     [SerializeField] private float startMovingGunSpacing = 0.1f;
     [SerializeField] private float trayMoveDuration = 5f;
@@ -30,6 +30,7 @@ public class ConveyorController : MonoBehaviour
     [SerializeField] private Ease shiftEase = Ease.OutQuad;
 
     public SplineContainer splineContainer;
+    private int currentMaxSlots;
 
     private List<TrayItem> prepairTrayItems = new List<TrayItem>();
     private List<TrayItem> movingTrayItems;
@@ -40,6 +41,7 @@ public class ConveyorController : MonoBehaviour
 
     public void Init()
     {
+        currentMaxSlots = initMaxSlot;
         endPointConveyor.gameObject.SetActive(true);
         movingTrayItems = new List<TrayItem>();
         movingTrayItems.Clear();
@@ -194,9 +196,16 @@ public class ConveyorController : MonoBehaviour
         UpdateTrayText();
     }
 
+    public void BoosterAddTrayItem()
+    {
+        currentMaxSlots += 1;
+        SpawnTrayAtLeft();
+        UpdateTrayText();
+    }
+
     private void InitTray()
     {
-        for (int i = 0; i < maxSlots; i++)
+        for (int i = 0; i < currentMaxSlots; i++)
         {
             SpawnTrayAtLeft();
         }
@@ -240,12 +249,12 @@ public class ConveyorController : MonoBehaviour
 
     private void UpdateTrayText()
     {
-        trayText.text = $@"{movingTrayItems.Count}/{maxSlots}";
+        trayText.text = $@"{movingTrayItems.Count}/{currentMaxSlots}";
     }
 
     public TrayItem SpawnTrayAtLeft()
     {
-        if (trayItemsFree.Count >= maxSlots)
+        if (trayItemsFree.Count >= currentMaxSlots)
         {
             Debug.LogWarning("List đã đầy!");
             return null;
@@ -280,7 +289,7 @@ public class ConveyorController : MonoBehaviour
 
     private void ShiftTraysToRight()
     {
-        int emptySlots = maxSlots - trayItemsFree.Count;
+        int emptySlots = currentMaxSlots - trayItemsFree.Count;
 
         for (int i = 0; i < trayItemsFree.Count; i++)
         {

@@ -216,6 +216,7 @@ namespace ColorBlockCrush
 
             ExecuteNextFlowStep();
 
+            LevelEvent.OnLevelStart?.Invoke(level);
         }
 
         private void CheckShowTutorials()
