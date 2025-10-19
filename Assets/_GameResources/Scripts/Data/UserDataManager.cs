@@ -74,6 +74,7 @@ public class UserDataManager : MonoBehaviour
             {
                 HeartManager.InfinityEndTime += amount;
             }
+            OnAddHeart?.Invoke(Heart, Heart, hasAnimation);
         }
     }
     #endregion
