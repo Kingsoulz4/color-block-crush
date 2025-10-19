@@ -55,6 +55,11 @@ public class UserDataManager : MonoBehaviour
             {
                 newValue = 0;
             }
+
+            if (newValue > 5)
+            {
+                newValue = 5;
+            }
             Heart = newValue;
             OnAddHeart?.Invoke(current, newValue, hasAnimation);
         }

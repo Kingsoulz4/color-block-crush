@@ -21,6 +21,7 @@ namespace ColorBlockCrush
         [SerializeField] private Text coinReceiveX2Txt;
 
         private int coinReceiveValue;
+        public Action<int> OnClaimedReward { get; set;}
 
         private void Awake()
         {
@@ -32,13 +33,14 @@ namespace ColorBlockCrush
         {
             UserDataManager.AddGold(80, "WinX2");
             Hide();
-            
+            OnClaimedReward.Invoke(coinReceiveValue * 2);
         }
 
         private void OnClickClaim()
         {
-            UserDataManager.AddGold(40, "Win");
+            UserDataManager.AddGold(coinReceiveValue, "Win");
             Hide();
+            OnClaimedReward.Invoke(coinReceiveValue);
         }
 
         public void UpdateInfo()
@@ -57,7 +59,7 @@ namespace ColorBlockCrush
                     break;
             }
             
-            coinReceiveTxt.text = coinReceiveValue.ToString();
+            coinReceiveTxt.text = $"x{coinReceiveValue.ToString()}";
             coinReceiveX2Txt.text = (coinReceiveValue * 2).ToString();
         }
 

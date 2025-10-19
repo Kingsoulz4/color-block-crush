@@ -3,6 +3,17 @@ using System.Collections.Generic;
 using System.Collections;
 using DG.Tweening;
 
+public enum AudioClipNames
+{
+    BACKGROUND_MUSIC_HOME,
+    BACKGROUND_MUSIC_GAMEPLAY,
+    BUTTON_CLICK,
+    WIN_GAME,
+    FAIL_GAME,
+    FIREWORK,
+    COLLECT_COIN
+}
+
 public class AudioManager : SingletonMono<AudioManager>
 {
     public static int MusicSetting

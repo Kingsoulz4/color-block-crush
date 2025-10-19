@@ -24,12 +24,21 @@ public class PopupSetting : PopupUI
 
     private void OnClickExitGame()
     {
-        Hide();
-        var popupConfirmLeave = UIManager.Instance.ShowPopup<PopupConfirmLeave>(null);
-        popupConfirmLeave.OnConfirm = () =>
-        {
-            UIManager.Instance.ShowScreen<MainScreenUI>();
-        };
+        // if (LevelManager.Instance.LevelGame.IsFirstClick)
+        // {
+            var popupConfirmLeave = UIManager.Instance.ShowPopup<PopupConfirmLeave>(null);
+            popupConfirmLeave.OnConfirm = () =>
+            {
+                Hide();
+                HeartManager.UseHeart(1);
+                UIManager.Instance.ShowScreen<MainScreenUI>();
+            };
+        //}
+        // else
+        // {
+        //     Hide();
+        //     UIManager.Instance.ShowScreen<MainScreenUI>();
+        // }    
     }
 
     public void SetType(PopupSettingType type)

@@ -33,6 +33,7 @@ public class MainScreenUI : ScreenUI
     [SerializeField] ParticleSystem fx_Gold;
     [SerializeField] Text txt_Gold;
     [SerializeField] Text txt_GoldShop;
+    [SerializeField] GoldDisplay m_goldBar;
     public float timeMoveCoinBack = 0.5f;
     public float timeMoveCoinUp = 0.75f;
     public AudioClip clip_SpawnItem;
@@ -101,6 +102,18 @@ public class MainScreenUI : ScreenUI
     public void MoveCoin(int amount, string reason, string where)
     {
     }
+    
+    public void ShowClaimReward(int quantity)
+    {
+        m_goldBar.Sync = false;
+        m_goldBar.SetText(UserDataManager.Gold - quantity);
+        var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
+        popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, quantity, () =>
+        {
+            m_goldBar.SetText(UserDataManager.Gold);
+            m_goldBar.Sync = true;
+        });
+    }    
 
     private void MoveValueTop(float timeDelay, GameObject objSpawn, RectTransform targetPos, int currentCoinText, bool isCoin, Action playFx, bool isFinish)
     {

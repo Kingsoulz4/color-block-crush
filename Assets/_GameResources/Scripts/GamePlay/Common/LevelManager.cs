@@ -229,10 +229,13 @@ namespace ColorBlockCrush
         public void OnWinGame(int level)
         {
             GameManager.Instance.SetGameState(GameState.Win);
-            UIManager.Instance.ShowPopup<PopupWin>(() =>
+            var popupWin = UIManager.Instance.ShowPopup<PopupWin>(null);
+            popupWin.OnClaimedReward = (val) =>
             {
                 NextLevel();
-            });
+                var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
+                mainScreen.ShowClaimReward(val);
+            };
         }
 
         public void NextLevel()

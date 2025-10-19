@@ -60,7 +60,7 @@ namespace ColorBlockCrush
             _goldCounter.transform.position = coinBarPosition;
             _goldCounter.SetText(UserDataManager.Gold - coinCount);
             _goldCounter.Sync = false;
-
+            Debug.Log($"Coin Bar {coinBarPosition} {_goldCounter.transform.position}");
             PlayTextFx(coinCount);
 
             //AudioManager.Instance.PlayAudioFX(AudioType.CoinCollecting);

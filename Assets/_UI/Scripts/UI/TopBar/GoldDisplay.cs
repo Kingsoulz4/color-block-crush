@@ -55,6 +55,7 @@ namespace ColorBlockCrush
 
         public void UpdateTextGold(int goldCurrent, int goldUpdate, float timeDelay) 
         {
+            Debug.Log($"Update {isUpadate}");
             if(isUpadate == false)
             {
                 return;
