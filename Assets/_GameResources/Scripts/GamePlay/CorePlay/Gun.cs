@@ -205,12 +205,12 @@ namespace ColorBlockCrush
                     {
                         timeTakeDamage = block.Size.x;
                     }
-                    else if(currentFireDir == RotationDirection.Left || currentFireDir == RotationDirection.Right)
+                    else if (currentFireDir == RotationDirection.Left || currentFireDir == RotationDirection.Right)
                     {
                         timeTakeDamage = block.Size.y;
                     }
 
-                    if(timeTakeDamage > 1)
+                    if (timeTakeDamage > 1)
                     {
                         Debug.Log("Fire > 1 times here");
                     }
@@ -433,7 +433,7 @@ namespace ColorBlockCrush
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
             });
-            moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
+            transform.DORotate(Vector3.zero, moveToSlotDuration).SetId(this);
             moveToSlotSq.Join(transform.DOScale(Vector3.one, moveToSlotDuration));
             moveToSlotSq.SetId(this);
         }
@@ -448,7 +448,7 @@ namespace ColorBlockCrush
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
             });
-            moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
+            transform.DORotate(Vector3.zero, moveToSlotDuration).SetId(this);
             moveToSlotSq.SetId(this);
         }
 
