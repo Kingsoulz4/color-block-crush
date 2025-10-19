@@ -1,5 +1,6 @@
 ﻿using ColorBlockCrush.Tools;
 using DG.Tweening;
+using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -100,10 +101,10 @@ namespace ColorBlockCrush
         void Update()
         {
             CheckFire();
-            //if (targetQueu1e.Count > 0)
-            //{
-            //    targetQueu1e = new List<Block>(targetQueu1e);
-            //}
+            if (targetQueu1e.Count > 0)
+            {
+                targetQueu1e = new List<Block>(targetQueue);
+            }
         }
 
         private void OnDisable()
@@ -550,6 +551,16 @@ namespace ColorBlockCrush
             {
                 LevelController.Instance.SlotController.OnTapGun(gun);
             }
+        }
+
+        public void OnRevive()
+        {
+            foreach (Block block in targetQueue)
+            {
+                block.OnGunRevive();
+            }
+            BulletRayCount = BulletCount;
+            targetQueue.Clear();
         }
     }
     public enum GunPos

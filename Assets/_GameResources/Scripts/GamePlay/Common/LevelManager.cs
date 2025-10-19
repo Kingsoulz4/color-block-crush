@@ -184,6 +184,7 @@ namespace ColorBlockCrush
             if (UserDataManager.Gold >= price)
             {
                 UserDataManager.AddGold(-price, "Revival");
+                GameManager.Instance.SetGameState(GameState.Playing);
             }
             else
             {

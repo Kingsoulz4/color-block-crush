@@ -99,5 +99,10 @@ namespace ColorBlockCrush
         {
             splineAnimate.Play();
         }
+
+        public void Pause()
+        {
+            splineAnimate.Pause();
+        }
     }
 }

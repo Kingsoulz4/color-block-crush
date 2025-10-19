@@ -122,9 +122,11 @@ public class ConveyorController : MonoBehaviour
     {
         for (int i = 0; i < movingTrayItems.Count; i++)
         {
-            movingTrayItems[i].MyGun.Scale(Vector3.one * 0.8f, 0.2f);
-            LevelController.Instance.BonusSlotController.MoveGunIn(movingTrayItems[i].MyGun);
-            MoveTrayIn(movingTrayItems[i]);
+            var gun = movingTrayItems[i].MyGun;
+            gun.Scale(Vector3.one * 0.8f, 0.2f);
+            gun.OnRevive();
+            LevelController.Instance.BonusSlotController.MoveGunIn(gun);
+            MoveTrayIn(movingTrayItems[i], true);
         }
     }
 
@@ -200,11 +202,11 @@ public class ConveyorController : MonoBehaviour
         return startPosition + new Vector3(index * spaceOffsetX, 0, 0);
     }
 
-    public bool MoveTrayIn(TrayItem tray)
+    public bool MoveTrayIn(TrayItem tray, bool forceMove = false)
     {
-        if (trayItemsFree.Count >= maxSlots)
+        if (!LevelController.Instance.SlotController.CanPlaceGuns(1) && !forceMove)
         {
-            Debug.LogWarning("List đã đầy!");
+            tray.Pause();
             return false;
         }
 

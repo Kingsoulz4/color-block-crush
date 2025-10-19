@@ -33,7 +33,6 @@ namespace ColorBlockCrush
             maxHitPoint = bigBlockConfig.blockHealth;
             hitPoint = bigBlockConfig.blockHealth;
             hitPointRaycast = bigBlockConfig.blockHealth;
-            IsAttacked = false;
             
 
             ResizeBlock();
