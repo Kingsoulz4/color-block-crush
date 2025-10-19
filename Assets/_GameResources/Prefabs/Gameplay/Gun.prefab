@@ -418,6 +418,7 @@ MonoBehaviour:
   moveToConveyorDuration: 0.3
   moveToConveyorJumpForce: 6
   moveToConveyorEase: 5
+  moveToSlotDuration: 0.25
   m_hiddenGun: {fileID: 8764903062490715236}
   m_connectedGuns: {fileID: 7885081760027138658}
 --- !u!65 &8597390162283652098

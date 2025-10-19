@@ -309,6 +309,11 @@ namespace ColorBlockCrush
 
         public void Turn(RotationDirection direction, RotationDirection directionNonfire)
         {
+            if (GunPos != GunPos.ON_CONVEYOR)
+            {
+                return;
+            }
+
             Vector3 newRotation;
             newRotation = GetTurnDirection(!isFireFirstTime ? directionNonfire : direction);
             currentMoveFireDir = directionNonfire;
@@ -433,7 +438,7 @@ namespace ColorBlockCrush
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
             });
-            transform.DORotate(Vector3.zero, moveToSlotDuration).SetId(this);
+            moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
             moveToSlotSq.Join(transform.DOScale(Vector3.one, moveToSlotDuration));
             moveToSlotSq.SetId(this);
         }
@@ -448,7 +453,7 @@ namespace ColorBlockCrush
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
             });
-            transform.DORotate(Vector3.zero, moveToSlotDuration).SetId(this);
+            moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
             moveToSlotSq.SetId(this);
         }
 
