@@ -120,7 +120,7 @@ public class ConveyorController : MonoBehaviour
     [Button("OnRevive")]
     public void OnRevive(int level)
     {
-        for (int i = 0; i < movingTrayItems.Count; i++)
+        for (int i = movingTrayItems.Count - 1; i >= 0; i--)
         {
             var gun = movingTrayItems[i].MyGun;
             gun.Scale(Vector3.one * 0.8f, 0.2f);
@@ -128,6 +128,10 @@ public class ConveyorController : MonoBehaviour
             LevelController.Instance.BonusSlotController.MoveGunIn(gun);
             MoveTrayIn(movingTrayItems[i], true);
         }
+
+        Gun lastGunInSlot = LevelController.Instance.SlotController.GetLastGun();
+        lastGunInSlot.Scale(Vector3.one * 0.8f, 0.2f);
+        LevelController.Instance.BonusSlotController.MoveGunIn(lastGunInSlot);
     }
 
     #region Tray Management
@@ -187,6 +191,7 @@ public class ConveyorController : MonoBehaviour
             movingTrayItems.Remove(trayItem);
             OnGunRemovedConveyor?.Invoke(trayItem.MyGun);
         }
+        UpdateTrayText();
     }
 
     private void InitTray()
@@ -202,11 +207,18 @@ public class ConveyorController : MonoBehaviour
         return startPosition + new Vector3(index * spaceOffsetX, 0, 0);
     }
 
+    public void PauseAllTray()
+    {
+        foreach (var tray in movingTrayItems)
+        {
+            tray.Pause();
+        }
+    }
+
     public bool MoveTrayIn(TrayItem tray, bool forceMove = false)
     {
         if (!LevelController.Instance.SlotController.CanPlaceGuns(1) && !forceMove)
         {
-            tray.Pause();
             return false;
         }
 

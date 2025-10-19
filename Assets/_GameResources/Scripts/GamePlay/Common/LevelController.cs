@@ -47,6 +47,7 @@ namespace ColorBlockCrush
             blockBoardController.Init(levelData);
             gunBoardController.Init(levelData);
             slotController.Init();
+            bonusSlotController.Init();
             conveyorController.Init();
         }
 
@@ -67,7 +68,7 @@ namespace ColorBlockCrush
 
         public bool CheckCanRevive()
         {
-            return bonusSlotController.CanPlaceGuns(ConveyorController.GetMovingTrayCount());
+            return bonusSlotController.CanPlaceGuns(ConveyorController.GetMovingTrayCount()+1);
         }
 
 

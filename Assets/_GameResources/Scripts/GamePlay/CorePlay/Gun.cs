@@ -448,7 +448,7 @@ namespace ColorBlockCrush
         {
             Sequence moveToSlotSq = DOTween.Sequence();
 
-            GunPos = GunPos.ON_SLOT;
+            GunPos = GunPos.ON_BONUS_SLOT;
             moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, moveToSlotDuration)).SetEase(Ease.Linear).OnComplete(() =>
             {
                 callback?.Invoke();
@@ -458,14 +458,14 @@ namespace ColorBlockCrush
             moveToSlotSq.SetId(this);
         }
 
-        public void MoveSortSlot(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
+        public void MoveSortSlot(Vector3 targetPos, float _shiftDuration, Ease _shiftEase, GunPos gunPosOnDone)
         {
             GunPos = GunPos.TWEEN_SORT;
             Sequence moveSortSlotSq = DOTween.Sequence();
 
             moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
             {
-                GunPos = GunPos.ON_SLOT;
+                GunPos = gunPosOnDone;
             });
             moveSortSlotSq.SetId(this);
         }
@@ -542,14 +542,19 @@ namespace ColorBlockCrush
                 return;
             }
 
-            if (gun.GunPos == GunPos.ON_GUN_BOARD)
+            switch (gun.GunPos)
             {
-                LevelController.Instance.GunBoardController.OnTapGun(gun);
-            }
-
-            if (gun.GunPos == GunPos.ON_SLOT)
-            {
-                LevelController.Instance.SlotController.OnTapGun(gun);
+                case GunPos.ON_GUN_BOARD:
+                    LevelController.Instance.GunBoardController.OnTapGun(gun);
+                    break;
+                case GunPos.ON_SLOT:
+                    LevelController.Instance.SlotController.OnTapGun(gun);
+                    break;
+                case GunPos.ON_BONUS_SLOT:
+                    LevelController.Instance.BonusSlotController.OnTapGun(gun);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -569,5 +574,6 @@ namespace ColorBlockCrush
         ON_SLOT = 1,
         ON_CONVEYOR = 2,
         TWEEN_SORT = 3,
+        ON_BONUS_SLOT = 4,
     }
 }

@@ -2219,7 +2219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxSlots: 6
   _slotStartPosition: {x: -3.5, y: 0, z: -5}
-  _slotSpacing: 0.95
+  _slotSpacing: 1.5
   slotItemPrb: {fileID: 0}
   gunContainer: {fileID: 4993241944393017477}
   _shiftDuration: 0.2

@@ -103,12 +103,14 @@ namespace ColorBlockCrush
             {
                 if (!CanPlaceGuns(gun.ConnectedGuns.Count))
                 {
+                    LevelController.Instance.ConveyorController.PauseAllTray();
                     LevelController.Instance.LoseLevel();
                     return;
                 }
             }
             else if (!CanPlaceGuns(1))
             {
+                LevelController.Instance.ConveyorController.PauseAllTray();
                 LevelController.Instance.LoseLevel();
                 return;
             }
@@ -186,12 +188,19 @@ namespace ColorBlockCrush
             }
         }
 
+        public Gun GetLastGun()
+        {
+            Gun lastGun = _gunsInSlots[_maxSlots-1];
+            RemoveGun(lastGun);
+            return lastGun;
+        }
+
         private void ShiftAllToTheLeft(int fromIndex = 0)
         {
             for (int i = fromIndex; i < _gunsInSlots.Count; i++)
             {
                 Vector3 targetPos = GetSlotPosition(i);
-                _gunsInSlots[i].MoveSortSlot(targetPos, _shiftDuration, _shiftEase);
+                _gunsInSlots[i].MoveSortSlot(targetPos, _shiftDuration, _shiftEase, GunPos.ON_SLOT);
             }
         }
     }
