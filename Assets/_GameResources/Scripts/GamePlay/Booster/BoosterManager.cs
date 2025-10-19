@@ -27,18 +27,18 @@ public class BoosterManager : SingletonMono<BoosterManager>
 
     public void Init()
     {
-        //foreach (var booster in Boosters)
-        //{
-        //    booster.Init();
-        //}
+        foreach (var booster in Boosters)
+        {
+            booster.Init();
+        }
     }
 
     public void UpdateVisualBooster()
     {
-        //foreach(var booster in Boosters)
-        //{
-        //    booster.UpdateVisualBooster();
-        //}
+        foreach (var booster in Boosters)
+        {
+            booster.UpdateVisualBooster();
+        }
     }
 
     public BoosterBase GetBoosterByType(BoosterType type)

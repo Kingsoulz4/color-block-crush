@@ -8,7 +8,6 @@ namespace ColorBlockCrush
 {
     public class HandBooster : BoosterBase
     {
-
         protected override int CurrentCount { get => UserDataManager.HandBooster; set => UserDataManager.HandBooster = value; }
 
         private void Update()
