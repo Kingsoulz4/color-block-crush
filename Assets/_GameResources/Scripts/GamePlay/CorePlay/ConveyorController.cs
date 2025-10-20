@@ -20,6 +20,7 @@ public class ConveyorController : MonoBehaviour
     [SerializeField] private EndPointConveyor endPointConveyor;
 
     [Header("Tray Spawn Settings")]
+    [SerializeField] private Transform startPosBooster;
     [SerializeField] private TrayItem trayPrefab;
     [SerializeField] private TextMeshPro trayText;
     [SerializeField] private Transform spawnParent;
@@ -193,8 +194,7 @@ public class ConveyorController : MonoBehaviour
     {
         currentMaxSlots += 1;
         currentStartPos.x = -spaceOffsetX * (currentMaxSlots - initMaxSlot + 1);
-        SpawnTrayAtLeft();
-        UpdateTrayText();
+        SpawnTraBooster();
     }
 
     private void InitTray()
@@ -258,6 +258,28 @@ public class ConveyorController : MonoBehaviour
         newTray.Init(trayMoveDuration, trayMoveDurationFast);
         trayItemsFree.Insert(0, newTray);
 
+        ShiftTraysToRight();
+
+        return newTray;
+    }
+
+    public TrayItem SpawnTraBooster()
+    {
+        if (trayItemsFree.Count >= currentMaxSlots)
+        {
+            Debug.LogWarning("List đã đầy!");
+            return null;
+        }
+
+        TrayItem newTray = Instantiate(trayPrefab, spawnParent);
+        newTray.transform.position = startPosBooster.position;
+        newTray.Init(trayMoveDuration, trayMoveDurationFast);
+        trayItemsFree.Insert(0, newTray);
+        this.Wait(shiftDuration, () =>
+        {
+            WarnTrayText();
+            UpdateTrayText();
+        });
         ShiftTraysToRight();
 
         return newTray;

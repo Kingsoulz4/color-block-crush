@@ -73,7 +73,6 @@ namespace ColorBlockCrush
             OnStartUseBooster?.Invoke(this, CurrentCount);
             currentCount += 1;
             LevelController.Instance.ConveyorController.BoosterAddTrayItem();
-            LevelController.Instance.ConveyorController.WarnTrayText();
             Done();
         }
 

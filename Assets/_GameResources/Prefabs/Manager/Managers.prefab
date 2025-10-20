@@ -613,6 +613,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1057309698828914412}
     m_Modifications:
+    - target: {fileID: 130207889246998500, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
+      propertyPath: superGunPrb
+      value: 
+      objectReference: {fileID: 1368227192826055, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}
     - target: {fileID: 796862612698015822, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: m_Name
       value: SuperShootBooster
@@ -659,6 +663,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6386734015373583055, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7186091768816987362, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7186091768816987362, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7186091768816987362, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8744219414392260340, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
