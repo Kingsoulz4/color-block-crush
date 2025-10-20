@@ -16,6 +16,8 @@ namespace ColorBlockCrush
 
         private List<GameObject> listBodyPart = new();
 
+        private List<Block> listBlockPlace = new();
+
         private int axis = 0;
 
         private Vector2Int direction;
@@ -53,6 +55,7 @@ namespace ColorBlockCrush
             for (int i=0; i<blockBarierData.blocksId.Count; i++)
             {
                 var block = LevelManager.Instance.LevelGame.BlockBoardController.GetBlockByID(blockBarierData.blocksId[i]);
+                listBlockPlace.Add(block);
                 minX = Mathf.Min(minX, block.transform.position.x);
                 maxX = Mathf.Max(maxX, block.transform.position.x);
                 minZ = Mathf.Min(minZ, block.transform.position.z);
@@ -164,7 +167,7 @@ namespace ColorBlockCrush
 
                 if (direction == Vector2Int.left)
                 {
-                    listPartPosZ.Reverse();
+                    listPartPosX.Reverse();
                 }
 
                 m_headPart.transform.position = new Vector3((listPartPosX[0] + listPartPosX[1]) / 2, m_headPart.transform.position.y, commonPos);
@@ -222,6 +225,11 @@ namespace ColorBlockCrush
             return new Vector2Int(maxX - minX + 1, maxY - minY + 1);
         }
 
+        public override Vector3 GetTargetHitBullet()
+        {
+            return m_headPart.transform.position;
+        }
+
         private void ResizeBlock()
         {
             var partCount = hitPoint / Size.x;
@@ -232,11 +240,32 @@ namespace ColorBlockCrush
 
             if (partCount < listBodyPart.Count + 3 && listBodyPart.Count > 0)
             {
+                if(direction == Vector2Int.up || direction == Vector2Int.down)
+                {
+                    var listBlockToDestroy = listBlockPlace.FindAll(x => Mathf.Abs(x.transform.position.z - m_tailPart.transform.position.z) <= float.Epsilon);
+                    listBlockToDestroy.ForEach(x => {
+                        x.TakeDamage(1);
+                        listBlockPlace.Remove(x);
+                    });
+                }    
+                else
+                {
+                    var listBlockToDestroy = listBlockPlace.FindAll(x => Mathf.Abs(x.transform.position.x - m_tailPart.transform.position.x) <= float.Epsilon);
+                    listBlockToDestroy.ForEach(x => {
+                        x.TakeDamage(1);
+                        listBlockPlace.Remove(x);
+                    });
+                }    
+
                 m_tailPart.transform.position = listBodyPart.Last().transform.position;
                 Destroy(listBodyPart[^1]);
                 listBodyPart.RemoveAt(listBodyPart.Count - 1);
                 UpdateCollider();
             }
+            else if(hitPoint <= 0)
+            {
+                listBlockPlace.ForEach(x => x.OnBlockDestroyed?.Invoke(x));
+            }    
             
         }
 
@@ -254,7 +283,7 @@ namespace ColorBlockCrush
                 }
 
                 if(hitPoint < maxHitPoint)
-                boxCollider.center -= new Vector3(direction.x, 0, direction.y) * transform.localScale.x;
+                boxCollider.center -= new Vector3(direction.x, 0, direction.y) * transform.localScale.x * 2;
             }
         }
 

@@ -24,6 +24,8 @@ namespace ColorBlockCrush
 
         private BigBlockConfig bigBlockData;
 
+        private List<Block> listBlockPlace = new();
+
         public void Init(BigBlockConfig bigBlockConfig)
         {
             bigBlockData = bigBlockConfig;
@@ -33,7 +35,12 @@ namespace ColorBlockCrush
             maxHitPoint = bigBlockConfig.blockHealth;
             hitPoint = bigBlockConfig.blockHealth;
             hitPointRaycast = bigBlockConfig.blockHealth;
-            
+
+            for (int i = 0; i < bigBlockData.blocksId.Count; i++)
+            {
+                var block = LevelManager.Instance.LevelGame.BlockBoardController.GetBlockByID(bigBlockData.blocksId[i]);
+                listBlockPlace.Add(block);
+            }
 
             ResizeBlock();
 
@@ -109,6 +116,10 @@ namespace ColorBlockCrush
         {
             base.TakeDamage(damageAmount);
             UpdateHeathText();
+            if(hitPoint<=0)
+            {
+                listBlockPlace.ForEach(x => x.OnBlockDestroyed?.Invoke(x));
+            }
         }
 
         private void UpdateHeathText()
