@@ -71,13 +71,13 @@ public class ConveyorController : MonoBehaviour
         for (int i = 0; i < guns.Count; i++)
         {
             PrepairTrayItems(1);
-            SetGunStartPosition(guns[i], prepairTrayItems[0], i);
+            SetGunStartPosition(guns[i], prepairTrayItems[0], i, i * startMovingGunSpacing);
             OnStartAddGunToConveyor?.Invoke(guns[i]);
-            await Task.Delay((int)(startMovingGunSpacing * 1000));
+            //await Task.Delay((int)(startMovingGunSpacing * 1000));
         }
     }
 
-    public void SetGunStartPosition(Gun gun, TrayItem trayItem, int slotIndex)
+    public void SetGunStartPosition(Gun gun, TrayItem trayItem, int slotIndex, float delay = 0)
     {
         slotIndex = 0;
         float normalizedTime = slotIndex * startMovingGunSpacing;
@@ -92,7 +92,7 @@ public class ConveyorController : MonoBehaviour
             gun.OnGunEmpty += OnGunEmpty;
             trayItem.SetChild(gun);
             trayItem.Move();
-        });
+        }, delay);
     }
 
     public bool CanPlaceGuns(int count)

@@ -157,6 +157,8 @@ namespace ColorBlockCrush
 
         public bool CanPushToConveyor()
         {
+            if (IsMovingToConveyor()) return false; 
+
             if (GunPos == GunPos.ON_CONVEYOR || GunPos == GunPos.TWEEN_SORT) return false;
 
             if (GunPos == GunPos.ON_GUN_BOARD)
@@ -418,7 +420,7 @@ namespace ColorBlockCrush
         Tween moveToConveyorTw;
         Tween moveToSlotTw;
 
-        public void MoveToConeyor(Vector3 endPos, Action callback = null)
+        public void MoveToConeyor(Vector3 endPos, Action callback = null, float delay = 0)
         {
             isFireFirstTime = false;
             Sequence moveToConveyorSq = DOTween.Sequence();
@@ -440,8 +442,14 @@ namespace ColorBlockCrush
             moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration));
             moveToConveyorSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration));
             moveToConveyorSq.SetId(this);
+            moveToConveyorSq.SetDelay(delay);
 
         }
+
+        public bool IsMovingToConveyor()
+        {
+            return moveToConveyorTw != null && moveToConveyorTw.IsPlaying();
+        }    
 
         public void MoveToSlot(Vector3 endPos, Action callback = null)
         {

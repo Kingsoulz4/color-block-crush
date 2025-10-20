@@ -490,6 +490,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Managers
       objectReference: {fileID: 0}
+    - target: {fileID: 5274498821936801233, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
+      propertyPath: m_levelGameOriginal
+      value: 
+      objectReference: {fileID: 2928285176485807823, guid: 06d1fe7c961c21e46929f0dc4515999f, type: 3}
     - target: {fileID: 5740006147290716732, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
       propertyPath: _camera
       value: 

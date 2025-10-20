@@ -140,7 +140,20 @@ namespace ColorBlockCrush
             if (gun.IsConnectedGroup())
             {
                 gunsToPush.Add(gun);
-                gunsToPush.AddRange(gun.ConnectedGuns);
+                foreach (var gunn in gun.ConnectedGuns)
+                {
+                    if (!gunsToPush.Contains(gunn))
+                    {
+                        gunsToPush.Add(gunn);
+                    }
+                    foreach (var gunn1 in gunn.ConnectedGuns)
+                    {
+                        if(!gunsToPush.Contains(gunn1))
+                        {
+                            gunsToPush.Add(gunn1);
+                        }
+                    }
+                }
             }
             else
             {
@@ -166,9 +179,13 @@ namespace ColorBlockCrush
 
             RemoveGun(gun);
 
-            foreach (var g in gun.ConnectedGuns)
+            foreach (var gunn in gun.ConnectedGuns)
             {
-                RemoveGun(g);
+                RemoveGun(gunn);
+                foreach (var gunn1 in gunn.ConnectedGuns)
+                {
+                    RemoveGun(gunn1);
+                }
             }
         }
 
