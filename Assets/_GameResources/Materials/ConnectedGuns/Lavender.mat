@@ -8,21 +8,22 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Lavender
-  m_Shader: {fileID: -6465566751694194690, guid: 822c5d60783218e4aabb5e64fa865501, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 79ec40e559f48984e92336c8577404ee, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - TCP2_MOBILE
+  - TCP2_OUTLINE_CONST_SIZE
   - TCP2_RAMP_BANDS
   - TCP2_REFLECTIONS_FRESNEL
   - TCP2_RIM_LIGHTING_LIGHTMASK
   - TCP2_SHADOW_LIGHT_COLOR
   - TCP2_SPECULAR
   - TCP2_SPECULAR_STYLIZED
-  - _EMISSION
-  m_InvalidKeywords:
-  - TCP2_OUTLINE_CONST_SIZE
   - TCP2_UV_NORMALS_FULL
+  - _ALPHAPREMULTIPLY_ON
+  - _EMISSION
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -80,7 +81,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DirectIntensityOutline: 1
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _EmissionChannel: 4
     - _FresnelMax: 1.5
     - _FresnelMin: 0
@@ -116,7 +117,7 @@ Material:
     - _ReceiveShadowsOff: 1
     - _ReflectionMapType: 0
     - _ReflectionSmoothness: 0.5
-    - _RenderingMode: 0
+    - _RenderingMode: 2
     - _RimMax: 1
     - _RimMin: 0.5
     - _ShadowColorLightAtten: 1
@@ -138,7 +139,7 @@ Material:
     - _UseMobileMode: 1
     - _UseNormalMap: 0
     - _UseOcclusion: 0
-    - _UseOutline: 0
+    - _UseOutline: 1
     - _UseReflections: 0
     - _UseRim: 0
     - _UseRimLightMask: 1
@@ -146,7 +147,7 @@ Material:
     - _UseSpecular: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.5294118, g: 0.57254905, b: 0.8156863, a: 1}
+    - _BaseColor: {r: 0.52927846, g: 0.5558902, b: 0.754, a: 1}
     - _Color: {r: 0.9063317, g: 0.9063317, b: 0.9063317, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _HColor: {r: 1, g: 1, b: 1, a: 1}
@@ -154,6 +155,6 @@ Material:
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectionColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.5}
-    - _SColor: {r: 0.26633143, g: 0.2901693, b: 0.4245283, a: 1}
-    - _SpecularColor: {r: 0.31608713, g: 0.76729554, b: 0.4040398, a: 1}
+    - _SColor: {r: 0.17367189, g: 0.18267709, b: 0.24700001, a: 1}
+    - _SpecularColor: {r: 0.2603773, g: 0.2603773, b: 0.2603773, a: 1}
   m_BuildTextureStacks: []
