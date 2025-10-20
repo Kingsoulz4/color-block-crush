@@ -55,7 +55,8 @@ namespace ColorBlockCrush
 
                 if (gun != null)
                 {
-                    gun.OnGunClicked(gun);
+                    gun.OnGunClicked();
+                    LevelEvent.OnGunClick?.Invoke(gun);
                 }
             }
         }

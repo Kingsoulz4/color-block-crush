@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -22,7 +23,7 @@ public class ConveyorController : MonoBehaviour
     [SerializeField] private TrayItem trayPrefab;
     [SerializeField] private TextMeshPro trayText;
     [SerializeField] private Transform spawnParent;
-    [SerializeField] private Vector3 startPosition; // Vị trí tray đầu tiên (bên trái)
+    [SerializeField] private Vector3 startPositionInit = new Vector3(-0.25f, -0.3f, 0);
     [SerializeField] private float spaceOffsetX = 0.3f; // Khoảng cách giữa các tray
 
     [Header("Animation")]
@@ -30,6 +31,7 @@ public class ConveyorController : MonoBehaviour
     [SerializeField] private Ease shiftEase = Ease.OutQuad;
 
     public SplineContainer splineContainer;
+    private Vector3 currentStartPos;
     private int currentMaxSlots;
 
     private List<TrayItem> prepairTrayItems = new List<TrayItem>();
@@ -42,6 +44,7 @@ public class ConveyorController : MonoBehaviour
     public void Init()
     {
         currentMaxSlots = initMaxSlot;
+        currentStartPos = startPositionInit;
         endPointConveyor.gameObject.SetActive(true);
         movingTrayItems = new List<TrayItem>();
         movingTrayItems.Clear();
@@ -62,28 +65,29 @@ public class ConveyorController : MonoBehaviour
         endPointConveyor.gameObject.SetActive(false);
     }
 
-    public void MoveGunIn(List<Gun> guns)
+    public async Task MoveGunIn(List<Gun> guns)
     {
-        PrepairTrayItems(guns.Count);
-
         for (int i = 0; i < guns.Count; i++)
         {
-            SetGunStartPosition(guns[i], prepairTrayItems[i], i);
+            PrepairTrayItems(1);
+            SetGunStartPosition(guns[i], prepairTrayItems[0], i);
             OnStartAddGunToConveyor?.Invoke(guns[i]);
+            await Task.Delay((int)(startMovingGunSpacing * 1000));
         }
     }
 
     public void SetGunStartPosition(Gun gun, TrayItem trayItem, int slotIndex)
     {
+        slotIndex = 0;
         float normalizedTime = slotIndex * startMovingGunSpacing;
         Vector3 position = splineContainer.EvaluatePosition(normalizedTime);
 
         gun.TrayItem = trayItem;
         AddTrayItem(trayItem);
         UpdateTrayText();
+
         gun.MoveToConeyor(position, () =>
         {
-
             gun.OnGunEmpty += OnGunEmpty;
             trayItem.SetChild(gun);
             trayItem.Move();
@@ -97,24 +101,12 @@ public class ConveyorController : MonoBehaviour
 
     private void OnGunEmpty(Gun gun)
     {
-
-        if (gun.CheckCanDisappear())
+        if (gun.TrayItem != null)
         {
-            if (gun.TrayItem != null)
-            {
-                MoveTrayIn(gun.TrayItem);
-                RemoveTrayItem(gun.TrayItem);
-            }
-
-            foreach (var g in gun.ConnectedGuns)
-            {
-                if (g.TrayItem != null)
-                {
-                    MoveTrayIn(g.TrayItem);
-                    RemoveTrayItem(g.TrayItem);
-                }
-            }
+            MoveTrayIn(gun.TrayItem);
+            RemoveTrayItem(gun.TrayItem);
         }
+        
         UpdateTrayText();
     }
 
@@ -163,6 +155,7 @@ public class ConveyorController : MonoBehaviour
 
     public void SetTrayStartPosition(TrayItem tray, int slotIndex)
     {
+        slotIndex = 0;
         float normalizedTime = slotIndex * startMovingGunSpacing;
         Vector3 position = splineContainer.EvaluatePosition(normalizedTime);
         tray.SplineAnimate.Container = splineContainer;
@@ -199,6 +192,7 @@ public class ConveyorController : MonoBehaviour
     public void BoosterAddTrayItem()
     {
         currentMaxSlots += 1;
+        currentStartPos.x = -spaceOffsetX * (currentMaxSlots - initMaxSlot + 1);
         SpawnTrayAtLeft();
         UpdateTrayText();
     }
@@ -213,7 +207,7 @@ public class ConveyorController : MonoBehaviour
 
     private Vector3 GetTrayPosition(int index)
     {
-        return startPosition + new Vector3(index * spaceOffsetX, 0, 0);
+        return currentStartPos + new Vector3(index * spaceOffsetX, 0, 0);
     }
 
     public void PauseAllTray()

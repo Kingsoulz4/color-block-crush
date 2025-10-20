@@ -78,8 +78,8 @@ namespace ColorBlockCrush
                         return !UserDataManager.FirstClaimHandBooster;
                     case BoosterType.SHUFFLE:
                         return !UserDataManager.FirstClaimShuffleBooster;
-                    case BoosterType.MAGNET:
-                        return !UserDataManager.FirstClaimMagnetBooster;
+                    case BoosterType.SUPER_SHOOT:
+                        return !UserDataManager.FirstClaimSuperShoot;
                     default:
                         return false;
                 }

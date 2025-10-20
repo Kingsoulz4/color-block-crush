@@ -22,12 +22,14 @@ namespace ColorBlockCrush
         [SerializeField] private Block blockPrefab;
         [SerializeField] private BlockKey blockKeyPrefab;
         [SerializeField] private BigBlock bigBlockPrefab;
+        [SerializeField] private BlockBarrier blockBarrierPrefab;
 
         [Header("References")]
         [SerializeField] private GridController gridController;
         [SerializeField] private Transform blockContainer;
         [SerializeField] private Transform keyContainer;
         [SerializeField] private Transform bigBlockContainer;
+        [SerializeField] private Transform blockBarrierContainer;
 
         private int _rows;
         private int _columns;
@@ -62,11 +64,12 @@ namespace ColorBlockCrush
                 calculatedBlockOffset  
             );
 
-            _blockStacks = new Block[_rows, _columns];
+            _blockStacks = new Block[_columns, _rows];
 
             SpawnBlockBoard(levelConfig);
             SpawnKeys();
             SpawnBigBlocks();
+            SpawnBlockBarriers();
         }
         private void SpawnBlockBoard(LevelConfig levelConfig)
         {
@@ -108,12 +111,15 @@ namespace ColorBlockCrush
             if (levelConfig.mapConfig.bigBlocks.Count <= 0) return;
             for(int i=0; i<levelConfig.mapConfig.bigBlocks.Count; i++)
             {
+                if (levelConfig.mapConfig.bigBlocks[i].blocksId.Count <= 0) continue;
+
                 SpawnBigBlock(levelConfig.mapConfig.bigBlocks[i]);
             }
         }
 
         public BigBlock SpawnBigBlock(BigBlockConfig bigBlockConfig)
         {
+
             BigBlock newBigBlock = Instantiate(bigBlockPrefab, bigBlockContainer);
 
             newBigBlock.Init(bigBlockConfig);
@@ -123,6 +129,25 @@ namespace ColorBlockCrush
             newBigBlock.transform.localScale = calculatedBlockScale;
 
             return newBigBlock;
+        }
+
+        private void SpawnBlockBarriers()
+        {
+            if (levelConfig.mapConfig.pixelSnakes.Count <= 0) return;
+
+            for(int i=0; i<levelConfig.mapConfig.pixelSnakes.Count; i++)
+            {
+                SpawnBlockBarrier(levelConfig.mapConfig.pixelSnakes[i]);
+            }
+        }
+
+        private BlockBarrier SpawnBlockBarrier(PixelSnakeConfig blockBarrierData)
+        {
+            BlockBarrier newBlockBarrier = Instantiate(blockBarrierPrefab, blockBarrierContainer);
+            newBlockBarrier.transform.position = CalculateCenter(blockBarrierData.blocksId);
+            newBlockBarrier.Init(blockBarrierData);
+            newBlockBarrier.transform.localScale = calculatedBlockScale;
+            return newBlockBarrier;
         }
 
         private void SpawnKeys()
@@ -145,7 +170,7 @@ namespace ColorBlockCrush
 
             for (int i = 0; i < keyConfig.blockId.Count; i++)
             {
-                (ulong row, ulong col) = CantorPairing.Unpair((ulong)keyConfig.blockId[i]);
+                (ulong col, ulong row) = CantorPairing.Unpair((ulong)keyConfig.blockId[i]);
                 int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
                 var blockData = levelConfig.mapConfig.blocks[idReal];
                 var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
@@ -175,7 +200,7 @@ namespace ColorBlockCrush
             var sumPos = new Vector3();
             for(int i=0; i<listBlockId.Count; i++)
             {
-                (ulong row, ulong col) = CantorPairing.Unpair((ulong)listBlockId[i]);
+                (ulong col, ulong row) = CantorPairing.Unpair((ulong)listBlockId[i]);
                 int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
                 var blockData = levelConfig.mapConfig.blocks[idReal];
                 var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
@@ -192,11 +217,20 @@ namespace ColorBlockCrush
 
         public Block GetBlockByID(int id)
         {
-            (ulong row, ulong col) = CantorPairing.Unpair((ulong)id);
-            int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
-            var blockData = levelConfig.mapConfig.blocks[idReal];
-            var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
-            return block;
+            (ulong col, ulong row) = CantorPairing.Unpair((ulong)id);
+            //int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
+            //var blockData = levelConfig.mapConfig.blocks[idReal];
+            try
+            {
+                var block = _blockStacks[col, row];
+                return block;
+            }
+            catch(Exception ex)
+            {
+                Debug.LogException(ex);
+            }
+
+            return null;
         }
 
         private void OnBlockDestroyed(Block block)
@@ -249,7 +283,7 @@ namespace ColorBlockCrush
         {
             if (!IsValidPosition(row, col)) return;
 
-            _blockStacks[row, col] = block;
+            _blockStacks[col, row] = block;
 
             if (block.BlockData.blockType == BlockType.Stone)
             {

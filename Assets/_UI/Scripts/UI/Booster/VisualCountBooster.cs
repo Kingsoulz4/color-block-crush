@@ -99,10 +99,10 @@ namespace ColorBlockCrush
                                     (boosterItemData.levelUnlock == UserDataManager.Level 
                                      && UserDataManager.FirstClaimShuffleBooster);
                     break;
-                case BoosterType.MAGNET:
+                case BoosterType.SUPER_SHOOT:
                     unlockBooster = boosterItemData.levelUnlock < UserDataManager.Level ||
                                     (boosterItemData.levelUnlock == UserDataManager.Level 
-                                     && UserDataManager.FirstClaimMagnetBooster);
+                                     && UserDataManager.FirstClaimSuperShoot);
                     break;
             }
             
@@ -182,8 +182,8 @@ namespace ColorBlockCrush
                     UserDataManager.FirstClaimHandBooster = true;
                 else if (boosterType == BoosterType.SHUFFLE)
                     UserDataManager.FirstClaimShuffleBooster = true;
-                else if (boosterType == BoosterType.MAGNET)
-                    UserDataManager.FirstClaimMagnetBooster = true;
+                else if (boosterType == BoosterType.SUPER_SHOOT)
+                    UserDataManager.FirstClaimSuperShoot = true;
             });
         }    
     }   

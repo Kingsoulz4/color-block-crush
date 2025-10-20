@@ -310,7 +310,7 @@ public class UserDataManager : MonoBehaviour
         }
     }
     
-    public static bool FirstClaimMagnetBooster
+    public static bool FirstClaimSuperShoot
     {
         get { return LoadUserData().firstClaimMagnetBooster; }
         set
@@ -334,7 +334,7 @@ public class UserDataManager : MonoBehaviour
             case BoosterType.HAND_MOVE:
                 HandBooster += quantity;
                 break;
-            case BoosterType.MAGNET:
+            case BoosterType.SUPER_SHOOT:
                 MagnetBooster += quantity;
                 break;
             default:

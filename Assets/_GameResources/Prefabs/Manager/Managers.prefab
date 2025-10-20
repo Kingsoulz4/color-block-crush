@@ -613,6 +613,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1057309698828914412}
     m_Modifications:
+    - target: {fileID: 796862612698015822, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
+      propertyPath: m_Name
+      value: SuperShootBooster
+      objectReference: {fileID: 0}
     - target: {fileID: 6018013672586842931, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: m_Name
       value: BoosterManager
@@ -656,6 +660,10 @@ PrefabInstance:
     - target: {fileID: 6386734015373583055, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8744219414392260340, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
+      propertyPath: zOffetCam
+      value: -12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
