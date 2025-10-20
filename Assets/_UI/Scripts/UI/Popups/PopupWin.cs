@@ -19,6 +19,7 @@ namespace ColorBlockCrush
         [SerializeField] private GameObject m_winContent;
         [SerializeField] private Text coinReceiveTxt;
         [SerializeField] private Text coinReceiveX2Txt;
+        [SerializeField] private AudioClip winSfx;
 
         private int coinReceiveValue;
         public Action<int> OnClaimedReward { get; set;}
@@ -78,6 +79,7 @@ namespace ColorBlockCrush
             m_winContent.SetActive(true);
             UpdateInfo();
             base.Show(onClose);
+            AudioManager.Instance.PlayOneShot(winSfx, 1);
         }
     }
 }

@@ -12,6 +12,8 @@ namespace ColorBlockCrush
         [SerializeField] private Button m_buttonRetry;
         [SerializeField] private Button m_buttonClose;
         [SerializeField] private Text m_textLevel;
+        
+        [SerializeField] private AudioClip failSfx;
 
         public Action OnRetry { get; set; }
 
@@ -26,6 +28,12 @@ namespace ColorBlockCrush
         {
             m_buttonRetry.onClick.AddListener(OnClickRetry);
             m_buttonClose.onClick.AddListener(OnClickClose);
+        }
+
+        public override void Show(Action onClose)
+        {
+            base.Show(onClose);
+            AudioManager.Instance.PlayOneShot(failSfx, 1);
         }
 
         private void OnClickClose()

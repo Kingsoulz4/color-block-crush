@@ -69,6 +69,7 @@ public class MainScreenUI : ScreenUI
             var popupRemoveAds = UIManager.Instance.ShowPopup<PopupRemoveAds>(null);
             //uiRemove.OnBuySS = deActionButtonRemoveAds;
         });
+        
     }
 
     public void ResetVisual()
@@ -88,8 +89,8 @@ public class MainScreenUI : ScreenUI
     public override void Active()
     {
         base.Active();
-        //AudioManager.Instance.StopAllMusic();
-        //this.Wait(0.5f, () => AudioManager.Instance.PlayMusic(soundBG, 0.5f, true));
+        AudioManager.Instance.StopMusic("BG_Gameplay");
+        AudioManager.Instance.PlayMusic("BG_Home", 1, true);
     }
 
     private void PlayLevel()

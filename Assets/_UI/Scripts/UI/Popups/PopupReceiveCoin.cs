@@ -93,6 +93,7 @@ namespace ColorBlockCrush
                        .OnComplete(() =>
                        {
                            //AudioManager.Instance.PlayCoinDingFX();
+                           AudioManager.Instance.PlayOneShot("SFX_CoinOneShot", 1);
                            //VibrationManager.VibrateWeak();
                            _goldCounter.SetText(UserDataManager.Gold - coinCount + coinCount / _coinContainer.childCount * (index + 1));
                            Destroy(coinObject.gameObject);

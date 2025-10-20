@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using DG.Tweening;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +14,9 @@ namespace ColorBlockCrush
         [SerializeField] private Button m_buttonBuy;
         [SerializeField] private Text m_textPrice;
         [SerializeField] private Text m_textCoinQuantity;
+        [SerializeField] private Text m_textPackName;
+        [SerializeField] private GameObject m_tagHighlight;
+        [SerializeField] private string packIDHighlight;
 
         private ShopPack shopPack;
         public Action OnPurchased { get; set; }
@@ -28,6 +30,7 @@ namespace ColorBlockCrush
         {
             //Add Logic IAP Here
 
+            ShopManager.Instance.AddPurchasedPack(shopPack);
             var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
             {
                 OnPurchased?.Invoke();
@@ -38,6 +41,10 @@ namespace ColorBlockCrush
             {
                 item.Claim();
             }
+            transform.DOScale(0, 0.1f).OnComplete(() =>
+            {
+                Destroy(gameObject);
+            });
         }
 
         public void SetData(ShopPack packData)
@@ -45,6 +52,9 @@ namespace ColorBlockCrush
             this.shopPack = packData;
             m_textCoinQuantity.text = packData.listReward.Find(x => x.type == ItemType.GOLD).quantity + "";
             m_iconCoin.sprite = packData.icon;
+            m_textPackName.text = packData.title;
+            m_tagHighlight.gameObject.SetActive(packData.id == packIDHighlight);
+            //m_textPrice.text = IAPManager.Instance.GetLocalizedPriceString(packData.id);
             MyUlti.RemoveAllChilds(m_listRewardContainer);
             foreach(var item in packData.listReward.Where(x => x.type != ItemType.GOLD))
             {
