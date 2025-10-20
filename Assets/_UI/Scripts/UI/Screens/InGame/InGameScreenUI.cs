@@ -89,7 +89,7 @@ namespace ColorBlockCrush
             addTrayBoosterCount.Init(UserDataManager.AddTrayBooster, BoosterType.ADD_TRAY);
             shuffleBoosterCount.Init(UserDataManager.ShuffleBooster, BoosterType.SHUFFLE);
             handMoveBoosterCount.Init(UserDataManager.HandBooster, BoosterType.HAND_MOVE);
-            magnetBoosterCount.Init(UserDataManager.MagnetBooster, BoosterType.MAGNET);
+            magnetBoosterCount.Init(UserDataManager.MagnetBooster, BoosterType.SUPER_SHOOT);
         }
 
         private void Awake()
@@ -140,7 +140,7 @@ namespace ColorBlockCrush
                 case BoosterType.SHUFFLE:
                     shuffleBoosterCount.UpdateTextCountBooster(currentCount);
                     break;
-                case BoosterType.MAGNET:
+                case BoosterType.SUPER_SHOOT:
                     magnetBoosterCount.UpdateTextCountBooster(currentCount);
                     break;
                 default:
@@ -159,7 +159,7 @@ namespace ColorBlockCrush
                     break;
                 case BoosterType.SHUFFLE:
                     break;
-                case BoosterType.MAGNET:
+                case BoosterType.SUPER_SHOOT:
                     boostersObj.gameObject.SetActive(true);
                     break;
                 default:
@@ -182,7 +182,7 @@ namespace ColorBlockCrush
                 case BoosterType.SHUFFLE:
                     shuffleBoosterCount.UpdateTextCountBooster(currentCount);
                     break;
-                case BoosterType.MAGNET:
+                case BoosterType.SUPER_SHOOT:
                     magnetBoosterCount.UpdateTextCountBooster(currentCount);
                     boosterConfirmUI.gameObject.SetActive(false);
                     break;
@@ -258,9 +258,9 @@ namespace ColorBlockCrush
         private void MagnetBoosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            if (!UserDataManager.FirstClaimMagnetBooster)
+            if (!UserDataManager.FirstClaimSuperShoot)
             {
-                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.MAGNET);
+                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.SUPER_SHOOT);
                 UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
             }
             else
@@ -270,7 +270,7 @@ namespace ColorBlockCrush
                     if (sucess)
                     {
                         boosterConfirmUI.gameObject.SetActive(true);
-                        var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.MAGNET);
+                        var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.SUPER_SHOOT);
                         Image magnetImg = magnetBoosterBtn.GetComponent<VisualCountBooster>().Icon;
                         boosterConfirmUI.SetUIData(boosterData, magnetImg);
                         boostersObj.gameObject.SetActive(false);

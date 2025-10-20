@@ -243,7 +243,8 @@ namespace ColorBlockCrush
             {
                 if (UserDataManager.Level < 10)
                 {
-                    NextLevel();   
+                    popupWin.ShowClaimReward(val, NextLevel);
+                    //NextLevel();   
                 }
                 else
                 {
