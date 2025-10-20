@@ -241,6 +241,7 @@ namespace ColorBlockCrush
             var popupWin = UIManager.Instance.ShowPopup<PopupWin>(null);
             popupWin.OnClaimedReward = (val) =>
             {
+                CurrentLevel++;
                 if (UserDataManager.Level < 10)
                 {
                     popupWin.ShowClaimReward(val, NextLevel);
@@ -248,17 +249,28 @@ namespace ColorBlockCrush
                 }
                 else
                 {
-                    CurrentLevel++;
-                    var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
-                    mainScreen.ShowClaimReward(val);   
+                    if (UserDataManager.Level == 15)
+                    {
+                        var popupRate = UIManager.Instance.ShowPopup<PopupRateGame>(() =>
+                        {
+                            popupWin.Hide();
+                            var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
+                            mainScreen.ShowClaimReward(val);                               
+                        });
+                        popupRate.SetRate(3);
+                    }
+                    else
+                    {
+                        popupWin.Hide();
+                        var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
+                        mainScreen.ShowClaimReward(val);   
+                    }
                 }
             };
         }
 
         public void NextLevel()
         {
-            CurrentLevel++;
-
             StartCurrentLevel();
             UIManager.Instance.ShowScreen<InGameScreenUI>();
         }
