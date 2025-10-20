@@ -1,3 +1,4 @@
+using System;
 using AYellowpaper.SerializedCollections;
 using DG.Tweening;
 using System.Collections;
@@ -5,7 +6,8 @@ using UnityEngine;
 using I2.Loc;
 using UnityEngine.UI;
 using ColorBlockCrush.Tools;
-using System;
+using Sirenix.OdinInspector.Editor.StateUpdaters;
+using Yoolax.Framework;
 
 namespace ColorBlockCrush
 {
@@ -24,6 +26,7 @@ namespace ColorBlockCrush
 
         [SerializeField] private GameObject boostersObj;
         [SerializeField] BoosterConfirmUI boosterConfirmUI;
+        [SerializeField] GameObject boosterForceTutShield;
 
         [Header("Booster Add Tray")] [SerializeField]
         VisualCountBooster addTrayBoosterCount;
@@ -109,6 +112,11 @@ namespace ColorBlockCrush
             }
         }
 
+        private void Awake()
+        {
+            Server.Get<OnForceTutBooster>().AddListener(ShowForceTut);
+        }
+
         private void OnDisable()
         {
             HideAllTuts();
@@ -126,6 +134,12 @@ namespace ColorBlockCrush
                 booster.OnChangeBoosterCount -= OnChangeBoosterCount;
                 booster.OnCancelBooster -= OnCancelBooster;
             }
+            Server.Get<OnForceTutBooster>().RemoveListener(ShowForceTut);
+        }
+
+        private void ShowForceTut(Action callback, BoosterType type, Vector3 pos)
+        {
+            boosterForceTutShield.SetActive(true);
         }
 
         private void OnChangeBoosterCount(BoosterBase booster, int currentCount)
@@ -194,6 +208,7 @@ namespace ColorBlockCrush
 
         private void OnAddTrayBoosterClick()
         {
+            boosterForceTutShield.SetActive(false);
             BoosterManager.Instance.AddTrayBooster.DoShowBooster((sucess) =>
             {
                 if (sucess)
@@ -205,6 +220,7 @@ namespace ColorBlockCrush
 
         private void HandMoveboosterClick()
         {
+            boosterForceTutShield.SetActive(false);
             BoosterManager.Instance.HandMoveBooster.DoShowBooster((sucess) =>
             {
                 if (sucess)
@@ -220,6 +236,7 @@ namespace ColorBlockCrush
 
         private void ShuffleBoosterClick()
         {
+            boosterForceTutShield.SetActive(false);
             BoosterManager.Instance.ShuffleBooster.DoShowBooster((sucess) =>
             {
                 if (sucess)
@@ -231,6 +248,7 @@ namespace ColorBlockCrush
 
         private void MagnetBoosterClick()
         {
+            boosterForceTutShield.SetActive(false);
             BoosterManager.Instance.MagnetBooster.DoShowBooster((sucess) =>
             {
                 if (sucess)

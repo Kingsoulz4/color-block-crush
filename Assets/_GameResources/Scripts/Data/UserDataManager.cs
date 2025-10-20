@@ -19,6 +19,10 @@ public class UserDataManager : MonoBehaviour
         public int shuffleBooster;
         public int magnetBooster;
         public int handBooster;
+        public bool firstClaimAddTrayBooster;
+        public bool firstClaimHandBooster;
+        public bool firstClaimShuffleBooster;
+        public bool firstClaimMagnetBooster;
         public long lastTimeLogin;
         public string userName;
         public long firstTimeJoinGame;
@@ -272,6 +276,50 @@ public class UserDataManager : MonoBehaviour
             SaveUserData(data);
         }
     }
+    
+    public static bool FirstClaimAddTrayBooster
+    {
+        get { return LoadUserData().firstClaimAddTrayBooster; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.firstClaimAddTrayBooster = value;
+            SaveUserData(data);
+        }
+    }
+    
+    public static bool FirstClaimHandBooster
+    {
+        get { return LoadUserData().firstClaimHandBooster; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.firstClaimHandBooster = value;
+            SaveUserData(data);
+        }
+    }
+    
+    public static bool FirstClaimShuffleBooster
+    {
+        get { return LoadUserData().firstClaimShuffleBooster; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.firstClaimShuffleBooster = value;
+            SaveUserData(data);
+        }
+    }
+    
+    public static bool FirstClaimMagnetBooster
+    {
+        get { return LoadUserData().firstClaimMagnetBooster; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.firstClaimMagnetBooster = value;
+            SaveUserData(data);
+        }
+    }
 
     public static void AddBooster(BoosterType boosterType, int quantity)
     {
@@ -326,6 +374,10 @@ public class UserDataManager : MonoBehaviour
             shuffleBooster = 0,
             magnetBooster = 0,
             handBooster = 0,
+            firstClaimAddTrayBooster = false,
+            firstClaimHandBooster = false,
+            firstClaimShuffleBooster = false,
+            firstClaimMagnetBooster = false
         };
     }
 }
