@@ -286,7 +286,7 @@ public class UserDataManager : MonoBehaviour
             case BoosterType.HAND_MOVE:
                 HandBooster += quantity;
                 break;
-            case BoosterType.MAGNET:
+            case BoosterType.SUPER_SHOOT:
                 MagnetBooster += quantity;
                 break;
             default:

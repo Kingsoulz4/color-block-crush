@@ -7,8 +7,9 @@ namespace ColorBlockCrush
 {
     public class SuperShootBooster : BoosterBase
     {
-        [SerializeField] Hammer hammerPrefab;
-
+        [SerializeField] GameObject superGunPrb;
+        [SerializeField] private float zOffetCam = -3;
+        private float originCamZ;
         protected override int CurrentCount { get => UserDataManager.MagnetBooster; set => UserDataManager.MagnetBooster = value; }
 
         public override void Init()
@@ -36,6 +37,7 @@ namespace ColorBlockCrush
         public override void CancelBooster()
         {
             base.CancelBooster();
+            Camera.main.GetComponent<GameCamera>().MoveZ(zOffetCam, 0.2f);
         }
 
         public override void ActiveBooster()
@@ -50,12 +52,13 @@ namespace ColorBlockCrush
         {
             base.ShowBooster();
             IsShowConfirm = true;
+            Camera.main.GetComponent<GameCamera>().MoveZ(zOffetCam, 0.2f);
         }
 
         protected override void Done()
         {
             base.Done();
-
+            Camera.main.GetComponent<GameCamera>().MoveZ(zOffetCam, 0.2f);
         }
 
         private IEnumerator DoBooster(Transform tile)
@@ -64,15 +67,15 @@ namespace ColorBlockCrush
 
             yield return new WaitForEndOfFrame();
 
-            Hammer hammer = Instantiate(hammerPrefab);
-            hammer.SmashToBlock(tile.transform.position, 0.35f, () =>
-            {
-                RemoveHammer(hammer);
-                Done();
-            });
+            GameObject superGun = Instantiate(superGunPrb);
+            //superGun.Shoot(tile.transform.position, 0.35f, () =>
+            //{
+            //    RemoveSuperGun(superGun);
+            //    Done();
+            //});
         }
 
-        private void RemoveHammer(Hammer hammer)
+        private void RemoveSuperGun(Hammer hammer)
         {
             hammer.transform.DOScale(Vector3.zero, 0.5f).OnComplete(() =>
             {
