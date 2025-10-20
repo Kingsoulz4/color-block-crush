@@ -54,14 +54,9 @@ public class MainScreenUI : ScreenUI
     {
         base.Initialize(uiManager);
         btn_Play.onClick.AddListener(PlayLevel);
-        txt_Level.text = $"Level {LevelManager.Instance.CurrentLevel}";
-        if (arrTextLevel != null)
-        {
-            for (int i = 0; i < arrTextLevel.Length; i++)
-            {
-                arrTextLevel[i].text = (LevelManager.Instance.CurrentLevel + i).ToString();
-            }
-        }
+
+        UpdateUI();
+        
         UIManager.OnRefeshBannerAndAds += UpdateButtonRemoveAds;
         UpdateButtonRemoveAds();
         btn_RemoveAds.onClick.AddListener(() =>
@@ -71,6 +66,18 @@ public class MainScreenUI : ScreenUI
         });
         
     }
+    
+    public void UpdateUI()
+    {
+        //txt_Level.text = $"Level {LevelManager.Instance.CurrentLevel}";
+        if (arrTextLevel != null)
+        {
+            for (int i = 0; i < arrTextLevel.Length; i++)
+            {
+                arrTextLevel[i].text = (LevelManager.Instance.CurrentLevel + i).ToString();
+            }
+        }
+    }
 
     public void ResetVisual()
     {
@@ -78,8 +85,8 @@ public class MainScreenUI : ScreenUI
     }
     private void UpdateButtonRemoveAds()
     {
-         
-        ResetVisual();
+        UpdateUI();
+        btn_RemoveAds.gameObject.SetActive(!ShopManager.Instance.HasPurchasedNoAdsPack);
     }
     void deActionButtonRemoveAds()
     {
@@ -89,6 +96,7 @@ public class MainScreenUI : ScreenUI
     public override void Active()
     {
         base.Active();
+        UpdateUI();
         AudioManager.Instance.StopMusic("BG_Gameplay");
         AudioManager.Instance.PlayMusic("BG_Home", 1, true);
     }

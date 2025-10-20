@@ -247,6 +247,7 @@ namespace ColorBlockCrush
                 }
                 else
                 {
+                    CurrentLevel++;
                     var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
                     mainScreen.ShowClaimReward(val);   
                 }

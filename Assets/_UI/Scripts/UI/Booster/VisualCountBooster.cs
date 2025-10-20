@@ -59,7 +59,7 @@ namespace ColorBlockCrush
             firstClaimBoosterIcon.sprite = iconSprite;
             obj_BoosterActive.SetActive(isActive);
             obj_BoosterAdd.SetActive(!isActive);
-            lvUnlock.text = $"Lv {boosterItemData.levelUnlock}";
+            lvUnlock.text = $"lv.{boosterItemData.levelUnlock}";
             UpdateText(count);
             UpdateState();
         }
@@ -152,7 +152,7 @@ namespace ColorBlockCrush
             {
                 transform.DOScale(Vector3.one * 1.25f, .15f).SetEase(Ease.InOutSine).OnComplete(() =>
                 {
-                    transform.DOScale(Vector3.one * 1.1f, .15f).SetEase(Ease.InOutSine).OnComplete(() =>
+                    transform.DOScale(Vector3.one * 1f, .15f).SetEase(Ease.InOutSine).OnComplete(() =>
                     {
                         DOVirtual.DelayedCall(0.3f, () => { handTut.SetActive(true); });
                     });

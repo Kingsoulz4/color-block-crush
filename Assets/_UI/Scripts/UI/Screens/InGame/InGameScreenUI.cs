@@ -97,6 +97,12 @@ namespace ColorBlockCrush
             Server.Get<OnForceTutBooster>().AddListener(ShowForceTut);
         }
 
+        private void OnEnable()
+        {
+            var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.ADD_TRAY);
+            boostersObj.SetActive(boosterData.levelUnlock <= UserDataManager.Level);
+        }
+
         private void OnDisable()
         {
             HideAllTuts();
@@ -188,57 +194,89 @@ namespace ColorBlockCrush
         private void OnAddTrayBoosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            BoosterManager.Instance.AddTrayBooster.DoShowBooster((sucess) =>
+            if (!UserDataManager.FirstClaimAddTrayBooster)
             {
-                if (sucess)
+                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.ADD_TRAY);
+                UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
+            }
+            else
+            {
+                BoosterManager.Instance.AddTrayBooster.DoShowBooster((sucess) =>
                 {
-                    BoosterManager.Instance.AddTrayBooster.ActiveBooster();
-                }
-            });
+                    if (sucess)
+                    {
+                        BoosterManager.Instance.AddTrayBooster.ActiveBooster();
+                    }
+                });   
+            }
         }
 
         private void HandMoveboosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            BoosterManager.Instance.HandMoveBooster.DoShowBooster((sucess) =>
+            if (!UserDataManager.FirstClaimHandBooster)
             {
-                if (sucess)
+                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.HAND_MOVE);
+                UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
+            }
+            else
+            {
+                BoosterManager.Instance.HandMoveBooster.DoShowBooster((sucess) =>
                 {
-                    boosterConfirmUI.gameObject.SetActive(true);
-                    var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.HAND_MOVE);
-                    Image handMoveImg = handMoveBoosterBtn.GetComponent<VisualCountBooster>().Icon;
-                    boosterConfirmUI.SetUIData(boosterData, handMoveImg);
-                    boostersObj.gameObject.SetActive(false);
-                }
-            });
+                    if (sucess)
+                    {
+                        boosterConfirmUI.gameObject.SetActive(true);
+                        var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.HAND_MOVE);
+                        Image handMoveImg = handMoveBoosterBtn.GetComponent<VisualCountBooster>().Icon;
+                        boosterConfirmUI.SetUIData(boosterData, handMoveImg);
+                        boostersObj.gameObject.SetActive(false);
+                    }
+                });   
+            }
         }
 
         private void ShuffleBoosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            BoosterManager.Instance.ShuffleBooster.DoShowBooster((sucess) =>
+            if (!UserDataManager.FirstClaimShuffleBooster)
             {
-                if (sucess)
+                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.SHUFFLE);
+                UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
+            }
+            else
+            {
+                BoosterManager.Instance.ShuffleBooster.DoShowBooster((sucess) =>
                 {
-                    BoosterManager.Instance.ShuffleBooster.ActiveBooster();
-                }
-            });
+                    if (sucess)
+                    {
+                        BoosterManager.Instance.ShuffleBooster.ActiveBooster();
+                    }
+                });   
+            }
         }
 
         private void MagnetBoosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            BoosterManager.Instance.MagnetBooster.DoShowBooster((sucess) =>
+            if (!UserDataManager.FirstClaimMagnetBooster)
             {
-                if (sucess)
+                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.MAGNET);
+                UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
+            }
+            else
+            {
+                BoosterManager.Instance.MagnetBooster.DoShowBooster((sucess) =>
                 {
-                    boosterConfirmUI.gameObject.SetActive(true);
-                    var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.MAGNET);
-                    Image magnetImg = magnetBoosterBtn.GetComponent<VisualCountBooster>().Icon;
-                    boosterConfirmUI.SetUIData(boosterData, magnetImg);
-                    boostersObj.gameObject.SetActive(false);
-                }
-            });
+                    if (sucess)
+                    {
+                        boosterConfirmUI.gameObject.SetActive(true);
+                        var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.MAGNET);
+                        Image magnetImg = magnetBoosterBtn.GetComponent<VisualCountBooster>().Icon;
+                        boosterConfirmUI.SetUIData(boosterData, magnetImg);
+                        boostersObj.gameObject.SetActive(false);
+                    }
+                });   
+            }
         }
 
         private void OnPauseClick()

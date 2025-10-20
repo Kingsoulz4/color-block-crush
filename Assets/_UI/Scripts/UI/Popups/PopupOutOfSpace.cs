@@ -41,6 +41,14 @@ namespace ColorBlockCrush
                 OnKeepPlaying?.Invoke();
                 Hide();
             }
+            else
+            {
+                UIManager.Instance.ShowPopup<PopupShop>(() =>
+                {
+                    GameManager.Instance.SetGameState(GameState.Playing);
+                });
+                GameManager.Instance.SetGameState(GameState.Paused);
+            }
         }
 
         private void OnClickClose()
