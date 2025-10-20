@@ -47,6 +47,7 @@ namespace ColorBlockCrush
         private GunConfig gunData;
         private Queue<Block> targetQueue;
         private List<Block> targetQueu1e = new List<Block>();
+        private bool isDisappeared = false;
 
         public int ID { get; set; }
         public GunConfig GunData => gunData;
@@ -257,9 +258,9 @@ namespace ColorBlockCrush
             {
                 CurrentTarget = null;
 
-                CheckDisappear();
+                
 
-                OnGunEmpty?.Invoke(this);
+                CheckDisappear(); 
             }
         }
 
@@ -267,7 +268,16 @@ namespace ColorBlockCrush
         {
             if (CheckCanDisappear())
             {
+                isDisappeared = true;
+
+                OnGunEmpty?.Invoke(this);
+
                 PlayAnim(Constant.GunAnimation.DISAPPEAR);
+
+                foreach(var gun in ConnectedGuns)
+                {
+                    gun.CheckDisappear();
+                }    
 
                 this.Wait(0.2f, () =>
                 {
@@ -491,6 +501,8 @@ namespace ColorBlockCrush
 
         public bool CheckCanDisappear()
         {
+            if(isDisappeared) return false;
+
             if (ConnectedGuns.Count <= 0)
             {
                 return true;

@@ -96,7 +96,7 @@ namespace ColorBlockCrush
                 return;
             }
 
-            gunsToPush.Sort((a, b) => a.ColumnIndex.CompareTo(b.ColumnIndex));
+            //gunsToPush.Sort((a, b) => a.ColumnIndex.CompareTo(b.ColumnIndex));
 
             LevelController.Instance.ConveyorController.MoveGunIn(gunsToPush);
 
