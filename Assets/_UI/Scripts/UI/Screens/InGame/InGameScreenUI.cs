@@ -6,7 +6,6 @@ using UnityEngine;
 using I2.Loc;
 using UnityEngine.UI;
 using ColorBlockCrush.Tools;
-using Sirenix.OdinInspector.Editor.StateUpdaters;
 using Yoolax.Framework;
 
 namespace ColorBlockCrush
