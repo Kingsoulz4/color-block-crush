@@ -310,7 +310,7 @@ public class UserDataManager : MonoBehaviour
         }
     }
     
-    public static bool FirstClaimMagnetBooster
+    public static bool FirstClaimSuperShoot
     {
         get { return LoadUserData().firstClaimMagnetBooster; }
         set
