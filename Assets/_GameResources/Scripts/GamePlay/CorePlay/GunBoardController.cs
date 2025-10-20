@@ -1,4 +1,5 @@
 using ColorBlockCrush.Tools;
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -189,7 +190,6 @@ namespace ColorBlockCrush
             }
         }
 
-
         public LockObject GetPenndingLock()
         {
             LockObject lockObject = null;
@@ -303,5 +303,148 @@ namespace ColorBlockCrush
             }
             return count;
         }
+
+
+        public void ShuffleBoard()
+        {
+            List<ShuffleableGun> shuffleableGuns = new List<ShuffleableGun>();
+
+            for (int col = 0; col < listGunColumn.Count; col++)
+            {
+                for (int row = 0; row < listGunColumn[col].Count; row++)
+                {
+                    if (listGunColumn[col][row] is Gun gun)
+                    {
+                        if (gun.IsConnectedGroup())
+                        {
+                            continue;
+                        }
+
+                        shuffleableGuns.Add(new ShuffleableGun
+                        {
+                            gun = gun,
+                            originalColumn = col,
+                            originalRow = row,
+                            originalPosition = gun.transform.position
+                        });
+                    }
+                }
+            }
+
+            if (shuffleableGuns.Count <= 1)
+            {
+                Debug.Log("Not enough guns to shuffle");
+                return;
+            }
+
+            List<Vector3> targetPositions = shuffleableGuns.Select(s => s.originalPosition).ToList();
+
+            for (int i = targetPositions.Count - 1; i > 0; i--)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, i + 1);
+                Vector3 temp = targetPositions[i];
+                targetPositions[i] = targetPositions[randomIndex];
+                targetPositions[randomIndex] = temp;
+            }
+
+            float animDuration = 0.25f;
+
+            for (int i = 0; i < shuffleableGuns.Count; i++)
+            {
+                Gun gun = shuffleableGuns[i].gun;
+                Vector3 newPosition = targetPositions[i];
+
+                gun.transform.DOMove(newPosition, animDuration)
+                    .SetEase(DG.Tweening.Ease.InOutQuad);
+            }
+            GameManager.Instance.SetGameState(GameState.Paused);
+
+            this.Wait(animDuration + 0.1f, () =>
+            {
+                ReorganizeInternalLists(shuffleableGuns, targetPositions);
+                GameManager.Instance.SetGameState(GameState.Playing);
+            });
+        }
+
+        private void ReorganizeInternalLists(List<ShuffleableGun> shuffleableGuns, List<Vector3> newPositions)
+        {
+            Dictionary<Vector3, Gun> positionToGunMap = new Dictionary<Vector3, Gun>();
+
+            for (int i = 0; i < shuffleableGuns.Count; i++)
+            {
+                positionToGunMap[newPositions[i]] = shuffleableGuns[i].gun;
+            }
+
+            for (int col = 0; col < listGunColumn.Count; col++)
+            {
+                List<ObjectOnGunBoardColumn> newColumnList = new List<ObjectOnGunBoardColumn>();
+
+                for (int row = 0; row < listGunColumn[col].Count; row++)
+                {
+                    ObjectOnGunBoardColumn currentObj = listGunColumn[col][row];
+
+                    if (currentObj is LockObject ||
+                        (currentObj is Gun g && (g.IsConnectedGroup() || g.GunData.isHidden)))
+                    {
+                        newColumnList.Add(currentObj);
+                    }
+                    else
+                    {
+                        Vector3 expectedPos = spawnOrigin + new Vector3(
+                            (col * columnSpacing) + GetCenterOffset(),
+                            0,
+                            row * -rowSpacing
+                        );
+
+                        Gun closestGun = FindClosestGunToPosition(expectedPos, positionToGunMap);
+                        if (closestGun != null)
+                        {
+                            newColumnList.Add(closestGun);
+                            closestGun.ColumnIndex = col; 
+                            positionToGunMap.Remove(closestGun.transform.position);
+                        }
+                    }
+                }
+
+                listGunColumn[col] = newColumnList;
+                UpdateFrontRowFlags(col);
+            }
+        }
+
+        private Gun FindClosestGunToPosition(Vector3 position, Dictionary<Vector3, Gun> positionToGunMap)
+        {
+            Gun closestGun = null;
+            float minDistance = float.MaxValue;
+            Vector3 closestPos = Vector3.zero;
+
+            foreach (var kvp in positionToGunMap)
+            {
+                float distance = Vector3.Distance(position, kvp.Key);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestGun = kvp.Value;
+                    closestPos = kvp.Key;
+                }
+            }
+
+            return closestGun;
+        }
+
+        private float GetCenterOffset()
+        {
+            int totalColumns = listGunColumn.Count;
+            float totalWidth = (totalColumns - 1) * columnSpacing;
+            return -totalWidth / 2f;
+        }
+    }
+
+    public class ShuffleableGun
+    {
+        public Gun gun;
+        public int originalColumn;
+        public int originalRow;
+        public Vector3 originalPosition;
     }
 }
+

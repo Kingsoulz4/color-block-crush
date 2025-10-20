@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,25 +7,35 @@ namespace ColorBlockCrush
 {
     public class SuperShootBooster : BoosterBase
     {
-        protected override int CurrentCount { get => UserDataManager.MagnetBooster; set => UserDataManager.MagnetBooster = value; }
+        [SerializeField] Hammer hammerPrefab;
 
-        private void Update()
-        {
-            if (IsShowConfirm && Input.GetMouseButton(0))
-            {
-                StartCoroutine(DoBooster());
-            }
-        }
+        protected override int CurrentCount { get => UserDataManager.MagnetBooster; set => UserDataManager.MagnetBooster = value; }
 
         public override void Init()
         {
             base.Init();
+            CurrentCount = UserDataManager.MagnetBooster;
+        }
+
+        private void Update()
+        {
+            if (IsShowConfirm && Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hitInfo))
+                {
+                    Transform tile = hitInfo.collider.GetComponent<Transform>();
+                    if (tile != null)
+                    {
+                        StartCoroutine(DoBooster(tile));
+                    }
+                }
+            }
         }
 
         public override void CancelBooster()
         {
             base.CancelBooster();
-            IsShowConfirm = false;
         }
 
         public override void ActiveBooster()
@@ -33,13 +44,6 @@ namespace ColorBlockCrush
             UpdateVisualBooster();
             IsShowConfirm = false;
             OnStartUseBooster?.Invoke(this, CurrentCount);
-        }
-
-        private IEnumerator DoBooster()
-        {
-            ActiveBooster();
-            yield return null;
-            Done();
         }
 
         protected override void ShowBooster()
@@ -51,6 +55,30 @@ namespace ColorBlockCrush
         protected override void Done()
         {
             base.Done();
+
+        }
+
+        private IEnumerator DoBooster(Transform tile)
+        {
+            ActiveBooster();
+
+            yield return new WaitForEndOfFrame();
+
+            Hammer hammer = Instantiate(hammerPrefab);
+            hammer.SmashToBlock(tile.transform.position, 0.35f, () =>
+            {
+                RemoveHammer(hammer);
+                Done();
+            });
+        }
+
+        private void RemoveHammer(Hammer hammer)
+        {
+            hammer.transform.DOScale(Vector3.zero, 0.5f).OnComplete(() =>
+            {
+                Destroy(hammer.gameObject);
+            }).SetEase(Ease.InOutBack);
         }
     }
 }
+    
