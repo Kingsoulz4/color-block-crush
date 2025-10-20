@@ -933,7 +933,7 @@ MonoBehaviour:
   m_buttonKeepPlaying: {fileID: 9072528723148437679}
   m_buttonClose: {fileID: 8347811556247765035}
   m_textPrice: {fileID: 748466447536413688}
-  shopData: {fileID: 11400000, guid: 5f1c4d12c23eedf4293107300349750f, type: 2}
+  shopData: {fileID: 11400000, guid: fe29eb78ef0cb2f43b093fad58de0ee1, type: 2}
   m_failOfferPack: {fileID: 8271582304468564750}
   failSfx: {fileID: 8300000, guid: 6a0f5eb6522131c4fa7e3e0261d6acbc, type: 3}
 --- !u!225 &968788071111029949

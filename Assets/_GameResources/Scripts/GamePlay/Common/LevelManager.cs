@@ -144,7 +144,11 @@ namespace ColorBlockCrush
 
                 popupLose.OnClose = () =>
                 {
-                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                    var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
+                    loading.Show(() =>
+                    {
+                        UIManager.Instance.ShowScreen<MainScreenUI>();
+                    });
                 };
                 popupLose.OnRetry = OnRetryGame;
             }
@@ -159,7 +163,11 @@ namespace ColorBlockCrush
 
                     popupLose.OnClose = () =>
                     {
-                        UIManager.Instance.ShowScreen<MainScreenUI>();
+                        var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
+                        loading.Show(() =>
+                        {
+                            UIManager.Instance.ShowScreen<MainScreenUI>();
+                        });
                     };
                     popupLose.OnRetry = OnRetryGame;
                 };
@@ -171,7 +179,11 @@ namespace ColorBlockCrush
             if (UserDataManager.Heart > 0)
             {
                 StartCurrentLevel();
-                UIManager.Instance.ShowScreen<InGameScreenUI>();
+                var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
+                loading.Show(() =>
+                {
+                    UIManager.Instance.ShowScreen<InGameScreenUI>();
+                });
             }
             else
             {
@@ -182,7 +194,11 @@ namespace ColorBlockCrush
                 };
                 popupGetMoreLives.OnClose = () =>
                 {
-                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                    var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
+                    loading.Show(() =>
+                    {
+                        UIManager.Instance.ShowScreen<MainScreenUI>();
+                    });
                 };
             }
         }
@@ -239,6 +255,7 @@ namespace ColorBlockCrush
         {
             GameManager.Instance.SetGameState(GameState.Win);
             var popupWin = UIManager.Instance.ShowPopup<PopupWin>(null);
+            
             popupWin.OnClaimedReward = (val) =>
             {
                 CurrentLevel++;
@@ -254,16 +271,24 @@ namespace ColorBlockCrush
                         var popupRate = UIManager.Instance.ShowPopup<PopupRateGame>(() =>
                         {
                             popupWin.Hide();
-                            var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
-                            mainScreen.ShowClaimReward(val);                               
+                            var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
+                            loading.Show(() =>
+                            {
+                                var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
+                                mainScreen.ShowClaimReward(val);   
+                            });
                         });
                         popupRate.SetRate(3);
                     }
                     else
                     {
+                        var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
                         popupWin.Hide();
-                        var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
-                        mainScreen.ShowClaimReward(val);   
+                        loading.Show(() =>
+                        {
+                            var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
+                            mainScreen.ShowClaimReward(val);   
+                        });
                     }
                 }
             };
@@ -272,7 +297,12 @@ namespace ColorBlockCrush
         public void NextLevel()
         {
             StartCurrentLevel();
-            UIManager.Instance.ShowScreen<InGameScreenUI>();
+            
+            var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
+            loading.Show(() =>
+            {
+                UIManager.Instance.ShowScreen<InGameScreenUI>();
+            });
         }
         #endregion
 

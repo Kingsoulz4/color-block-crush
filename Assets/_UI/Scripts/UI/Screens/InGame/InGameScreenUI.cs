@@ -339,6 +339,7 @@ namespace ColorBlockCrush
                 LevelManager.Instance.CurrentLevel ==
                 feature.level /* && UserDataManager.LastFeatureCount < feature.level*/)
             {
+                GameManager.Instance.SetGameState(GameState.Paused);
                 var pop = UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
                 pop.SetData(feature);
             }
