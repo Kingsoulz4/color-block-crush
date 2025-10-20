@@ -5,35 +5,17 @@ using UnityEngine;
 
 public class ShuffleBooster : BoosterBase
 {
-    [SerializeField] Hammer hammerPrefab;
-
     protected override int CurrentCount { get => UserDataManager.ShuffleBooster; set => UserDataManager.ShuffleBooster = value; }
 
     public override void Init()
     {
         base.Init();
-        CurrentCount = UserDataManager.ShuffleBooster;
-    }
-
-    private void Update()
-    {
-        if (IsShowConfirm && Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hitInfo))
-            {
-                Transform tile = hitInfo.collider.GetComponent<Transform>();
-                if (tile != null)
-                {
-                    StartCoroutine(DoBooster(tile));
-                }
-            }
-        }
     }
 
     public override void CancelBooster()
     {
         base.CancelBooster();
+        IsShowConfirm = false;
     }
 
     public override void ActiveBooster()
@@ -41,6 +23,8 @@ public class ShuffleBooster : BoosterBase
         base.ActiveBooster();
         UpdateVisualBooster();
         IsShowConfirm = false;
+        LevelController.Instance.GunBoardController.ShuffleBoard();
+        Done();
         OnStartUseBooster?.Invoke(this, CurrentCount);
     }
 
@@ -53,29 +37,7 @@ public class ShuffleBooster : BoosterBase
     protected override void Done()
     {
         base.Done();
-
     }
 
-    private IEnumerator DoBooster(Transform tile)
-    {
-        ActiveBooster();
-
-        yield return new WaitForEndOfFrame();
-
-        Hammer hammer = Instantiate(hammerPrefab);
-        hammer.SmashToBlock(tile.transform.position, 0.35f, () =>
-        {
-            RemoveHammer(hammer);
-            Done();
-        });
-    }
-
-    private void RemoveHammer(Hammer hammer)
-    {
-        hammer.transform.DOScale(Vector3.zero, 0.5f).OnComplete(() =>
-        {
-            Destroy(hammer.gameObject);
-        }).SetEase(Ease.InOutBack);
-    }
 
 }

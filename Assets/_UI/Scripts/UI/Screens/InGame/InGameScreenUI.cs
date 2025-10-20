@@ -1,3 +1,4 @@
+using System;
 using AYellowpaper.SerializedCollections;
 using DG.Tweening;
 using System.Collections;
@@ -5,6 +6,8 @@ using UnityEngine;
 using I2.Loc;
 using UnityEngine.UI;
 using ColorBlockCrush.Tools;
+using Sirenix.OdinInspector.Editor.StateUpdaters;
+using Yoolax.Framework;
 
 namespace ColorBlockCrush
 {
@@ -23,6 +26,7 @@ namespace ColorBlockCrush
 
         [SerializeField] private GameObject boostersObj;
         [SerializeField] BoosterConfirmUI boosterConfirmUI;
+        [SerializeField] GameObject boosterForceTutShield;
 
         [Header("Booster Add Tray")] [SerializeField]
         VisualCountBooster addTrayBoosterCount;
@@ -78,6 +82,7 @@ namespace ColorBlockCrush
                 booster.OnStartUseBooster += OnStartUseBooster;
                 booster.OnChangeBoosterCount += OnChangeBoosterCount;
                 booster.OnUseBoosterDone += OnUseBoosterDone;
+                booster.OnCancelBooster += OnCancelBooster;
             }
 
             boosterDataSO = BoosterManager.Instance.BoosterData;
@@ -85,7 +90,31 @@ namespace ColorBlockCrush
             addTrayBoosterCount.Init(UserDataManager.AddTrayBooster, BoosterType.ADD_TRAY);
             shuffleBoosterCount.Init(UserDataManager.ShuffleBooster, BoosterType.SHUFFLE);
             handMoveBoosterCount.Init(UserDataManager.HandBooster, BoosterType.HAND_MOVE);
-            magnetBoosterCount.Init(UserDataManager.MagnetBooster, BoosterType.MAGNET);
+            magnetBoosterCount.Init(UserDataManager.MagnetBooster, BoosterType.SUPER_SHOOT);
+        }
+
+        private void OnCancelBooster(BoosterBase booster, int arg2)
+        {
+            switch (booster.BoosterType)
+            {
+                case BoosterType.ADD_TRAY:
+                    break;
+                case BoosterType.HAND_MOVE:
+                    boostersObj.gameObject.SetActive(true);
+                    break;
+                case BoosterType.SHUFFLE:
+                    break;
+                case BoosterType.SUPER_SHOOT:
+                    boostersObj.gameObject.SetActive(true);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void Awake()
+        {
+            Server.Get<OnForceTutBooster>().AddListener(ShowForceTut);
         }
 
         private void OnDisable()
@@ -103,7 +132,14 @@ namespace ColorBlockCrush
                 booster.OnStartUseBooster -= OnStartUseBooster;
                 booster.OnUseBoosterDone -= OnUseBoosterDone;
                 booster.OnChangeBoosterCount -= OnChangeBoosterCount;
+                booster.OnCancelBooster -= OnCancelBooster;
             }
+            Server.Get<OnForceTutBooster>().RemoveListener(ShowForceTut);
+        }
+
+        private void ShowForceTut(Action callback, BoosterType type, Vector3 pos)
+        {
+            boosterForceTutShield.SetActive(true);
         }
 
         private void OnChangeBoosterCount(BoosterBase booster, int currentCount)
@@ -119,7 +155,7 @@ namespace ColorBlockCrush
                 case BoosterType.SHUFFLE:
                     shuffleBoosterCount.UpdateTextCountBooster(currentCount);
                     break;
-                case BoosterType.MAGNET:
+                case BoosterType.SUPER_SHOOT:
                     magnetBoosterCount.UpdateTextCountBooster(currentCount);
                     break;
                 default:
@@ -138,7 +174,7 @@ namespace ColorBlockCrush
                     break;
                 case BoosterType.SHUFFLE:
                     break;
-                case BoosterType.MAGNET:
+                case BoosterType.SUPER_SHOOT:
                     boostersObj.gameObject.SetActive(true);
                     break;
                 default:
@@ -161,7 +197,7 @@ namespace ColorBlockCrush
                 case BoosterType.SHUFFLE:
                     shuffleBoosterCount.UpdateTextCountBooster(currentCount);
                     break;
-                case BoosterType.MAGNET:
+                case BoosterType.SUPER_SHOOT:
                     magnetBoosterCount.UpdateTextCountBooster(currentCount);
                     boosterConfirmUI.gameObject.SetActive(false);
                     break;
@@ -172,6 +208,7 @@ namespace ColorBlockCrush
 
         private void OnAddTrayBoosterClick()
         {
+            boosterForceTutShield.SetActive(false);
             BoosterManager.Instance.AddTrayBooster.DoShowBooster((sucess) =>
             {
                 if (sucess)
@@ -183,6 +220,7 @@ namespace ColorBlockCrush
 
         private void HandMoveboosterClick()
         {
+            boosterForceTutShield.SetActive(false);
             BoosterManager.Instance.HandMoveBooster.DoShowBooster((sucess) =>
             {
                 if (sucess)
@@ -198,6 +236,7 @@ namespace ColorBlockCrush
 
         private void ShuffleBoosterClick()
         {
+            boosterForceTutShield.SetActive(false);
             BoosterManager.Instance.ShuffleBooster.DoShowBooster((sucess) =>
             {
                 if (sucess)
@@ -209,12 +248,13 @@ namespace ColorBlockCrush
 
         private void MagnetBoosterClick()
         {
+            boosterForceTutShield.SetActive(false);
             BoosterManager.Instance.MagnetBooster.DoShowBooster((sucess) =>
             {
                 if (sucess)
                 {
                     boosterConfirmUI.gameObject.SetActive(true);
-                    var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.MAGNET);
+                    var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.SUPER_SHOOT);
                     Image magnetImg = magnetBoosterBtn.GetComponent<VisualCountBooster>().Icon;
                     boosterConfirmUI.SetUIData(boosterData, magnetImg);
                     boostersObj.gameObject.SetActive(false);

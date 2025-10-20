@@ -81,6 +81,9 @@ namespace ColorBlockCrush
             {
                 boxCollider.size = new Vector3(blockSize.x, boxCollider.size.y, blockSize.y);
             }
+
+            var textRect = (RectTransform)m_textHealth.transform;
+            textRect.sizeDelta = new Vector2(Mathf.Max(Size.x, 1f), Mathf.Max(Size.y, 1f)) * 0.9f;
                 
         }
 

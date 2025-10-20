@@ -8,26 +8,37 @@ namespace ColorBlockCrush
 {
     public class HandBooster : BoosterBase
     {
-        protected override int CurrentCount { get => UserDataManager.HandBooster; set => UserDataManager.HandBooster = value; }
 
-        private void Update()
-        {
-            if (IsShowConfirm && Input.GetMouseButton(0))
-            {
-                    StartCoroutine(DoBooster());
-            }
-        }
+        [SerializeField] private float zOffetCam;
+        private float originCamZ;
+        protected override int CurrentCount { get => UserDataManager.HandBooster; set => UserDataManager.HandBooster = value; }
 
         public override void Init()
         {
             base.Init();
-            CurrentCount = UserDataManager.HandBooster;
+            LevelEvent.OnGunClick += OnGunClick;
+
+        }
+
+        private void OnGunClick(Gun gun)
+        {
+            if (IsShowConfirm)
+            {
+                StartCoroutine(DoBooster());
+                gun.OnGunClicked(true);
+            }
+        }
+
+        private void OnDisable()
+        {
+            LevelEvent.OnGunClick += OnGunClick;
         }
 
         public override void CancelBooster()
         {
             base.CancelBooster();
             IsShowConfirm = false;
+            Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
         }
 
         public override void ActiveBooster()
@@ -49,11 +60,14 @@ namespace ColorBlockCrush
         {
             base.ShowBooster();
             IsShowConfirm = true;
+            originCamZ = Camera.main.transform.position.z;
+            Camera.main.GetComponent<GameCamera>().MoveZ(zOffetCam, 0.2f);
         }
 
         protected override void Done()
         {
             base.Done();
+            Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
         }
     }
 }
