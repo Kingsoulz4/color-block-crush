@@ -20,6 +20,7 @@ namespace ColorBlockCrush
         [Header("Prefabs")]
         [SerializeField] private Gun gunPrefab;
         [SerializeField] private LockObject lockPrefab;
+        [SerializeField] private TunnelController tunnelPrefab;
 
         [Header("References")]
         [SerializeField] private Transform gunContainer;
@@ -103,6 +104,23 @@ namespace ColorBlockCrush
             return lockObj;
         }
 
+        public TunnelController SpawnTunnel(int column, int row, TunnelConfig gunData, float centerOffsetX = 0f)
+        {
+            if (!IsValidColumn(column)) return null;
+
+            Vector3 worldPos = spawnOrigin + new Vector3(
+                (column * columnSpacing) + centerOffsetX,
+                0,
+                row * -rowSpacing
+            );
+
+            TunnelController lockObj = Instantiate(tunnelPrefab, worldPos, Quaternion.identity, gunContainer);
+            lockObj.Init(gunData);
+            lockObj.name = $"Gun_{column}_{row}";
+
+            return lockObj;
+        }
+
         public Gun SpawnGun(int column, int row, GunConfig gunData, int id, float centerOffsetX = 0f)
         {
             if (!IsValidColumn(column)) return null;
@@ -120,6 +138,13 @@ namespace ColorBlockCrush
             gun.name = $"Gun_{column}_{row}";
 
             return gun;
+        }
+
+        public Gun SpawnNewGun(int column, int row, GunConfig gunData, int id, float centerOffsetX = 0f)
+        {
+            var gunn = SpawnGun(column, row, gunData, id, centerOffsetX);
+            listGunColumn[column].Add(gunn);
+            return gunn;
         }
 
         public void OnTapGun(Gun gun)
@@ -168,6 +193,12 @@ namespace ColorBlockCrush
             RemoveObjectFromColumn(lockObject);
             totalGunCount--;
             ShiftColumn(lockObject.ColumnIndex, lockObject.Index);
+        }
+
+        public void ResolveTunnel(TunnelController tunnel)
+        {
+            RemoveObjectFromColumn(tunnel);
+            ShiftColumn(tunnel.ColumnIndex, tunnel.Index);
         }
 
         private void AddAllGunToPush(List<Gun> listGunToPush, Gun gun)
@@ -221,6 +252,8 @@ namespace ColorBlockCrush
             for (int i = removedIndex; i < columnObjects.Count; i++)
             {
                 ObjectOnGunBoardColumn objOnColumn = columnObjects[i];
+
+                if (!objOnColumn.CanShift) break;
 
                 Vector3 currentPos = objOnColumn.transform.position;
                 Vector3 newPos = new Vector3(
