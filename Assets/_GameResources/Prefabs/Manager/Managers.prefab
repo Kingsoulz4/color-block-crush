@@ -510,6 +510,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6009332021277553892, guid: 4f471b22482600c4ea770d17c83b9735, type: 3}
+    - {fileID: 3858044786568180675, guid: 4f471b22482600c4ea770d17c83b9735, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -614,9 +615,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 1057309698828914412}
     m_Modifications:
     - target: {fileID: 130207889246998500, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
+      propertyPath: bulletPrb
+      value: 
+      objectReference: {fileID: 395657148022226912, guid: 01063d7c4dbbe6b4c8702d9c79d9492e, type: 3}
+    - target: {fileID: 130207889246998500, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
+      propertyPath: spawnPoint
+      value: 
+      objectReference: {fileID: 3030464676802345570}
+    - target: {fileID: 130207889246998500, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: superGunPrb
       value: 
-      objectReference: {fileID: 1368227192826055, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}
+      objectReference: {fileID: 1368227192826055, guid: 994cde9c679ac2a4f88c9361787fa59e, type: 3}
     - target: {fileID: 796862612698015822, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: m_Name
       value: SuperShootBooster
@@ -671,11 +680,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7186091768816987362, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7186091768816987362, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -6
       objectReference: {fileID: 0}
     - target: {fileID: 8744219414392260340, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: zOffetCam
@@ -689,6 +698,11 @@ PrefabInstance:
 --- !u!4 &1231245546184963151 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6386734015373583055, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
+  m_PrefabInstance: {fileID: 5311010540730832512}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3030464676802345570 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7186091768816987362, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
   m_PrefabInstance: {fileID: 5311010540730832512}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5993158329019546487

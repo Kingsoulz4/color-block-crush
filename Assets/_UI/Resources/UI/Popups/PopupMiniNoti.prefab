@@ -32,7 +32,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 560}
+  m_AnchoredPosition: {x: 0, y: 304}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4300271194975139270
@@ -101,8 +101,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3134783cb8d808e4fb5fc2243e2d5099, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 999d07ece6cdc0941a05f8a67acf318b, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -222,7 +222,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 331}
+  m_AnchoredPosition: {x: 0, y: -7}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8405262963749388278
@@ -318,11 +318,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCache: 0
   isCloseAnim: 0
-  duration: 0.2
-  animType: 2
+  duration: 0.3
+  animType: 1
   mainPopUp: {fileID: 904632619425649791}
   m_background: {fileID: 2998283285879616984}
-  m_textContent: {fileID: 0}
-  m_mainContent: {fileID: 4962732881653286668}
+  m_textContent: {fileID: 5491382734484740572}
+  m_mainContent: {fileID: 4300271194975139270}
   m_spawnPoint: {fileID: 1153112076859115773}
   m_endPoint: {fileID: 3626993601114743358}

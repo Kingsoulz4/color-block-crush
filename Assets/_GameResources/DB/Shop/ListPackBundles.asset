@@ -64,3 +64,35 @@ MonoBehaviour:
       quantity: 10
     - type: 1
       quantity: 10800
+  - id: fail_offer
+    googleID: 
+    appleID: 
+    title: Fail Offer
+    description: boost
+    icon: {fileID: 21300000, guid: 33794141aa455cb4b8fb459a7462ad9b, type: 3}
+    listReward:
+    - type: 0
+      quantity: 2400
+    - type: 3
+      quantity: 1
+    - type: 4
+      quantity: 1
+    - type: 5
+      quantity: 1
+  - id: starter_pack
+    googleID: 
+    appleID: 
+    title: Starter Pack
+    description: 
+    icon: {fileID: 21300000, guid: 33794141aa455cb4b8fb459a7462ad9b, type: 3}
+    listReward:
+    - type: 0
+      quantity: 1200
+    - type: 3
+      quantity: 1
+    - type: 4
+      quantity: 1
+    - type: 5
+      quantity: 1
+    - type: 1
+      quantity: 30

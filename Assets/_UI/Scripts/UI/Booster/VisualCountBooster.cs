@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using Yoolax.Framework;
+using AYellowpaper.SerializedCollections;
+using ColorBlockCrush.Tools;
 
 namespace ColorBlockCrush
 {
@@ -14,6 +16,7 @@ namespace ColorBlockCrush
         [SerializeField] GameObject obj_BoosterActive;
         [SerializeField] GameObject obj_BoosterAdd;
         [SerializeField] Button btn_AddBooster;
+        [SerializeField] SerializedDictionary<LevelDifficult, GameObject> m_listBgBackground;
         [SerializeField] Image icon;
         [Header("Lock Booster")]
         [SerializeField] private GameObject lockIcon;
@@ -59,9 +62,19 @@ namespace ColorBlockCrush
             firstClaimBoosterIcon.sprite = iconSprite;
             obj_BoosterActive.SetActive(isActive);
             obj_BoosterAdd.SetActive(!isActive);
-            lvUnlock.text = $"Lv {boosterItemData.levelUnlock}";
+            lvUnlock.text = $"lv.{boosterItemData.levelUnlock}";
             UpdateText(count);
             UpdateState();
+        }
+
+        public void UpdateBgDiff(LevelDifficult difficult)
+        {
+            foreach (var item in m_listBgBackground)
+            {
+                item.Value.SetActive(false);
+            }
+
+            m_listBgBackground[difficult].SetActive(true);
         }
 
         private void UpdateState()
@@ -152,7 +165,7 @@ namespace ColorBlockCrush
             {
                 transform.DOScale(Vector3.one * 1.25f, .15f).SetEase(Ease.InOutSine).OnComplete(() =>
                 {
-                    transform.DOScale(Vector3.one * 1.1f, .15f).SetEase(Ease.InOutSine).OnComplete(() =>
+                    transform.DOScale(Vector3.one * 1f, .15f).SetEase(Ease.InOutSine).OnComplete(() =>
                     {
                         DOVirtual.DelayedCall(0.3f, () => { handTut.SetActive(true); });
                     });

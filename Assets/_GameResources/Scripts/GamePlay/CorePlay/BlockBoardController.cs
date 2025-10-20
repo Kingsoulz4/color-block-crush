@@ -331,5 +331,27 @@ namespace ColorBlockCrush
                 return gridController.GridNodes[row, col];
             return null;
         }
+
+        public List<Block> GetBlockListByColor(ColorType targetColor)
+        {
+            List<Block> blocks = new List<Block>();
+
+            int rows = _blockStacks.GetLength(0);
+            int cols = _blockStacks.GetLength(1);
+
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    Block block = _blockStacks[row, col];
+                    if (block != null && block.ColorType == targetColor)
+                    {
+                        blocks.Add(block);
+                    }
+                }
+            }
+
+            return blocks;
+        }
     }
 }
