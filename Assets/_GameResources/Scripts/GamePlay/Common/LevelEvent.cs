@@ -12,5 +12,6 @@ namespace ColorBlockCrush
         public static Action<int> OnRevive;
         public static Action<int> OnLevelStart;
         public static Action OnFastMode;
+        public static Action<Gun> OnGunClick;
     }
 }

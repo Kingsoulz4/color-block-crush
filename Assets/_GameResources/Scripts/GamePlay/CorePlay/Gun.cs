@@ -534,24 +534,26 @@ namespace ColorBlockCrush
             anim.PlayAnim(name);
         }
 
-        public void OnGunClicked(Gun gun)
+        public void OnGunClicked(bool isBooster = false)
         {
-            gun.PlayAnim(Constant.GunAnimation.CLICK);
-            if (!gun.CanPushToConveyor())
+            PlayAnim(Constant.GunAnimation.CLICK);
+            if (!CanPushToConveyor() && !isBooster)
             {
                 return;
             }
 
-            switch (gun.GunPos)
+            switch (GunPos)
             {
                 case GunPos.ON_GUN_BOARD:
-                    LevelController.Instance.GunBoardController.OnTapGun(gun);
+                    LevelController.Instance.GunBoardController.OnTapGun(this);
                     break;
                 case GunPos.ON_SLOT:
-                    LevelController.Instance.SlotController.OnTapGun(gun);
+                    if (isBooster) return;
+                    LevelController.Instance.SlotController.OnTapGun(this);
                     break;
                 case GunPos.ON_BONUS_SLOT:
-                    LevelController.Instance.BonusSlotController.OnTapGun(gun);
+                    if (isBooster) return;
+                    LevelController.Instance.BonusSlotController.OnTapGun(this);
                     break;
                 default:
                     break;

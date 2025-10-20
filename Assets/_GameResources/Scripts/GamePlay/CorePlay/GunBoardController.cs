@@ -158,7 +158,7 @@ namespace ColorBlockCrush
             {
                 int col = g.ColumnIndex;
                 RemoveObjectFromColumn(g);
-                ShiftColumn(col);
+                ShiftColumn(col, g.Index);
             }
         }
 
@@ -166,7 +166,7 @@ namespace ColorBlockCrush
         {
             RemoveObjectFromColumn(lockObject);
             totalGunCount--;
-            ShiftColumn(lockObject.ColumnIndex);
+            ShiftColumn(lockObject.ColumnIndex, lockObject.Index);
         }
 
         private void AddAllGunToPush(List<Gun> listGunToPush, Gun gun)
@@ -212,18 +212,22 @@ namespace ColorBlockCrush
             listGunColumn[gun.ColumnIndex].Remove(gun);
         }
 
-        private void ShiftColumn(int column)
+        private void ShiftColumn(int column, int removedIndex)
         {
             if (!IsValidColumn(column)) return;
 
-            List<ObjectOnGunBoardColumn> columnGuns = listGunColumn[column];
+            List<ObjectOnGunBoardColumn> columnObjects = listGunColumn[column];
 
-            // Update positions for all remaining guns
-            for (int i = 0; i < columnGuns.Count; i++)
+            for (int i = removedIndex; i < columnObjects.Count; i++)
             {
-                ObjectOnGunBoardColumn objOnColumn = columnGuns[i];
+                ObjectOnGunBoardColumn objOnColumn = columnObjects[i];
 
-                Vector3 newPos = new Vector3(objOnColumn.transform.position.x, 0, objOnColumn.transform.position.z + rowSpacing);
+                Vector3 currentPos = objOnColumn.transform.position;
+                Vector3 newPos = new Vector3(
+                    currentPos.x,
+                    0,
+                    currentPos.z + rowSpacing
+                );
 
                 if (objOnColumn is Gun gun)
                 {
@@ -236,6 +240,11 @@ namespace ColorBlockCrush
             }
 
             UpdateFrontRowFlags(column);
+        }
+
+        private void ShiftColumn(int column)
+        {
+            ShiftColumn(column, 0);
         }
 
         private void UpdateFrontRowFlags(int column)

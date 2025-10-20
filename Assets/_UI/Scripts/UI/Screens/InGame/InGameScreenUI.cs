@@ -5,6 +5,7 @@ using UnityEngine;
 using I2.Loc;
 using UnityEngine.UI;
 using ColorBlockCrush.Tools;
+using System;
 
 namespace ColorBlockCrush
 {
@@ -78,6 +79,7 @@ namespace ColorBlockCrush
                 booster.OnStartUseBooster += OnStartUseBooster;
                 booster.OnChangeBoosterCount += OnChangeBoosterCount;
                 booster.OnUseBoosterDone += OnUseBoosterDone;
+                booster.OnCancelBooster += OnCancelBooster;
             }
 
             boosterDataSO = BoosterManager.Instance.BoosterData;
@@ -86,6 +88,25 @@ namespace ColorBlockCrush
             shuffleBoosterCount.Init(UserDataManager.ShuffleBooster, BoosterType.SHUFFLE);
             handMoveBoosterCount.Init(UserDataManager.HandBooster, BoosterType.HAND_MOVE);
             magnetBoosterCount.Init(UserDataManager.MagnetBooster, BoosterType.MAGNET);
+        }
+
+        private void OnCancelBooster(BoosterBase booster, int arg2)
+        {
+            switch (booster.BoosterType)
+            {
+                case BoosterType.ADD_TRAY:
+                    break;
+                case BoosterType.HAND_MOVE:
+                    boostersObj.gameObject.SetActive(true);
+                    break;
+                case BoosterType.SHUFFLE:
+                    break;
+                case BoosterType.MAGNET:
+                    boostersObj.gameObject.SetActive(true);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void OnDisable()
@@ -103,6 +124,7 @@ namespace ColorBlockCrush
                 booster.OnStartUseBooster -= OnStartUseBooster;
                 booster.OnUseBoosterDone -= OnUseBoosterDone;
                 booster.OnChangeBoosterCount -= OnChangeBoosterCount;
+                booster.OnCancelBooster -= OnCancelBooster;
             }
         }
 
