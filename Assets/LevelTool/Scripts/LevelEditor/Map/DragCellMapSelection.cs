@@ -169,7 +169,7 @@ namespace ColorBlockCrush.Tools
             var cam = eventData.pressEventCamera; // Overlay => null
             Debug.Log("Pointer down");
 
-            if (currentDragType == DragType.Normal || currentDragType == DragType.PixelSnake)
+            if (currentDragType == DragType.Normal)
             {
                 if (!ScreenToRC(eventData.position, cam, out var rcStart))
                 {
@@ -212,8 +212,11 @@ namespace ColorBlockCrush.Tools
                 isDragging = true;
                 startPos = eventData.position;
             }
-            else if(currentDragType == DragType.Key || currentDragType == DragType.TunnelArea)
+            else if(currentDragType == DragType.Key || currentDragType == DragType.TunnelArea
+                                                    || currentDragType == DragType.PixelSnake)
             {
+                ScreenToRC(eventData.position, cam, out var rcStart);
+                startCell = GetCell(rcStart.x, rcStart.y);
                 CurrentlySelectedCells.Clear();
                 if (FinalSelectedCells.Count > 0)
                 {
@@ -228,7 +231,7 @@ namespace ColorBlockCrush.Tools
         {
             if (!isDragging) return;
 
-            if (currentDragType == DragType.Normal || currentDragType == DragType.PixelSnake)
+            if (currentDragType == DragType.Normal)
             {
                 var cam = eventData.pressEventCamera;
                 if (!ScreenToRC(eventData.position, cam, out var currRC))
@@ -291,7 +294,8 @@ namespace ColorBlockCrush.Tools
 
                 HighlightCellsInRect(selectionRect);
             }else if (currentDragType == DragType.Key
-                      || currentDragType == DragType.TunnelArea)
+                      || currentDragType == DragType.TunnelArea
+                      || currentDragType == DragType.PixelSnake)
             {
                 Vector2 endPos = eventData.position;
 
@@ -316,7 +320,7 @@ namespace ColorBlockCrush.Tools
 
             isDragging = false;
 
-            if (currentDragType == DragType.Normal || currentDragType == DragType.PixelSnake)
+            if (currentDragType == DragType.Normal)
             {
                 hasLastPointerRC = false;
 
@@ -343,7 +347,8 @@ namespace ColorBlockCrush.Tools
                 }   
             }
             else if(currentDragType == DragType.Key
-                    || currentDragType == DragType.TunnelArea)
+                    || currentDragType == DragType.TunnelArea
+                    || currentDragType == DragType.PixelSnake)
             {
                 foreach (var cell in CurrentlySelectedCells)
                 {
