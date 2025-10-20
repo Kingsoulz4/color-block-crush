@@ -238,6 +238,7 @@ namespace ColorBlockCrush
 
         public void Fire(Block target)
         {
+            Debug.Log("Fire Here");
 
             RotateToFire(target.transform);
             BulletCount--;
@@ -537,7 +538,19 @@ namespace ColorBlockCrush
 
             float angle = Vector3.Angle(shootDir, toBlock);
 
-            bool isInAngle = angle <= maxShootingAngle;
+            var shootingAngle = maxShootingAngle;
+
+            if(currentFireDir == RotationDirection.Up || currentFireDir == RotationDirection.Down)
+            {
+                shootingAngle = maxShootingAngle * block.Size.x;
+            }    
+            else
+            {
+                shootingAngle = maxShootingAngle * block.Size.y;
+            }    
+
+            bool isInAngle = angle <= shootingAngle ;
+
             return isInAngle;
         }
 
