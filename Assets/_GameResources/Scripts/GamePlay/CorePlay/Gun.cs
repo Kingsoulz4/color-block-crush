@@ -130,6 +130,10 @@ namespace ColorBlockCrush
             {
                 PlayAnim(Constant.GunAnimation.IDLE);
             }
+            else
+            {
+                PlayAnim(Constant.GunAnimation.STAND);
+            }
         }
 
         private void CheckFire()
