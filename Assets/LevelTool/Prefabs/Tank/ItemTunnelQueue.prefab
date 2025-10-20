@@ -171,7 +171,7 @@ MonoBehaviour:
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 10
   m_fontSizeMax: 20
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -276,7 +276,6 @@ MonoBehaviour:
   tankConfig:
     colorType: 0
     bulletNumber: 0
-    hasLock: 0
     isHidden: 0
     gunConnect: 
   bulletNumber: {fileID: 5158809738347573104}

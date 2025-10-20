@@ -1,22 +1,28 @@
 ﻿using ColorBlockCrush;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Splines;
 
 public class ConveyorController : MonoBehaviour
 {
     [Header("Conveyor Settings")]
-    [SerializeField] private int maxSlots = 5;
+    [SerializeField] private int initMaxSlot = 5;
     [SerializeField] private Transform startPos;
     [SerializeField] private float startMovingGunSpacing = 0.1f;
+    [SerializeField] private float trayMoveDuration = 5f;
+    [SerializeField] private float trayMoveDurationFast = 3f;
+    [SerializeField] private EndPointConveyor endPointConveyor;
 
     [Header("Tray Spawn Settings")]
     [SerializeField] private TrayItem trayPrefab;
+    [SerializeField] private TextMeshPro trayText;
     [SerializeField] private Transform spawnParent;
-    [SerializeField] private Vector3 startPosition; // Vị trí tray đầu tiên (bên trái)
+    [SerializeField] private Vector3 startPositionInit = new Vector3(-0.25f, -0.3f, 0);
     [SerializeField] private float spaceOffsetX = 0.3f; // Khoảng cách giữa các tray
 
     [Header("Animation")]
@@ -24,6 +30,8 @@ public class ConveyorController : MonoBehaviour
     [SerializeField] private Ease shiftEase = Ease.OutQuad;
 
     public SplineContainer splineContainer;
+    private Vector3 currentStartPos;
+    private int currentMaxSlots;
 
     private List<TrayItem> prepairTrayItems = new List<TrayItem>();
     private List<TrayItem> movingTrayItems;
@@ -34,9 +42,26 @@ public class ConveyorController : MonoBehaviour
 
     public void Init()
     {
+        currentMaxSlots = initMaxSlot;
+        currentStartPos = startPositionInit;
+        endPointConveyor.gameObject.SetActive(true);
         movingTrayItems = new List<TrayItem>();
         movingTrayItems.Clear();
+        UpdateTrayText();
         InitTray();
+        LevelEvent.OnFastMode += OnFastMode;
+        LevelEvent.OnRevive += OnRevive;
+    }
+
+    private void OnDisable()
+    {
+        LevelEvent.OnFastMode -= OnFastMode;
+        LevelEvent.OnRevive -= OnRevive;
+    }
+
+    private void OnFastMode()
+    {
+        endPointConveyor.gameObject.SetActive(false);
     }
 
     public void MoveGunIn(List<Gun> guns)
@@ -50,6 +75,70 @@ public class ConveyorController : MonoBehaviour
         }
     }
 
+    public void SetGunStartPosition(Gun gun, TrayItem trayItem, int slotIndex)
+    {
+        float normalizedTime = slotIndex * startMovingGunSpacing;
+        Vector3 position = splineContainer.EvaluatePosition(normalizedTime);
+
+        gun.TrayItem = trayItem;
+        AddTrayItem(trayItem);
+        UpdateTrayText();
+        gun.MoveToConeyor(position, () =>
+        {
+
+            gun.OnGunEmpty += OnGunEmpty;
+            trayItem.SetChild(gun);
+            trayItem.Move();
+        });
+    }
+
+    public bool CanPlaceGuns(int count)
+    {
+        return trayItemsFree.Count >= count;
+    }
+
+    private void OnGunEmpty(Gun gun)
+    {
+
+        if (gun.CheckCanDisappear())
+        {
+            if (gun.TrayItem != null)
+            {
+                MoveTrayIn(gun.TrayItem);
+                RemoveTrayItem(gun.TrayItem);
+            }
+
+            foreach (var g in gun.ConnectedGuns)
+            {
+                if (g.TrayItem != null)
+                {
+                    MoveTrayIn(g.TrayItem);
+                    RemoveTrayItem(g.TrayItem);
+                }
+            }
+        }
+        UpdateTrayText();
+    }
+
+
+    [Button("OnRevive")]
+    public void OnRevive(int level)
+    {
+        for (int i = movingTrayItems.Count - 1; i >= 0; i--)
+        {
+            var gun = movingTrayItems[i].MyGun;
+            gun.Scale(Vector3.one * 0.8f, 0.2f);
+            gun.OnRevive();
+            LevelController.Instance.BonusSlotController.MoveGunIn(gun);
+            MoveTrayIn(movingTrayItems[i], true);
+        }
+
+        Gun lastGunInSlot = LevelController.Instance.SlotController.GetLastGun();
+        lastGunInSlot.Scale(Vector3.one * 0.8f, 0.2f);
+        LevelController.Instance.BonusSlotController.MoveGunIn(lastGunInSlot);
+    }
+
+    #region Tray Management
     private void PrepairTrayItems(int trayCount)
     {
         prepairTrayItems.Clear();
@@ -69,6 +158,11 @@ public class ConveyorController : MonoBehaviour
         }
     }
 
+    public void WarnTrayText()
+    {
+        trayText.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
+    }
+
     public void SetTrayStartPosition(TrayItem tray, int slotIndex)
     {
         float normalizedTime = slotIndex * startMovingGunSpacing;
@@ -82,28 +176,6 @@ public class ConveyorController : MonoBehaviour
         });
     }
 
-    public void SetGunStartPosition(Gun gun, TrayItem trayItem, int slotIndex)
-    {
-        float normalizedTime = slotIndex * startMovingGunSpacing;
-        Vector3 position = splineContainer.EvaluatePosition(normalizedTime);
-
-        gun.TrayItem = trayItem;
-        AddTrayItem(trayItem);
-
-        gun.MoveToConeyor(position, () =>
-        {
-
-            gun.OnGunEmpty += OnGunEmpty;
-            trayItem.SetChild(gun);
-            trayItem.Move();
-        });
-    }
-
-    public bool CanPlaceGuns(int count)
-    {
-        return trayItemsFree.Count >= count;
-    }
-
     public void AddTrayItem(TrayItem trayItem)
     {
         if (!movingTrayItems.Contains(trayItem))
@@ -112,58 +184,53 @@ public class ConveyorController : MonoBehaviour
         }
     }
 
-    private void OnGunEmpty(Gun gun)
-    {
-
-        if(gun.CheckDestroy())
-        {
-            if (gun.TrayItem != null)
-            {
-                MoveTrayIn(gun.TrayItem);
-                RemoveTrayItem(gun.TrayItem);
-            }
-
-            foreach(var g in gun.ConnectedGuns)
-            {
-                if (g.TrayItem != null)
-                {
-                    MoveTrayIn(g.TrayItem);
-                    RemoveTrayItem(g.TrayItem);
-                }
-            }
-        }
-    }
-
     public void RemoveTrayItem(TrayItem trayItem)
     {
-        if (movingTrayItems.Contains(trayItem))
+        if (trayItem == null) return;
+
+        if (movingTrayItems != null && movingTrayItems.Contains(trayItem))
         {
             trayItem.SplineAnimate.Pause();
             trayItem.MyGun.OnGunEmpty -= OnGunEmpty;
             movingTrayItems.Remove(trayItem);
             OnGunRemovedConveyor?.Invoke(trayItem.MyGun);
         }
+        UpdateTrayText();
     }
 
-    #region Tray Management
+    public void BoosterAddTrayItem()
+    {
+        currentMaxSlots += 1;
+        currentStartPos.x = -spaceOffsetX * (currentMaxSlots - initMaxSlot + 1);
+        SpawnTrayAtLeft();
+        UpdateTrayText();
+    }
 
     private void InitTray()
     {
-        for (int i = 0; i < maxSlots; i++)
+        for (int i = 0; i < currentMaxSlots; i++)
         {
             SpawnTrayAtLeft();
         }
     }
+
     private Vector3 GetTrayPosition(int index)
     {
-        return startPosition + new Vector3(index * spaceOffsetX, 0, 0);
+        return currentStartPos + new Vector3(index * spaceOffsetX, 0, 0);
     }
 
-    public bool MoveTrayIn(TrayItem tray)
+    public void PauseAllTray()
     {
-        if (trayItemsFree.Count >= maxSlots)
+        foreach (var tray in movingTrayItems)
         {
-            Debug.LogWarning("List đã đầy!");
+            tray.Pause();
+        }
+    }
+
+    public bool MoveTrayIn(TrayItem tray, bool forceMove = false)
+    {
+        if (!LevelController.Instance.SlotController.CanPlaceGuns(1) && !forceMove)
+        {
             return false;
         }
 
@@ -183,16 +250,21 @@ public class ConveyorController : MonoBehaviour
         return true;
     }
 
+    private void UpdateTrayText()
+    {
+        trayText.text = $@"{movingTrayItems.Count}/{currentMaxSlots}";
+    }
+
     public TrayItem SpawnTrayAtLeft()
     {
-        if (trayItemsFree.Count >= maxSlots)
+        if (trayItemsFree.Count >= currentMaxSlots)
         {
             Debug.LogWarning("List đã đầy!");
             return null;
         }
 
         TrayItem newTray = Instantiate(trayPrefab, spawnParent);
-
+        newTray.Init(trayMoveDuration, trayMoveDurationFast);
         trayItemsFree.Insert(0, newTray);
 
         ShiftTraysToRight();
@@ -220,7 +292,7 @@ public class ConveyorController : MonoBehaviour
 
     private void ShiftTraysToRight()
     {
-        int emptySlots = maxSlots - trayItemsFree.Count;
+        int emptySlots = currentMaxSlots - trayItemsFree.Count;
 
         for (int i = 0; i < trayItemsFree.Count; i++)
         {
@@ -228,6 +300,11 @@ public class ConveyorController : MonoBehaviour
             Vector3 targetPos = GetTrayPosition(newIndex);
             trayItemsFree[i].transform.DOLocalMove(targetPos, shiftDuration).SetEase(shiftEase);
         }
+    }
+
+    public int GetMovingTrayCount()
+    {
+        return movingTrayItems.Count;
     }
     #endregion
 }

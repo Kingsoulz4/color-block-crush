@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/_GameResources/Scenes/GameScene.unity
     guid: 0f65462696ae54748b944091b1532844
   - enabled: 0
@@ -20,7 +20,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_GameResources/Scenes/LevelTest.unity
     guid: afe578602add06045aeba597ec0c8add
-  - enabled: 1
+  - enabled: 0
     path: Assets/_GameResources/Scenes/GameSceneUI.unity
     guid: 69d344b2de48d4841b0eb334eb3b5a63
   m_configObjects:

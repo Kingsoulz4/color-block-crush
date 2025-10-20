@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine.SceneManagement;
 
 namespace ColorBlockCrush.Tools
@@ -158,6 +159,39 @@ namespace ColorBlockCrush.Tools
             view.buttonClearAll.onClick.AddListener(ClearAllColor);
             view.buttonSetColor.onClick.AddListener(SetColorSelected);
             view.buttonDel.onClick.AddListener(DeleteColorSelected);
+            
+            view.buttonAddTunnelAreaItemQueue.onClick.AddListener(() =>
+            {
+                if (string.IsNullOrEmpty(view.healthElementTunnelAreaQueueInputField.text))
+                {
+                    Debug.LogError("Invalid health number");
+                    return;
+                }
+                
+                int healthNumber = int.Parse(view.healthElementTunnelAreaQueueInputField.text);
+
+                if (healthNumber <= 0)
+                {
+                    Debug.LogError("Invalid health number");
+                    return;
+                }
+
+                TunnelAreaElementConfig newElementConfig = new TunnelAreaElementConfig();
+                newElementConfig.health = healthNumber;
+                newElementConfig.elementColor = currentTunnelAreaQueueColor;
+                
+                OnAddColorQueueToTunnelArea(newElementConfig);
+            });
+            view.buttonSetTunnelAreaInfor.onClick.AddListener(SetTunnelArea);
+            view.buttonDelTunnelArea.onClick.AddListener(DeleteTunnelArea);
+            view.buttonClearSelect.onClick.AddListener(ButtonClearSelect);
+            
+            for (int i = 0; i < view.buttonTankTunnelAreaQueueColorChooses.Count; i++)
+            {
+                view.buttonTankTunnelAreaQueueColorChooses[i].Init(UpdateCurrentColorChooseTunnelAreaQueue);
+            }
+            
+            UpdateCurrentColorChooseTunnelAreaQueue(ColorType.PowderPink);
 
             for (int i = 0; i < view.buttonCellGridColorChooses.Count; i++)
             {
@@ -799,6 +833,20 @@ namespace ColorBlockCrush.Tools
             UpdateButtonChooseTankColor();
             UpdateButtonChooseTunnelQueueColor();
             UpdateBlockBulletValidate();
+        }
+
+        [Button]
+        public int CantorParing(int i, int j)
+        {
+            return (int)CantorPairing.MakeId((ulong)i, (ulong)j);
+        }
+        
+        [Button]
+        public (int i, int j) CantorParingInvert(int id)
+        {
+            (ulong x, ulong y) = (CantorPairing.Unpair((ulong)id));
+            
+            return ((int)x, (int)y);
         }
     }
 }

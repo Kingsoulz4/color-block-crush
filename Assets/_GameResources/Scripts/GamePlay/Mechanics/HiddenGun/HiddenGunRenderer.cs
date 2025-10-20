@@ -15,7 +15,7 @@ namespace ColorBlockCrush
             gameObject.SetActive(false);
         }
 
-        internal void Init(List<MeshRenderer> listMeshRenderer)
+        internal void Init(List<Renderer> listMeshRenderer)
         {
             for(int i=0; i<listMeshRenderer.Count; i++)
             {

@@ -37,7 +37,15 @@ namespace ColorBlockCrush
             var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
             loading.Show(() =>
             {
-                UIManager.Instance.ShowScreen<MainScreenUI>();
+                if (UserDataManager.Level <= 10)
+                {
+                    LevelManager.Instance.StartCurrentLevel();
+                    UIManager.Instance.ShowScreen<InGameScreenUI>();
+                }
+                else
+                {
+                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                }
             });
         }
 

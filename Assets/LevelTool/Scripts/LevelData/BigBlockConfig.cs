@@ -12,6 +12,7 @@ namespace ColorBlockCrush.Tools
         public ColorType colorType;
         public int blockHealth;
         public List<int> blocksId;
+        public bool isHidden = false;
 
         public BigBlockConfig()
         {

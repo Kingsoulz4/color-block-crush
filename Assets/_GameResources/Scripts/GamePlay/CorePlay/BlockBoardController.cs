@@ -21,11 +21,15 @@ namespace ColorBlockCrush
         [Header("Prefabs")]
         [SerializeField] private Block blockPrefab;
         [SerializeField] private BlockKey blockKeyPrefab;
+        [SerializeField] private BigBlock bigBlockPrefab;
+        [SerializeField] private BlockBarrier blockBarrierPrefab;
 
         [Header("References")]
         [SerializeField] private GridController gridController;
         [SerializeField] private Transform blockContainer;
         [SerializeField] private Transform keyContainer;
+        [SerializeField] private Transform bigBlockContainer;
+        [SerializeField] private Transform blockBarrierContainer;
 
         private int _rows;
         private int _columns;
@@ -64,6 +68,8 @@ namespace ColorBlockCrush
 
             SpawnBlockBoard(levelConfig);
             SpawnKeys();
+            SpawnBigBlocks();
+            SpawnBlockBarriers();
         }
         private void SpawnBlockBoard(LevelConfig levelConfig)
         {
@@ -74,12 +80,6 @@ namespace ColorBlockCrush
                 {
                     var idx = c * _rows + r;
                     ColorType color = listBlock[idx].colorType;
-
-                    if (color == ColorType.None)
-                    {
-                        continue;
-                    }
-
                     SpawnBlock(r, c, BlockType.Normal, listBlock[idx]);
                 }
             }
@@ -104,6 +104,47 @@ namespace ColorBlockCrush
             block.OnBlockDestroyed += OnBlockDestroyed;
 
             return block;
+        }
+
+        private void SpawnBigBlocks()
+        {
+            if (levelConfig.mapConfig.bigBlocks.Count <= 0) return;
+            for(int i=0; i<levelConfig.mapConfig.bigBlocks.Count; i++)
+            {
+                SpawnBigBlock(levelConfig.mapConfig.bigBlocks[i]);
+            }
+        }
+
+        public BigBlock SpawnBigBlock(BigBlockConfig bigBlockConfig)
+        {
+            BigBlock newBigBlock = Instantiate(bigBlockPrefab, bigBlockContainer);
+
+            newBigBlock.Init(bigBlockConfig);
+
+            newBigBlock.transform.position = CalculateCenter(bigBlockConfig.blocksId);
+
+            newBigBlock.transform.localScale = calculatedBlockScale;
+
+            return newBigBlock;
+        }
+
+        private void SpawnBlockBarriers()
+        {
+            if (levelConfig.mapConfig.pixelSnakes.Count <= 0) return;
+
+            for(int i=0; i<levelConfig.mapConfig.pixelSnakes.Count; i++)
+            {
+                SpawnBlockBarrier(levelConfig.mapConfig.pixelSnakes[i]);
+            }
+        }
+
+        private BlockBarrier SpawnBlockBarrier(PixelSnakeConfig blockBarrierData)
+        {
+            BlockBarrier newBlockBarrier = Instantiate(blockBarrierPrefab, blockBarrierContainer);
+            newBlockBarrier.transform.position = CalculateCenter(blockBarrierData.blocksId);
+            newBlockBarrier.Init(blockBarrierData);
+            newBlockBarrier.transform.localScale = calculatedBlockScale;
+            return newBlockBarrier;
         }
 
         private void SpawnKeys()
@@ -169,6 +210,15 @@ namespace ColorBlockCrush
         public BlockKey GetPendingKey()
         {
             return listKey.Find(x => !x.IsResolved && x.IsUnBlocked);
+        }
+
+        public Block GetBlockByID(int id)
+        {
+            (ulong row, ulong col) = CantorPairing.Unpair((ulong)id);
+            int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
+            var blockData = levelConfig.mapConfig.blocks[idReal];
+            var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
+            return block;
         }
 
         private void OnBlockDestroyed(Block block)

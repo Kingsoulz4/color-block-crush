@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,10 +11,29 @@ namespace ColorBlockCrush
     {
         [SerializeField] private Text m_textQuantity;
         [SerializeField] private Text m_textCountDown;
+        [SerializeField] private Button m_button;
+        [SerializeField] private GameObject m_normalHeart;
+        [SerializeField] private GameObject m_infinityHeart;
+        [SerializeField] private GameObject m_iconHeart;
+        [SerializeField] public bool isUpadate = true;
+
+        public bool Sync
+        {
+            get => isUpadate;
+            set => isUpadate = value;
+        }
+
+        public GameObject ImgIcon => m_iconHeart;
+        
+        private void Awake()
+        {
+            m_button.onClick.AddListener(OnClickHeartBar);
+        }
 
         private void OnEnable()
         {
             UserDataManager.OnAddHeart += UpdateQuantity;
+            UpdateUI();
         }
 
         private void OnDisable()
@@ -25,9 +45,32 @@ namespace ColorBlockCrush
         {
             m_textCountDown.text = HeartManager.Instance.GetTimeRemaningText();
         }
+        
+        private void OnClickHeartBar()
+        {
+            if(UserDataManager.Heart < HeartManager.MAX_HEART)
+            {
+                UIManager.Instance.ShowPopup<PopupGetMoreLives>(null);
+            }
+            // else
+            // {
+            //     UIManager.Instance.ShowPopup<PopupFullLives>(null);
+            // }
+        }
+        
+        private void UpdateUI()
+        {
+            m_textQuantity.text = UserDataManager.Heart.ToString();
+            m_normalHeart.gameObject.SetActive(!HeartManager.IsInfinityEndTime);
+            m_infinityHeart.gameObject.SetActive(HeartManager.IsInfinityEndTime);
+
+        }
 
         private void UpdateQuantity(int oldVal, int newVal, bool hasAnim)
         {
+            if (!Sync) return;
+
+            UpdateUI();
             if(hasAnim)
             {
                 DOTween.To(() => oldVal, (val) => { m_textQuantity.text = (int)val + ""; }, newVal, 0.5f);
@@ -36,6 +79,12 @@ namespace ColorBlockCrush
             {
                 m_textQuantity.text = UserDataManager.Heart.ToString();
             }
+        }
+        
+        internal void SetText(int v)
+        {
+            Debug.Log($"Heart {v}");
+            m_textQuantity.text = v.ToString();
         }
     }
 }

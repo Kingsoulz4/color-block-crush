@@ -69,6 +69,7 @@ namespace ColorBlockCrush
         {
             LevelEvent.OnWin += OnWinGame;
             LevelEvent.OnLose += OnLoseGame;
+            LevelEvent.OnRevive += OnReviveGame;
 
         }
 
@@ -76,6 +77,7 @@ namespace ColorBlockCrush
         {
             LevelEvent.OnWin -= OnWinGame;
             LevelEvent.OnLose -= OnLoseGame;
+            LevelEvent.OnRevive -= OnReviveGame;
         }
 
         public void StartCurrentLevel()
@@ -129,7 +131,12 @@ namespace ColorBlockCrush
 
         public void OnLoseGame(int level)
         {
-            if (BoosterManager.Instance.BoosterData.boosterItemDatas.First().levelUnlock > CurrentLevel)
+            if (GameManager.GameState == GameState.Lose)
+            {
+                return;
+            }
+            GameManager.Instance.SetGameState(GameState.Lose);
+            if (!LevelController.Instance.CheckCanRevive())
             {
                 var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
 
@@ -143,13 +150,19 @@ namespace ColorBlockCrush
             }
             else
             {
-                var popupLose = UIManager.Instance.ShowPopup<PopupLoseHaveSelectBooster>(null);
-                popupLose.OnClose = () =>
+                var popupRevival = UIManager.Instance.ShowPopup<PopupOutOfSpace>(null);
+                popupRevival.OnClose = () =>
                 {
-                    UIManager.Instance.ShowScreen<MainScreenUI>();
-                };
-                popupLose.OnRetry = OnRetryGame;
+                    var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
 
+                    HeartManager.UseHeart(1);
+
+                    popupLose.OnClose = () =>
+                    {
+                        UIManager.Instance.ShowScreen<MainScreenUI>();
+                    };
+                    popupLose.OnRetry = OnRetryGame;
+                };
             }
         }
 
@@ -174,16 +187,21 @@ namespace ColorBlockCrush
             }
         }
 
-        public void OnReviveGame()
+        public void OnReviveGame(int price)
         {
-            if (UserDataManager.Gold >= priceRevive)
+            if (UserDataManager.Gold >= price)
             {
-                UserDataManager.AddGold(-priceRevive, "Revive");
-
+                UserDataManager.AddGold(-price, "Revival");
+                GameManager.Instance.SetGameState(GameState.Playing);
             }
             else
             {
+                GameManager.Instance.SetGameState(GameState.Paused);
 
+                UIManager.Instance.ShowPopup<PopupShop>(() =>
+                {
+                    GameManager.Instance.SetGameState(GameState.Playing);
+                });
             }
         }
 
@@ -206,6 +224,7 @@ namespace ColorBlockCrush
 
             ExecuteNextFlowStep();
 
+            LevelEvent.OnLevelStart?.Invoke(level);
         }
 
         private void CheckShowTutorials()
@@ -219,10 +238,19 @@ namespace ColorBlockCrush
         public void OnWinGame(int level)
         {
             GameManager.Instance.SetGameState(GameState.Win);
-            UIManager.Instance.ShowPopup<PopupWin>(() =>
+            var popupWin = UIManager.Instance.ShowPopup<PopupWin>(null);
+            popupWin.OnClaimedReward = (val) =>
             {
-                NextLevel();
-            });
+                if (UserDataManager.Level < 10)
+                {
+                    NextLevel();   
+                }
+                else
+                {
+                    var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
+                    mainScreen.ShowClaimReward(val);   
+                }
+            };
         }
 
         public void NextLevel()

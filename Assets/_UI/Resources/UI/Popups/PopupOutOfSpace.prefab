@@ -393,6 +393,7 @@ MonoBehaviour:
   m_buttonKeepPlaying: {fileID: 9072528723148437679}
   m_buttonClose: {fileID: 8347811556247765035}
   m_textPrice: {fileID: 748466447536413688}
+  failSfx: {fileID: 8300000, guid: 6a0f5eb6522131c4fa7e3e0261d6acbc, type: 3}
 --- !u!1 &4246825738999553343
 GameObject:
   m_ObjectHideFlags: 0

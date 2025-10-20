@@ -1855,6 +1855,7 @@ MonoBehaviour:
   m_winContent: {fileID: 6626601413424052008}
   coinReceiveTxt: {fileID: 3851022343640151451}
   coinReceiveX2Txt: {fileID: 8966222289498841994}
+  winSfx: {fileID: 8300000, guid: ebd4229a2c46dad47ad251acdc6cc1e0, type: 3}
 --- !u!1001 &1180037522012424744
 PrefabInstance:
   m_ObjectHideFlags: 0

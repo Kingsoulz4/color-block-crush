@@ -152,7 +152,7 @@ MonoBehaviour:
   closeBtn: {fileID: 1736715312983094756}
   bgTooltip: {fileID: 7022668030657455695}
   toolTipHanPos: {fileID: 2576260904085246086}
-  toolTipMagnetPos: {fileID: 0}
+  toolTipMagnetPos: {fileID: 1577985784796826673}
   BoosterType: -1
 --- !u!1 &2476499720202459031
 GameObject:

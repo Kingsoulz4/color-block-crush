@@ -24,24 +24,23 @@ namespace ColorBlockCrush
 
         [Header("Renderer References")]
         [SerializeField] protected Transform centerPoint;
-        [SerializeField] private MeshRenderer _blockMeshRenderer;
+        [SerializeField] private Renderer _blockMeshRenderer;
         [SerializeField] private ListMaterialsByColor colorRef;
-        [SerializeField] private LayerMask blockRay0;
+        [SerializeField] protected Collider mCollider;
         public SerializedDictionary<int, int> colorRate;
 
         protected int maxHitPoint;
         protected int hitPoint;
         protected int hitPointRaycast;
         protected Vector3 originScale;
-        private int id;
+        protected int id;
         private BlockConfig blockData;
         public BlockType BlockType { get; private set; }
         public ColorType ColorType { get; protected set; }
         public GridNode GridNode { get; set; }
-        public int GridHeight { get; set; }
         public bool CanDestroy { get; private set; }
-        public bool IsAttacked { get; set; }
         public bool IsDestroyed { get; set; }
+        public Vector2Int Size { get; set; } = new Vector2Int(1, 1);
 
         public BlockConfig BlockData { get => blockData; }
         public int Id { get => id; }
@@ -54,7 +53,6 @@ namespace ColorBlockCrush
             maxHitPoint = 1;
             hitPoint = 1;
             hitPointRaycast = 1;
-            IsAttacked = false;
             blockData = blockDataP;
             originScale = transform.localScale;
 
@@ -76,6 +74,11 @@ namespace ColorBlockCrush
                 if (mat != null && _blockMeshRenderer.sharedMaterial != mat)
                     _blockMeshRenderer.sharedMaterial = mat;
             }
+            else
+            {
+                _blockMeshRenderer.gameObject.SetActive(false);
+                mCollider.enabled = false;
+            }    
         }
 
         int GetRandomByRatio(Dictionary<int, int> ratioMap)
@@ -114,6 +117,12 @@ namespace ColorBlockCrush
             }
         }
 
+        public virtual void OnGunRevive()
+        {
+            hitPointRaycast += 1;
+            ChangeLayer(Constant.Layer.BLOCK);
+        }
+
         public virtual void TakeDamageRaycast(int damageAmount)
         {
             if (hitPointRaycast > 0)
@@ -123,10 +132,15 @@ namespace ColorBlockCrush
                 {
                     this.Wait(Time.deltaTime, () =>
                     {
-                        gameObject.layer = LayerMask.NameToLayer(Constant.Layer.BLOCK_RAY0);
+                        ChangeLayer(Constant.Layer.BLOCK_RAY0);
                     });
                 }
             }
+        }
+
+        public void ChangeLayer(string name)
+        {
+            gameObject.layer = LayerMask.NameToLayer(name);
         }
 
         private void OnDisable()

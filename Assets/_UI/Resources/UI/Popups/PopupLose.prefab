@@ -113,7 +113,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -94.62073}
+  m_AnchoredPosition: {x: 0, y: 100}
   m_SizeDelta: {x: 900, y: 889.1813}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8204070631989058193
@@ -222,6 +222,7 @@ MonoBehaviour:
   m_buttonRetry: {fileID: 2414967931837647645}
   m_buttonClose: {fileID: 3348094472192806340}
   m_textLevel: {fileID: 6173115639970994033}
+  failSfx: {fileID: 8300000, guid: 6a0f5eb6522131c4fa7e3e0261d6acbc, type: 3}
 --- !u!1 &2535633597751794665
 GameObject:
   m_ObjectHideFlags: 0

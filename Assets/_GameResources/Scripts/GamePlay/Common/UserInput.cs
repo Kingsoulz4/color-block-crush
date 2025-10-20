@@ -20,6 +20,11 @@ namespace ColorBlockCrush
 
         private void Update()
         {
+            if (GameManager.GameState != GameState.Playing)
+            {
+                return;
+            }
+
             HandleInput();
         }
 
@@ -50,28 +55,10 @@ namespace ColorBlockCrush
 
                 if (gun != null)
                 {
-                    OnGunClicked(gun);
+                    gun.OnGunClicked();
+                    LevelEvent.OnGunClick?.Invoke(gun);
                 }
             }
-        }
-
-        private void OnGunClicked(Gun gun)
-        {
-            if (!gun.CanPushToConveyor())
-            {
-                return;
-            }
-
-            if (gun.GunPos == GunPos.ON_GUN_BOARD)
-            {
-                LevelController.Instance.GunBoardController.OnTapGun(gun);
-            }
-
-            if (gun.GunPos == GunPos.ON_SLOT)
-            {
-                LevelController.Instance.SlotController.OnTapGun(gun);
-            }
-
         }
     }
 }

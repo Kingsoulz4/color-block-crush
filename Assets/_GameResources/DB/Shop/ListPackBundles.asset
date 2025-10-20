@@ -13,15 +13,21 @@ MonoBehaviour:
   m_Name: ListPackBundles
   m_EditorClassIdentifier: 
   listShopPack:
-  - id: boost_bundle
-    googleID: boost_bundle
-    appleID: boost_bundle
-    title: Boost Bundle
+  - id: small_bundle
+    googleID: small_bundle
+    appleID: small_bundle
+    title: Small Bundle
     description: boost
-    icon: {fileID: 21300000, guid: 278e4320ce504c54494354285a618103, type: 3}
+    icon: {fileID: 21300000, guid: 7b8c0d95df4074f42b89b50c1fc834b3, type: 3}
     listReward:
     - type: 0
-      quantity: 6000
+      quantity: 5000
+    - type: 3
+      quantity: 1
+    - type: 4
+      quantity: 1
+    - type: 5
+      quantity: 1
     - type: 1
       quantity: 3600
   - id: mega_bundle
@@ -33,14 +39,14 @@ MonoBehaviour:
     listReward:
     - type: 0
       quantity: 10000
+    - type: 3
+      quantity: 5
     - type: 4
-      quantity: 3
+      quantity: 5
     - type: 5
-      quantity: 3
-    - type: 6
-      quantity: 3
+      quantity: 5
     - type: 1
-      quantity: 10800
+      quantity: 7200
   - id: ultra_bundle
     googleID: ultra_bundle
     appleID: ultra_bundle
@@ -50,11 +56,11 @@ MonoBehaviour:
     listReward:
     - type: 0
       quantity: 16000
+    - type: 3
+      quantity: 10
     - type: 4
-      quantity: 6
+      quantity: 10
     - type: 5
-      quantity: 6
-    - type: 6
-      quantity: 6
+      quantity: 10
     - type: 1
-      quantity: 21600
+      quantity: 10800

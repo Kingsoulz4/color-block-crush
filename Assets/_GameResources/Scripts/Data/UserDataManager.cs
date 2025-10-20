@@ -36,7 +36,7 @@ public class UserDataManager : MonoBehaviour
     public static void AddGold(int value, string where, bool isLog = false, string reason = "", float timeDelay = 0)
     {
         Gold = Mathf.Clamp(Gold + value, 0, int.MaxValue);
-        OnUpdateGold?.Invoke(Gold - value, Gold, timeDelay);
+        OnUpdateGold?.Invoke(Gold + value, Gold, timeDelay);
     }
 
     public static Action<int, int, bool> OnAddHeart;
@@ -55,6 +55,11 @@ public class UserDataManager : MonoBehaviour
             {
                 newValue = 0;
             }
+
+            if (newValue > 5)
+            {
+                newValue = 5;
+            }
             Heart = newValue;
             OnAddHeart?.Invoke(current, newValue, hasAnimation);
         }
@@ -69,6 +74,7 @@ public class UserDataManager : MonoBehaviour
             {
                 HeartManager.InfinityEndTime += amount;
             }
+            OnAddHeart?.Invoke(Heart, Heart, hasAnimation);
         }
     }
     #endregion
@@ -281,7 +287,7 @@ public class UserDataManager : MonoBehaviour
                 HandBooster += quantity;
                 break;
             case BoosterType.MAGNET:
-                HandBooster += quantity;
+                MagnetBooster += quantity;
                 break;
             default:
                 break;

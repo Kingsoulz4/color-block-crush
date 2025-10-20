@@ -60,7 +60,7 @@ namespace ColorBlockCrush
             _goldCounter.transform.position = coinBarPosition;
             _goldCounter.SetText(UserDataManager.Gold - coinCount);
             _goldCounter.Sync = false;
-
+            Debug.Log($"Coin Bar {coinBarPosition} {_goldCounter.transform.position}");
             PlayTextFx(coinCount);
 
             //AudioManager.Instance.PlayAudioFX(AudioType.CoinCollecting);
@@ -93,6 +93,7 @@ namespace ColorBlockCrush
                        .OnComplete(() =>
                        {
                            //AudioManager.Instance.PlayCoinDingFX();
+                           AudioManager.Instance.PlayOneShot("SFX_CoinOneShot", 1);
                            //VibrationManager.VibrateWeak();
                            _goldCounter.SetText(UserDataManager.Gold - coinCount + coinCount / _coinContainer.childCount * (index + 1));
                            Destroy(coinObject.gameObject);

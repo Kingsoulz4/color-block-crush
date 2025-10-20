@@ -12,7 +12,9 @@ namespace ColorBlockCrush
         [SerializeField] private Button m_buttonClose;
         [SerializeField] private Text m_textPrice;
 
-        private BoosterItemData boosterData; 
+        private BoosterItemData boosterData;
+
+        [SerializeField] private AudioClip failSfx;
 
         public Action OnKeepPlaying { get; set; }
 
@@ -21,30 +23,23 @@ namespace ColorBlockCrush
         private void Awake()
         {
             m_buttonClose.onClick.AddListener(OnClickClose);
-            m_buttonKeepPlaying.onClick.AddListener(OnClickKeepPlaying);
+            m_buttonKeepPlaying.onClick.AddListener(OnClickRevive);
         }
 
-        public void Show()
+        public override void Show(Action onClose)
         {
+            base.Show(onClose);
             boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.REVIVAL);
             m_textPrice.text = boosterData.price.ToString();
+            AudioManager.Instance.PlayOneShot(failSfx, 1);
         }
-
-        private void OnClickKeepPlaying()
+        private void OnClickRevive()
         {
             if (UserDataManager.Gold >= boosterData.price)
             {
-                UserDataManager.AddGold(-boosterData.price, "Revival");
-                Hide();
+                LevelController.Instance.ReviveLevel(boosterData.price);
                 OnKeepPlaying?.Invoke();
-            }
-            else
-            {
-                UIManager.Instance.ShowPopup<PopupShop>(() =>
-                {
-                    GameManager.Instance.SetGameState(GameState.Playing);
-                });
-                GameManager.Instance.SetGameState(GameState.Paused);
+                Hide();
             }
         }
 

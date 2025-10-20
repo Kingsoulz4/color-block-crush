@@ -108,9 +108,20 @@ namespace ColorBlockCrush
             };
             
             var popupOutOfSpace = UIManager.Instance.ShowPopup<PopupOutOfSpace>(() => { });
-            popupOutOfSpace.Show();
-            popupOutOfSpace.OnClose = onClose;
-            popupOutOfSpace.OnKeepPlaying = onrevival;
+            popupOutOfSpace.Show(null);
+            popupOutOfSpace.OnClose = () =>
+            {
+                var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
+
+                HeartManager.UseHeart(1);
+
+                popupLose.OnClose = () =>
+                {
+                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                };
+                popupLose.OnRetry = LevelManager.Instance.OnRetryGame;
+            };
+            //popupOutOfSpace.OnKeepPlaying = LevelManager.Instance.OnReviveGame;
         }
 
         private void ReturnLevelEditor()

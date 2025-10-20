@@ -8,21 +8,27 @@ namespace ColorBlockCrush
 {
     public class HandBooster : BoosterBase
     {
-
         protected override int CurrentCount { get => UserDataManager.HandBooster; set => UserDataManager.HandBooster = value; }
-
-        private void Update()
-        {
-            if (IsShowConfirm && Input.GetMouseButton(0))
-            {
-                    StartCoroutine(DoBooster());
-            }
-        }
 
         public override void Init()
         {
             base.Init();
-            CurrentCount = UserDataManager.HandBooster;
+            LevelEvent.OnGunClick += OnGunClick;
+
+        }
+
+        private void OnGunClick(Gun gun)
+        {
+            if (IsShowConfirm)
+            {
+                StartCoroutine(DoBooster());
+                gun.OnGunClicked(true);
+            }
+        }
+
+        private void OnDisable()
+        {
+            LevelEvent.OnGunClick += OnGunClick;
         }
 
         public override void CancelBooster()
