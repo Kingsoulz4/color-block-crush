@@ -20,6 +20,7 @@ namespace ColorBlockCrush
         [SerializeField] private Text coinReceiveTxt;
         [SerializeField] private Text coinReceiveX2Txt;
         [SerializeField] private AudioClip winSfx;
+        [SerializeField] private GoldDisplay m_goldBar;
 
         private int coinReceiveValue;
         public Action<int> OnClaimedReward { get; set;}
@@ -63,6 +64,19 @@ namespace ColorBlockCrush
             coinReceiveTxt.text = $"x{coinReceiveValue.ToString()}";
             coinReceiveX2Txt.text = (coinReceiveValue * 2).ToString();
         }
+        
+        public void ShowClaimReward(int quantity, Action onClaimComplete)
+        {
+            m_goldBar.Sync = false;
+            m_goldBar.SetText(UserDataManager.Gold - quantity);
+            var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
+            popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, quantity, () =>
+            {
+                m_goldBar.SetText(UserDataManager.Gold);
+                m_goldBar.Sync = true;
+                onClaimComplete?.Invoke();
+            });
+        }    
 
         private void OnEnable()
         {
@@ -80,6 +94,7 @@ namespace ColorBlockCrush
             UpdateInfo();
             base.Show(onClose);
             AudioManager.Instance.PlayOneShot(winSfx, 1);
+            m_buttonClaimX2.gameObject.SetActive(UserDataManager.Level >= 10);
         }
     }
 }

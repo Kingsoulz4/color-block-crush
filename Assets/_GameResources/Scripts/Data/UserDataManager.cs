@@ -367,7 +367,7 @@ public class UserDataManager : MonoBehaviour
         return new UserData
         {
             level = 1,
-            gold = 5000,
+            gold = 0,
             heart = 5,
             removeAds = false,
             addTrayBooster = 0,

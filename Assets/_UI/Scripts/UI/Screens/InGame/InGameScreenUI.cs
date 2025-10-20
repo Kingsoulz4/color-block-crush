@@ -6,6 +6,7 @@ using UnityEngine;
 using I2.Loc;
 using UnityEngine.UI;
 using ColorBlockCrush.Tools;
+using Sirenix.OdinInspector.Editor.StateUpdaters;
 using Yoolax.Framework;
 
 namespace ColorBlockCrush
@@ -72,7 +73,7 @@ namespace ColorBlockCrush
             addTrayBoosterBtn.onClick.AddListener(OnAddTrayBoosterClick);
             handMoveBoosterBtn.onClick.AddListener(HandMoveboosterClick);
             shuffleBtn.onClick.AddListener(ShuffleBoosterClick);
-            magnetBoosterBtn.onClick.AddListener(MagnetBoosterClick);
+            magnetBoosterBtn.onClick.AddListener(SuperShootBoosterClick);
             btn_pause.onClick.AddListener(OnPauseClick);
             btn_Replay.onClick.AddListener(OnReplayClick);
 
@@ -81,7 +82,6 @@ namespace ColorBlockCrush
                 booster.OnStartUseBooster += OnStartUseBooster;
                 booster.OnChangeBoosterCount += OnChangeBoosterCount;
                 booster.OnUseBoosterDone += OnUseBoosterDone;
-                booster.OnCancelBooster += OnCancelBooster;
             }
 
             boosterDataSO = BoosterManager.Instance.BoosterData;
@@ -92,28 +92,15 @@ namespace ColorBlockCrush
             magnetBoosterCount.Init(UserDataManager.MagnetBooster, BoosterType.SUPER_SHOOT);
         }
 
-        private void OnCancelBooster(BoosterBase booster, int arg2)
-        {
-            switch (booster.BoosterType)
-            {
-                case BoosterType.ADD_TRAY:
-                    break;
-                case BoosterType.HAND_MOVE:
-                    boostersObj.gameObject.SetActive(true);
-                    break;
-                case BoosterType.SHUFFLE:
-                    break;
-                case BoosterType.SUPER_SHOOT:
-                    boostersObj.gameObject.SetActive(true);
-                    break;
-                default:
-                    break;
-            }
-        }
-
         private void Awake()
         {
             Server.Get<OnForceTutBooster>().AddListener(ShowForceTut);
+        }
+
+        private void OnEnable()
+        {
+            var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.ADD_TRAY);
+            boostersObj.SetActive(boosterData.levelUnlock <= UserDataManager.Level);
         }
 
         private void OnDisable()
@@ -131,7 +118,6 @@ namespace ColorBlockCrush
                 booster.OnStartUseBooster -= OnStartUseBooster;
                 booster.OnUseBoosterDone -= OnUseBoosterDone;
                 booster.OnChangeBoosterCount -= OnChangeBoosterCount;
-                booster.OnCancelBooster -= OnCancelBooster;
             }
             Server.Get<OnForceTutBooster>().RemoveListener(ShowForceTut);
         }
@@ -208,57 +194,89 @@ namespace ColorBlockCrush
         private void OnAddTrayBoosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            BoosterManager.Instance.AddTrayBooster.DoShowBooster((sucess) =>
+            if (!UserDataManager.FirstClaimAddTrayBooster)
             {
-                if (sucess)
+                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.ADD_TRAY);
+                UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
+            }
+            else
+            {
+                BoosterManager.Instance.AddTrayBooster.DoShowBooster((sucess) =>
                 {
-                    BoosterManager.Instance.AddTrayBooster.ActiveBooster();
-                }
-            });
+                    if (sucess)
+                    {
+                        BoosterManager.Instance.AddTrayBooster.ActiveBooster();
+                    }
+                });   
+            }
         }
 
         private void HandMoveboosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            BoosterManager.Instance.HandMoveBooster.DoShowBooster((sucess) =>
+            if (!UserDataManager.FirstClaimHandBooster)
             {
-                if (sucess)
+                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.HAND_MOVE);
+                UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
+            }
+            else
+            {
+                BoosterManager.Instance.HandMoveBooster.DoShowBooster((sucess) =>
                 {
-                    boosterConfirmUI.gameObject.SetActive(true);
-                    var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.HAND_MOVE);
-                    Image handMoveImg = handMoveBoosterBtn.GetComponent<VisualCountBooster>().Icon;
-                    boosterConfirmUI.SetUIData(boosterData, handMoveImg);
-                    boostersObj.gameObject.SetActive(false);
-                }
-            });
+                    if (sucess)
+                    {
+                        boosterConfirmUI.gameObject.SetActive(true);
+                        var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.HAND_MOVE);
+                        Image handMoveImg = handMoveBoosterBtn.GetComponent<VisualCountBooster>().Icon;
+                        boosterConfirmUI.SetUIData(boosterData, handMoveImg);
+                        boostersObj.gameObject.SetActive(false);
+                    }
+                });   
+            }
         }
 
         private void ShuffleBoosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            BoosterManager.Instance.ShuffleBooster.DoShowBooster((sucess) =>
+            if (!UserDataManager.FirstClaimShuffleBooster)
             {
-                if (sucess)
+                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.SHUFFLE);
+                UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
+            }
+            else
+            {
+                BoosterManager.Instance.ShuffleBooster.DoShowBooster((sucess) =>
                 {
-                    BoosterManager.Instance.ShuffleBooster.ActiveBooster();
-                }
-            });
+                    if (sucess)
+                    {
+                        BoosterManager.Instance.ShuffleBooster.ActiveBooster();
+                    }
+                });   
+            }
         }
 
-        private void MagnetBoosterClick()
+        private void SuperShootBoosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            BoosterManager.Instance.SuperShootBooster.DoShowBooster((sucess) =>
+            if (!UserDataManager.FirstClaimSuperShoot)
             {
-                if (sucess)
+                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.SUPER_SHOOT);
+                UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
+            }
+            else
+            {
+                BoosterManager.Instance.SuperShootBooster.DoShowBooster((sucess) =>
                 {
-                    boosterConfirmUI.gameObject.SetActive(true);
-                    var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.SUPER_SHOOT);
-                    Image magnetImg = magnetBoosterBtn.GetComponent<VisualCountBooster>().Icon;
-                    boosterConfirmUI.SetUIData(boosterData, magnetImg);
-                    boostersObj.gameObject.SetActive(false);
-                }
-            });
+                    if (sucess)
+                    {
+                        boosterConfirmUI.gameObject.SetActive(true);
+                        var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.SUPER_SHOOT);
+                        Image magnetImg = magnetBoosterBtn.GetComponent<VisualCountBooster>().Icon;
+                        boosterConfirmUI.SetUIData(boosterData, magnetImg);
+                        boostersObj.gameObject.SetActive(false);
+                    }
+                });   
+            }
         }
 
         private void OnPauseClick()
@@ -292,6 +310,7 @@ namespace ColorBlockCrush
             txt_Level_Localize_Param.SetParameterValue(txt_Level_Localize_Param_String,
                 LevelManager.Instance.CurrentLevel.ToString());
             UpdateTimeBar();
+            UpdateBgDiffBooster();
         }
 
         private void UpdateTimeBar()
@@ -302,6 +321,14 @@ namespace ColorBlockCrush
             }
 
             m_listTimeBarBackground[LevelController.GameLevelData.levelDifficult].SetActive(true);
+        }
+
+        private void UpdateBgDiffBooster()
+        {
+            handMoveBoosterCount.UpdateBgDiff(LevelController.GameLevelData.levelDifficult);
+            addTrayBoosterCount.UpdateBgDiff(LevelController.GameLevelData.levelDifficult);
+            shuffleBoosterCount.UpdateBgDiff(LevelController.GameLevelData.levelDifficult);
+            magnetBoosterCount.UpdateBgDiff(LevelController.GameLevelData.levelDifficult);
         }
 
         private void PoupNewFeature()

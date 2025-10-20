@@ -16,10 +16,16 @@ public class PopupSetting : PopupUI
     [SerializeField] Button btn_Close;
     [SerializeField] Button btn_Restore;
     [SerializeField] Button m_buttonExitGame;
+    [SerializeField] Button m_buttonContact;
+    [SerializeField] Button m_buttonPrivacySetting;
+    [SerializeField] Text versionTxt;
 
     private void Awake()
     {
         m_buttonExitGame.onClick.AddListener(OnClickExitGame);
+        m_buttonPrivacySetting.onClick.AddListener(OpenPrivacySetting);
+        m_buttonContact.onClick.AddListener(ContactUs);
+        versionTxt.text = Application.version;
     }
 
     private void OnClickExitGame()
@@ -39,6 +45,24 @@ public class PopupSetting : PopupUI
         //     Hide();
         //     UIManager.Instance.ShowScreen<MainScreenUI>();
         // }    
+    }
+
+    private void ContactUs()
+    {
+        EmailComposer.ComposeEmail(
+            to:  new[] { "tuandt@android.vn" },
+            cc:  new[] { "ledinhcuong248@gmail.com" },
+            bcc: null,
+            subject: "Color Block Crush Support",
+            body:
+            "Hello! Nice To meet you.\n\n" +
+            "— Sent from MyUnityApp"
+        );
+    }
+
+    private void OpenPrivacySetting()
+    {
+        Application.OpenURL("https://sites.google.com/view/amobear-privacy-policy/home");
     }
 
     public void SetType(PopupSettingType type)

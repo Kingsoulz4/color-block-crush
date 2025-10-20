@@ -144,6 +144,11 @@ namespace ColorBlockCrush.Tools
                 }
                 currentLevelConfig.levelId = levelId;
             });
+            
+            view.difficultDropdown.onValueChanged.AddListener((index) =>
+            {
+                currentLevelConfig.levelDifficult = (LevelDifficult)index;
+            });
 
             #endregion
             

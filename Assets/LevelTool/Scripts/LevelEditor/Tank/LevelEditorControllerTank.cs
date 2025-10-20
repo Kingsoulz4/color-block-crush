@@ -32,6 +32,11 @@ namespace ColorBlockCrush.Tools
             {
                 (ulong lineId, ulong itemIndex) = CantorPairing.Unpair((ulong)itemLevelView.elementConfig.elementId);
                 DelConnectLine(itemLevelView);
+                ColorType colorType = itemLevelView.elementConfig.gunConfig.colorType;
+                if (itemLevelView.elementConfig.elementType == GunLineElementType.Tank 
+                    && GetBloclColorNumber(colorType) <= 0)
+                    if (currentColorSet.Contains(colorType))
+                        currentColorSet.Remove(colorType);
                 UpdateTankLinesInfor();
                 UpdateLevelState();
                 ReUpdateElementId((int)lineId);
@@ -547,6 +552,11 @@ namespace ColorBlockCrush.Tools
                         tankLock++;
                     }
                 }
+            }
+
+            foreach (var colorType in colors)
+            {
+                currentColorSet.Add(colorType);
             }
 
             view.tankNumberTxtValue.text = tankNumber.ToString();
