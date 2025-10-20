@@ -1,6 +1,5 @@
 using System.Collections;
 using DG.Tweening;
-using ColorBlockCrush;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -33,6 +32,7 @@ namespace ColorBlockCrush
             int count = _coinContainer.childCount;
             _initialPos = new Vector3[count];
             _initialRot = new Quaternion[count];
+            _goldCounter.Sync = false;
 
             for (int i = 0; i < count; i++)
             {
@@ -58,9 +58,9 @@ namespace ColorBlockCrush
         private IEnumerator CoinFXRoutine(Vector3 coinBarPosition, int coinCount, UnityAction onFinish)
         {
             _goldCounter.transform.position = coinBarPosition;
-            _goldCounter.SetText(UserDataManager.Gold - coinCount);
             _goldCounter.Sync = false;
-            Debug.Log($"Coin Bar {coinBarPosition} {_goldCounter.transform.position}");
+            _goldCounter.SetText(UserDataManager.Gold - coinCount);
+
             PlayTextFx(coinCount);
 
             //AudioManager.Instance.PlayAudioFX(AudioType.CoinCollecting);
@@ -68,6 +68,7 @@ namespace ColorBlockCrush
             float delayCount = 0f;
             for (int i = 0; i < _coinContainer.childCount; i++)
             {
+                _goldCounter.SetText(UserDataManager.Gold - coinCount);
                 Transform coin = _coinContainer.GetChild(i);
 
                 Transform coinObject = Instantiate(m_coinPrefab, coin).transform;
@@ -86,23 +87,34 @@ namespace ColorBlockCrush
                             /*.SetLoops(-1, LoopType.Restart)*/)
                        .AppendInterval(_moveOutDelay)
                        .Append(coin.DOMove(_goldCounter.ImgCoinIcon.transform.position + Vector3.forward * 5, _moveToTargetDuration).SetEase(Ease.InBack))
-                       .Join(coin.DOScale(0.8f, _moveToTargetDuration))
+                       .Join(coin.DOScale(0.8f, _moveToTargetDuration * 0.8f).OnComplete(() =>
+                           {
+                                coin.DOScale(0f, _moveToTargetDuration * 0.2f).SetEase(Ease.InBack);
+                           }))
                        .Join(coinObject.DORotate(coinObject.localRotation.eulerAngles + Vector3.forward * 360, _moveToTargetDuration * 2, RotateMode.FastBeyond360).SetEase(Ease.Linear))
-                       .Append(coin.DOScale(0f, 0.25f).SetEase(Ease.InBack))
+                       //.Append(coin.DOScale(0f, 0.25f).SetEase(Ease.InBack))
+                       .Join(_goldCounter.transform.DOScale(_originScale * 1.1f, 0.05f).SetEase(Ease.InOutSine)
+                            .SetDelay(_moveToTargetDuration)
+                            .OnComplete(() =>
+                            {
+                                _goldCounter.SetText(UserDataManager.Gold - coinCount + coinCount / _coinContainer.childCount * (index + 1));
+                                _goldCounter.transform.DOScale(_originScale, 0.05f);
+                            }))
                        .SetDelay(delayCount)
                        .OnComplete(() =>
                        {
                            //AudioManager.Instance.PlayCoinDingFX();
-                           AudioManager.Instance.PlayOneShot("SFX_CoinOneShot", 1);
                            //VibrationManager.VibrateWeak();
-                           _goldCounter.SetText(UserDataManager.Gold - coinCount + coinCount / _coinContainer.childCount * (index + 1));
+                           //AudioManager.Instance.PlayOneShot(AudioClipNames.COLLECT_COIN.ToString(), 1f);
+                           
                            Destroy(coinObject.gameObject);
 
                            if (index == _coinContainer.childCount - 1)
                            {
                                // Final sync
                                _goldCounter.SetText(UserDataManager.Gold);
-                               _goldCounter.Sync = true;
+                               //_goldCounter.Sync = true;
+                               _goldCounter.gameObject.SetActive(false);
 
                                //m_targetPointFx?.Play();
                                onFinish?.Invoke();
@@ -143,10 +155,10 @@ namespace ColorBlockCrush
             }
 
             // Counter bounce FX
-            _goldCounter.transform.DOScale(_originScale * 1.1f, 0.1f)
-                .SetLoops(8, LoopType.Yoyo)
-                .SetEase(Ease.InOutSine)
-                .SetDelay(1f);
+            //_goldCounter.transform.DOScale(_originScale * 1.1f, 0.1f)
+            //    .SetLoops(8, LoopType.Yoyo)
+            //    .SetEase(Ease.InOutSine)
+            //    .SetDelay(1f);
 
             yield return null;
         }
@@ -175,6 +187,7 @@ namespace ColorBlockCrush
 
         private void ResetCoins()
         {
+            _goldCounter.gameObject.SetActive(true);
             for (int i = 0; i < _coinContainer.childCount; i++)
             {
                 Transform coin = _coinContainer.GetChild(i);
