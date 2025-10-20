@@ -57,10 +57,13 @@ namespace ColorBlockCrush
 
         private void ResizeBlock()
         {
-            m_tailPart.transform.position = listBodyPart.Last().transform.position;
-            Destroy(listBodyPart[^1]);
-            listBodyPart.RemoveAt(listBodyPart.Count -1);
-            UpdateCollider();
+            if (listBodyPart.Count > 0)
+            {
+                m_tailPart.transform.position = listBodyPart.Last().transform.position;
+                Destroy(listBodyPart[^1]);
+                listBodyPart.RemoveAt(listBodyPart.Count - 1);
+                UpdateCollider();
+            }
             
         }
 
