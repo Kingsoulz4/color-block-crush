@@ -80,6 +80,7 @@ namespace ColorBlockCrush
             UpdateInfo();
             base.Show(onClose);
             AudioManager.Instance.PlayOneShot(winSfx, 1);
+            m_buttonClaimX2.gameObject.SetActive(UserDataManager.Level >= 10);
         }
     }
 }

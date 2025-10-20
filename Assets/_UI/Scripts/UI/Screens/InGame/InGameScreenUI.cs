@@ -310,6 +310,7 @@ namespace ColorBlockCrush
             txt_Level_Localize_Param.SetParameterValue(txt_Level_Localize_Param_String,
                 LevelManager.Instance.CurrentLevel.ToString());
             UpdateTimeBar();
+            UpdateBgDiffBooster();
         }
 
         private void UpdateTimeBar()
@@ -320,6 +321,14 @@ namespace ColorBlockCrush
             }
 
             m_listTimeBarBackground[LevelController.GameLevelData.levelDifficult].SetActive(true);
+        }
+
+        private void UpdateBgDiffBooster()
+        {
+            handMoveBoosterCount.UpdateBgDiff(LevelController.GameLevelData.levelDifficult);
+            addTrayBoosterCount.UpdateBgDiff(LevelController.GameLevelData.levelDifficult);
+            shuffleBoosterCount.UpdateBgDiff(LevelController.GameLevelData.levelDifficult);
+            magnetBoosterCount.UpdateBgDiff(LevelController.GameLevelData.levelDifficult);
         }
 
         private void PoupNewFeature()

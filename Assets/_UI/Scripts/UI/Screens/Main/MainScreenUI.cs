@@ -3,6 +3,7 @@ using ColorBlockCrush;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ColorBlockCrush.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,8 @@ public class MainScreenUI : ScreenUI
     [SerializeField] MenuTabSystem menuTab;
     [SerializeField] GameObject blockUI;
     [SerializeField] Text[] arrTextLevel;
+    [SerializeField] GameObject arrBgHardLevel;
+    [SerializeField] GameObject arrBgSuperHardLevel;
     [SerializeField] Button btn_RemoveAds;
     [SerializeField] Button btn_StarterPackage;
     [SerializeField] GameObject objOtherGame;
@@ -76,6 +79,21 @@ public class MainScreenUI : ScreenUI
             {
                 arrTextLevel[i].text = (LevelManager.Instance.CurrentLevel + i).ToString();
             }
+        }
+
+        LevelDifficult levelDiff = LevelManager.Instance.GetCurrentLevelType();
+        if (levelDiff == LevelDifficult.Normal)
+        {
+            arrBgHardLevel.SetActive(false);
+            arrBgSuperHardLevel.SetActive(false);
+        }else if (levelDiff == LevelDifficult.Hard)
+        {
+            arrBgHardLevel.SetActive(true);
+            arrBgSuperHardLevel.SetActive(false);
+        }else if (levelDiff == LevelDifficult.SuperHard)
+        {
+            arrBgHardLevel.SetActive(false);
+            arrBgSuperHardLevel.SetActive(true);
         }
     }
 

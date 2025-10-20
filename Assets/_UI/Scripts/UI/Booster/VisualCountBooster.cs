@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using Yoolax.Framework;
+using AYellowpaper.SerializedCollections;
+using ColorBlockCrush.Tools;
 
 namespace ColorBlockCrush
 {
@@ -14,6 +16,7 @@ namespace ColorBlockCrush
         [SerializeField] GameObject obj_BoosterActive;
         [SerializeField] GameObject obj_BoosterAdd;
         [SerializeField] Button btn_AddBooster;
+        [SerializeField] SerializedDictionary<LevelDifficult, GameObject> m_listBgBackground;
         [SerializeField] Image icon;
         [Header("Lock Booster")]
         [SerializeField] private GameObject lockIcon;
@@ -62,6 +65,16 @@ namespace ColorBlockCrush
             lvUnlock.text = $"lv.{boosterItemData.levelUnlock}";
             UpdateText(count);
             UpdateState();
+        }
+
+        public void UpdateBgDiff(LevelDifficult difficult)
+        {
+            foreach (var item in m_listBgBackground)
+            {
+                item.Value.SetActive(false);
+            }
+
+            m_listBgBackground[difficult].SetActive(true);
         }
 
         private void UpdateState()
