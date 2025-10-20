@@ -47,6 +47,7 @@ namespace ColorBlockCrush
         private GunConfig gunData;
         private Queue<Block> targetQueue;
         private List<Block> targetQueu1e = new List<Block>();
+        private bool isDisappeared = false;
 
         public int ID { get; set; }
         public GunConfig GunData => gunData;
@@ -237,6 +238,7 @@ namespace ColorBlockCrush
 
         public void Fire(Block target)
         {
+            Debug.Log("Fire Here");
 
             RotateToFire(target.transform);
             BulletCount--;
@@ -257,9 +259,9 @@ namespace ColorBlockCrush
             {
                 CurrentTarget = null;
 
-                CheckDisappear();
+                
 
-                OnGunEmpty?.Invoke(this);
+                CheckDisappear(); 
             }
         }
 
@@ -267,7 +269,16 @@ namespace ColorBlockCrush
         {
             if (CheckCanDisappear())
             {
+                isDisappeared = true;
+
+                OnGunEmpty?.Invoke(this);
+
                 PlayAnim(Constant.GunAnimation.DISAPPEAR);
+
+                foreach(var gun in ConnectedGuns)
+                {
+                    gun.CheckDisappear();
+                }    
 
                 this.Wait(0.2f, () =>
                 {
@@ -491,6 +502,8 @@ namespace ColorBlockCrush
 
         public bool CheckCanDisappear()
         {
+            if(isDisappeared) return false;
+
             if (ConnectedGuns.Count <= 0)
             {
                 return true;
@@ -525,7 +538,19 @@ namespace ColorBlockCrush
 
             float angle = Vector3.Angle(shootDir, toBlock);
 
-            bool isInAngle = angle <= maxShootingAngle;
+            var shootingAngle = maxShootingAngle;
+
+            if(currentFireDir == RotationDirection.Up || currentFireDir == RotationDirection.Down)
+            {
+                shootingAngle = maxShootingAngle * block.Size.x;
+            }    
+            else
+            {
+                shootingAngle = maxShootingAngle * block.Size.y;
+            }    
+
+            bool isInAngle = angle <= shootingAngle ;
+
             return isInAngle;
         }
 

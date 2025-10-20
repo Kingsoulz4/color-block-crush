@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -64,28 +65,29 @@ public class ConveyorController : MonoBehaviour
         endPointConveyor.gameObject.SetActive(false);
     }
 
-    public void MoveGunIn(List<Gun> guns)
+    public async Task MoveGunIn(List<Gun> guns)
     {
-        PrepairTrayItems(guns.Count);
-
         for (int i = 0; i < guns.Count; i++)
         {
-            SetGunStartPosition(guns[i], prepairTrayItems[i], i);
+            PrepairTrayItems(1);
+            SetGunStartPosition(guns[i], prepairTrayItems[0], i);
             OnStartAddGunToConveyor?.Invoke(guns[i]);
+            await Task.Delay((int)(startMovingGunSpacing * 1000));
         }
     }
 
     public void SetGunStartPosition(Gun gun, TrayItem trayItem, int slotIndex)
     {
+        slotIndex = 0;
         float normalizedTime = slotIndex * startMovingGunSpacing;
         Vector3 position = splineContainer.EvaluatePosition(normalizedTime);
 
         gun.TrayItem = trayItem;
         AddTrayItem(trayItem);
         UpdateTrayText();
+
         gun.MoveToConeyor(position, () =>
         {
-
             gun.OnGunEmpty += OnGunEmpty;
             trayItem.SetChild(gun);
             trayItem.Move();
@@ -99,24 +101,12 @@ public class ConveyorController : MonoBehaviour
 
     private void OnGunEmpty(Gun gun)
     {
-
-        if (gun.CheckCanDisappear())
+        if (gun.TrayItem != null)
         {
-            if (gun.TrayItem != null)
-            {
-                MoveTrayIn(gun.TrayItem);
-                RemoveTrayItem(gun.TrayItem);
-            }
-
-            foreach (var g in gun.ConnectedGuns)
-            {
-                if (g.TrayItem != null)
-                {
-                    MoveTrayIn(g.TrayItem);
-                    RemoveTrayItem(g.TrayItem);
-                }
-            }
+            MoveTrayIn(gun.TrayItem);
+            RemoveTrayItem(gun.TrayItem);
         }
+        
         UpdateTrayText();
     }
 
@@ -165,6 +155,7 @@ public class ConveyorController : MonoBehaviour
 
     public void SetTrayStartPosition(TrayItem tray, int slotIndex)
     {
+        slotIndex = 0;
         float normalizedTime = slotIndex * startMovingGunSpacing;
         Vector3 position = splineContainer.EvaluatePosition(normalizedTime);
         tray.SplineAnimate.Container = splineContainer;
