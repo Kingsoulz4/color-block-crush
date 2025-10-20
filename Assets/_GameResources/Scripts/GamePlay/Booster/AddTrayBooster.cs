@@ -45,6 +45,7 @@ namespace ColorBlockCrush
             {
                 if (currentCount >= maxTrayCount)
                 {
+                    LevelController.Instance.ConveyorController.WarnTrayText();
                     UIManager.Instance.NotifyContent("You can't use it now!");
                     return;
                 }
