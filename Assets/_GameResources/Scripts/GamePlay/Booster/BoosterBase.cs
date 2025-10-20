@@ -19,7 +19,7 @@ public abstract class BoosterBase : MonoBehaviour
     [SerializeField] BoosterType boosterType;
     private int currentCount;
     private bool canActive => !InProgress;
-    private bool inProgress;
+    protected bool inProgress;
     private bool isShowConfirm = false;
 
     public Action<BoosterBase, int> OnStartUseBooster;
@@ -51,7 +51,7 @@ public abstract class BoosterBase : MonoBehaviour
         InProgress = false;
     }
 
-    public void DoShowBooster(Action<bool> callback = null)
+    public virtual void DoShowBooster(Action<bool> callback = null)
     {
         if (CanShowBooster())
         {
