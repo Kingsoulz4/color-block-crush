@@ -510,6 +510,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6009332021277553892, guid: 4f471b22482600c4ea770d17c83b9735, type: 3}
+    - {fileID: 3858044786568180675, guid: 4f471b22482600c4ea770d17c83b9735, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -624,7 +625,7 @@ PrefabInstance:
     - target: {fileID: 130207889246998500, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: superGunPrb
       value: 
-      objectReference: {fileID: 1368227192826055, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}
+      objectReference: {fileID: 1368227192826055, guid: 994cde9c679ac2a4f88c9361787fa59e, type: 3}
     - target: {fileID: 796862612698015822, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: m_Name
       value: SuperShootBooster
@@ -679,11 +680,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7186091768816987362, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7186091768816987362, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -6
       objectReference: {fileID: 0}
     - target: {fileID: 8744219414392260340, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: zOffetCam

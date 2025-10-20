@@ -384,10 +384,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2963680295945916546, guid: 46a8edf75861c5c4097b559db34fcef2, type: 3}
-      propertyPath: orthographic size
-      value: 14.3
-      objectReference: {fileID: 0}
     - target: {fileID: 3254280744557311143, guid: 46a8edf75861c5c4097b559db34fcef2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -490,22 +486,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3030464676802345570, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3030464676802345570, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -6
-      objectReference: {fileID: 0}
     - target: {fileID: 4007479879379954468, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
       propertyPath: m_Name
       value: Managers
       objectReference: {fileID: 0}
-    - target: {fileID: 5222742423315716452, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
-      propertyPath: superGunPrb
-      value: 
-      objectReference: {fileID: 1432112894508569, guid: 4957b2bd496e38944937d092d5ff0842, type: 3}
     - target: {fileID: 5740006147290716732, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
       propertyPath: _camera
       value: 

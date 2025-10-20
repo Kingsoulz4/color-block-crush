@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8576036070549581444}
   - component: {fileID: 130207889246998500}
   m_Layer: 0
-  m_Name: MagnetBooster
+  m_Name: SuperShoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,6 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boosterType: 3
+  superGunPrb: {fileID: 1368227192826055, guid: 994cde9c679ac2a4f88c9361787fa59e, type: 3}
+  zOffetCam: -3
+  bulletPrb: {fileID: 395657148022226912, guid: 01063d7c4dbbe6b4c8702d9c79d9492e, type: 3}
+  spawnPoint: {fileID: 7186091768816987362}
 --- !u!1 &2747553025833055162
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boosterType: 2
+  zOffetCam: 0
 --- !u!1 &5931702196088051768
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,7 +186,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boosterType: 1
-  hammerPrefab: {fileID: 0}
 --- !u!1 &6018013672586842931
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,7 +242,7 @@ MonoBehaviour:
   - {fileID: 130207889246998500}
   addTrayBooster: {fileID: 4439173133010605132}
   shuffleBooster: {fileID: 4683005929746910059}
-  magnetBooster: {fileID: 130207889246998500}
+  superShootBooster: {fileID: 130207889246998500}
   handMoveBooster: {fileID: 8744219414392260340}
 --- !u!1 &7139980177684193534
 GameObject:

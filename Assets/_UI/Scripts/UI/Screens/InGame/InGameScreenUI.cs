@@ -248,7 +248,7 @@ namespace ColorBlockCrush
         private void MagnetBoosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            BoosterManager.Instance.MagnetBooster.DoShowBooster((sucess) =>
+            BoosterManager.Instance.SuperShootBooster.DoShowBooster((sucess) =>
             {
                 if (sucess)
                 {
