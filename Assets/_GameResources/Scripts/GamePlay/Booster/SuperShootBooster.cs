@@ -1,7 +1,9 @@
+using ColorBlockCrush.Tools;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace ColorBlockCrush
 {
@@ -9,13 +11,15 @@ namespace ColorBlockCrush
     {
         [SerializeField] GameObject superGunPrb;
         [SerializeField] private float zOffetCam = -3;
+        [SerializeField] private Bullet bulletPrb;
+        [SerializeField] private Transform spawnPoint;
         private float originCamZ;
+
         protected override int CurrentCount { get => UserDataManager.MagnetBooster; set => UserDataManager.MagnetBooster = value; }
 
         public override void Init()
         {
             base.Init();
-            CurrentCount = UserDataManager.MagnetBooster;
         }
 
         private void Update()
@@ -25,10 +29,10 @@ namespace ColorBlockCrush
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hitInfo))
                 {
-                    Transform tile = hitInfo.collider.GetComponent<Transform>();
-                    if (tile != null)
+                    Block block = hitInfo.collider.GetComponent<Block>();
+                    if (block != null)
                     {
-                        StartCoroutine(DoBooster(tile));
+                        StartCoroutine(DoBooster(block.ColorType));
                     }
                 }
             }
@@ -37,7 +41,7 @@ namespace ColorBlockCrush
         public override void CancelBooster()
         {
             base.CancelBooster();
-            Camera.main.GetComponent<GameCamera>().MoveZ(zOffetCam, 0.2f);
+            Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
         }
 
         public override void ActiveBooster()
@@ -52,22 +56,26 @@ namespace ColorBlockCrush
         {
             base.ShowBooster();
             IsShowConfirm = true;
+            originCamZ = Camera.main.transform.position.z;
             Camera.main.GetComponent<GameCamera>().MoveZ(zOffetCam, 0.2f);
         }
 
         protected override void Done()
         {
             base.Done();
-            Camera.main.GetComponent<GameCamera>().MoveZ(zOffetCam, 0.2f);
+            Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
         }
 
-        private IEnumerator DoBooster(Transform tile)
+        private IEnumerator DoBooster(ColorType colorType)
         {
             ActiveBooster();
-
+            List<Block> blocks = new List<Block>();
+            blocks = LevelController.Instance.BlockBoardController.GetBlockListByColor(colorType);
             yield return new WaitForEndOfFrame();
-
             GameObject superGun = Instantiate(superGunPrb);
+            yield return StartCoroutine(Fire(blocks));
+            RemoveSuperGun(superGun);
+            Done();
             //superGun.Shoot(tile.transform.position, 0.35f, () =>
             //{
             //    RemoveSuperGun(superGun);
@@ -75,13 +83,25 @@ namespace ColorBlockCrush
             //});
         }
 
-        private void RemoveSuperGun(Hammer hammer)
+        private IEnumerator Fire(List<Block> blocks)
         {
-            hammer.transform.DOScale(Vector3.zero, 0.5f).OnComplete(() =>
+            foreach (Block block in blocks)
             {
-                Destroy(hammer.gameObject);
-            }).SetEase(Ease.InOutBack);
+                Bullet bullet = Instantiate(bulletPrb, spawnPoint.position, Quaternion.identity);
+                bullet.transform.SetParent(LevelController.Instance.transform);
+                bullet.OnInit(null, block, (gun, block) =>
+                {
+                    block.TakeDamage(1);
+                    Destroy(bullet.gameObject);
+                });
+                yield return null;
+            }
+
+        }
+
+        private void RemoveSuperGun(GameObject a)
+        {
+            Destroy(a);
         }
     }
 }
-    
