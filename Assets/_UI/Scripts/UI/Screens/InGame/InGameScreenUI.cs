@@ -193,9 +193,9 @@ namespace ColorBlockCrush
         private void OnAddTrayBoosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            if (!UserDataManager.FirstClaimAddTrayBooster)
+            var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.ADD_TRAY);
+            if (!UserDataManager.FirstClaimAddTrayBooster && UserDataManager.Level <= boosterData.levelUnlock)
             {
-                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.ADD_TRAY);
                 UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
             }
             else
@@ -213,9 +213,9 @@ namespace ColorBlockCrush
         private void HandMoveboosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            if (!UserDataManager.FirstClaimHandBooster)
+            var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.HAND_MOVE);
+            if (!UserDataManager.FirstClaimHandBooster && UserDataManager.Level <= boosterData.levelUnlock)
             {
-                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.HAND_MOVE);
                 UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
             }
             else
@@ -225,7 +225,6 @@ namespace ColorBlockCrush
                     if (sucess)
                     {
                         boosterConfirmUI.gameObject.SetActive(true);
-                        var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.HAND_MOVE);
                         Image handMoveImg = handMoveBoosterBtn.GetComponent<VisualCountBooster>().Icon;
                         boosterConfirmUI.SetUIData(boosterData, handMoveImg);
                         boostersObj.gameObject.SetActive(false);
@@ -237,9 +236,9 @@ namespace ColorBlockCrush
         private void ShuffleBoosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            if (!UserDataManager.FirstClaimShuffleBooster)
+            var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.SHUFFLE);
+            if (!UserDataManager.FirstClaimShuffleBooster && UserDataManager.Level <= boosterData.levelUnlock)
             {
-                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.SHUFFLE);
                 UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
             }
             else
@@ -257,9 +256,9 @@ namespace ColorBlockCrush
         private void SuperShootBoosterClick()
         {
             boosterForceTutShield.SetActive(false);
-            if (!UserDataManager.FirstClaimSuperShoot)
+            var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.SUPER_SHOOT);
+            if (!UserDataManager.FirstClaimSuperShoot && UserDataManager.Level <= boosterData.levelUnlock)
             {
-                var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.SUPER_SHOOT);
                 UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock at lv.{boosterData.levelUnlock}");
             }
             else
