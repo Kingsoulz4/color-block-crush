@@ -23,7 +23,7 @@ public class ConveyorController : MonoBehaviour
     [SerializeField] private TrayItem trayPrefab;
     [SerializeField] private TextMeshPro trayText;
     [SerializeField] private Transform spawnParent;
-    [SerializeField] private Vector3 startPosition; // Vị trí tray đầu tiên (bên trái)
+    [SerializeField] private Vector3 startPositionInit = new Vector3(-0.25f, -0.3f, 0);
     [SerializeField] private float spaceOffsetX = 0.3f; // Khoảng cách giữa các tray
 
     [Header("Animation")]
@@ -31,6 +31,7 @@ public class ConveyorController : MonoBehaviour
     [SerializeField] private Ease shiftEase = Ease.OutQuad;
 
     public SplineContainer splineContainer;
+    private Vector3 currentStartPos;
     private int currentMaxSlots;
 
     private List<TrayItem> prepairTrayItems = new List<TrayItem>();
@@ -43,6 +44,7 @@ public class ConveyorController : MonoBehaviour
     public void Init()
     {
         currentMaxSlots = initMaxSlot;
+        currentStartPos = startPositionInit;
         endPointConveyor.gameObject.SetActive(true);
         movingTrayItems = new List<TrayItem>();
         movingTrayItems.Clear();
@@ -190,6 +192,7 @@ public class ConveyorController : MonoBehaviour
     public void BoosterAddTrayItem()
     {
         currentMaxSlots += 1;
+        currentStartPos.x = -spaceOffsetX * (currentMaxSlots - initMaxSlot + 1);
         SpawnTrayAtLeft();
         UpdateTrayText();
     }
@@ -204,7 +207,7 @@ public class ConveyorController : MonoBehaviour
 
     private Vector3 GetTrayPosition(int index)
     {
-        return startPosition + new Vector3(index * spaceOffsetX, 0, 0);
+        return currentStartPos + new Vector3(index * spaceOffsetX, 0, 0);
     }
 
     public void PauseAllTray()

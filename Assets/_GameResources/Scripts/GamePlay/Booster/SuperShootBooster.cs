@@ -19,7 +19,6 @@ namespace ColorBlockCrush
         public override void Init()
         {
             base.Init();
-            CurrentCount = UserDataManager.MagnetBooster;
         }
 
         public override void CancelBooster()

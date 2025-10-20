@@ -19,12 +19,13 @@ public abstract class BoosterBase : MonoBehaviour
     [SerializeField] BoosterType boosterType;
     private int currentCount;
     private bool canActive => !InProgress;
-    private bool inProgress;
+    protected bool inProgress;
     private bool isShowConfirm = false;
 
     public Action<BoosterBase, int> OnStartUseBooster;
     public Action<BoosterBase, int> OnChangeBoosterCount;
     public Action<BoosterBase, int> OnUseBoosterDone;
+    public Action<BoosterBase, int> OnCancelBooster;
 
     protected virtual int CurrentCount
     {
@@ -51,7 +52,7 @@ public abstract class BoosterBase : MonoBehaviour
         InProgress = false;
     }
 
-    public void DoShowBooster(Action<bool> callback = null)
+    public virtual void DoShowBooster(Action<bool> callback = null)
     {
         if (CanShowBooster())
         {
@@ -76,7 +77,7 @@ public abstract class BoosterBase : MonoBehaviour
                     GameManager.Instance.SetGameState(GameState.Playing);
                     OnUseBoosterDone?.Invoke(this, CurrentCount);
                 });
-                
+
                 poup.Show(boosterType);
                 poup.OnBought = UpdateVisualBooster;
             }
@@ -104,6 +105,7 @@ public abstract class BoosterBase : MonoBehaviour
     {
         IsShowConfirm = false;
         InProgress = false;
+        OnCancelBooster?.Invoke(this, 0);
     }
 
     protected virtual void ShowBooster()

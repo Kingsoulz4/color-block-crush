@@ -1201,7 +1201,7 @@ MonoBehaviour:
   trayPrefab: {fileID: 7864664086401441334, guid: b0fe6a15e27bbf049bcdbde5b85cbab7, type: 3}
   trayText: {fileID: 1627710677912917364}
   spawnParent: {fileID: 7078067749853631460}
-  startPosition: {x: -0.25, y: -0.3, z: 0}
+  startPositionInit: {x: -0.25, y: -0.3, z: 0}
   spaceOffsetX: 0.2
   shiftDuration: 0.2
   shiftEase: 6
@@ -2485,7 +2485,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -0.06999999, y: -3.6, z: 0.45}
-  m_LocalScale: {x: 17.25955, y: 32.786213, z: 9.624462}
+  m_LocalScale: {x: 23, y: 40, z: 9.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1135669931889588602}
