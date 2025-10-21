@@ -379,10 +379,11 @@ namespace ColorBlockCrush
                 }
 
                 Vector3 currentPos = objOnColumn.transform.position;
-                Vector3 newPos = new Vector3(
+
+                Vector3 newPos = spawnOrigin + new Vector3(
                     currentPos.x,
                     0,
-                    currentPos.z + rowSpacing
+                     i * -rowSpacing
                 );
 
                 if (objOnColumn is Gun gun)
