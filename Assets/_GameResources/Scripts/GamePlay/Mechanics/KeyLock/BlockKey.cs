@@ -32,17 +32,17 @@ namespace ColorBlockCrush
 
         public void CheckCanResolve()
         {
-            var lastBlock = listBlock[^1];
+            //var lastBlock = listBlock[^1];
             for (int i=0; i<listBlock.Count; i++)
             {
 
-                if (lastBlock.IsDestroyed && listBlock[i].IsDestroyed)
+                if (listBlock[i].IsDestroyed)
                 {
                     Resolve();
                     return;
                 }
     
-                lastBlock = listBlock[i];
+                //lastBlock = listBlock[i];
             }
         }
 

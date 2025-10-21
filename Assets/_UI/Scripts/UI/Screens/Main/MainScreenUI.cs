@@ -62,12 +62,16 @@ public class MainScreenUI : ScreenUI
         
         UIManager.OnRefeshBannerAndAds += UpdateButtonRemoveAds;
         UpdateButtonRemoveAds();
+        UpdateButtonStarterPack();
         btn_RemoveAds.onClick.AddListener(() =>
         {
             var popupRemoveAds = UIManager.Instance.ShowPopup<PopupRemoveAds>(null);
             //uiRemove.OnBuySS = deActionButtonRemoveAds;
         });
-        
+        btn_StarterPackage.onClick.AddListener(() =>
+        {
+            var popupStarterPack = UIManager.Instance.ShowPopup<PopupStarterPack>(null);
+        });
     }
     
     public void UpdateUI()
@@ -111,6 +115,11 @@ public class MainScreenUI : ScreenUI
         btn_RemoveAds.gameObject.SetActive(false);
     }
 
+    private void UpdateButtonStarterPack()
+    {
+        btn_StarterPackage.gameObject.SetActive(!ShopManager.Instance.HasPurchasedStarterPack);
+    }
+
     public override void Active()
     {
         base.Active();
@@ -121,8 +130,32 @@ public class MainScreenUI : ScreenUI
 
     private void PlayLevel()
     {
-        LevelManager.Instance.StartCurrentLevel();
-        UIManager.Instance.ShowScreen<InGameScreenUI>();
+        if (UserDataManager.Heart > 0)
+        {
+            var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
+            loading.Show(() =>
+            {
+                LevelManager.Instance.StartCurrentLevel();
+                UIManager.Instance.ShowScreen<InGameScreenUI>();
+            });
+        }
+        else
+        {
+            var popupGetMoreLives = UIManager.Instance.ShowPopup<PopupGetMoreLives>(null);
+            popupGetMoreLives.OnRefilled = () =>
+            {
+                var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
+                loading.Show(() =>
+                {
+                    LevelManager.Instance.StartCurrentLevel();
+                    UIManager.Instance.ShowScreen<InGameScreenUI>();
+                });
+            };
+            popupGetMoreLives.OnClose = () =>
+            {
+                UIManager.Instance.ShowScreen<MainScreenUI>();
+            };
+        }
         //UIManager.Instance.ShowPopup<PopupSelectBooster>(null);
     }
 

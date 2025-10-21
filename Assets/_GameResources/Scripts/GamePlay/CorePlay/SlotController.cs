@@ -99,21 +99,6 @@ namespace ColorBlockCrush
         //}
         public void MoveGunIn(Gun gun)
         {
-            if (gun.ConnectedGuns.Count > 1)
-            {
-                if (!CanPlaceGuns(gun.ConnectedGuns.Count))
-                {
-                    LevelController.Instance.ConveyorController.PauseAllTray();
-                    LevelController.Instance.LoseLevel();
-                    return;
-                }
-            }
-            else if (!CanPlaceGuns(1))
-            {
-                LevelController.Instance.ConveyorController.PauseAllTray();
-                LevelController.Instance.LoseLevel();
-                return;
-            }
 
             _gunsInSlots.Add(gun);
             gun.transform.SetParent(gunContainer);
@@ -139,21 +124,7 @@ namespace ColorBlockCrush
 
             if (gun.IsConnectedGroup())
             {
-                gunsToPush.Add(gun);
-                foreach (var gunn in gun.ConnectedGuns)
-                {
-                    if (!gunsToPush.Contains(gunn))
-                    {
-                        gunsToPush.Add(gunn);
-                    }
-                    foreach (var gunn1 in gunn.ConnectedGuns)
-                    {
-                        if(!gunsToPush.Contains(gunn1))
-                        {
-                            gunsToPush.Add(gunn1);
-                        }
-                    }
-                }
+                AddAllGunToPush(gunsToPush, gun);
             }
             else
             {
@@ -177,14 +148,29 @@ namespace ColorBlockCrush
 
             LevelController.Instance.ConveyorController.MoveGunIn(gunsToPush);
 
-            RemoveGun(gun);
-
-            foreach (var gunn in gun.ConnectedGuns)
+            foreach(var gunn in gunsToPush)
             {
                 RemoveGun(gunn);
-                foreach (var gunn1 in gunn.ConnectedGuns)
+            }
+                
+        }
+
+        private void AddAllGunToPush(List<Gun> listGunToPush, Gun gun)
+        {
+            var stack = new Stack<Gun>();
+            stack.Push(gun);
+            List<Gun> visited = new();
+            while (stack.Count > 0)
+            {
+                var gunTemp = stack.Pop();
+                listGunToPush.Add(gunTemp);
+                for (int i = 0; i < gunTemp.ConnectedGuns.Count; i++)
                 {
-                    RemoveGun(gunn1);
+                    var linkGun = gunTemp.ConnectedGuns[i];
+                    if (!listGunToPush.Contains(linkGun))
+                    {
+                        stack.Push(linkGun);
+                    }
                 }
             }
         }
@@ -207,7 +193,7 @@ namespace ColorBlockCrush
 
         public Gun GetLastGun()
         {
-            Gun lastGun = _gunsInSlots[_maxSlots-1];
+            Gun lastGun = _gunsInSlots[_gunsInSlots.Count-1];
             RemoveGun(lastGun);
             return lastGun;
         }

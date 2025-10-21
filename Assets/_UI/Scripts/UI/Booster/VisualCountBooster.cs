@@ -147,7 +147,8 @@ namespace ColorBlockCrush
                 onCompleteForceTut = null;
             }       
             boosterCanvas.sortingOrder = 0;
-            handTut.SetActive(false);       
+            handTut.SetActive(false);      
+            GameManager.Instance.SetGameState(GameState.Playing);
         }
 
         public void ShowEffect(Action complete, BoosterType type, Vector3 startPosition)

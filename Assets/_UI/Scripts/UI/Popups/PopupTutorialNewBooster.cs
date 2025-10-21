@@ -53,6 +53,7 @@ namespace ColorBlockCrush
             if (CheckShowForceTut())
             {
                 base.Show(callback);
+                GameManager.Instance.SetGameState(GameState.Paused);
                 boosterType = boosterUnlock.boosterType;
                 SetData(boosterUnlock.title, boosterUnlock.description, boosterUnlock.icon);
                 

@@ -11,6 +11,8 @@ namespace ColorBlockCrush
 
         public int Index { get; private set; } = 0;
 
+        public bool CanShift { get; set; }  = true;
+
         protected Tween moveSortSlotTw;
 
         public virtual void SetIndex(int index)

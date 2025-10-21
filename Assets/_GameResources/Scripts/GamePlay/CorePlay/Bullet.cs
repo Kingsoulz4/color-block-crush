@@ -22,7 +22,7 @@ namespace ColorBlockCrush
             onHit = onHitP;
             block = blockP;
             var y = transform.position.y;
-            endPos = blockP.transform.position;
+            endPos = blockP.GetTargetHitBullet();
             endPos.y = y;
 
             isMoving = true;

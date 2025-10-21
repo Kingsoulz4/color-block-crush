@@ -166,7 +166,7 @@ namespace ColorBlockCrush
             var newKey = Instantiate(blockKeyPrefab, keyContainer);
             newKey.transform.position = CalculateCenter(keyConfig.blockId);
             newKey.Init(keyConfig);
-            var directions = new List<Vector2Int>() { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right, Vector2Int.one, Vector2Int.one * -1, new Vector2Int(1, -1), new Vector2Int(-1, 1)};
+            var directions = new List<Vector2Int>() { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right/*, Vector2Int.one, Vector2Int.one * -1, new Vector2Int(1, -1), new Vector2Int(-1, 1)*/};
 
             for (int i = 0; i < keyConfig.blockId.Count; i++)
             {
