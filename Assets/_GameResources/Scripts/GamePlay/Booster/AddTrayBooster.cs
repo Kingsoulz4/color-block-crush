@@ -15,16 +15,11 @@ namespace ColorBlockCrush
         public override void Init()
         {
             base.Init();
-            LevelEvent.OnLevelStart += OnLevelStart;
         }
 
-        private void OnDisable()
+        protected override void OnLevelStart(int obj)
         {
-            LevelEvent.OnLevelStart -= OnLevelStart;
-        }
-
-        private void OnLevelStart(int obj)
-        {
+            base.OnLevelStart(obj);
             currentCount = 0;
         }
 

@@ -34,7 +34,11 @@ namespace ColorBlockCrush
 
         private void OnFastMode()
         {
-            SplineAnimate.Duration = fastModeDuration;
+            float t = splineAnimate.NormalizedTime;
+
+            splineAnimate.Duration = Mathf.Max(0.0001f, fastModeDuration);
+
+            splineAnimate.NormalizedTime = t;
         }
 
         private void OnDisable()

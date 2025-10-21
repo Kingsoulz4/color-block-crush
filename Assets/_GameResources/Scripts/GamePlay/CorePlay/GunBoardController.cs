@@ -514,6 +514,10 @@ namespace ColorBlockCrush
             this.Wait(animDuration + 0.1f, () =>
             {
                 ReorganizeInternalLists(shuffleableGuns, shuffledGuns);
+            });
+
+            this.Wait(animDuration + 0.8f, () =>
+            {
                 GameManager.Instance.SetGameState(GameState.Playing);
             });
         }
@@ -524,6 +528,15 @@ namespace ColorBlockCrush
             {
                 ShuffleableGun slot = originalSlots[i];
                 Gun newGun = shuffledGuns[i];
+
+                //Debug.Log($"Attempting to place gun at col={slot.originalColumn}, row={slot.originalRow}");
+                //Debug.Log($"listGunColumn[{slot.originalColumn}].Count = {listGunColumn[slot.originalColumn].Count}");
+
+                if (slot.originalRow >= listGunColumn[slot.originalColumn].Count)
+                {
+                    Debug.LogError($"OUT OF RANGE: row {slot.originalRow} >= count {listGunColumn[slot.originalColumn].Count}");
+                    continue;
+                }
 
                 newGun.ColumnIndex = slot.originalColumn;
                 listGunColumn[slot.originalColumn][slot.originalRow] = newGun;
@@ -542,14 +555,6 @@ namespace ColorBlockCrush
             public int originalRow;
             public Vector3 originalPosition;
         }
-    }
-
-    public class ShuffleableGun
-    {
-        public Gun gun;
-        public int originalColumn;
-        public int originalRow;
-        public Vector3 originalPosition;
     }
 }
 
