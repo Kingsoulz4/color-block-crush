@@ -50,6 +50,7 @@ namespace ColorBlockCrush
         private Queue<Block> targetQueue;
         private List<Block> targetQueu1e = new List<Block>();
         private bool isDisappeared = false;
+        private Vector3 currentTargetPos;
 
         public int ID { get; set; }
         public GunConfig GunData => gunData;
@@ -580,7 +581,14 @@ namespace ColorBlockCrush
         public override void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
         {
             Sequence moveSortSlotSq = DOTween.Sequence();
-            moveSortSlotTw.Kill();
+            if(moveSortSlotTw != null && moveSortSlotTw.IsPlaying())
+            {
+                moveSortSlotTw.Kill();
+                transform.position = currentTargetPos;
+                
+            }
+
+            currentTargetPos = targetPos;
             if (gunData.isHidden && m_hiddenGun.IsResolved)
             {
                 moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove((targetPos + transform.position) / 2 + Vector3.up * 5f, _shiftDuration).SetEase(_shiftEase))
