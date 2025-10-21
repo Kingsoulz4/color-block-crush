@@ -40,6 +40,10 @@ namespace ColorBlockCrush
             dictGun.Clear();
             this.levelConfig = levelConfig;
             SpawnGunBoard(levelConfig);
+            this.Wait(0.1f, () => // gun connect init take 1 frame
+            {
+                InitConnectGun();
+            });
         }
 
         public void SpawnGunBoard(LevelConfig gunBoardData)
@@ -83,7 +87,7 @@ namespace ColorBlockCrush
                             dictGun[data.elementId] = gun;
                         }
                     }
-                    else if(data.elementType == GunLineElementType.Tunnel)
+                    else if (data.elementType == GunLineElementType.Tunnel)
                     {
                         var gun = SpawnTunnel(col, i, data.tunnelConfig, data.elementId, centerOffsetX);
                         if (gun != null)
@@ -92,10 +96,24 @@ namespace ColorBlockCrush
                             //dictGun[data.elementId] = gun;
                         }
                     }
-                        
+
                 }
                 totalGunCount = GetGunCountInBoard();
                 UpdateFrontRowFlags(col);
+            }
+        }
+
+        public void InitConnectGun()
+        {
+            foreach (var c in listGunColumn)
+            {
+                foreach (var obj in c)
+                {
+                    if (obj is Gun gun)
+                    {
+                        gun.GetConnectedCountAll(listGunColumn);
+                    }
+                }
             }
         }
 

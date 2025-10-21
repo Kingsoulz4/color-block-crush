@@ -42,9 +42,9 @@ namespace ColorBlockCrush
 
         public void MoveGunIn(Gun gun)
         {
-            if (gun.ConnectedGuns.Count > 1)
+            if (gun.ConnectedGuns.Count > 0)
             {
-                if (!CanPlaceGuns(gun.ConnectedGuns.Count))
+                if (!CanPlaceGuns(gun.AllConnectedGunCount))
                 {
                     LevelController.Instance.LoseLevel();
                     return;
