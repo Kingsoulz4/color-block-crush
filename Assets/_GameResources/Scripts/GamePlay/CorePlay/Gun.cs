@@ -360,7 +360,7 @@ namespace ColorBlockCrush
                     gun.CheckDisappear();
                 }
 
-                this.Wait(0.2f, () =>
+                this.Wait(0.3f, () =>
                 {
                     gameObject.SetActive(false);
                     OnGunDissapear?.Invoke(this);
