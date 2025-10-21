@@ -8,6 +8,9 @@ namespace ColorBlockCrush
 {
     public class HandBooster : BoosterBase
     {
+
+        [SerializeField] private float zOffetCam;
+        private float originCamZ;
         protected override int CurrentCount { get => UserDataManager.HandBooster; set => UserDataManager.HandBooster = value; }
 
         public override void Init()
@@ -35,6 +38,7 @@ namespace ColorBlockCrush
         {
             base.CancelBooster();
             IsShowConfirm = false;
+            Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
         }
 
         public override void ActiveBooster()
@@ -56,11 +60,14 @@ namespace ColorBlockCrush
         {
             base.ShowBooster();
             IsShowConfirm = true;
+            originCamZ = Camera.main.transform.position.z;
+            Camera.main.GetComponent<GameCamera>().MoveZ(zOffetCam, 0.2f);
         }
 
         protected override void Done()
         {
             base.Done();
+            Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
         }
     }
 }

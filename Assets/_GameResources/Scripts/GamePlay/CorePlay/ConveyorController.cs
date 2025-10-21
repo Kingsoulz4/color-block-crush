@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -19,6 +20,7 @@ public class ConveyorController : MonoBehaviour
     [SerializeField] private EndPointConveyor endPointConveyor;
 
     [Header("Tray Spawn Settings")]
+    [SerializeField] private Transform startPosBooster;
     [SerializeField] private TrayItem trayPrefab;
     [SerializeField] private TextMeshPro trayText;
     [SerializeField] private Transform spawnParent;
@@ -64,32 +66,33 @@ public class ConveyorController : MonoBehaviour
         endPointConveyor.gameObject.SetActive(false);
     }
 
-    public void MoveGunIn(List<Gun> guns)
+    public async Task MoveGunIn(List<Gun> guns)
     {
-        PrepairTrayItems(guns.Count);
-
         for (int i = 0; i < guns.Count; i++)
         {
-            SetGunStartPosition(guns[i], prepairTrayItems[i], i);
+            PrepairTrayItems(1);
+            SetGunStartPosition(guns[i], prepairTrayItems[0], i, i * startMovingGunSpacing);
             OnStartAddGunToConveyor?.Invoke(guns[i]);
+            //await Task.Delay((int)(startMovingGunSpacing * 1000));
         }
     }
 
-    public void SetGunStartPosition(Gun gun, TrayItem trayItem, int slotIndex)
+    public void SetGunStartPosition(Gun gun, TrayItem trayItem, int slotIndex, float delay = 0)
     {
+        slotIndex = 0;
         float normalizedTime = slotIndex * startMovingGunSpacing;
         Vector3 position = splineContainer.EvaluatePosition(normalizedTime);
 
         gun.TrayItem = trayItem;
         AddTrayItem(trayItem);
         UpdateTrayText();
+
         gun.MoveToConeyor(position, () =>
         {
-
             gun.OnGunEmpty += OnGunEmpty;
             trayItem.SetChild(gun);
             trayItem.Move();
-        });
+        }, delay);
     }
 
     public bool CanPlaceGuns(int count)
@@ -99,24 +102,12 @@ public class ConveyorController : MonoBehaviour
 
     private void OnGunEmpty(Gun gun)
     {
-
-        if (gun.CheckCanDisappear())
+        if (gun.TrayItem != null)
         {
-            if (gun.TrayItem != null)
-            {
-                MoveTrayIn(gun.TrayItem);
-                RemoveTrayItem(gun.TrayItem);
-            }
-
-            foreach (var g in gun.ConnectedGuns)
-            {
-                if (g.TrayItem != null)
-                {
-                    MoveTrayIn(g.TrayItem);
-                    RemoveTrayItem(g.TrayItem);
-                }
-            }
+            MoveTrayIn(gun.TrayItem);
+            RemoveTrayItem(gun.TrayItem);
         }
+        
         UpdateTrayText();
     }
 
@@ -165,6 +156,7 @@ public class ConveyorController : MonoBehaviour
 
     public void SetTrayStartPosition(TrayItem tray, int slotIndex)
     {
+        slotIndex = 0;
         float normalizedTime = slotIndex * startMovingGunSpacing;
         Vector3 position = splineContainer.EvaluatePosition(normalizedTime);
         tray.SplineAnimate.Container = splineContainer;
@@ -202,8 +194,7 @@ public class ConveyorController : MonoBehaviour
     {
         currentMaxSlots += 1;
         currentStartPos.x = -spaceOffsetX * (currentMaxSlots - initMaxSlot + 1);
-        SpawnTrayAtLeft();
-        UpdateTrayText();
+        SpawnTraBooster();
     }
 
     private void InitTray()
@@ -267,6 +258,28 @@ public class ConveyorController : MonoBehaviour
         newTray.Init(trayMoveDuration, trayMoveDurationFast);
         trayItemsFree.Insert(0, newTray);
 
+        ShiftTraysToRight();
+
+        return newTray;
+    }
+
+    public TrayItem SpawnTraBooster()
+    {
+        if (trayItemsFree.Count >= currentMaxSlots)
+        {
+            Debug.LogWarning("List đã đầy!");
+            return null;
+        }
+
+        TrayItem newTray = Instantiate(trayPrefab, spawnParent);
+        newTray.transform.position = startPosBooster.position;
+        newTray.Init(trayMoveDuration, trayMoveDurationFast);
+        trayItemsFree.Insert(0, newTray);
+        this.Wait(shiftDuration, () =>
+        {
+            WarnTrayText();
+            UpdateTrayText();
+        });
         ShiftTraysToRight();
 
         return newTray;

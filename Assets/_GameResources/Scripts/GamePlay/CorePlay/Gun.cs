@@ -47,6 +47,7 @@ namespace ColorBlockCrush
         private GunConfig gunData;
         private Queue<Block> targetQueue;
         private List<Block> targetQueu1e = new List<Block>();
+        private bool isDisappeared = false;
 
         public int ID { get; set; }
         public GunConfig GunData => gunData;
@@ -129,6 +130,10 @@ namespace ColorBlockCrush
             {
                 PlayAnim(Constant.GunAnimation.IDLE);
             }
+            else
+            {
+                PlayAnim(Constant.GunAnimation.STAND);
+            }
         }
 
         private void CheckFire()
@@ -152,6 +157,8 @@ namespace ColorBlockCrush
 
         public bool CanPushToConveyor()
         {
+            if (IsMovingToConveyor()) return false; 
+
             if (GunPos == GunPos.ON_CONVEYOR || GunPos == GunPos.TWEEN_SORT) return false;
 
             if (GunPos == GunPos.ON_GUN_BOARD)
@@ -237,6 +244,7 @@ namespace ColorBlockCrush
 
         public void Fire(Block target)
         {
+            Debug.Log("Fire Here");
 
             RotateToFire(target.transform);
             BulletCount--;
@@ -257,9 +265,9 @@ namespace ColorBlockCrush
             {
                 CurrentTarget = null;
 
-                CheckDisappear();
+                
 
-                OnGunEmpty?.Invoke(this);
+                CheckDisappear(); 
             }
         }
 
@@ -267,7 +275,16 @@ namespace ColorBlockCrush
         {
             if (CheckCanDisappear())
             {
+                isDisappeared = true;
+
+                OnGunEmpty?.Invoke(this);
+
                 PlayAnim(Constant.GunAnimation.DISAPPEAR);
+
+                foreach(var gun in ConnectedGuns)
+                {
+                    gun.CheckDisappear();
+                }    
 
                 this.Wait(0.2f, () =>
                 {
@@ -403,7 +420,7 @@ namespace ColorBlockCrush
         Tween moveToConveyorTw;
         Tween moveToSlotTw;
 
-        public void MoveToConeyor(Vector3 endPos, Action callback = null)
+        public void MoveToConeyor(Vector3 endPos, Action callback = null, float delay = 0)
         {
             isFireFirstTime = false;
             Sequence moveToConveyorSq = DOTween.Sequence();
@@ -425,8 +442,14 @@ namespace ColorBlockCrush
             moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration));
             moveToConveyorSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration));
             moveToConveyorSq.SetId(this);
+            moveToConveyorSq.SetDelay(delay);
 
         }
+
+        public bool IsMovingToConveyor()
+        {
+            return moveToConveyorTw != null && moveToConveyorTw.IsPlaying();
+        }    
 
         public void MoveToSlot(Vector3 endPos, Action callback = null)
         {
@@ -491,6 +514,8 @@ namespace ColorBlockCrush
 
         public bool CheckCanDisappear()
         {
+            if(isDisappeared) return false;
+
             if (ConnectedGuns.Count <= 0)
             {
                 return true;
@@ -525,7 +550,19 @@ namespace ColorBlockCrush
 
             float angle = Vector3.Angle(shootDir, toBlock);
 
-            bool isInAngle = angle <= maxShootingAngle;
+            var shootingAngle = maxShootingAngle;
+
+            if(currentFireDir == RotationDirection.Up || currentFireDir == RotationDirection.Down)
+            {
+                shootingAngle = maxShootingAngle * block.Size.x;
+            }    
+            else
+            {
+                shootingAngle = maxShootingAngle * block.Size.y;
+            }    
+
+            bool isInAngle = angle <= shootingAngle ;
+
             return isInAngle;
         }
 

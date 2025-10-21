@@ -38,6 +38,7 @@ public class Constant
         public const string IDLE = "Idle";
         public const string CLICK = "Click";
         public const string DISAPPEAR = "Disappear";
+        public const string STAND = "Stand";
     }
 
 }

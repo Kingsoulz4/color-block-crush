@@ -40,6 +40,8 @@ namespace ColorBlockCrush
 
         private void DetectAndTapGun(Vector3 screenPosition)
         {
+            if (BoosterManager.Instance && BoosterManager.Instance.SuperShootBooster.InProgress) return;
+
             Ray ray = _camera.ScreenPointToRay(screenPosition);
             RaycastHit hit;
 

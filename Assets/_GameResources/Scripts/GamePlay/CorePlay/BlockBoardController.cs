@@ -64,7 +64,7 @@ namespace ColorBlockCrush
                 calculatedBlockOffset  
             );
 
-            _blockStacks = new Block[_rows, _columns];
+            _blockStacks = new Block[_columns, _rows];
 
             SpawnBlockBoard(levelConfig);
             SpawnKeys();
@@ -111,12 +111,15 @@ namespace ColorBlockCrush
             if (levelConfig.mapConfig.bigBlocks.Count <= 0) return;
             for(int i=0; i<levelConfig.mapConfig.bigBlocks.Count; i++)
             {
+                if (levelConfig.mapConfig.bigBlocks[i].blocksId.Count <= 0) continue;
+
                 SpawnBigBlock(levelConfig.mapConfig.bigBlocks[i]);
             }
         }
 
         public BigBlock SpawnBigBlock(BigBlockConfig bigBlockConfig)
         {
+
             BigBlock newBigBlock = Instantiate(bigBlockPrefab, bigBlockContainer);
 
             newBigBlock.Init(bigBlockConfig);
@@ -167,7 +170,7 @@ namespace ColorBlockCrush
 
             for (int i = 0; i < keyConfig.blockId.Count; i++)
             {
-                (ulong row, ulong col) = CantorPairing.Unpair((ulong)keyConfig.blockId[i]);
+                (ulong col, ulong row) = CantorPairing.Unpair((ulong)keyConfig.blockId[i]);
                 int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
                 var blockData = levelConfig.mapConfig.blocks[idReal];
                 var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
@@ -197,7 +200,7 @@ namespace ColorBlockCrush
             var sumPos = new Vector3();
             for(int i=0; i<listBlockId.Count; i++)
             {
-                (ulong row, ulong col) = CantorPairing.Unpair((ulong)listBlockId[i]);
+                (ulong col, ulong row) = CantorPairing.Unpair((ulong)listBlockId[i]);
                 int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
                 var blockData = levelConfig.mapConfig.blocks[idReal];
                 var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
@@ -214,11 +217,20 @@ namespace ColorBlockCrush
 
         public Block GetBlockByID(int id)
         {
-            (ulong row, ulong col) = CantorPairing.Unpair((ulong)id);
-            int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
-            var blockData = levelConfig.mapConfig.blocks[idReal];
-            var block = _blockStacks[blockData.coordinate.x, blockData.coordinate.y];
-            return block;
+            (ulong col, ulong row) = CantorPairing.Unpair((ulong)id);
+            //int idReal = (int)col * levelConfig.mapConfig.mapSize.y + (int)row;
+            //var blockData = levelConfig.mapConfig.blocks[idReal];
+            try
+            {
+                var block = _blockStacks[col, row];
+                return block;
+            }
+            catch(Exception ex)
+            {
+                Debug.LogException(ex);
+            }
+
+            return null;
         }
 
         private void OnBlockDestroyed(Block block)
@@ -271,7 +283,7 @@ namespace ColorBlockCrush
         {
             if (!IsValidPosition(row, col)) return;
 
-            _blockStacks[row, col] = block;
+            _blockStacks[col, row] = block;
 
             if (block.BlockData.blockType == BlockType.Stone)
             {
@@ -318,6 +330,28 @@ namespace ColorBlockCrush
             if (IsValidPosition(row, col))
                 return gridController.GridNodes[row, col];
             return null;
+        }
+
+        public List<Block> GetBlockListByColor(ColorType targetColor)
+        {
+            List<Block> blocks = new List<Block>();
+
+            int rows = _blockStacks.GetLength(0);
+            int cols = _blockStacks.GetLength(1);
+
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    Block block = _blockStacks[row, col];
+                    if (block != null && block.ColorType == targetColor)
+                    {
+                        blocks.Add(block);
+                    }
+                }
+            }
+
+            return blocks;
         }
     }
 }

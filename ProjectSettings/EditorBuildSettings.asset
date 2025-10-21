@@ -17,7 +17,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_GameResources/Scenes/LevelEditor.unity
     guid: a955a2f28083e5e4aafcd2d7f4f9b9a8
-  - enabled: 0
+  - enabled: 1
     path: Assets/_GameResources/Scenes/LevelTest.unity
     guid: afe578602add06045aeba597ec0c8add
   - enabled: 0

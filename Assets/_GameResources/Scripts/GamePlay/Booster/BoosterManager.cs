@@ -10,12 +10,12 @@ public class BoosterManager : SingletonMono<BoosterManager>
     [SerializeField] private List<BoosterBase> boosters;
     [SerializeField] private BoosterBase addTrayBooster;
     [SerializeField] private BoosterBase shuffleBooster;
-    [SerializeField] private BoosterBase magnetBooster;
+    [SerializeField] private BoosterBase superShootBooster;
     [SerializeField] private BoosterBase handMoveBooster;
     public BoosterBase AddTrayBooster { get => addTrayBooster; set => addTrayBooster = value; }
     public BoosterBase ShuffleBooster { get => shuffleBooster; set => shuffleBooster = value; }
     public BoosterBase HandMoveBooster { get => handMoveBooster; set => handMoveBooster = value; }
-    public BoosterBase MagnetBooster {get => magnetBooster; set => magnetBooster = value; }
+    public BoosterBase SuperShootBooster {get => superShootBooster; set => superShootBooster = value; }
 
     public BoosterDataSO BoosterData { get => boosterData; }
     public List<BoosterBase> Boosters { get => boosters; }

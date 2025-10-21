@@ -1,4 +1,5 @@
 using ColorBlockCrush.Tools;
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -189,7 +190,6 @@ namespace ColorBlockCrush
             }
         }
 
-
         public LockObject GetPenndingLock()
         {
             LockObject lockObject = null;
@@ -303,5 +303,102 @@ namespace ColorBlockCrush
             }
             return count;
         }
+
+
+        public void ShuffleBoard()
+        {
+            List<ShuffleableGun> shuffleableGuns = new List<ShuffleableGun>();
+
+            for (int col = 0; col < listGunColumn.Count; col++)
+            {
+                for (int row = 0; row < listGunColumn[col].Count; row++)
+                {
+                    if (listGunColumn[col][row] is Gun gun)
+                    {
+                        if (gun.IsConnectedGroup())
+                        {
+                            continue;
+                        }
+
+                        shuffleableGuns.Add(new ShuffleableGun
+                        {
+                            gun = gun,
+                            originalColumn = col,
+                            originalRow = row,
+                            originalPosition = gun.transform.position
+                        });
+                    }
+                }
+            }
+
+            if (shuffleableGuns.Count <= 1)
+            {
+                Debug.Log("Not enough guns to shuffle");
+                return;
+            }
+
+            List<Gun> shuffledGuns = shuffleableGuns.Select(s => s.gun).ToList();
+
+            for (int i = shuffledGuns.Count - 1; i > 0; i--)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, i + 1);
+                Gun temp = shuffledGuns[i];
+                shuffledGuns[i] = shuffledGuns[randomIndex];
+                shuffledGuns[randomIndex] = temp;
+            }
+
+            float animDuration = 0.25f;
+
+            for (int i = 0; i < shuffleableGuns.Count; i++)
+            {
+                Gun gun = shuffledGuns[i];
+                Vector3 targetPosition = shuffleableGuns[i].originalPosition;
+
+                gun.transform.DOMove(targetPosition, animDuration)
+                    .SetEase(DG.Tweening.Ease.InOutQuad);
+            }
+
+            GameManager.Instance.SetGameState(GameState.Paused);
+
+            this.Wait(animDuration + 0.1f, () =>
+            {
+                ReorganizeInternalLists(shuffleableGuns, shuffledGuns);
+                GameManager.Instance.SetGameState(GameState.Playing);
+            });
+        }
+
+        private void ReorganizeInternalLists(List<ShuffleableGun> originalSlots, List<Gun> shuffledGuns)
+        {
+            for (int i = 0; i < originalSlots.Count; i++)
+            {
+                ShuffleableGun slot = originalSlots[i];
+                Gun newGun = shuffledGuns[i];
+
+                newGun.ColumnIndex = slot.originalColumn;
+                listGunColumn[slot.originalColumn][slot.originalRow] = newGun;
+            }
+
+            for (int col = 0; col < listGunColumn.Count; col++)
+            {
+                UpdateFrontRowFlags(col);
+            }
+        }
+
+        private class ShuffleableGun
+        {
+            public Gun gun;
+            public int originalColumn;
+            public int originalRow;
+            public Vector3 originalPosition;
+        }
+    }
+
+    public class ShuffleableGun
+    {
+        public Gun gun;
+        public int originalColumn;
+        public int originalRow;
+        public Vector3 originalPosition;
     }
 }
+

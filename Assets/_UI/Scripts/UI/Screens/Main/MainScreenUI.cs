@@ -3,6 +3,7 @@ using ColorBlockCrush;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ColorBlockCrush.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,8 @@ public class MainScreenUI : ScreenUI
     [SerializeField] MenuTabSystem menuTab;
     [SerializeField] GameObject blockUI;
     [SerializeField] Text[] arrTextLevel;
+    [SerializeField] GameObject arrBgHardLevel;
+    [SerializeField] GameObject arrBgSuperHardLevel;
     [SerializeField] Button btn_RemoveAds;
     [SerializeField] Button btn_StarterPackage;
     [SerializeField] GameObject objOtherGame;
@@ -54,14 +57,9 @@ public class MainScreenUI : ScreenUI
     {
         base.Initialize(uiManager);
         btn_Play.onClick.AddListener(PlayLevel);
-        txt_Level.text = $"Level {LevelManager.Instance.CurrentLevel}";
-        if (arrTextLevel != null)
-        {
-            for (int i = 0; i < arrTextLevel.Length; i++)
-            {
-                arrTextLevel[i].text = (LevelManager.Instance.CurrentLevel + i).ToString();
-            }
-        }
+
+        UpdateUI();
+        
         UIManager.OnRefeshBannerAndAds += UpdateButtonRemoveAds;
         UpdateButtonRemoveAds();
         btn_RemoveAds.onClick.AddListener(() =>
@@ -71,6 +69,33 @@ public class MainScreenUI : ScreenUI
         });
         
     }
+    
+    public void UpdateUI()
+    {
+        //txt_Level.text = $"Level {LevelManager.Instance.CurrentLevel}";
+        if (arrTextLevel != null)
+        {
+            for (int i = 0; i < arrTextLevel.Length; i++)
+            {
+                arrTextLevel[i].text = (LevelManager.Instance.CurrentLevel + i).ToString();
+            }
+        }
+
+        LevelDifficult levelDiff = LevelManager.Instance.GetCurrentLevelType();
+        if (levelDiff == LevelDifficult.Normal)
+        {
+            arrBgHardLevel.SetActive(false);
+            arrBgSuperHardLevel.SetActive(false);
+        }else if (levelDiff == LevelDifficult.Hard)
+        {
+            arrBgHardLevel.SetActive(true);
+            arrBgSuperHardLevel.SetActive(false);
+        }else if (levelDiff == LevelDifficult.SuperHard)
+        {
+            arrBgHardLevel.SetActive(false);
+            arrBgSuperHardLevel.SetActive(true);
+        }
+    }
 
     public void ResetVisual()
     {
@@ -78,8 +103,8 @@ public class MainScreenUI : ScreenUI
     }
     private void UpdateButtonRemoveAds()
     {
-         
-        ResetVisual();
+        UpdateUI();
+        btn_RemoveAds.gameObject.SetActive(!ShopManager.Instance.HasPurchasedNoAdsPack);
     }
     void deActionButtonRemoveAds()
     {
@@ -89,6 +114,7 @@ public class MainScreenUI : ScreenUI
     public override void Active()
     {
         base.Active();
+        UpdateUI();
         AudioManager.Instance.StopMusic("BG_Gameplay");
         AudioManager.Instance.PlayMusic("BG_Home", 1, true);
     }

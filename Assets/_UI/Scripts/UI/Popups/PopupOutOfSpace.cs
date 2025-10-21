@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,9 @@ namespace ColorBlockCrush
         [SerializeField] private Button m_buttonKeepPlaying;
         [SerializeField] private Button m_buttonClose;
         [SerializeField] private Text m_textPrice;
+        
+        [SerializeField] private ShopData shopData;
+        [SerializeField] private FailOfferPack m_failOfferPack;
 
         private BoosterItemData boosterData;
 
@@ -32,6 +36,14 @@ namespace ColorBlockCrush
             boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.REVIVAL);
             m_textPrice.text = boosterData.price.ToString();
             AudioManager.Instance.PlayOneShot(failSfx, 1);
+
+            var pack = shopData.listShopPack.FirstOrDefault(x => x.id == "fail_offer");
+            m_failOfferPack.SetData(pack, () =>
+            {
+                LevelController.Instance.ReviveLevel(boosterData.price);
+                OnKeepPlaying?.Invoke();
+                Hide();
+            });
         }
         private void OnClickRevive()
         {
@@ -40,6 +52,14 @@ namespace ColorBlockCrush
                 LevelController.Instance.ReviveLevel(boosterData.price);
                 OnKeepPlaying?.Invoke();
                 Hide();
+            }
+            else
+            {
+                UIManager.Instance.ShowPopup<PopupShop>(() =>
+                {
+                    GameManager.Instance.SetGameState(GameState.Playing);
+                });
+                GameManager.Instance.SetGameState(GameState.Paused);
             }
         }
 
