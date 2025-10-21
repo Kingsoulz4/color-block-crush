@@ -105,6 +105,7 @@ public abstract class BoosterBase : MonoBehaviour
     {
         IsShowConfirm = false;
         InProgress = false;
+        //CurrentCount++;
         OnCancelBooster?.Invoke(this, 0);
     }
 

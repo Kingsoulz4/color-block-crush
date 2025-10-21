@@ -13,6 +13,7 @@ public class PopupSetting : PopupUI
     [SerializeField] Button btn_Close;
     [SerializeField] Button btn_Restore;
     [SerializeField] Button m_buttonExitGame;
+    [SerializeField] Button m_buttonRestart;
     [SerializeField] Button m_buttonContact;
     [SerializeField] Button m_buttonPrivacySetting;
     [SerializeField] Text versionTxt;
@@ -20,6 +21,7 @@ public class PopupSetting : PopupUI
     private void Awake()
     {
         m_buttonExitGame.onClick.AddListener(OnClickExitGame);
+        m_buttonRestart.onClick.AddListener(OnClickRestartGame);
         m_buttonPrivacySetting.onClick.AddListener(OpenPrivacySetting);
         m_buttonContact.onClick.AddListener(ContactUs);
         versionTxt.text = Application.version;
@@ -49,6 +51,19 @@ public class PopupSetting : PopupUI
         // }    
     }
 
+    private void OnClickRestartGame()
+    {
+        var popupConfirmLeave = UIManager.Instance.ShowPopup<PopupConfirmLeave>(null);
+        popupConfirmLeave.SetTextButtonConfirm("Retry");
+        popupConfirmLeave.OnConfirm = () =>
+        {
+            LevelManager.Instance.OnRetryGame();
+            Hide();
+            HeartManager.UseHeart(1);
+        };
+        popupConfirmLeave.OnClose = () => { };
+    }
+
     private void ContactUs()
     {
         EmailComposer.ComposeEmail(
@@ -70,6 +85,7 @@ public class PopupSetting : PopupUI
     public void SetType(PopupSettingType type)
     {
         m_buttonExitGame.gameObject.SetActive(type == PopupSettingType.IN_GAME);
+        m_buttonRestart.gameObject.SetActive(type == PopupSettingType.IN_GAME);
     }
 
     public override void Initialize(UIManager manager)

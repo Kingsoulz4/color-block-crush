@@ -82,10 +82,12 @@ namespace ColorBlockCrush
                 newPack.OnPurchased = () =>
                 {
                     UpdateContainer();
+                    m_goldBar.gameObject.SetActive(false);
                     var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
                     var goldQuantity = pack.listReward.Find(x => x.type == ItemType.GOLD).quantity;
                     popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity, () =>
                     {
+                        m_goldBar.gameObject.SetActive(true);
                         m_goldBar.SetText(UserDataManager.Gold);
                     });
                 };
@@ -99,18 +101,22 @@ namespace ColorBlockCrush
                 newCoinPack.SetData(pack);
                 newCoinPack.OnPurchased = () =>
                 {
+                    m_goldBar.gameObject.SetActive(false);
                     var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
                     var goldQuantity = pack.listReward.Find(x => x.type == ItemType.GOLD).quantity;
                     popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity, () =>
                     {
+                        m_goldBar.gameObject.SetActive(true);
                         m_goldBar.SetText(UserDataManager.Gold);
                     });
                 };
             }
             m_freeCoinPack.OnGotCoin = (val) => {
+                m_goldBar.gameObject.SetActive(false);
                 var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
                 popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, val, () =>
                 {
+                    m_goldBar.gameObject.SetActive(true);
                     m_goldBar.SetText(UserDataManager.Gold);
                 });
             };

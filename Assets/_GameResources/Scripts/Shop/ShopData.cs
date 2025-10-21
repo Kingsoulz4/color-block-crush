@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Purchasing;
 
 namespace ColorBlockCrush
 {
@@ -19,6 +20,7 @@ namespace ColorBlockCrush
         public string googleID;
         public string appleID;
         public string title;
+        public ProductType type;
         public string description;
         public Sprite icon;
         public List<RewardDataGameGecko> listReward;

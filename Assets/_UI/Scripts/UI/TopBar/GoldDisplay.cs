@@ -32,7 +32,6 @@ namespace ColorBlockCrush
         private void OnEnable()
         {
             UserDataManager.OnUpdateGold += UpdateTextGold;
-            setUpVisual();
         }
 
         private void setUpVisual()
@@ -51,6 +50,7 @@ namespace ColorBlockCrush
 
         private void showPopupMiniShop()
         {
+            UIManager.Instance.ShowPopup<PopupShop>(null);
         }
 
         public void UpdateTextGold(int goldCurrent, int goldUpdate, float timeDelay) 

@@ -1,9 +1,5 @@
 using AYellowpaper.SerializedCollections;
 using ColorBlockCrush;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Purchasing;
@@ -37,9 +33,14 @@ public class IAPManager : SingletonDontDestroyMono<IAPManager>, IHandleIAP
         IAPHandler.AddProductType(type, id, idStoreGoogle, idStoreApple, callbackPurchase);
     }
 
-    public void BuyProductID(string internalProductId, UnityAction<bool> callback = null)
-    {
+    public void BuyProductID(string internalProductId, UnityAction<bool> callback = null) {
+        #if UNITY_EDITOR
+                callback?.Invoke(true);
+                return;
+        #endif
         IAPHandler.BuyProductID(internalProductId, callback);
+      //  Debug.Log("buy:" + CheckHasPurchased(internalProductId));
+
     }
 
     public void Init()
@@ -52,21 +53,26 @@ public class IAPManager : SingletonDontDestroyMono<IAPManager>, IHandleIAP
         IAPHandler.RestorePurchases();
     }
 
-    public void AddProductConsume(string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
-    {
-        IAPHandler.AddProductConsume(id, idStoreGoogle, idStoreApple, callbackPurchase);
+    //public void AddProductConsume(string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
+    //{
+    //    IAPHandler.AddProductConsume(id, idStoreGoogle, idStoreApple, callbackPurchase);
+    //}
+
+    //public void AddProductNonConsume(string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
+    //{
+    //    IAPHandler.AddProductNonConsume(id, idStoreGoogle, idStoreApple, callbackPurchase);
+    //}
+
+    //public void AddProductSubscription(string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
+    //{
+    //    IAPHandler.AddProductSubscription(id, idStoreGoogle, idStoreApple, callbackPurchase);
+    //}
+
+    public void AddProduct(ProductType type, string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase) {
+        IAPHandler.AddProductType(type, id, idStoreGoogle, idStoreApple, callbackPurchase);
     }
 
-    public void AddProductNonConsume(string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
-    {
-        IAPHandler.AddProductNonConsume(id, idStoreGoogle, idStoreApple, callbackPurchase);
-    }
 
-    public void AddProductSubscription(string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
-    {
-        IAPHandler.AddProductSubscription(id, idStoreGoogle, idStoreApple, callbackPurchase);
-    }
-    
     public float GetLocalizedPrice(string pPackageId)
     {
         return IAPHandler.GetLocalizedPrice(pPackageId);
@@ -75,5 +81,15 @@ public class IAPManager : SingletonDontDestroyMono<IAPManager>, IHandleIAP
     public string GetLocalizedPriceString(string pPackageId)
     {
         return IAPHandler.GetLocalizedPriceString(pPackageId);
+    }
+
+    public bool CheckHasPurchased(string internalProductId) {
+      return  IAPHandler.CheckHasPurchased(internalProductId);
+    }
+    public void Restore() {
+        IAPHandler.RestorePurchases();
+    }
+    public bool IsSubscribed(string productId) {
+        return IAPHandler.IsSubscribed(productId);
     }
 }

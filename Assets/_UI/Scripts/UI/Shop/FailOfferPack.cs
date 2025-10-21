@@ -32,20 +32,36 @@ namespace ColorBlockCrush
         
         private void OnClickBuy()
         {
-            //Add Logic IAP Here
-
-            ShopManager.Instance.AddPurchasedPack(shopPack);
-            var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
+            if (shopPack == null)
             {
-                OnPurchased?.Invoke();
-                onRevival?.Invoke();
-            });
-            popupReceiveReward.SetData(shopPack.listReward);
-
-            foreach(var item in shopPack.listReward)
-            {
-                item.Claim();
+                UIManager.Instance.ShowPopup<PopupPurchaseFailed>(null);
+                return;
             }
+            
+            var popupLoadingProcess = UIManager.Instance.ShowPopup<PopupLoadingProcess>(null);
+            IAPManager.Instance.BuyProductID(shopPack.id, (success) =>
+            {
+                popupLoadingProcess.Hide();
+                if (success)
+                {
+                    ShopManager.Instance.AddPurchasedPack(shopPack);
+                    var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
+                    {
+                        OnPurchased?.Invoke();
+                        onRevival?.Invoke();
+                    });
+                    popupReceiveReward.SetData(shopPack.listReward);
+
+                    foreach(var item in shopPack.listReward)
+                    {
+                        item.Claim();
+                    }
+                }
+                else
+                {
+                    UIManager.Instance.ShowPopup<PopupPurchaseFailed>(null);
+                }
+            });
         }
     }
 }

@@ -28,22 +28,34 @@ namespace ColorBlockCrush
 
         private void OnClickBuy()
         {
-            //Add Logic IAP Here
+            if(shopPack == null) return;
+            
+            var popupLoadingProcess = UIManager.Instance.ShowPopup<PopupLoadingProcess>(null);
+            IAPManager.Instance.BuyProductID(shopPack.id, (success) =>
+            {
+                popupLoadingProcess.Hide();
+                if (success)
+                {
+                    ShopManager.Instance.AddPurchasedPack(shopPack);
+                    var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
+                    {
+                        OnPurchased?.Invoke();
+                    });
+                    popupReceiveReward.SetData(shopPack.listReward);
 
-            ShopManager.Instance.AddPurchasedPack(shopPack);
-            var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
-            {
-                OnPurchased?.Invoke();
-            });
-            popupReceiveReward.SetData(shopPack.listReward);
-
-            foreach(var item in shopPack.listReward)
-            {
-                item.Claim();
-            }
-            transform.DOScale(0, 0.1f).OnComplete(() =>
-            {
-                Destroy(gameObject);
+                    foreach(var item in shopPack.listReward)
+                    {
+                        item.Claim();
+                    }
+                    // transform.DOScale(0, 0.1f).OnComplete(() =>
+                    // {
+                    //     Destroy(gameObject);
+                    // });
+                }
+                else
+                {
+                    UIManager.Instance.ShowPopup<PopupPurchaseFailed>(null);
+                }
             });
         }
 
@@ -54,7 +66,7 @@ namespace ColorBlockCrush
             m_iconCoin.sprite = packData.icon;
             m_textPackName.text = packData.title;
             m_tagHighlight.gameObject.SetActive(packData.id == packIDHighlight);
-            //m_textPrice.text = IAPManager.Instance.GetLocalizedPriceString(packData.id);
+            m_textPrice.text = IAPManager.Instance.GetLocalizedPriceString(packData.id);
             MyUlti.RemoveAllChilds(m_listRewardContainer);
             foreach(var item in packData.listReward.Where(x => x.type != ItemType.GOLD))
             {

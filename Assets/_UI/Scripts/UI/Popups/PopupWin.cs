@@ -67,6 +67,7 @@ namespace ColorBlockCrush
         {
             m_goldBar.Sync = false;
             m_goldBar.SetText(UserDataManager.Gold - quantity);
+            m_goldBar.gameObject.SetActive(false);
 
             Action onUpdateLevel = () =>
             {
@@ -76,9 +77,12 @@ namespace ColorBlockCrush
                 Hide();
             };
             var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
+            var popupBlock = UIManager.Instance.ShowPopup<PopupBlock>(null);
             popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, quantity, () =>
             {
+                m_goldBar.gameObject.SetActive(true);
                 onUpdateLevel?.Invoke();
+                popupBlock.Hide();
             });
         }    
 
