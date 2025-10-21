@@ -3,6 +3,7 @@ using DG.Tweening;
 using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -56,6 +57,7 @@ namespace ColorBlockCrush
         public ColorType ColorType { get; private set; }
         public bool IsFrontRow { get; set; }
         public List<Gun> ConnectedGuns { get => ConnectedGunHandler.ListGun; }
+        public List<Gun> AllConnectedGuns { get; private set; }
         public Block CurrentTarget { get; set; }
         public TrayItem TrayItem { get => trayItem; set => trayItem = value; }
         public GunPos GunPos { get => gunPos; set => gunPos = value; }
@@ -91,6 +93,7 @@ namespace ColorBlockCrush
             isTurning = false;
             gunData = gunDataP;
             targetQueue = new Queue<Block>();
+            AllConnectedGuns = new List<Gun>();
             UpdateVisuals();
             InitMechanics();
             LevelEvent.OnFastMode += OnFastMode;
@@ -145,6 +148,7 @@ namespace ColorBlockCrush
             }
 
             Debug.Log($"Gun {this.ID}: AllConnectedGunCount = {visited.Count}");
+            AllConnectedGuns = new List<Gun>(visited);
             AllConnectedGunCount = visited.Count;
             OriginConnectedGun = visited.Count;
         }
