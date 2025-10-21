@@ -42,6 +42,8 @@ public class ConveyorController : MonoBehaviour
     public Action<Gun> OnStartAddGunToConveyor;
     public Action<Gun> OnGunRemovedConveyor;
 
+    private float timeDelayMove = 0;
+
     public void Init()
     {
         currentMaxSlots = initMaxSlot;
@@ -61,6 +63,14 @@ public class ConveyorController : MonoBehaviour
         LevelEvent.OnRevive -= OnRevive;
     }
 
+    private void Update()
+    {
+        if(timeDelayMove > 0)
+        {
+            timeDelayMove -= Time.deltaTime;
+        }
+    }
+
     private void OnFastMode()
     {
         endPointConveyor.gameObject.SetActive(false);
@@ -68,12 +78,15 @@ public class ConveyorController : MonoBehaviour
 
     public void MoveGunIn(List<Gun> guns)
     {
+        if (timeDelayMove <= 0) timeDelayMove = 0;
         for (int i = 0; i < guns.Count; i++)
         {
             PrepairTrayItems(1);
-            SetGunStartPosition(guns[i], prepairTrayItems[0], i, i * startMovingGunSpacing);
+            SetGunStartPosition(guns[i], prepairTrayItems[0], i, i * startMovingGunSpacing + timeDelayMove);
             OnStartAddGunToConveyor?.Invoke(guns[i]);
         }
+
+        timeDelayMove = (guns.Count + 1) * startMovingGunSpacing;
     }
 
     public void SetGunStartPosition(Gun gun, TrayItem trayItem, int slotIndex, float delay = 0)

@@ -17,6 +17,8 @@ namespace ColorBlockCrush
 
         private int currentIndexGunSpawned = 0;
 
+        private bool isFirstUpdate = false;
+
         public void Resolve()
         {
             if (IsResolved) return;
@@ -34,24 +36,25 @@ namespace ColorBlockCrush
         internal void Init(TunnelConfig tunnelConfig, int column ,int id)
         {
             tunnelData = tunnelConfig;
-            CanShift = true;
+            CanShift = false;
             ColumnIndex = column;
             ID = id;    
         }
 
         public override void UpdateWhenColumnChange()
         {
-            if(Index == 1)
+            if(!isFirstUpdate)
             {
-                CanShift = false;
+                isFirstUpdate = true;
+                return;
             }    
 
-            if (Index == 0)
+            m_animation.Play();
+            DOVirtual.DelayedCall(0.5f, () =>
             {
-                m_animation.Play();
-                LevelManager.Instance.LevelGame.GunBoardController.SpawnNewGun(ColumnIndex, 0, tunnelData.tanks[currentIndexGunSpawned], 0);
-                currentIndexGunSpawned++;
-            }
+                LevelManager.Instance.LevelGame.GunBoardController.SpawnNewGun(ColumnIndex, Index, tunnelData.tanks[currentIndexGunSpawned], 0);
+            });
+            currentIndexGunSpawned++;
 
             if(currentIndexGunSpawned >= tunnelData.tanks.Count)
             {

@@ -1,6 +1,7 @@
 ﻿using ColorBlockCrush.Tools;
 using DG.Tweening;
 using Sirenix.Serialization;
+using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -223,12 +224,28 @@ namespace ColorBlockCrush
             if (GunPos == GunPos.ON_GUN_BOARD)
             {
                 if (!IsConnectedGroup())
-                    return IsFrontRow;
-
-
-                foreach (Gun gun in ConnectedGuns)
                 {
-                    if (!gun.IsFrontRow) return false;
+                    return IsFrontRow;
+                }
+                else
+                {
+                    Dictionary<int, List<Gun>> listGunByColumn = new();
+                    listGunByColumn[ColumnIndex] = new();
+                    listGunByColumn[ColumnIndex].Add(this);
+                    foreach(var gun in AllConnectedGuns)
+                    {
+                        if(!listGunByColumn.ContainsKey(gun.ColumnIndex))
+                        {
+                            listGunByColumn[ColumnIndex] = new();
+                        }
+                        listGunByColumn[ColumnIndex].Add(gun);
+                    }    
+
+                    foreach(var item in listGunByColumn)
+                    {
+                        var listGun = item.Value.OrderBy(x => x.Index);
+                        if (!listGun.First().IsFrontRow) return false;
+                    }
                 }
             }
 
