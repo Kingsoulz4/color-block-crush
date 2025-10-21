@@ -13,7 +13,11 @@ namespace ColorBlockCrush
 
         public override void Initialize(UIManager uiManager)
         {
-            m_continue.onClick.AddListener(Hide);
+            m_continue.onClick.AddListener(() =>
+            {
+                GameManager.Instance.SetGameState(GameState.Playing);
+                Hide();
+            });
         }
         
         public void SetData(NewFeatureItemData newFeatureData)
