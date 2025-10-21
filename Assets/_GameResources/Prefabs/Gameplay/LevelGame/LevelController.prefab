@@ -1142,7 +1142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initMaxSlot: 5
   startPos: {fileID: 5707933120642198670}
-  startMovingGunSpacing: 0.25
+  startMovingGunSpacing: 0.15
   trayMoveDuration: 5
   trayMoveDurationFast: 2.5
   endPointConveyor: {fileID: 9217796885872078684}
