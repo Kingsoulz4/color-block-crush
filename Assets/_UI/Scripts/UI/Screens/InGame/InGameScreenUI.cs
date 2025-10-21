@@ -331,18 +331,15 @@ namespace ColorBlockCrush
 
         private void PoupNewFeature()
         {
-            //return;
-            Debug.Log("New Feature");
-            var feature = NewFeatureManager.Instance.GetNewFeatureInProgress();
-            Debug.Log($"feature: {feature != null} {LevelManager.Instance.CurrentLevel} {feature.level}");
-            if (feature != null &&
-                LevelManager.Instance.CurrentLevel ==
-                feature.level /* && UserDataManager.LastFeatureCount < feature.level*/)
-            {
-                GameManager.Instance.SetGameState(GameState.Paused);
-                var pop = UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
-                pop.SetData(feature);
-            }
+            // var feature = NewFeatureManager.Instance.GetNewFeatureInProgress();
+            // if (feature != null &&
+            //     LevelManager.Instance.CurrentLevel ==
+            //     feature.level /* && UserDataManager.LastFeatureCount < feature.level*/)
+            // {
+            //     GameManager.Instance.SetGameState(GameState.Paused);
+            //     var pop = UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
+            //     pop.SetData(feature);
+            // }
         }
 
         private void HideAllTuts()

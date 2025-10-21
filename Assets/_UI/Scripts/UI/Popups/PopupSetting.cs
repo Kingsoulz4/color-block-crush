@@ -57,12 +57,7 @@ public class PopupSetting : PopupUI
         popupConfirmLeave.SetTextButtonConfirm("Retry");
         popupConfirmLeave.OnConfirm = () =>
         {
-            var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
-            loading.Show(() =>
-            {
-                UIManager.Instance.ShowScreen<InGameScreenUI>();
-                LevelManager.Instance.OnRetryGame();
-            });
+            LevelManager.Instance.OnRetryGame();
             Hide();
             HeartManager.UseHeart(1);
         };
