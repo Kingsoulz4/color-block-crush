@@ -143,6 +143,11 @@ namespace ColorBlockCrush
             gameObject.layer = LayerMask.NameToLayer(name);
         }
 
+        public virtual Vector3 GetTargetHitBullet()
+        {
+            return transform.position;
+        }
+
         private void OnDisable()
         {
             DOTween.Kill(this);

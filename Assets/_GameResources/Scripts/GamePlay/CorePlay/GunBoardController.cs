@@ -20,6 +20,7 @@ namespace ColorBlockCrush
         [Header("Prefabs")]
         [SerializeField] private Gun gunPrefab;
         [SerializeField] private LockObject lockPrefab;
+        [SerializeField] private TunnelController tunnelPrefab;
 
         [Header("References")]
         [SerializeField] private Transform gunContainer;
@@ -37,6 +38,10 @@ namespace ColorBlockCrush
             totalGunCount = 0;
             dictGun.Clear();
             SpawnGunBoard(levelConfig);
+            this.Wait(0.1f, () => // gun connect init take 1 frame
+            {
+                InitConnectGun();
+            });
         }
 
         public void SpawnGunBoard(LevelConfig gunBoardData)
@@ -80,9 +85,33 @@ namespace ColorBlockCrush
                             dictGun[data.elementId] = gun;
                         }
                     }
+                    else if (data.elementType == GunLineElementType.Tunnel)
+                    {
+                        var gun = SpawnTunnel(col, i, data.tunnelConfig, data.elementId, centerOffsetX);
+                        if (gun != null)
+                        {
+                            listGunColumn[col].Add(gun);
+                            //dictGun[data.elementId] = gun;
+                        }
+                    }
+
                 }
                 totalGunCount = GetGunCountInBoard();
                 UpdateFrontRowFlags(col);
+            }
+        }
+
+        public void InitConnectGun()
+        {
+            foreach (var c in listGunColumn)
+            {
+                foreach (var obj in c)
+                {
+                    if (obj is Gun gun)
+                    {
+                        gun.GetConnectedCountAll(listGunColumn);
+                    }
+                }
             }
         }
 
@@ -98,6 +127,23 @@ namespace ColorBlockCrush
 
             LockObject lockObj = Instantiate(lockPrefab, worldPos, Quaternion.identity, gunContainer);
             lockObj.Init(column);
+            lockObj.name = $"Gun_{column}_{row}";
+
+            return lockObj;
+        }
+
+        public TunnelController SpawnTunnel(int column, int row, TunnelConfig gunData, int id, float centerOffsetX = 0f)
+        {
+            if (!IsValidColumn(column)) return null;
+
+            Vector3 worldPos = spawnOrigin + new Vector3(
+                (column * columnSpacing) + centerOffsetX,
+                0,
+                row * -rowSpacing
+            );
+
+            TunnelController lockObj = Instantiate(tunnelPrefab, worldPos, Quaternion.identity, gunContainer);
+            lockObj.Init(gunData, column, id);
             lockObj.name = $"Gun_{column}_{row}";
 
             return lockObj;
@@ -120,6 +166,14 @@ namespace ColorBlockCrush
             gun.name = $"Gun_{column}_{row}";
 
             return gun;
+        }
+
+        public Gun SpawnNewGun(int column, int row, GunConfig gunData, int id, float centerOffsetX = 0f)
+        {
+            var gunn = SpawnGun(column, row, gunData, id, centerOffsetX);
+            listGunColumn[column].Insert(0, gunn);
+            ShiftColumn(column);
+            return gunn;
         }
 
         public void OnTapGun(Gun gun)
@@ -168,6 +222,12 @@ namespace ColorBlockCrush
             RemoveObjectFromColumn(lockObject);
             totalGunCount--;
             ShiftColumn(lockObject.ColumnIndex, lockObject.Index);
+        }
+
+        public void ResolveTunnel(TunnelController tunnel)
+        {
+            RemoveObjectFromColumn(tunnel);
+            ShiftColumn(tunnel.ColumnIndex, tunnel.Index);
         }
 
         private void AddAllGunToPush(List<Gun> listGunToPush, Gun gun)
@@ -221,6 +281,8 @@ namespace ColorBlockCrush
             for (int i = removedIndex; i < columnObjects.Count; i++)
             {
                 ObjectOnGunBoardColumn objOnColumn = columnObjects[i];
+
+                if (!objOnColumn.CanShift) break;
 
                 Vector3 currentPos = objOnColumn.transform.position;
                 Vector3 newPos = new Vector3(
