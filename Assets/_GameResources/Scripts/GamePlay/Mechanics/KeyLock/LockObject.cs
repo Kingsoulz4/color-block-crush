@@ -21,8 +21,7 @@ namespace ColorBlockCrush
                 {
                     LevelManager.Instance.LevelGame.GunBoardController.ResolveLock(this);
                 });
-
-        }
+        } 
 
         internal void Init(int column)
         {
@@ -36,7 +35,7 @@ namespace ColorBlockCrush
                 var pendingKey = LevelManager.Instance.LevelGame.BlockBoardController.GetPendingKey();
                 if (pendingKey != null)
                 {
-                    pendingKey.Resolve();
+                    pendingKey.Resolve(this);
                 }
             }
         }

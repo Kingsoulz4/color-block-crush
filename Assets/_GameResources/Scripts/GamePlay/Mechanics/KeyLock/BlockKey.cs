@@ -65,6 +65,27 @@ namespace ColorBlockCrush
                 pendingLock.Resolve();
             }
         }
+
+        public void Resolve(LockObject lockObject)
+        {
+            Debug.Log("Key Resolved");
+
+            IsUnBlocked = true;
+
+            if (IsResolved) return;
+
+            var pendingLock = lockObject;
+            if (pendingLock != null)
+            {
+                IsResolved = true;
+                transform.DOMove(pendingLock.transform.position, 0.25f).OnComplete(() =>
+                {
+                    Destroy(gameObject);
+                });
+                pendingLock.Resolve();
+            }
+        }
+            
             
     }
 }
