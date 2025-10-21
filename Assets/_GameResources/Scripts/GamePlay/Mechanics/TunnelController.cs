@@ -8,6 +8,9 @@ namespace ColorBlockCrush
 {
     public class TunnelController : ObjectOnGunBoardColumn
     {
+        [SerializeField] private Animation m_animation;
+
+        public int ID { get; set; }
         public bool IsResolved { get; private set; }
 
         private TunnelConfig tunnelData;
@@ -23,22 +26,30 @@ namespace ColorBlockCrush
             transform.DOScale(0, 0.25f)
                 .OnComplete(() =>
                 {
-                    
+                    LevelManager.Instance.LevelGame.GunBoardController.ResolveTunnel(this);
                 });
 
         }
 
-        internal void Init(TunnelConfig tunnelConfig)
+        internal void Init(TunnelConfig tunnelConfig, int column ,int id)
         {
             tunnelData = tunnelConfig;
-            CanShift = false;
+            CanShift = true;
+            ColumnIndex = column;
+            ID = id;    
         }
 
         public override void UpdateWhenColumnChange()
         {
-            if (Index == 1)
+            if(Index == 1)
             {
-                LevelManager.Instance.LevelGame.GunBoardController.SpawnNewGun(0, ColumnIndex, tunnelData.tanks[currentIndexGunSpawned], 0);
+                CanShift = false;
+            }    
+
+            if (Index == 0)
+            {
+                m_animation.Play();
+                LevelManager.Instance.LevelGame.GunBoardController.SpawnNewGun(ColumnIndex, 0, tunnelData.tanks[currentIndexGunSpawned], 0);
                 currentIndexGunSpawned++;
             }
 

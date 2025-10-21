@@ -157,7 +157,7 @@ namespace ColorBlockCrush
 
         public bool CanPushToConveyor()
         {
-            if (IsMovingToConveyor()) return false; 
+            if (IsMovingToConveyor() || IsMovingToSlot()) return false; 
 
             if (GunPos == GunPos.ON_CONVEYOR || GunPos == GunPos.TWEEN_SORT) return false;
 
@@ -449,6 +449,11 @@ namespace ColorBlockCrush
         public bool IsMovingToConveyor()
         {
             return moveToConveyorTw != null && moveToConveyorTw.IsPlaying();
+        }    
+
+        public bool IsMovingToSlot()
+        {
+            return moveSortSlotTw != null && moveSortSlotTw.IsPlaying();
         }    
 
         public void MoveToSlot(Vector3 endPos, Action callback = null)

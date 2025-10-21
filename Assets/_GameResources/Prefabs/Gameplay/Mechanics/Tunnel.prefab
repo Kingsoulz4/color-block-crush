@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8303927084989255469}
   - component: {fileID: 7841600385539253220}
+  - component: {fileID: 4177275073027250895}
   m_Layer: 0
   m_Name: Tunnel
   m_TagString: Untagged
@@ -45,6 +46,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f9f7bca616ffd74fb0d84249d391fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_animation: {fileID: 4177275073027250895}
+--- !u!111 &4177275073027250895
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3214473869528082661}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: ecb5dd654c53929488a11f094fb48898, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1001 &3286960792140075518
 PrefabInstance:
   m_ObjectHideFlags: 0
