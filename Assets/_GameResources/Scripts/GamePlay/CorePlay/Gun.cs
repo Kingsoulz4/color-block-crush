@@ -429,7 +429,7 @@ namespace ColorBlockCrush
             currentMoveFireDir = RotationDirection.Right;
 
             moveToConveyorTw = moveToConveyorSq.Append(
-                transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration)).SetEase(moveToConveyorEase).OnComplete(() =>
+                transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration + delay)).SetEase(moveToConveyorEase).OnComplete(() =>
             {
                 Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
                 transform.DORotate(newRotation, 0f);
@@ -439,10 +439,10 @@ namespace ColorBlockCrush
                 GetTargetBock();
 
             });
-            moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration));
-            moveToConveyorSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration));
+            moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration + delay));
+            moveToConveyorSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration + delay));
             moveToConveyorSq.SetId(this);
-            moveToConveyorSq.SetDelay(delay);
+            //moveToConveyorSq.SetDelay(delay);
 
         }
 

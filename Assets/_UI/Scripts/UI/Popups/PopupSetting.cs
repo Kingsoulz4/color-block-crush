@@ -1,7 +1,4 @@
 using ColorBlockCrush;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,9 +32,14 @@ public class PopupSetting : PopupUI
             var popupConfirmLeave = UIManager.Instance.ShowPopup<PopupConfirmLeave>(null);
             popupConfirmLeave.OnConfirm = () =>
             {
+                var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
+                loading.Show(() =>
+                {
+                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                });
                 Hide();
                 HeartManager.UseHeart(1);
-                UIManager.Instance.ShowScreen<MainScreenUI>();
+                
             };
         //}
         // else

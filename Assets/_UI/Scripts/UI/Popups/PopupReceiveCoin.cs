@@ -106,7 +106,7 @@ namespace ColorBlockCrush
                            //AudioManager.Instance.PlayCoinDingFX();
                            //VibrationManager.VibrateWeak();
                            //AudioManager.Instance.PlayOneShot(AudioClipNames.COLLECT_COIN.ToString(), 1f);
-                           
+                           AudioManager.Instance.PlayOneShot("SFX_CoinOneShot", 1);
                            Destroy(coinObject.gameObject);
 
                            if (index == _coinContainer.childCount - 1)

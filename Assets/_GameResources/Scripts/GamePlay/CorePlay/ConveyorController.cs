@@ -66,14 +66,13 @@ public class ConveyorController : MonoBehaviour
         endPointConveyor.gameObject.SetActive(false);
     }
 
-    public async Task MoveGunIn(List<Gun> guns)
+    public void MoveGunIn(List<Gun> guns)
     {
         for (int i = 0; i < guns.Count; i++)
         {
             PrepairTrayItems(1);
             SetGunStartPosition(guns[i], prepairTrayItems[0], i, i * startMovingGunSpacing);
             OnStartAddGunToConveyor?.Invoke(guns[i]);
-            //await Task.Delay((int)(startMovingGunSpacing * 1000));
         }
     }
 

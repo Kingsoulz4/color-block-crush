@@ -117,7 +117,11 @@ namespace ColorBlockCrush
 
                 popupLose.OnClose = () =>
                 {
-                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                    var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
+                    loading.Show(() =>
+                    {
+                        UIManager.Instance.ShowScreen<MainScreenUI>();
+                    });
                 };
                 popupLose.OnRetry = LevelManager.Instance.OnRetryGame;
             };

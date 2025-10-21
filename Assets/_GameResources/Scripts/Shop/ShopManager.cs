@@ -27,6 +27,12 @@ namespace ColorBlockCrush
             get => PlayerPrefs.GetInt("HasPurchasedNoAdsPack", 0) > 0;
             set => PlayerPrefs.SetInt("HasPurchasedNoAdsPack", value ? 1 : 0);
         }
+        
+        public bool HasPurchasedStarterPack
+        {
+            get => PlayerPrefs.GetInt("HasPurchasedStarterPack", 0) > 0;
+            set => PlayerPrefs.SetInt("HasPurchasedStarterPack", value ? 1 : 0);
+        }
 
         private List<string> listPurchasedPack;
 

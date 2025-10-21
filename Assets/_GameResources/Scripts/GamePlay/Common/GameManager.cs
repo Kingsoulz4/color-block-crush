@@ -34,7 +34,7 @@ namespace ColorBlockCrush
             HeartManager.CF_RecoverTimeHeart = 60 * 20;
             SetGameState(GameState.MainMenu);
 
-            var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
+            var loading = UIManager.Instance.ShowScreen<FirstLoadingScreen>();
             loading.Show(() =>
             {
                 if (UserDataManager.Level <= 10)

@@ -34,14 +34,12 @@ namespace ColorBlockCrush
         private void OnClickClaimX2()
         {
             UserDataManager.AddGold(80, "WinX2");
-            Hide();
             OnClaimedReward.Invoke(coinReceiveValue * 2);
         }
 
         private void OnClickClaim()
         {
             UserDataManager.AddGold(coinReceiveValue, "Win");
-            Hide();
             OnClaimedReward.Invoke(coinReceiveValue);
         }
 
@@ -69,12 +67,18 @@ namespace ColorBlockCrush
         {
             m_goldBar.Sync = false;
             m_goldBar.SetText(UserDataManager.Gold - quantity);
-            var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
-            popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, quantity, () =>
+
+            Action onUpdateLevel = () =>
             {
                 m_goldBar.SetText(UserDataManager.Gold);
                 m_goldBar.Sync = true;
                 onClaimComplete?.Invoke();
+                Hide();
+            };
+            var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
+            popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, quantity, () =>
+            {
+                onUpdateLevel?.Invoke();
             });
         }    
 
