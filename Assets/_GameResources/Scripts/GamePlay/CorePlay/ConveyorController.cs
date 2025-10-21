@@ -65,7 +65,7 @@ public class ConveyorController : MonoBehaviour
 
     private void Update()
     {
-        if(timeDelayMove > 0)
+        if (timeDelayMove > 0)
         {
             timeDelayMove -= Time.deltaTime;
         }
@@ -119,7 +119,7 @@ public class ConveyorController : MonoBehaviour
             MoveTrayIn(gun.TrayItem);
             RemoveTrayItem(gun.TrayItem);
         }
-        
+
         UpdateTrayText();
     }
 
@@ -161,9 +161,16 @@ public class ConveyorController : MonoBehaviour
         }
     }
 
+    Tween warnTrayTween;
     public void WarnTrayText()
     {
-        trayText.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
+        if (warnTrayTween != null && warnTrayTween.IsActive())
+        {
+            warnTrayTween.Kill(true);
+        }
+
+        trayText.transform.localScale = Vector3.one * 1.1f;
+        warnTrayTween = trayText.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
     }
 
     public void SetTrayStartPosition(TrayItem tray, int slotIndex)
