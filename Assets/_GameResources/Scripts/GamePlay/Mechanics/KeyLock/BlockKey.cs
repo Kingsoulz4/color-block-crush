@@ -58,10 +58,7 @@ namespace ColorBlockCrush
             if (pendingLock != null)
             {
                 IsResolved = true;
-                transform.DOMove(pendingLock.transform.position, 0.25f).OnComplete(() =>
-                {
-                    Destroy(gameObject);
-                });
+                StartCoroutine(IEResolve(pendingLock));
                 pendingLock.Resolve();
             }
         }
@@ -78,13 +75,21 @@ namespace ColorBlockCrush
             if (pendingLock != null)
             {
                 IsResolved = true;
-                transform.DOMove(pendingLock.transform.position, 0.25f).OnComplete(() =>
-                {
-                    Destroy(gameObject);
-                });
+                StartCoroutine(IEResolve(pendingLock));
                 pendingLock.Resolve();
             }
         }
+
+        private IEnumerator IEResolve(LockObject pendingLock)
+        {
+            float timeEachStep = 0.25f;
+            transform.DOMove(transform.position + Vector3.up * 10, timeEachStep);
+            yield return new WaitForSeconds(timeEachStep);
+            transform.DOMove(pendingLock.transform.position, timeEachStep);
+            yield return new WaitForSeconds(timeEachStep);
+            Destroy(gameObject);
+        }
+            
             
             
     }
