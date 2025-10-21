@@ -205,20 +205,21 @@ namespace ColorBlockCrush
 
         public void OnReviveGame(int price)
         {
-            if (UserDataManager.Gold >= price)
-            {
-                UserDataManager.AddGold(-price, "Revival");
-                GameManager.Instance.SetGameState(GameState.Playing);
-            }
-            else
-            {
-                GameManager.Instance.SetGameState(GameState.Paused);
-
-                UIManager.Instance.ShowPopup<PopupShop>(() =>
-                {
-                    GameManager.Instance.SetGameState(GameState.Playing);
-                });
-            }
+            GameManager.Instance.SetGameState(GameState.Playing);
+            // if (UserDataManager.Gold >= price)
+            // {
+            //     UserDataManager.AddGold(-price, "Revival");
+            //     
+            // }
+            // else
+            // {
+            //     GameManager.Instance.SetGameState(GameState.Paused);
+            //
+            //     UIManager.Instance.ShowPopup<PopupShop>(() =>
+            //     {
+            //         GameManager.Instance.SetGameState(GameState.Playing);
+            //     });
+            // }
         }
 
         public void OnPauseGame(int level)

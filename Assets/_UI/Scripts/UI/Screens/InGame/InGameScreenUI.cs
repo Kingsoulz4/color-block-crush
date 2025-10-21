@@ -81,6 +81,7 @@ namespace ColorBlockCrush
                 booster.OnStartUseBooster += OnStartUseBooster;
                 booster.OnChangeBoosterCount += OnChangeBoosterCount;
                 booster.OnUseBoosterDone += OnUseBoosterDone;
+                booster.OnCancelBooster += OnCancelBooster;
             }
 
             boosterDataSO = BoosterManager.Instance.BoosterData;
@@ -117,6 +118,7 @@ namespace ColorBlockCrush
                 booster.OnStartUseBooster -= OnStartUseBooster;
                 booster.OnUseBoosterDone -= OnUseBoosterDone;
                 booster.OnChangeBoosterCount -= OnChangeBoosterCount;
+                booster.OnCancelBooster -= OnCancelBooster;
             }
             Server.Get<OnForceTutBooster>().RemoveListener(ShowForceTut);
         }
@@ -184,6 +186,25 @@ namespace ColorBlockCrush
                 case BoosterType.SUPER_SHOOT:
                     magnetBoosterCount.UpdateTextCountBooster(currentCount);
                     boosterConfirmUI.gameObject.SetActive(false);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OnCancelBooster(BoosterBase booster, int currentCount)
+        {
+            switch (booster.BoosterType)
+            {
+                case BoosterType.ADD_TRAY:
+                    break;
+                case BoosterType.HAND_MOVE:
+                    boostersObj.gameObject.SetActive(true);
+                    break;
+                case BoosterType.SHUFFLE:
+                    break;
+                case BoosterType.SUPER_SHOOT:
+                    boostersObj.gameObject.SetActive(true);
                     break;
                 default:
                     break;
