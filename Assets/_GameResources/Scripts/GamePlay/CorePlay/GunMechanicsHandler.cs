@@ -19,7 +19,7 @@ namespace ColorBlockCrush
             if(GunData.isHidden)
             {
                 EnableTextBulletCount(false);
-                m_hiddenGun.Init(meshRendererList);
+                m_hiddenGun.Init(this, meshRendererList);
             }
 
             if(GunData.gunConnect.Count > 0)
@@ -54,6 +54,17 @@ namespace ColorBlockCrush
                 OnHiddenResolved?.Invoke();
             }
 
+        }
+
+        public void ForceHiddenResolve()
+        {
+            if (GunData.isHidden)
+            {
+                UpdateVisuals();
+                EnableTextBulletCount(true);
+                m_hiddenGun.Resolve();
+                OnHiddenResolved?.Invoke();
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,14 +12,22 @@ namespace ColorBlockCrush
 
         private HiddenGunRenderer hiddenGunRenderer;
 
-        public void Init(List<Renderer> listMeshRenderer)
+        private Gun gunController;
+
+        public bool IsResolved { get; private set; } = false;
+
+        public void Init(Gun gun, List<Renderer> listMeshRenderer)
         {
+            gunController = gun;
             hiddenGunRenderer = Instantiate(m_hiddenGunRendererPrefab, transform);
             hiddenGunRenderer.Init(listMeshRenderer);
         }
 
         public void Resolve()
         {
+            if (IsResolved) return;
+            IsResolved = true;
+            m_fxOpenHidden.gameObject.SetActive(true);
             m_fxOpenHidden.Stop();
             m_fxOpenHidden.Play();
             hiddenGunRenderer.Resolve();

@@ -152,16 +152,19 @@ namespace ColorBlockCrush
                 {
                     if (block == null) continue;
 
-                    block.TakeDamageRaycast(1);
-
-                    spawPos.y = 0;
-                    Bullet bullet = Instantiate(bulletPrb, spawPos, Quaternion.identity);
-                    bullet.transform.SetParent(LevelController.Instance.transform);
-                    bullet.OnInit(null, block, (gun, b) =>
+                    for (int i = 0; i < block.GetMaxHitPoint(); i++)
                     {
-                        b.TakeDamage(1);
-                        Destroy(bullet.gameObject);
-                    });
+                        block.TakeDamageRaycast(1);
+
+                        spawPos.y = 0;
+                        Bullet bullet = Instantiate(bulletPrb, spawPos, Quaternion.identity);
+                        bullet.transform.SetParent(LevelController.Instance.transform);
+                        bullet.OnInit(null, block, (gun, b) =>
+                        {
+                            Destroy(bullet.gameObject);
+                            b.TakeDamage(1);
+                        });
+                    }
 
                     //yield return 0;
                 }

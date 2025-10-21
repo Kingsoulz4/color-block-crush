@@ -73,19 +73,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   centerPoint: {fileID: 4289695443016426}
   _blockMeshRenderer: {fileID: 6935697324433818279}
-  colorRef: {fileID: 11400000, guid: 58e29ccb3985dee4482a8db47cc64ff1, type: 2}
-  blockRay0:
-    serializedVersion: 2
-    m_Bits: 1024
+  colorRef: {fileID: 11400000, guid: a42b8c8c66de18b4983ac373f56d1b5a, type: 2}
   mCollider: {fileID: 207611675957290789}
   colorRate:
     _serializedList:
     - Key: 0
-      Value: 80
-    - Key: 1
-      Value: 10
-    - Key: 2
-      Value: 10
+      Value: 100
   sizeScaleFactor: 1.8
   m_textHealth: {fileID: 8311871648464119271}
   m_upTopLeft: {fileID: 4963372310288405719}
@@ -493,6 +486,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8130972467701707719, guid: 23c7d8709896ec84c98d2a7be53727b4, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8f4f883a7d527a447914bbedd0cd622b, type: 2}
     - target: {fileID: 919132149155446097, guid: 23c7d8709896ec84c98d2a7be53727b4, type: 3}
       propertyPath: m_Name
       value: Cube8new

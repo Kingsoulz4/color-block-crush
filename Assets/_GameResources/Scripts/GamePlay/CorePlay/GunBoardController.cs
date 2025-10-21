@@ -6,8 +6,6 @@ using System.Drawing;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Experimental.AI;
-using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 namespace ColorBlockCrush
 {
@@ -372,18 +370,20 @@ namespace ColorBlockCrush
             {
                 ObjectOnGunBoardColumn objOnColumn = columnObjects[i];
                 objOnColumn.SetIndex(i);
+                objOnColumn.UpdateWhenColumnChange();
 
                 if (!objOnColumn.CanShift)
                 {
-                    objOnColumn.UpdateWhenColumnChange();
+                    //objOnColumn.UpdateWhenColumnChange();
                     return;
                 }
 
                 Vector3 currentPos = objOnColumn.transform.position;
-                Vector3 newPos = new Vector3(
+
+                Vector3 newPos = spawnOrigin + new Vector3(
                     currentPos.x,
                     0,
-                    currentPos.z + rowSpacing
+                     i * -rowSpacing
                 );
 
                 if (objOnColumn is Gun gun)

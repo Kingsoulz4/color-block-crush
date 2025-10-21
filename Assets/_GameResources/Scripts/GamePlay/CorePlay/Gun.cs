@@ -50,6 +50,7 @@ namespace ColorBlockCrush
         private Queue<Block> targetQueue;
         private List<Block> targetQueu1e = new List<Block>();
         private bool isDisappeared = false;
+        private Vector3 currentTargetPos;
 
         public int ID { get; set; }
         public GunConfig GunData => gunData;
@@ -287,11 +288,11 @@ namespace ColorBlockCrush
                     int timeTakeDamage = 1;
                     if (currentFireDir == RotationDirection.Up || currentFireDir == RotationDirection.Down)
                     {
-                        timeTakeDamage = block.Size.x;
+                        timeTakeDamage = Mathf.Min(block.Size.x, block.GetHitPoint());
                     }
                     else if (currentFireDir == RotationDirection.Left || currentFireDir == RotationDirection.Right)
                     {
-                        timeTakeDamage = block.Size.y;
+                        timeTakeDamage = Mathf.Min(block.Size.y, block.GetHitPoint());
                     }
 
                     if (timeTakeDamage > 1)
@@ -329,8 +330,8 @@ namespace ColorBlockCrush
             bullet.transform.SetParent(LevelController.Instance.transform);
             bullet.OnInit(this, target, (gun, block) =>
             {
-                target.TakeDamage(1);
                 Destroy(bullet.gameObject);
+                target.TakeDamage(1);
             });
 
             OnGunFired?.Invoke(this);
@@ -360,7 +361,7 @@ namespace ColorBlockCrush
                     gun.CheckDisappear();
                 }
 
-                this.Wait(0.2f, () =>
+                this.Wait(0.3f, () =>
                 {
                     gameObject.SetActive(false);
                     OnGunDissapear?.Invoke(this);
@@ -502,6 +503,8 @@ namespace ColorBlockCrush
             currentFireDir = RotationDirection.Up;
             currentMoveFireDir = RotationDirection.Right;
 
+            ForceResoveHidden();
+
             moveToConveyorTw = moveToConveyorSq.Append(
                 transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration + delay)).SetEase(moveToConveyorEase).OnComplete(() =>
             {
@@ -580,10 +583,27 @@ namespace ColorBlockCrush
         public override void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
         {
             Sequence moveSortSlotSq = DOTween.Sequence();
-            moveSortSlotTw.Kill();
-            moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
+            if(moveSortSlotTw != null && moveSortSlotTw.IsPlaying())
             {
-            });
+                moveSortSlotTw.Kill();
+                transform.position = currentTargetPos;
+                
+            }
+
+            currentTargetPos = targetPos;
+            if (gunData.isHidden && m_hiddenGun.IsResolved)
+            {
+                moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove((targetPos + transform.position) / 2 + Vector3.up * 5f, _shiftDuration).SetEase(_shiftEase))
+                    .Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase));
+
+                //moveSortSlotTw = moveSortSlotSq.Append((transform.DOJump(targetPos,1, 1, _shiftDuration).SetEase(_shiftEase)));
+            }
+            else
+            {
+                moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
+                {
+                });
+            }
             moveSortSlotSq.SetId(this);
         }
 
@@ -679,6 +699,11 @@ namespace ColorBlockCrush
                 default:
                     break;
             }
+        }
+
+        public void ForceResoveHidden()
+        {
+            ForceHiddenResolve();
         }
 
         public void OnRevive()

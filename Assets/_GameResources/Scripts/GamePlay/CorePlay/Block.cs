@@ -45,6 +45,8 @@ namespace ColorBlockCrush
         public BlockConfig BlockData { get => blockData; }
         public int Id { get => id; }
 
+        private Tween tweenKillBlock;
+
         public void Init(BlockType blockType, BlockConfig blockDataP)
         {
             BlockType = blockType;
@@ -107,7 +109,6 @@ namespace ColorBlockCrush
 
             if (hitPoint <= 0)
             {
-                
                 DestroyBlock(() =>
                 {
                     IsDestroyed = true;
@@ -155,6 +156,11 @@ namespace ColorBlockCrush
 
         private void DestroyBlock(Action callback = null)
         {
+            if(tweenKillBlock != null && tweenKillBlock.IsPlaying())
+            {
+                tweenKillBlock.Kill();
+            } 
+
             var sq = DOTween.Sequence();
             var targetScale = originScale * 1.3f;
             targetScale.y = originScale.y * 1.5f;
@@ -165,6 +171,7 @@ namespace ColorBlockCrush
                 callback?.Invoke();
             });
             sq.SetId(this);
+            tweenKillBlock = sq;
         }
 
         public bool CanBeRaycastHit()

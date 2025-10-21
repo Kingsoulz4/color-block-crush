@@ -36,6 +36,7 @@ namespace ColorBlockCrush
 
 
         private Block[,] _blockStacks;
+        private List<BigBlock> listBigBlock = new();
         private List<BlockKey> listKey = new();
 
         private Vector3 calculatedBlockScale;
@@ -113,13 +114,12 @@ namespace ColorBlockCrush
             {
                 if (levelConfig.mapConfig.bigBlocks[i].blocksId.Count <= 0) continue;
 
-                SpawnBigBlock(levelConfig.mapConfig.bigBlocks[i]);
+                listBigBlock.Add(SpawnBigBlock(levelConfig.mapConfig.bigBlocks[i]));
             }
         }
 
         public BigBlock SpawnBigBlock(BigBlockConfig bigBlockConfig)
         {
-
             BigBlock newBigBlock = Instantiate(bigBlockPrefab, bigBlockContainer);
 
             newBigBlock.Init(bigBlockConfig);
@@ -350,6 +350,8 @@ namespace ColorBlockCrush
                     }
                 }
             }
+
+            blocks.AddRange(listBigBlock.FindAll(x => x.ColorType == targetColor));
 
             return blocks;
         }

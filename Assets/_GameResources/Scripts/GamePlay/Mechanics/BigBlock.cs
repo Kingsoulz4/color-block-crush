@@ -1,4 +1,5 @@
 using ColorBlockCrush.Tools;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -26,6 +27,8 @@ namespace ColorBlockCrush
 
         private List<Block> listBlockPlace = new();
 
+        private Vector3 defaultScale;
+
         public void Init(BigBlockConfig bigBlockConfig)
         {
             bigBlockData = bigBlockConfig;
@@ -35,6 +38,7 @@ namespace ColorBlockCrush
             maxHitPoint = bigBlockConfig.blockHealth;
             hitPoint = bigBlockConfig.blockHealth;
             hitPointRaycast = bigBlockConfig.blockHealth;
+            //defaultScale = transform.localScale;
 
             for (int i = 0; i < bigBlockData.blocksId.Count; i++)
             {
@@ -47,7 +51,12 @@ namespace ColorBlockCrush
             StartBlock();
             OnBlockInitialized?.Invoke(this);
             UpdateHeathText();
-        }    
+        }
+
+        private void Start()
+        {
+            defaultScale = transform.localScale;
+        }
 
         private void ResizeBlock()
         {
@@ -115,6 +124,14 @@ namespace ColorBlockCrush
         public override void TakeDamage(int damageAmount)
         {
             base.TakeDamage(damageAmount);
+
+            transform.DOKill();
+
+            transform.DOScale(defaultScale * 1.1f, 0.1f).SetEase(Ease.OutBack).OnComplete(() =>
+            {
+                transform.DOScale(defaultScale, 0.1f).SetEase(Ease.OutBack);
+            });
+
             UpdateHeathText();
             if(hitPoint<=0)
             {
