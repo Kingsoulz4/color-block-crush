@@ -109,7 +109,7 @@ namespace ColorBlockCrush
                 {
                     if (obj is Gun gun)
                     {
-                        gun.GetConnectedCountAll();
+                        gun.GetConnectedCountAll(listGunColumn);
                     }
                 }
             }

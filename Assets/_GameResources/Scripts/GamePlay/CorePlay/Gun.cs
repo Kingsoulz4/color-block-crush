@@ -61,8 +61,10 @@ namespace ColorBlockCrush
         public GunPos GunPos { get => gunPos; set => gunPos = value; }
         public RotationDirection CurrentFireDir { get => currentFireDir; set => currentFireDir = value; }
         public RotationDirection CurrentMoveFireDir { get => currentMoveFireDir; set => currentMoveFireDir = value; }
-        public int AllConnectedGunCount { get => allConnectedGunCount + 1; set => allConnectedGunCount = value; }
+        public int AllConnectedGunCount { get => allConnectedGunCount; set => allConnectedGunCount = value; }
+        public int OriginConnectedGun { get => originConnectedGun; set => originConnectedGun = value; }
 
+        private int originConnectedGun = 0;
         private int allConnectedGunCount;
 
 
@@ -102,39 +104,49 @@ namespace ColorBlockCrush
             }
         }
 
-        public void GetConnectedCountAll()
+        public void GetConnectedCountAll(List<List<ObjectOnGunBoardColumn>> objectOnGunBoardColumns)
         {
-            if (ConnectedGuns == null || ConnectedGuns.Count == 0)
-                return;
-
             HashSet<Gun> visited = new HashSet<Gun>();
             Queue<Gun> queue = new Queue<Gun>();
 
             queue.Enqueue(this);
+            visited.Add(this);
 
             while (queue.Count > 0)
             {
                 Gun currentGun = queue.Dequeue();
 
-                if (visited.Contains(currentGun))
-                    continue;
-
-                visited.Add(currentGun);
-
-                if (ConnectedGuns != null && ConnectedGuns.Count > 0)
+                if (currentGun.ConnectedGuns != null && currentGun.ConnectedGuns.Count > 0)
                 {
-                    foreach (Gun gun in ConnectedGuns)
+                    foreach (Gun connectedGun in currentGun.ConnectedGuns)
                     {
-                        if (!visited.Contains(gun))
+                        if (!visited.Contains(connectedGun))
                         {
-                            queue.Enqueue(gun);
+                            visited.Add(connectedGun);
+                            queue.Enqueue(connectedGun);
+                        }
+                    }
+
+                    foreach (var column in objectOnGunBoardColumns)
+                    {
+                        foreach (var obj in column)
+                        {
+                            if (obj is Gun otherGun &&
+                                otherGun.ConnectedGuns != null &&
+                                otherGun.ConnectedGuns.Contains(currentGun) &&
+                                !visited.Contains(otherGun))
+                            {
+                                visited.Add(otherGun);
+                                queue.Enqueue(otherGun);
+                            }
                         }
                     }
                 }
             }
 
-            Debug.Log("AllConnectedGunCount" + visited.Count);
+            Debug.Log($"Gun {this.ID}: AllConnectedGunCount = {visited.Count}");
             AllConnectedGunCount = visited.Count;
+            OriginConnectedGun = visited.Count;
         }
 
         void Update()
@@ -197,10 +209,10 @@ namespace ColorBlockCrush
         {
             if (IsMovingToConveyor() || IsMovingToSlot()) return false;
 
-            foreach(var gunn in ConnectedGuns)
+            foreach (var gunn in ConnectedGuns)
             {
                 if (gunn.IsMovingToSlot() || gunn.IsMovingToConveyor()) return false;
-            }    
+            }
 
             if (GunPos == GunPos.ON_CONVEYOR || GunPos == GunPos.TWEEN_SORT) return false;
 
@@ -492,14 +504,14 @@ namespace ColorBlockCrush
             bool res = moveToConveyorTw != null && moveToConveyorTw.IsPlaying();
 
             return res;
-        }    
+        }
 
         public bool IsMovingToSlot()
         {
             bool res = moveSortSlotTw != null && moveSortSlotTw.IsPlaying();
 
             return res;
-        }    
+        }
 
         public void MoveToSlot(Vector3 endPos, Action callback = null)
         {
@@ -511,6 +523,7 @@ namespace ColorBlockCrush
             {
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
+                AllConnectedGunCount = OriginConnectedGun;
             });
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
             moveToSlotSq.Join(transform.DOScale(Vector3.one, moveToSlotDuration));
