@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ColorBlockCrush
@@ -20,15 +21,54 @@ namespace ColorBlockCrush
                     break;
                 case ItemType.BOOSTER_1:
                     UserDataManager.AddTrayBooster += quantity;
+                    if (BoosterManager.Instance != null)
+                    {
+                        BoosterBase addTrayBooster = BoosterManager.Instance.Boosters.FirstOrDefault(x =>
+                            x.BoosterType == BoosterType.ADD_TRAY);
+                        if (addTrayBooster != null)
+                        {
+                            addTrayBooster.UpdateVisualBooster();
+                        }
+                    }
                     break;
                 case ItemType.BOOSTER_2:
+                    Debug.Log("Add Hand");
                     UserDataManager.HandBooster += quantity;
+                    if (BoosterManager.Instance != null)
+                    {
+                        Debug.Log("Add Hand BM");
+                        BoosterBase handBooster = BoosterManager.Instance.Boosters.FirstOrDefault(x =>
+                            x.BoosterType == BoosterType.HAND_MOVE);
+                        if (handBooster != null)
+                        {
+                            Debug.Log("Add Hand BM Hand");
+                            handBooster.UpdateVisualBooster();
+                        }
+                    }
                     break;
                 case ItemType.BOOSTER_3:
                     UserDataManager.ShuffleBooster += quantity;
+                    if (BoosterManager.Instance != null)
+                    {
+                        BoosterBase shuffleBooster = BoosterManager.Instance.Boosters.FirstOrDefault(x =>
+                            x.BoosterType == BoosterType.SHUFFLE);
+                        if (shuffleBooster != null)
+                        {
+                            shuffleBooster.UpdateVisualBooster();
+                        }
+                    }
                     break;
                 case ItemType.BOOSTER_4:
                     UserDataManager.MagnetBooster += quantity;
+                    if (BoosterManager.Instance != null)
+                    {
+                        BoosterBase superShootBooster = BoosterManager.Instance.Boosters.FirstOrDefault(x =>
+                            x.BoosterType == BoosterType.SUPER_SHOOT);
+                        if (superShootBooster != null)
+                        {
+                            superShootBooster.UpdateVisualBooster();
+                        }
+                    }
                     break;
             }
         }

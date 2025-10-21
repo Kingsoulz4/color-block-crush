@@ -13,6 +13,7 @@ namespace ColorBlockCrush
         [SerializeField] private Text m_textFeatureDes;
         [SerializeField] private Image m_imageFeatureIcon;
         private BoosterType boosterType;
+        private Action doneForceTut;
         
         private void Awake()
         {
@@ -42,6 +43,7 @@ namespace ColorBlockCrush
             Action useBooster = () =>
             {
                 UserDataManager.AddBooster(boosterType, 3);
+                doneForceTut?.Invoke();
             };
             Server.Get<OnForceTutBooster>().Dispatch(useBooster, boosterType, m_imageFeatureIcon.transform.position);
             Hide();
@@ -52,7 +54,8 @@ namespace ColorBlockCrush
             var boosterUnlock = BoosterManager.Instance.BoosterData.boosterItemDatas.Find(x => x.levelUnlock == LevelManager.Instance.CurrentLevel);
             if (CheckShowForceTut())
             {
-                base.Show(callback);
+                base.Show(null);
+                doneForceTut = callback;
                 GameManager.Instance.SetGameState(GameState.Paused);
                 boosterType = boosterUnlock.boosterType;
                 SetData(boosterUnlock.title, boosterUnlock.description, boosterUnlock.icon);

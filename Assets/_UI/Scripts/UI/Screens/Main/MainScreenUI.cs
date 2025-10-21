@@ -18,6 +18,8 @@ public class MainScreenUI : ScreenUI
     [SerializeField] MenuTabSystem menuTab;
     [SerializeField] GameObject blockUI;
     [SerializeField] Text[] arrTextLevel;
+    [SerializeField] private GameObject bigBgHardLevel;
+    [SerializeField] private GameObject bigBgSuperHardLevel;
     [SerializeField] GameObject arrBgHardLevel;
     [SerializeField] GameObject arrBgSuperHardLevel;
     [SerializeField] Button btn_RemoveAds;
@@ -88,14 +90,20 @@ public class MainScreenUI : ScreenUI
         LevelDifficult levelDiff = LevelManager.Instance.GetCurrentLevelType();
         if (levelDiff == LevelDifficult.Normal)
         {
+            bigBgHardLevel.SetActive(false);
+            bigBgSuperHardLevel.SetActive(false);
             arrBgHardLevel.SetActive(false);
             arrBgSuperHardLevel.SetActive(false);
         }else if (levelDiff == LevelDifficult.Hard)
         {
+            bigBgHardLevel.SetActive(true);
+            bigBgSuperHardLevel.SetActive(false);
             arrBgHardLevel.SetActive(true);
             arrBgSuperHardLevel.SetActive(false);
         }else if (levelDiff == LevelDifficult.SuperHard)
         {
+            bigBgHardLevel.SetActive(false);
+            bigBgSuperHardLevel.SetActive(true);
             arrBgHardLevel.SetActive(false);
             arrBgSuperHardLevel.SetActive(true);
         }

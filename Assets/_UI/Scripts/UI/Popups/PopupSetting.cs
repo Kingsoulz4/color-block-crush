@@ -18,6 +18,9 @@ public class PopupSetting : PopupUI
     [SerializeField] Button m_buttonPrivacySetting;
     [SerializeField] Text versionTxt;
 
+    [SerializeField] RectTransform btnVerticalLayout;
+    [SerializeField] RectTransform bgVerticalLayout;
+    
     private void Awake()
     {
         m_buttonExitGame.onClick.AddListener(OnClickExitGame);
@@ -86,6 +89,10 @@ public class PopupSetting : PopupUI
     {
         m_buttonExitGame.gameObject.SetActive(type == PopupSettingType.IN_GAME);
         m_buttonRestart.gameObject.SetActive(type == PopupSettingType.IN_GAME);
+        
+        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(btnVerticalLayout);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(bgVerticalLayout);
     }
 
     public override void Initialize(UIManager manager)

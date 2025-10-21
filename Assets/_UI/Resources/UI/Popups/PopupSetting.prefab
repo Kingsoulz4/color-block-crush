@@ -1814,6 +1814,8 @@ MonoBehaviour:
   m_buttonContact: {fileID: 8914581254671692559}
   m_buttonPrivacySetting: {fileID: 4950866750919112028}
   versionTxt: {fileID: 9034628387624808651}
+  btnVerticalLayout: {fileID: 3798102934782725063}
+  bgVerticalLayout: {fileID: 4115894757074722732}
 --- !u!114 &1567350317854013078
 MonoBehaviour:
   m_ObjectHideFlags: 0

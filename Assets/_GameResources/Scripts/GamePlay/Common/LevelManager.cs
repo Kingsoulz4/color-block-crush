@@ -176,7 +176,7 @@ namespace ColorBlockCrush
 
         public void OnRetryGame()
         {
-            if (UserDataManager.Heart > 0)
+            if (UserDataManager.Heart > 1)
             {
                 StartCurrentLevel();
                 var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
@@ -339,8 +339,8 @@ namespace ColorBlockCrush
 
         public void DoneFlowStartGame()
         {
+            Debug.Log($"Done");
             GameManager.Instance.SetGameState(GameState.Playing);
-
         }
 
         #endregion
