@@ -1,7 +1,9 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace ColorBlockCrush
@@ -16,8 +18,17 @@ namespace ColorBlockCrush
         public override void Init()
         {
             base.Init();
+            originCamZ = Camera.main.transform.position.z;
             LevelEvent.OnGunClick += OnGunClick;
+            LevelEvent.OnLevelStart += OnLevelStart;
 
+        }
+
+        private void OnLevelStart(int obj)
+        {
+            IsShowConfirm = false;
+            InProgress = false;
+            Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
         }
 
         private void OnGunClick(Gun gun)
@@ -26,12 +37,14 @@ namespace ColorBlockCrush
             {
                 StartCoroutine(DoBooster());
                 gun.OnGunClicked(true);
+                gun.ForceResoveHidden();
             }
         }
 
         private void OnDisable()
         {
             LevelEvent.OnGunClick += OnGunClick;
+            LevelEvent.OnLevelStart -= OnLevelStart;
         }
 
         public override void CancelBooster()
@@ -60,7 +73,6 @@ namespace ColorBlockCrush
         {
             base.ShowBooster();
             IsShowConfirm = true;
-            originCamZ = Camera.main.transform.position.z;
             Camera.main.GetComponent<GameCamera>().MoveZ(zOffetCam, 0.2f);
         }
 
