@@ -37,7 +37,7 @@ namespace ColorBlockCrush
                         LevelController.Instance.LoseLevel();
                         return;
                     }
-                    if (gun)
+                    if (gun && gun.TrayItem)
                     {
                         conveyorController.MoveTrayIn(gun.TrayItem);
                         slotController.MoveGunIn(gun);
