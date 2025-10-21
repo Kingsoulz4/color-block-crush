@@ -66,5 +66,26 @@ namespace ColorBlockCrush
                 OnHiddenResolved?.Invoke();
             }
         }
+
+        public void RemoveAllConnection()
+        {
+            foreach(var connectGun in AllConnectedGuns)
+            {
+                if (connectGun != this)
+                {
+                    connectGun.RemoveConnection(this);
+                }
+            }
+            AllConnectedGunCount = 0;
+            AllConnectedGuns.Clear();
+            ConnectedGunHandler.ClearConnection();
+        }
+
+        public void RemoveConnection(Gun gunn)
+        {
+            AllConnectedGuns.Remove(gunn);
+            AllConnectedGunCount -= 1;
+            ConnectedGunHandler.RemoveConnection(gunn);
+        }
     }
 }

@@ -54,5 +54,25 @@ namespace ColorBlockCrush
         {
             return dictRope.ContainsKey(id);
         }
+
+        public void RemoveConnection(Gun gun)
+        {
+            ListGun.Remove(gun);
+            if (dictRope.ContainsKey(gun.ID))
+            {
+                Destroy(dictRope[gun.ID].gameObject);
+                dictRope.Remove(gun.ID);
+            }
+        }
+
+        internal void ClearConnection()
+        {
+            ListGun.Clear();
+            foreach(var item in dictRope)
+            {
+                Destroy(item.Value.gameObject);
+            }    
+            dictRope.Clear();
+        }
     }
 }

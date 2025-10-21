@@ -237,9 +237,9 @@ namespace ColorBlockCrush
                     {
                         if(!listGunByColumn.ContainsKey(gun.ColumnIndex))
                         {
-                            listGunByColumn[ColumnIndex] = new();
+                            listGunByColumn[gun.ColumnIndex] = new();
                         }
-                        listGunByColumn[ColumnIndex].Add(gun);
+                        listGunByColumn[gun.ColumnIndex].Add(gun);
                     }    
 
                     foreach(var item in listGunByColumn)
