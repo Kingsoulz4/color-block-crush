@@ -49,7 +49,7 @@ namespace ColorBlockCrush
 
         public void ResetTray(Vector3 endPos, Action callback = null)
         {
-            splineAnimate.Pause();
+            SplineAnimate.Container = null;
             myGun = null;
 
             if (moveToConveyorSq != null && moveToConveyorSq.IsPlaying())
