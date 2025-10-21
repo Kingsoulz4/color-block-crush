@@ -25,13 +25,7 @@ namespace ColorBlockCrush
 
         public void Resolve()
         {
-            //var defaultPos = transform.localPosition.y;
-            //gunController.transform.DOLocalMoveY(transform.localPosition.y + 10, 0.1f).SetEase(Ease.OutQuart)
-            //    .OnComplete(() =>
-            //    {
-            //        gunController.transform.DOLocalMoveY(defaultPos, 0.1f).SetEase(Ease.OutBack);
-            //    });
-
+            if (IsResolved) return;
             IsResolved = true;
             m_fxOpenHidden.gameObject.SetActive(true);
             m_fxOpenHidden.Stop();

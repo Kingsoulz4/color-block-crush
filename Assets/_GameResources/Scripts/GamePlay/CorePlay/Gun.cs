@@ -288,11 +288,11 @@ namespace ColorBlockCrush
                     int timeTakeDamage = 1;
                     if (currentFireDir == RotationDirection.Up || currentFireDir == RotationDirection.Down)
                     {
-                        timeTakeDamage = block.Size.x;
+                        timeTakeDamage = Mathf.Min(block.Size.x, block.GetHitPoint());
                     }
                     else if (currentFireDir == RotationDirection.Left || currentFireDir == RotationDirection.Right)
                     {
-                        timeTakeDamage = block.Size.y;
+                        timeTakeDamage = Mathf.Min(block.Size.y, block.GetHitPoint());
                     }
 
                     if (timeTakeDamage > 1)
@@ -330,8 +330,8 @@ namespace ColorBlockCrush
             bullet.transform.SetParent(LevelController.Instance.transform);
             bullet.OnInit(this, target, (gun, block) =>
             {
-                target.TakeDamage(1);
                 Destroy(bullet.gameObject);
+                target.TakeDamage(1);
             });
 
             OnGunFired?.Invoke(this);
