@@ -1644,7 +1644,7 @@ MonoBehaviour:
   m_textCoinQuantity: {fileID: 7351161461855947513}
   m_textPackName: {fileID: 2675001988614719646}
   m_tagHighlight: {fileID: 7079592961773976924}
-  packIDHighlight: 
+  packIDHighlight: medium_bundle
 --- !u!1 &9057345135669921538
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,7 @@ MonoBehaviour:
     googleID: small_bundle
     appleID: small_bundle
     title: Small Bundle
+    type: 0
     description: boost
     icon: {fileID: 21300000, guid: 7b8c0d95df4074f42b89b50c1fc834b3, type: 3}
     listReward:
@@ -30,10 +31,11 @@ MonoBehaviour:
       quantity: 1
     - type: 1
       quantity: 3600
-  - id: mega_bundle
-    googleID: mega_bundle
-    appleID: mega_bundle
-    title: Mega Bundle
+  - id: medium_bundle
+    googleID: medium_bundle
+    appleID: medium_bundle
+    title: Medium Bundle
+    type: 0
     description: boost
     icon: {fileID: 21300000, guid: d89e1da3f23a4d04dbd2a263c2fedb3d, type: 3}
     listReward:
@@ -47,10 +49,11 @@ MonoBehaviour:
       quantity: 5
     - type: 1
       quantity: 7200
-  - id: ultra_bundle
-    googleID: ultra_bundle
-    appleID: ultra_bundle
-    title: Ultra Bundle
+  - id: big_bundle
+    googleID: big_bundle
+    appleID: big_bundle
+    title: Big Bundle
+    type: 0
     description: boost
     icon: {fileID: 21300000, guid: 33794141aa455cb4b8fb459a7462ad9b, type: 3}
     listReward:
