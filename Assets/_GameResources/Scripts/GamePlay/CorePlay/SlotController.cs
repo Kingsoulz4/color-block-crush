@@ -99,21 +99,6 @@ namespace ColorBlockCrush
         //}
         public void MoveGunIn(Gun gun)
         {
-            if (gun.ConnectedGuns.Count > 1)
-            {
-                if (!CanPlaceGuns(gun.ConnectedGuns.Count))
-                {
-                    LevelController.Instance.ConveyorController.PauseAllTray();
-                    LevelController.Instance.LoseLevel();
-                    return;
-                }
-            }
-            else if (!CanPlaceGuns(1))
-            {
-                LevelController.Instance.ConveyorController.PauseAllTray();
-                LevelController.Instance.LoseLevel();
-                return;
-            }
 
             _gunsInSlots.Add(gun);
             gun.transform.SetParent(gunContainer);
@@ -208,7 +193,7 @@ namespace ColorBlockCrush
 
         public Gun GetLastGun()
         {
-            Gun lastGun = _gunsInSlots[_maxSlots-1];
+            Gun lastGun = _gunsInSlots[_gunsInSlots.Count-1];
             RemoveGun(lastGun);
             return lastGun;
         }

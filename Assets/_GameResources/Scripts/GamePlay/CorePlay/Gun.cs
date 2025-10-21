@@ -61,6 +61,10 @@ namespace ColorBlockCrush
         public GunPos GunPos { get => gunPos; set => gunPos = value; }
         public RotationDirection CurrentFireDir { get => currentFireDir; set => currentFireDir = value; }
         public RotationDirection CurrentMoveFireDir { get => currentMoveFireDir; set => currentMoveFireDir = value; }
+        public int AllConnectedGunCount { get => allConnectedGunCount + 1; set => allConnectedGunCount = value; }
+
+        private int allConnectedGunCount;
+
 
         public Action<Gun> OnGunFired;
         public Action<Gun> OnGunEmpty;
@@ -88,7 +92,6 @@ namespace ColorBlockCrush
             UpdateVisuals();
             InitMechanics();
             LevelEvent.OnFastMode += OnFastMode;
-
         }
 
         private void OnFastMode()
@@ -97,6 +100,41 @@ namespace ColorBlockCrush
             {
                 maxShootingAngle = 20;
             }
+        }
+
+        public void GetConnectedCountAll()
+        {
+            if (ConnectedGuns == null || ConnectedGuns.Count == 0)
+                return;
+
+            HashSet<Gun> visited = new HashSet<Gun>();
+            Queue<Gun> queue = new Queue<Gun>();
+
+            queue.Enqueue(this);
+
+            while (queue.Count > 0)
+            {
+                Gun currentGun = queue.Dequeue();
+
+                if (visited.Contains(currentGun))
+                    continue;
+
+                visited.Add(currentGun);
+
+                if (ConnectedGuns != null && ConnectedGuns.Count > 0)
+                {
+                    foreach (Gun gun in ConnectedGuns)
+                    {
+                        if (!visited.Contains(gun))
+                        {
+                            queue.Enqueue(gun);
+                        }
+                    }
+                }
+            }
+
+            Debug.Log("AllConnectedGunCount" + visited.Count);
+            AllConnectedGunCount = visited.Count;
         }
 
         void Update()
@@ -157,7 +195,7 @@ namespace ColorBlockCrush
 
         public bool CanPushToConveyor()
         {
-            if (IsMovingToConveyor() || IsMovingToSlot()) return false; 
+            if (IsMovingToConveyor() || IsMovingToSlot()) return false;
 
             if (GunPos == GunPos.ON_CONVEYOR || GunPos == GunPos.TWEEN_SORT) return false;
 
@@ -244,8 +282,6 @@ namespace ColorBlockCrush
 
         public void Fire(Block target)
         {
-            Debug.Log("Fire Here");
-
             RotateToFire(target.transform);
             BulletCount--;
             PlayAnim(Constant.GunAnimation.SHOOT);
@@ -265,9 +301,9 @@ namespace ColorBlockCrush
             {
                 CurrentTarget = null;
 
-                
 
-                CheckDisappear(); 
+
+                CheckDisappear();
             }
         }
 
@@ -281,10 +317,10 @@ namespace ColorBlockCrush
 
                 PlayAnim(Constant.GunAnimation.DISAPPEAR);
 
-                foreach(var gun in ConnectedGuns)
+                foreach (var gun in ConnectedGuns)
                 {
                     gun.CheckDisappear();
-                }    
+                }
 
                 this.Wait(0.2f, () =>
                 {
@@ -449,15 +485,16 @@ namespace ColorBlockCrush
         public bool IsMovingToConveyor()
         {
             return moveToConveyorTw != null && moveToConveyorTw.IsPlaying();
-        }    
+        }
 
         public bool IsMovingToSlot()
         {
             return moveSortSlotTw != null && moveSortSlotTw.IsPlaying();
-        }    
+        }
 
         public void MoveToSlot(Vector3 endPos, Action callback = null)
         {
+            Debug.Log("MoveToSlot");
             Sequence moveToSlotSq = DOTween.Sequence();
 
             GunPos = GunPos.ON_SLOT;
@@ -519,7 +556,7 @@ namespace ColorBlockCrush
 
         public bool CheckCanDisappear()
         {
-            if(isDisappeared) return false;
+            if (isDisappeared) return false;
 
             if (ConnectedGuns.Count <= 0)
             {
@@ -557,16 +594,16 @@ namespace ColorBlockCrush
 
             var shootingAngle = maxShootingAngle;
 
-            if(currentFireDir == RotationDirection.Up || currentFireDir == RotationDirection.Down)
+            if (currentFireDir == RotationDirection.Up || currentFireDir == RotationDirection.Down)
             {
                 shootingAngle = maxShootingAngle * block.Size.x;
-            }    
+            }
             else
             {
                 shootingAngle = maxShootingAngle * block.Size.y;
-            }    
+            }
 
-            bool isInAngle = angle <= shootingAngle ;
+            bool isInAngle = angle <= shootingAngle;
 
             return isInAngle;
         }
