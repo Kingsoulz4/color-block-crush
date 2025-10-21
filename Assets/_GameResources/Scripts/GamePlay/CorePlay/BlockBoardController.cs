@@ -119,7 +119,6 @@ namespace ColorBlockCrush
 
         public BigBlock SpawnBigBlock(BigBlockConfig bigBlockConfig)
         {
-
             BigBlock newBigBlock = Instantiate(bigBlockPrefab, bigBlockContainer);
 
             newBigBlock.Init(bigBlockConfig);
