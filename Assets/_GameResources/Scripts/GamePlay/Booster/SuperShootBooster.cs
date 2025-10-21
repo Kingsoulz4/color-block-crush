@@ -154,7 +154,7 @@ namespace ColorBlockCrush
                         Destroy(bullet.gameObject);
                     });
 
-                    yield return null;
+                    //yield return 0;
                 }
 
                 yield return new WaitForSeconds(0.2f);
