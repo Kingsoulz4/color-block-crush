@@ -33,12 +33,16 @@ namespace ColorBlockCrush
 
         private void OnClickClaimX2()
         {
-            UserDataManager.AddGold(80, "WinX2");
-            OnClaimedReward.Invoke(coinReceiveValue * 2);
+            MaxAdsManager.Instance.ShowRewardedAd(MaxKeys.rewardedID, () =>
+            {
+                UserDataManager.AddGold(80, "WinX2");
+                OnClaimedReward.Invoke(coinReceiveValue * 2); 
+            });
         }
 
         private void OnClickClaim()
         {
+            MaxAdsManager.Instance.ShowInterstitialAd(MaxKeys.interstitialID);
             UserDataManager.AddGold(coinReceiveValue, "Win");
             OnClaimedReward.Invoke(coinReceiveValue);
         }
