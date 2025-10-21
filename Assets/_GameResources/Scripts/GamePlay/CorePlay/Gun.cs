@@ -229,12 +229,12 @@ namespace ColorBlockCrush
                 }
                 else
                 {
-                    Dictionary<int, SortedSet<Gun>> listGunByColumn = new();
+                    Dictionary<int, List<Gun>> listGunByColumn = new();
                     listGunByColumn[ColumnIndex] = new();
                     listGunByColumn[ColumnIndex].Add(this);
                     foreach(var gun in AllConnectedGuns)
                     {
-                        if(listGunByColumn.ContainsKey(gun.ColumnIndex))
+                        if(!listGunByColumn.ContainsKey(gun.ColumnIndex))
                         {
                             listGunByColumn[ColumnIndex] = new();
                         }
@@ -243,7 +243,8 @@ namespace ColorBlockCrush
 
                     foreach(var item in listGunByColumn)
                     {
-                        if (!item.Value.First().IsFrontRow) return false;
+                        var listGun = item.Value.OrderBy(x => x.Index);
+                        if (!listGun.First().IsFrontRow) return false;
                     }
                 }
             }
