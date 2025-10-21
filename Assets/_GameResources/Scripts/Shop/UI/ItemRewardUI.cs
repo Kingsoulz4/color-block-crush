@@ -27,7 +27,7 @@ namespace ColorBlockCrush
             }
             else
             {
-                m_textQuantity.text = $"{rewardData.quantity/3600}h";
+                m_textQuantity.text = $"{rewardData.quantity / 60}m";
             }
         }
     }
