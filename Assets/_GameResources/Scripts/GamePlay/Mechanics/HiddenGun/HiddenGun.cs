@@ -7,6 +7,7 @@ namespace ColorBlockCrush
     public class HiddenGun : MonoBehaviour
     {
         [SerializeField] private HiddenGunRenderer m_hiddenGunRendererPrefab;
+        [SerializeField] private ParticleSystem m_fxOpenHidden;
 
         private HiddenGunRenderer hiddenGunRenderer;
 
@@ -18,6 +19,8 @@ namespace ColorBlockCrush
 
         public void Resolve()
         {
+            m_fxOpenHidden.Stop();
+            m_fxOpenHidden.Play();
             hiddenGunRenderer.Resolve();
         }
     }
