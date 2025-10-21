@@ -20,14 +20,12 @@ namespace ColorBlockCrush
             base.Init();
             originCamZ = Camera.main.transform.position.z;
             LevelEvent.OnGunClick += OnGunClick;
-            LevelEvent.OnLevelStart += OnLevelStart;
 
         }
 
-        private void OnLevelStart(int obj)
+        protected override void OnLevelStart(int obj)
         {
-            IsShowConfirm = false;
-            InProgress = false;
+            base.OnLevelStart(obj);
             Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
         }
 
@@ -44,7 +42,6 @@ namespace ColorBlockCrush
         private void OnDisable()
         {
             LevelEvent.OnGunClick += OnGunClick;
-            LevelEvent.OnLevelStart -= OnLevelStart;
         }
 
         public override void CancelBooster()

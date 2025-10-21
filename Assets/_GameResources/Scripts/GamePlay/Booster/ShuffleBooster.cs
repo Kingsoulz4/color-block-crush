@@ -2,6 +2,7 @@ using DG.Tweening;
 using ColorBlockCrush;
 using System.Collections;
 using UnityEngine;
+using System;
 
 public class ShuffleBooster : BoosterBase
 {
@@ -12,10 +13,14 @@ public class ShuffleBooster : BoosterBase
         base.Init();
     }
 
+    protected override void OnLevelStart(int obj)
+    {
+        base.OnLevelStart(obj);
+    }
+
     public override void CancelBooster()
     {
         base.CancelBooster();
-        IsShowConfirm = false;
     }
 
     public override void ActiveBooster()
@@ -24,7 +29,10 @@ public class ShuffleBooster : BoosterBase
         UpdateVisualBooster();
         IsShowConfirm = false;
         LevelController.Instance.GunBoardController.ShuffleBoard();
-        Done();
+        this.Wait(0.3f, () =>
+        {
+            Done();
+        });
         OnStartUseBooster?.Invoke(this, CurrentCount);
     }
 

@@ -50,6 +50,19 @@ public abstract class BoosterBase : MonoBehaviour
     public virtual void Init()
     {
         InProgress = false;
+        LevelEvent.OnLevelStart += OnLevelStart;
+
+    }
+
+    private void OnDisable()
+    {
+        LevelEvent.OnLevelStart -= OnLevelStart;
+    }
+
+    protected virtual void OnLevelStart(int obj)
+    {
+        IsShowConfirm = false;
+        InProgress = false;
     }
 
     public virtual void DoShowBooster(Action<bool> callback = null)
