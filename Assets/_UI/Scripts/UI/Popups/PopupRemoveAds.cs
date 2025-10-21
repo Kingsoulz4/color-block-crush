@@ -16,10 +16,15 @@ namespace ColorBlockCrush
         
         [SerializeField] private GameObject m_removeAdsPack;
 
+        [SerializeField] private Text priceValueTxt;
+
         private void Awake()
         {
             m_buttonClose.onClick.AddListener(OnClickClose);
             m_buttonPurchaseNoAdsPack.onClick.AddListener(OnClickPurchaseNoAdsPack);
+            var packNoAds = m_listRemoveAdsPacks.listShopPack.Find(
+                x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_ADS) != null);
+            priceValueTxt.text = IAPManager.Instance.GetLocalizedPriceString(packNoAds.id);
         }
 
         public void UpdateUI()
@@ -32,12 +37,21 @@ namespace ColorBlockCrush
             var packNoAds = m_listRemoveAdsPacks.listShopPack.Find(
                x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_ADS) != null);
             if (packNoAds == null) return;
-
-            var popupReceiveRewards = UIManager.Instance.ShowPopup<PopupReceiveReward>(null);
-            popupReceiveRewards.SetData(packNoAds.listReward);
-            ShopManager.Instance.HasPurchasedNoAdsPack = true;
-
-            Hide();
+            
+            IAPManager.Instance.BuyProductID(packNoAds.id, (success) =>
+            {
+                if (success)
+                {
+                    var popupReceiveRewards = UIManager.Instance.ShowPopup<PopupReceiveReward>(null);
+                    popupReceiveRewards.SetData(packNoAds.listReward);
+                    ShopManager.Instance.HasPurchasedNoAdsPack = true;
+                    Hide();
+                }
+                else
+                {
+                    UIManager.Instance.ShowPopup<PopupPurchaseFailed>(null);
+                }
+            });
         }
 
         private void OnClickClose()

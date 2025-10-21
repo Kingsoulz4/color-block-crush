@@ -17,6 +17,7 @@ MonoBehaviour:
     googleID: no_ads
     appleID: no_ads
     title: No Ads
+    type: 1
     description: No Ads
     icon: {fileID: 21300000, guid: 7beb6e67e78d248489e8740ddeec573a, type: 3}
     listReward:

@@ -17,6 +17,7 @@ MonoBehaviour:
     googleID: 
     appleID: 
     title: Fail Offer
+    type: 0
     description: boost
     icon: {fileID: 21300000, guid: 33794141aa455cb4b8fb459a7462ad9b, type: 3}
     listReward:
@@ -32,6 +33,7 @@ MonoBehaviour:
     googleID: 
     appleID: 
     title: Starter Pack
+    type: 1
     description: 
     icon: {fileID: 21300000, guid: 33794141aa455cb4b8fb459a7462ad9b, type: 3}
     listReward:

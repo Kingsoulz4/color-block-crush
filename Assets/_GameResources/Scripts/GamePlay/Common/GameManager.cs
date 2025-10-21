@@ -32,6 +32,7 @@ namespace ColorBlockCrush
         {
             HeartManager.CF_EnableHeart = 1;
             HeartManager.CF_RecoverTimeHeart = 60 * 20;
+            I2.Loc.LocalizationManager.CurrentLanguage = "English";
             SetGameState(GameState.MainMenu);
 
             var loading = UIManager.Instance.ShowScreen<FirstLoadingScreen>();

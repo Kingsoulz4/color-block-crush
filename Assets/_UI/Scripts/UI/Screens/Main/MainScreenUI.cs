@@ -167,9 +167,11 @@ public class MainScreenUI : ScreenUI
     {
         m_goldBar.Sync = false;
         m_goldBar.SetText(UserDataManager.Gold - quantity);
+        m_goldBar.gameObject.SetActive(false);
         var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
         popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, quantity, () =>
         {
+            m_goldBar.gameObject.SetActive(true);
             m_goldBar.SetText(UserDataManager.Gold);
             m_goldBar.Sync = true;
         });
