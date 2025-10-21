@@ -197,6 +197,11 @@ namespace ColorBlockCrush
         {
             if (IsMovingToConveyor() || IsMovingToSlot()) return false;
 
+            foreach(var gunn in ConnectedGuns)
+            {
+                if (gunn.IsMovingToSlot() || gunn.IsMovingToConveyor()) return false;
+            }    
+
             if (GunPos == GunPos.ON_CONVEYOR || GunPos == GunPos.TWEEN_SORT) return false;
 
             if (GunPos == GunPos.ON_GUN_BOARD)
@@ -484,13 +489,17 @@ namespace ColorBlockCrush
 
         public bool IsMovingToConveyor()
         {
-            return moveToConveyorTw != null && moveToConveyorTw.IsPlaying();
-        }
+            bool res = moveToConveyorTw != null && moveToConveyorTw.IsPlaying();
+
+            return res;
+        }    
 
         public bool IsMovingToSlot()
         {
-            return moveSortSlotTw != null && moveSortSlotTw.IsPlaying();
-        }
+            bool res = moveSortSlotTw != null && moveSortSlotTw.IsPlaying();
+
+            return res;
+        }    
 
         public void MoveToSlot(Vector3 endPos, Action callback = null)
         {
