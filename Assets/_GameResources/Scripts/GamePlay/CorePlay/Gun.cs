@@ -169,12 +169,25 @@ namespace ColorBlockCrush
             if (GunPos == GunPos.ON_GUN_BOARD)
             {
                 if (!IsConnectedGroup())
-                    return IsFrontRow;
-
-
-                foreach (Gun gun in ConnectedGuns)
                 {
-                    if (!gun.IsFrontRow) return false;
+                    return IsFrontRow;
+                }
+                else
+                {
+                    if (IsFrontRow)
+                    {
+                        for(int i=0; i<ConnectedGuns.Count; i++)
+                        {
+
+                        }    
+                    }
+                    else
+                    {
+                        foreach (Gun gun in ConnectedGuns)
+                        {
+                            if (!gun.IsFrontRow) return false;
+                        }
+                    }
                 }
             }
 

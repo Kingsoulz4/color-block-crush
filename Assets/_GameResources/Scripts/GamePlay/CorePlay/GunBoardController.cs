@@ -30,6 +30,7 @@ namespace ColorBlockCrush
 
         private Dictionary<int, Gun> dictGun = new();
         private int totalGunCount = 0;
+        private LevelConfig levelConfig;
 
         public int TotalGunCount { get => totalGunCount; }
 
@@ -37,6 +38,7 @@ namespace ColorBlockCrush
         {
             totalGunCount = 0;
             dictGun.Clear();
+            this.levelConfig = levelConfig;
             SpawnGunBoard(levelConfig);
         }
 
@@ -150,11 +152,27 @@ namespace ColorBlockCrush
             return gun;
         }
 
-        public Gun SpawnNewGun(int column, int row, GunConfig gunData, int id, float centerOffsetX = 0f)
+        public Gun SpawnNewGun(int column, int row, GunConfig gunData, int id)
         {
+            int totalColumns = levelConfig.gunLines.Where(x => x.gunLineElementConfigs.Count > 0).Count();
+
+            float totalWidth = (totalColumns - 1) * columnSpacing;
+            float centerOffsetX = -totalWidth / 2f;
             var gunn = SpawnGun(column, row, gunData, id, centerOffsetX);
-            listGunColumn[column].Insert(0, gunn);
-            ShiftColumn(column);
+            listGunColumn[column].Insert(row -1, gunn);
+            gunn.SetIndex(row - 1);
+
+            Vector3 currentPos = gunn.transform.position;
+            Vector3 newPos = new Vector3(
+                currentPos.x,
+                0,
+                currentPos.z + rowSpacing
+            );
+
+            gunn.MoveColumn(newPos, 0.2f, Ease.OutQuad);
+            
+
+            //ShiftColumn(column);
             return gunn;
         }
 
@@ -263,8 +281,13 @@ namespace ColorBlockCrush
             for (int i = removedIndex; i < columnObjects.Count; i++)
             {
                 ObjectOnGunBoardColumn objOnColumn = columnObjects[i];
+                objOnColumn.SetIndex(i);
 
-                if (!objOnColumn.CanShift) break;
+                if (!objOnColumn.CanShift)
+                {
+                    objOnColumn.UpdateWhenColumnChange();
+                    return;
+                }
 
                 Vector3 currentPos = objOnColumn.transform.position;
                 Vector3 newPos = new Vector3(
