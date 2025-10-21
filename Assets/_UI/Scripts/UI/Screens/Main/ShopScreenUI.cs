@@ -59,9 +59,13 @@ namespace ColorBlockCrush
                 newPack.SetData(pack);
                 newPack.OnPurchased = () =>
                 {
+                    m_goldBar.gameObject.SetActive(false);
                     var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
                     var goldQuantity = pack.listReward.Find(x => x.type == ItemType.GOLD).quantity;
-                    popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity);
+                    popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity, () =>
+                    {
+                        m_goldBar.gameObject.SetActive(true);
+                    });
                 };
             }
             MyUlti.RemoveAllChilds(m_listShopCoinPackContainer);
@@ -71,9 +75,13 @@ namespace ColorBlockCrush
                 newCoinPack.SetData(pack);
                 newCoinPack.OnPurchased = () =>
                 {
+                    m_goldBar.gameObject.SetActive(false);
                     var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
                     var goldQuantity = pack.listReward.Find(x => x.type == ItemType.GOLD).quantity;
-                    popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity);
+                    popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity, () =>
+                    {
+                        m_goldBar.gameObject.SetActive(true);
+                    });
                 };
             }
         }

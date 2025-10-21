@@ -205,20 +205,21 @@ namespace ColorBlockCrush
 
         public void OnReviveGame(int price)
         {
-            if (UserDataManager.Gold >= price)
-            {
-                UserDataManager.AddGold(-price, "Revival");
-                GameManager.Instance.SetGameState(GameState.Playing);
-            }
-            else
-            {
-                GameManager.Instance.SetGameState(GameState.Paused);
-
-                UIManager.Instance.ShowPopup<PopupShop>(() =>
-                {
-                    GameManager.Instance.SetGameState(GameState.Playing);
-                });
-            }
+            GameManager.Instance.SetGameState(GameState.Playing);
+            // if (UserDataManager.Gold >= price)
+            // {
+            //     UserDataManager.AddGold(-price, "Revival");
+            //     
+            // }
+            // else
+            // {
+            //     GameManager.Instance.SetGameState(GameState.Paused);
+            //
+            //     UIManager.Instance.ShowPopup<PopupShop>(() =>
+            //     {
+            //         GameManager.Instance.SetGameState(GameState.Playing);
+            //     });
+            // }
         }
 
         public void OnPauseGame(int level)
@@ -233,8 +234,10 @@ namespace ColorBlockCrush
 
             CheckShowTutorials();
 
-            var popupTutNewFeature = UIManager.Instance.GetPopup<PopupTutorialNewBooster>();
+            var popupTutNewFeature = UIManager.Instance.GetPopup<PopupTutorialNewFeature>();
             InjectToFlowStartGame(popupTutNewFeature, 1);
+            var popupTutNewBooster = UIManager.Instance.GetPopup<PopupTutorialNewBooster>();
+            InjectToFlowStartGame(popupTutNewBooster, 2);
             var popupWarningDifficultLevel = UIManager.Instance.GetPopup<PopupWarningDifficultLevel>();
             InjectToFlowStartGame(popupWarningDifficultLevel, 0);
 

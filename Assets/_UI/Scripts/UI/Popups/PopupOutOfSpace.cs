@@ -49,6 +49,7 @@ namespace ColorBlockCrush
         {
             if (UserDataManager.Gold >= boosterData.price)
             {
+                UserDataManager.AddGold(-boosterData.price, "Revival");
                 LevelController.Instance.ReviveLevel(boosterData.price);
                 OnKeepPlaying?.Invoke();
                 Hide();

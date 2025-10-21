@@ -15,6 +15,7 @@ namespace ColorBlockCrush
         [SerializeField] private Bullet bulletPrb;
         [SerializeField] private Transform spawnPoint;
         private float originCamZ;
+        private GunAnim anim;
 
         protected override int CurrentCount { get => UserDataManager.MagnetBooster; set => UserDataManager.MagnetBooster = value; }
 
@@ -72,17 +73,22 @@ namespace ColorBlockCrush
             ActiveBooster();
             List<Block> blocks = new List<Block>();
             blocks = LevelController.Instance.BlockBoardController.GetBlockListByColor(colorType);
+            LevelController.Instance.GunBoardController.RemoveGunByColor(colorType);
+
             yield return new WaitForEndOfFrame();
+
             GameObject superGun = Instantiate(superGunPrb);
+
+            superGun.transform.localScale = Vector3.one * 0.1f;
+            yield return superGun.transform.DOScale(Vector3.one, 0.25f);
+
+            anim = superGun.GetComponent<GunAnim>();
+            anim.PlayAnim(Constant.GunAnimation.APPEAR);
             superGun.transform.position = spawnPoint.position;
+
             yield return StartCoroutine(FireWithBatchRotation(superGun, blocks));
-            RemoveSuperGun(superGun);
+            Destroy(superGun);
             Done();
-            //superGun.Shoot(tile.transform.position, 0.35f, () =>
-            //{
-            //    RemoveSuperGun(superGun);
-            //    Done();
-            //});
         }
 
         private IEnumerator Fire(List<Block> blocks)
@@ -104,9 +110,10 @@ namespace ColorBlockCrush
         private IEnumerator FireWithBatchRotation(GameObject superGun, List<Block> blocks)
         {
             if (blocks == null || blocks.Count == 0) yield break;
+            var spawPos = superGun.GetComponent<SuperGun>().SpawnBulletPos.position;
 
             Dictionary<float, List<Block>> blocksByAngle = new Dictionary<float, List<Block>>();
-
+            yield return new WaitForSeconds(0.3f);
             foreach (Block block in blocks)
             {
                 if (block == null) continue;
@@ -137,6 +144,7 @@ namespace ColorBlockCrush
                     Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
                     superGun.transform.DORotateQuaternion(targetRotation, 0.1f)
                         .SetEase(DG.Tweening.Ease.OutQuad);
+                    anim.PlayAnim(Constant.GunAnimation.SHOOT);
                     yield return null;
                 }
 
@@ -146,7 +154,8 @@ namespace ColorBlockCrush
 
                     block.TakeDamageRaycast(1);
 
-                    Bullet bullet = Instantiate(bulletPrb, spawnPoint.position, Quaternion.identity);
+                    spawPos.y = 0;
+                    Bullet bullet = Instantiate(bulletPrb, spawPos, Quaternion.identity);
                     bullet.transform.SetParent(LevelController.Instance.transform);
                     bullet.OnInit(null, block, (gun, b) =>
                     {
@@ -154,16 +163,14 @@ namespace ColorBlockCrush
                         Destroy(bullet.gameObject);
                     });
 
-                    yield return null;
+                    //yield return 0;
                 }
 
                 yield return new WaitForSeconds(0.2f);
             }
-        }
 
-        private void RemoveSuperGun(GameObject a)
-        {
-            Destroy(a);
+            anim.PlayAnim(Constant.GunAnimation.DISAPPEAR);
+            yield return new WaitForSeconds(0.4f);
         }
     }
 }

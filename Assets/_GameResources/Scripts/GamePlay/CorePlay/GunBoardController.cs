@@ -5,8 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI.Table;
+using UnityEngine.Experimental.AI;
 
 namespace ColorBlockCrush
 {
@@ -117,6 +116,77 @@ namespace ColorBlockCrush
             }
         }
 
+        public void RemoveGunByColor(ColorType colorType)
+        {
+            Dictionary<int, List<int>> removedIndicesByColumn = new Dictionary<int, List<int>>();
+
+            for (int col = 0; col < listGunColumn.Count; col++)
+            {
+                removedIndicesByColumn[col] = new List<int>();
+
+                for (int row = listGunColumn[col].Count - 1; row >= 0; row--)
+                {
+                    if (listGunColumn[col][row] is Gun gun && gun.ColorType == colorType)
+                    {
+                        gun.gameObject.SetActive(false);
+                        RemoveObjectFromColumn(gun);
+                        removedIndicesByColumn[col].Add(row);
+                    }
+                }
+            }
+
+            foreach (var kvp in removedIndicesByColumn)
+            {
+                if (kvp.Value.Count > 0)
+                {
+                    ShiftColumnAll(kvp.Key);
+                }
+            }
+        }
+
+        private void ShiftColumnAll(int column)
+        {
+            if (!IsValidColumn(column)) return;
+
+            List<ObjectOnGunBoardColumn> columnObjects = listGunColumn[column];
+
+            int totalColumns = levelConfig.gunLines.Where(x => x.gunLineElementConfigs.Count > 0).Count();
+            float totalWidth = (totalColumns - 1) * columnSpacing;
+            float centerOffsetX = -totalWidth / 2f;
+
+            for (int i = 0; i < columnObjects.Count; i++)
+            {
+                ObjectOnGunBoardColumn objOnColumn = columnObjects[i];
+
+                Vector3 targetPos = spawnOrigin + new Vector3(
+                    (column * columnSpacing) + centerOffsetX,
+                    0,
+                    i * -rowSpacing
+                );
+
+                Vector3 currentPos = objOnColumn.transform.position;
+
+                if (Vector3.Distance(currentPos, targetPos) > 0.01f)
+                {
+                    if (objOnColumn is Gun gun)
+                    {
+                        gun.MoveColumn(targetPos, 0.2f, DG.Tweening.Ease.OutQuad);
+                    }
+                    else if (objOnColumn is LockObject lockObject)
+                    {
+                        lockObject.MoveColumn(targetPos, 0.2f, DG.Tweening.Ease.OutQuad);
+                    }
+                    else if (objOnColumn is TunnelController tunnel)
+                    {
+                        tunnel.MoveColumn(targetPos, 0.2f, DG.Tweening.Ease.OutQuad);
+                    }
+                }
+
+                objOnColumn.SetIndex(i);
+            }
+
+            UpdateFrontRowFlags(column);
+        }
         public LockObject SpawnLock(int column, int row, GunConfig gunData, float centerOffsetX = 0f)
         {
             if (!IsValidColumn(column)) return null;
@@ -177,7 +247,7 @@ namespace ColorBlockCrush
             float totalWidth = (totalColumns - 1) * columnSpacing;
             float centerOffsetX = -totalWidth / 2f;
             var gunn = SpawnGun(column, row, gunData, id, centerOffsetX);
-            listGunColumn[column].Insert(row -1, gunn);
+            listGunColumn[column].Insert(row - 1, gunn);
             gunn.SetIndex(row - 1);
 
             Vector3 currentPos = gunn.transform.position;
@@ -188,7 +258,7 @@ namespace ColorBlockCrush
             );
 
             gunn.MoveColumn(newPos, 0.2f, Ease.OutQuad);
-            
+
 
             //ShiftColumn(column);
             return gunn;
@@ -329,11 +399,6 @@ namespace ColorBlockCrush
             UpdateFrontRowFlags(column);
         }
 
-        private void ShiftColumn(int column)
-        {
-            ShiftColumn(column, 0);
-        }
-
         private void UpdateFrontRowFlags(int column)
         {
             if (!IsValidColumn(column)) return;
@@ -390,7 +455,6 @@ namespace ColorBlockCrush
             }
             return count;
         }
-
 
         public void ShuffleBoard()
         {

@@ -15,6 +15,8 @@ namespace ColorBlockCrush
         [SerializeField] private GameObject m_superHardLevelObject;
         [SerializeField] private SkeletonGraphic m_hardAnim;
         [SerializeField] private SkeletonGraphic m_superHardAnim;
+        [SerializeField] private Image hardImage;
+        [SerializeField] private Image superHardImage;
         [SerializeField] private Image m_frameImage;
 
         private LevelController LevelGame => LevelManager.Instance.LevelGame;
@@ -36,6 +38,18 @@ namespace ColorBlockCrush
         public void Show(LevelDifficult levelType, Action callback)
         {
             base.Show(null);
+            if (levelType == LevelDifficult.Hard)
+            {
+                superHardImage.gameObject.SetActive(false);
+                hardImage.gameObject.SetActive(true);
+                m_frameImage = hardImage;
+            }
+            else
+            {
+                superHardImage.gameObject.SetActive(true);
+                hardImage.gameObject.SetActive(false);
+                m_frameImage = superHardImage;
+            }
             StartCoroutine(IEAnimate(levelType, callback));
         }
 

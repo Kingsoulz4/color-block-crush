@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,20 +9,20 @@ namespace ColorBlockCrush
 {
     public class IAPHandlerBase : MonoBehaviour, IHandleIAP
     {
-        public void AddProductConsume(string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
-        {
-            AddProductType(ProductType.Consumable, id, idStoreGoogle, idStoreApple, callbackPurchase);
-        }
+        //public void AddProductConsume(string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
+        //{
+        //    AddProductType(ProductType.Consumable, id, idStoreGoogle, idStoreApple, callbackPurchase);
+        //}
 
-        public void AddProductNonConsume(string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
-        {
-            AddProductType(ProductType.NonConsumable, id, idStoreGoogle, idStoreApple, callbackPurchase);
-        }
+        //public void AddProductNonConsume(string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
+        //{
+        //    AddProductType(ProductType.NonConsumable, id, idStoreGoogle, idStoreApple, callbackPurchase);
+        //}
 
-        public void AddProductSubscription(string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
-        {
-            AddProductType(ProductType.Subscription, id, idStoreGoogle, idStoreApple, callbackPurchase);
-        }
+        //public void AddProduct(string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
+        //{
+        //    AddProductType(ProductType.Subscription, id, idStoreGoogle, idStoreApple, callbackPurchase);
+        //}
 
         public virtual void AddProductType(ProductType type, string id, string idStoreGoogle, string idStoreApple, UnityAction<bool> callbackPurchase)
         {
@@ -32,7 +33,11 @@ namespace ColorBlockCrush
         {
             
         }
-        
+
+        public virtual bool CheckHasPurchased(string internalProductId) {
+            return false;
+        }
+
         public virtual float GetLocalizedPrice(string pPackageId)
         {
             return 0f;
@@ -51,6 +56,8 @@ namespace ColorBlockCrush
         {
         }
 
-        
+        public virtual bool IsSubscribed(string productId) {
+            return false;
+        }
     }
 }

@@ -71,8 +71,8 @@ namespace ColorBlockCrush
                 _goldCounter.SetText(UserDataManager.Gold - coinCount);
                 Transform coin = _coinContainer.GetChild(i);
 
-                Transform coinObject = Instantiate(m_coinPrefab, coin).transform;
-                coinObject.localPosition = Vector3.zero + Vector3.forward * Random.Range(-100f, -120f);
+                // Transform coinObject = Instantiate(m_coinPrefab, coin).transform;
+                // coinObject.localPosition = Vector3.zero + Vector3.forward * Random.Range(-100f, -120f);
                 //coinObject.DOLocalRotate(coinObject.localRotation.eulerAngles + Vector3.forward * 360, 0.5f, RotateMode.FastBeyond360)
                 //    .SetEase(Ease.Linear)
                 //    .SetLoops(-1, LoopType.Restart);
@@ -82,7 +82,7 @@ namespace ColorBlockCrush
                 Sequence coinSeq = DOTween.Sequence();
                 coinSeq.Append(coin.DOScale(1f, _moveOutDuration).SetEase(Ease.OutBack))
                        .Join(coin.DOLocalMove(_initialPos[i], _moveOutDuration).SetEase(Ease.OutBack))
-                       .Join(coinObject.DOLocalRotate(coinObject.localRotation.eulerAngles + Vector3.forward * 360, _moveOutDuration * 5, RotateMode.FastBeyond360)
+                       .Join(coin.DOLocalRotate(coin.localRotation.eulerAngles + Vector3.forward * 360, _moveOutDuration * 5, RotateMode.FastBeyond360)
                             .SetEase(Ease.Linear)
                             /*.SetLoops(-1, LoopType.Restart)*/)
                        .AppendInterval(_moveOutDelay)
@@ -91,7 +91,7 @@ namespace ColorBlockCrush
                            {
                                 coin.DOScale(0f, _moveToTargetDuration * 0.2f).SetEase(Ease.InBack);
                            }))
-                       .Join(coinObject.DORotate(coinObject.localRotation.eulerAngles + Vector3.forward * 360, _moveToTargetDuration * 2, RotateMode.FastBeyond360).SetEase(Ease.Linear))
+                       .Join(coin.DORotate(coin.localRotation.eulerAngles + Vector3.forward * 360, _moveToTargetDuration * 2, RotateMode.FastBeyond360).SetEase(Ease.Linear))
                        //.Append(coin.DOScale(0f, 0.25f).SetEase(Ease.InBack))
                        .Join(_goldCounter.transform.DOScale(_originScale * 1.1f, 0.05f).SetEase(Ease.InOutSine)
                             .SetDelay(_moveToTargetDuration)
@@ -107,7 +107,7 @@ namespace ColorBlockCrush
                            //VibrationManager.VibrateWeak();
                            //AudioManager.Instance.PlayOneShot(AudioClipNames.COLLECT_COIN.ToString(), 1f);
                            AudioManager.Instance.PlayOneShot("SFX_CoinOneShot", 1);
-                           Destroy(coinObject.gameObject);
+                           //Destroy(coinObject.gameObject);
 
                            if (index == _coinContainer.childCount - 1)
                            {

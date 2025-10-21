@@ -361,7 +361,7 @@ namespace ColorBlockCrush
                     gun.CheckDisappear();
                 }
 
-                this.Wait(0.2f, () =>
+                this.Wait(0.3f, () =>
                 {
                     gameObject.SetActive(false);
                     OnGunDissapear?.Invoke(this);
@@ -502,6 +502,8 @@ namespace ColorBlockCrush
             GunPos = GunPos.TWEEN_SORT;
             currentFireDir = RotationDirection.Up;
             currentMoveFireDir = RotationDirection.Right;
+
+            ForceResoveHidden();
 
             moveToConveyorTw = moveToConveyorSq.Append(
                 transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration + delay)).SetEase(moveToConveyorEase).OnComplete(() =>
@@ -697,6 +699,11 @@ namespace ColorBlockCrush
                 default:
                     break;
             }
+        }
+
+        public void ForceResoveHidden()
+        {
+            ForceHiddenResolve();
         }
 
         public void OnRevive()

@@ -9,11 +9,12 @@ namespace ColorBlockCrush
         [SerializeField] private ShopData m_listCoinPacks;
         [SerializeField] private ShopData m_listBundlePack;
         [SerializeField] private ShopData m_listRemoveAdsPacks;
+        [SerializeField] private ShopData m_listDataShop;
 
         public bool HasPurchasedRemoveInterAds
         {
             get => PlayerPrefs.GetInt("HasPurchasedRemoveInterAds", 0) > 0;
-            set => PlayerPrefs.SetInt("HasPurchasedRemoveInterAds", value ? 1 : 0);
+            set => PlayerPrefs.SetInt("HasPurchasedRemoveInterAds", value? 1: 0);
         }
 
         public bool HasPurchasedRemoveAds
@@ -40,12 +41,10 @@ namespace ColorBlockCrush
         {
             get
             {
-                if (listPurchasedPack == null)
+                if(listPurchasedPack == null)
                 {
-                    listPurchasedPack =
-                        JsonConvert.DeserializeObject<List<string>>(PlayerPrefs.GetString("ListPurchasedPacks", "[]"));
+                    listPurchasedPack = JsonConvert.DeserializeObject<List<string>>(PlayerPrefs.GetString("ListPurchasedPacks", "[]"));
                 }
-
                 return listPurchasedPack;
             }
 
@@ -58,12 +57,16 @@ namespace ColorBlockCrush
 
         public void AddPurchasedPack(ShopPack packID)
         {
-            if (!ListPurchasedPacks.Contains(packID.id))
+            if(!ListPurchasedPacks.Contains(packID.id))
             {
                 ListPurchasedPacks.Add(packID.id);
                 ListPurchasedPacks = ListPurchasedPacks;
             }
         }
+         public void CheckReMoveAds() {
+
+        }
+
 
         private void Awake()
         {
@@ -72,20 +75,27 @@ namespace ColorBlockCrush
 
         void Init()
         {
-            foreach (var item in m_listCoinPacks.listShopPack)
+            foreach(var item in m_listCoinPacks.listShopPack)
             {
-                IAPManager.Instance.AddProductConsume(item.id, item.googleID, item.appleID, null);
+                IAPManager.Instance.AddProduct(item.type,item.id, item.googleID, item.appleID, null);
             }
-
+            
             foreach (var item in m_listBundlePack.listShopPack)
             {
-                IAPManager.Instance.AddProductConsume(item.id, item.googleID, item.appleID, null);
+                IAPManager.Instance.AddProduct(item.type,item.id, item.googleID, item.appleID, null);
             }
-
+            foreach (var item in m_listDataShop.listShopPack)
+            {
+                IAPManager.Instance.AddProduct(item.type,item.id, item.googleID, item.appleID, null);
+            }
+            
             foreach (var item in m_listRemoveAdsPacks.listShopPack)
             {
-                IAPManager.Instance.AddProductConsume(item.id, item.googleID, item.appleID, null);
+                IAPManager.Instance.AddProduct(item.type,item.id, item.googleID, item.appleID, (Success) => {
+                    if(Success)
+                    Debug.Log("Remove ads");
+                });
             }
         }
-    }
+    } 
 }
