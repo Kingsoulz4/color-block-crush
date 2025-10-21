@@ -1,3 +1,4 @@
+using System;
 using ColorBlockCrush;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,9 @@ public class PopupSetting : PopupUI
     [SerializeField] Button m_buttonContact;
     [SerializeField] Button m_buttonPrivacySetting;
     [SerializeField] Text versionTxt;
+    [SerializeField] private Button debugBtn;
+    private float lastTimeDebugClick;
+    private int debugClickCount = 0;
 
     [SerializeField] RectTransform btnVerticalLayout;
     [SerializeField] RectTransform bgVerticalLayout;
@@ -28,6 +32,12 @@ public class PopupSetting : PopupUI
         m_buttonPrivacySetting.onClick.AddListener(OpenPrivacySetting);
         m_buttonContact.onClick.AddListener(ContactUs);
         versionTxt.text = Application.version;
+    }
+
+    private void Start()
+    {
+        debugBtn.GetComponent<Image>().color = TestManager.IsCheating ? Color.white : new Color(1, 1, 1, 0);
+        debugBtn.onClick.AddListener(OnDebugClick);
     }
 
     private void OnClickExitGame()
@@ -106,5 +116,28 @@ public class PopupSetting : PopupUI
     {
         UIManager.Instance.CheckRestore();
         Hide();
+    }
+    
+    private void OnDebugClick()
+    {
+        if (Time.time - lastTimeDebugClick < 1)
+        {
+            debugClickCount++;
+            Debug.Log(debugClickCount);
+            if (debugClickCount >= 30 || Application.isEditor)
+            {
+                TestManager.IsCheating = !TestManager.IsCheating;
+                debugBtn.GetComponent<Image>().color = TestManager.IsCheating ? Color.white : new Color(1, 1, 1, 0);
+                Debug.Log("active debug:" + TestManager.IsCheating, debugBtn);
+                debugClickCount = 0;
+                if (TestManager.Instance) TestManager.Instance.UpdateState();
+            }
+        }
+        else
+        {
+            debugClickCount = 0;
+        }
+
+        lastTimeDebugClick = Time.time;
     }
 }
