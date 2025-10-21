@@ -29,7 +29,7 @@ public class ShuffleBooster : BoosterBase
         UpdateVisualBooster();
         IsShowConfirm = false;
         LevelController.Instance.GunBoardController.ShuffleBoard();
-        this.Wait(0.3f, () =>
+        this.Wait(0.9f, () =>
         {
             Done();
         });
