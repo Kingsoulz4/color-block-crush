@@ -148,7 +148,7 @@ namespace ColorBlockCrush
                 }
             }
 
-            Debug.Log($"Gun {this.ID}: AllConnectedGunCount = {visited.Count}");
+            //Debug.Log($"Gun {this.ID}: AllConnectedGunCount = {visited.Count}");
             AllConnectedGuns = new List<Gun>(visited);
             AllConnectedGunCount = visited.Count;
             OriginConnectedGun = visited.Count;
@@ -267,7 +267,7 @@ namespace ColorBlockCrush
             for (int i = 0; i < maxRaycastSteps; i++)
             {
                 var startPos = raycastPos.position + dirMove * raycastSpacing * i;
-                Debug.DrawRay(startPos, dir * 12, UnityEngine.Color.red, 1);
+                //Debug.DrawRay(startPos, dir * 12, UnityEngine.Color.red, 1);
 
                 Ray ray = new Ray(startPos, dir);
                 if (Physics.Raycast(ray, out RaycastHit hit, 12, blockMask))
@@ -535,7 +535,6 @@ namespace ColorBlockCrush
 
         public void MoveToSlot(Vector3 endPos, Action callback = null)
         {
-            Debug.Log("MoveToSlot");
             Sequence moveToSlotSq = DOTween.Sequence();
 
             GunPos = GunPos.ON_SLOT;
