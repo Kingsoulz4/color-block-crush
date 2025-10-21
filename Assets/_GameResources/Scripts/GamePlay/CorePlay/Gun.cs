@@ -581,9 +581,19 @@ namespace ColorBlockCrush
         {
             Sequence moveSortSlotSq = DOTween.Sequence();
             moveSortSlotTw.Kill();
-            moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
+            if (gunData.isHidden && m_hiddenGun.IsResolved)
             {
-            });
+                moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove((targetPos + transform.position) / 2 + Vector3.up * 5f, _shiftDuration).SetEase(_shiftEase))
+                    .Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase));
+
+                //moveSortSlotTw = moveSortSlotSq.Append((transform.DOJump(targetPos,1, 1, _shiftDuration).SetEase(_shiftEase)));
+            }
+            else
+            {
+                moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
+                {
+                });
+            }
             moveSortSlotSq.SetId(this);
         }
 

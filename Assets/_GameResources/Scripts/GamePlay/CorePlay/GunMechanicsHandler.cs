@@ -19,7 +19,7 @@ namespace ColorBlockCrush
             if(GunData.isHidden)
             {
                 EnableTextBulletCount(false);
-                m_hiddenGun.Init(meshRendererList);
+                m_hiddenGun.Init(this, meshRendererList);
             }
 
             if(GunData.gunConnect.Count > 0)

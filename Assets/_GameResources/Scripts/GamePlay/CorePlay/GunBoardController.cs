@@ -373,10 +373,11 @@ namespace ColorBlockCrush
             {
                 ObjectOnGunBoardColumn objOnColumn = columnObjects[i];
                 objOnColumn.SetIndex(i);
+                objOnColumn.UpdateWhenColumnChange();
 
                 if (!objOnColumn.CanShift)
                 {
-                    objOnColumn.UpdateWhenColumnChange();
+                    //objOnColumn.UpdateWhenColumnChange();
                     return;
                 }
 

@@ -47,9 +47,10 @@ namespace ColorBlockCrush
             {
                 isFirstUpdate = true;
                 return;
-            }    
+            }
 
-            m_animation.Play();
+            m_animation.Stop();
+            m_animation.Play("Tunnel");
             DOVirtual.DelayedCall(0.5f, () =>
             {
                 LevelManager.Instance.LevelGame.GunBoardController.SpawnNewGun(ColumnIndex, Index, tunnelData.tanks[currentIndexGunSpawned], 0);
