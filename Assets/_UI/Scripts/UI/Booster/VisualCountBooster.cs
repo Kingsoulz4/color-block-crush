@@ -79,7 +79,7 @@ namespace ColorBlockCrush
 
         private void UpdateState()
         {
-            Debug.Log($"Update State {boosterType}");
+            //Debug.Log($"Update State {boosterType}");
             if(boosterItemData == null) return;
             bool unlockBooster = false;
             switch (boosterType)
