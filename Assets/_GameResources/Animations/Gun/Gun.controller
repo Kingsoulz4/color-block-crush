@@ -345,7 +345,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Disappear
-  m_Speed: 2
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -790102616210769004}
@@ -384,7 +384,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 73c13a773e939f34eac1331f1ad73600, type: 2}
+  m_Motion: {fileID: 7400000, guid: 9ce2ac06e00c7d94498769d7450b6fa7, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

@@ -502,6 +502,8 @@ namespace ColorBlockCrush
             currentFireDir = RotationDirection.Up;
             currentMoveFireDir = RotationDirection.Right;
 
+            ForceResoveHidden();
+
             moveToConveyorTw = moveToConveyorSq.Append(
                 transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration + delay)).SetEase(moveToConveyorEase).OnComplete(() =>
             {
@@ -689,6 +691,11 @@ namespace ColorBlockCrush
                 default:
                     break;
             }
+        }
+
+        public void ForceResoveHidden()
+        {
+            ForceHiddenResolve();
         }
 
         public void OnRevive()

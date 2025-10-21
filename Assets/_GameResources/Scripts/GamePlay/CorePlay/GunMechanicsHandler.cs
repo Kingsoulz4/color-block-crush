@@ -55,5 +55,13 @@ namespace ColorBlockCrush
             }
 
         }
+
+        public void ForceHiddenResolve()
+        {
+            UpdateVisuals();
+            EnableTextBulletCount(true);
+            m_hiddenGun.Resolve();
+            OnHiddenResolved?.Invoke();
+        }
     }
 }
