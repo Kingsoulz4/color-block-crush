@@ -73,6 +73,7 @@ namespace ColorBlockCrush
             ActiveBooster();
             List<Block> blocks = new List<Block>();
             blocks = LevelController.Instance.BlockBoardController.GetBlockListByColor(colorType);
+            LevelController.Instance.GunBoardController.RemoveGunByColor(colorType);
 
             yield return new WaitForEndOfFrame();
 
