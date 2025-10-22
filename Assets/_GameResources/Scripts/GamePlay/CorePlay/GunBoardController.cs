@@ -129,7 +129,7 @@ namespace ColorBlockCrush
                     if (listGunColumn[col][row] is Gun gun && gun.ColorType == colorType)
                     {
                         gun.RemoveAllConnection();
-                        gun.gameObject.SetActive(false);
+                        gun.ForceDisappear();
                         RemoveObjectFromColumn(gun);
                         removedIndicesByColumn[col].Add(row);
                     }

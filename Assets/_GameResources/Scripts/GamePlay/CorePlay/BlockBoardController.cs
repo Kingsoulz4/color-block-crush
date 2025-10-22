@@ -344,7 +344,7 @@ namespace ColorBlockCrush
                 for (int col = 0; col < cols; col++)
                 {
                     Block block = _blockStacks[row, col];
-                    if (block != null && block.ColorType == targetColor)
+                    if (block != null && block.ColorType == targetColor && block.gameObject.activeInHierarchy)
                     {
                         blocks.Add(block);
                     }
