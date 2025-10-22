@@ -38,7 +38,15 @@ public class IAPManager : SingletonDontDestroyMono<IAPManager>, IHandleIAP
                 callback?.Invoke(true);
                 return;
         #endif
-        IAPHandler.BuyProductID(internalProductId, callback);
+
+        if (TestManager.IsCheating)
+        {
+            callback?.Invoke(true);
+        }
+        else
+        {
+            IAPHandler.BuyProductID(internalProductId, callback);            
+        }
       //  Debug.Log("buy:" + CheckHasPurchased(internalProductId));
 
     }

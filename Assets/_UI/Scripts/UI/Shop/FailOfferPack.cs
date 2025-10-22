@@ -37,8 +37,9 @@ namespace ColorBlockCrush
                 UIManager.Instance.ShowPopup<PopupPurchaseFailed>(null);
                 return;
             }
-            
+
             var popupLoadingProcess = UIManager.Instance.ShowPopup<PopupLoadingProcess>(null);
+            popupLoadingProcess.ShowPopup();
             IAPManager.Instance.BuyProductID(shopPack.id, (success) =>
             {
                 popupLoadingProcess.Hide();
