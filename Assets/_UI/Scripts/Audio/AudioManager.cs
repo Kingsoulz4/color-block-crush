@@ -43,13 +43,13 @@ public class AudioManager : SingletonMono<AudioManager>
         //}
         DontDestroyOnLoad(gameObject);
     }
-    public void PlayOneShot(AudioClip audioClip, float volume, float pitch = 1, float delay = 0)
+    public void PlayOneShot(AudioClip audioClip, float volume = 1, float pitch = 1, float delay = 0)
     {
         if (SoundSetting != 1) return;
         if (audioClip == null) return;
         StartCoroutine(IEDeplayPlayOneShot(audioClip, volume, pitch, delay));
     }
-    public void PlayOneShot(string clipName, float volume, float pitch = 1, float delay = 0)
+    public void PlayOneShot(string clipName, float volume = 1, float pitch = 1, float delay = 0)
     {
         if (SoundSetting != 1) return;
         AudioClip clip = commonSound.GetClip(clipName);

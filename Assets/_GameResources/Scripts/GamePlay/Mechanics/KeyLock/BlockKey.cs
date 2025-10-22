@@ -83,11 +83,21 @@ namespace ColorBlockCrush
         private IEnumerator IEResolve(LockObject pendingLock)
         {
             float timeEachStep = 0.25f;
-            transform.DOMove(transform.position + Vector3.up * 10, timeEachStep);
+            transform.DOMove(transform.position + Vector3.up * 5, timeEachStep);
+            transform.DOScale(4, timeEachStep);
+            transform.DOLocalRotate(new Vector3(90, 0, 0), timeEachStep);
             yield return new WaitForSeconds(timeEachStep);
-            transform.DOMove(pendingLock.transform.position, timeEachStep);
+            transform.DOMove(pendingLock.transform.position - Vector3.up * 1.25f, timeEachStep);
+            transform.DOScale(2, timeEachStep);
+            transform.DOLocalRotate(new Vector3(0, 90, 0), timeEachStep);
             yield return new WaitForSeconds(timeEachStep);
-            Destroy(gameObject);
+            yield return new WaitForSeconds(0.1f);
+            transform.DOLocalRotate(new Vector3(0, 0, 0), timeEachStep);
+            yield return new WaitForSeconds(timeEachStep);
+            transform.DOScale(0, timeEachStep).OnComplete(() =>
+            {
+                Destroy(gameObject);
+            });
         }
             
             

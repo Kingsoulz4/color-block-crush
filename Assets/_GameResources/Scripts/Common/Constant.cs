@@ -42,4 +42,10 @@ public class Constant
         public const string STAND = "Stand";
     }
 
+    public class SFX
+    {
+        public const string SHOOT = "SFX_Shoot";
+        public const string CLICK = "SFX_Click";
+    }
+
 }

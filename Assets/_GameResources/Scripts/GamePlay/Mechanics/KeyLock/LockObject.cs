@@ -8,6 +8,8 @@ namespace ColorBlockCrush
 {
     public class LockObject : ObjectOnGunBoardColumn
     {
+        [SerializeField] private Animator m_animator;
+
         public bool IsResolved { get; private set; }
 
         public void Resolve()
@@ -17,10 +19,15 @@ namespace ColorBlockCrush
             IsResolved = true;
 
             transform.DOScale(0, 0.25f)
+                .OnStart(() =>
+                {
+                    m_animator.Play("LockUnlock");
+                })
                 .OnComplete(() =>
                 {
                     LevelManager.Instance.LevelGame.GunBoardController.ResolveLock(this);
-                });
+                })
+                .SetDelay(0.85f);
         } 
 
         internal void Init(int column)
@@ -30,6 +37,8 @@ namespace ColorBlockCrush
 
         public override void UpdateWhenColumnChange()
         {
+            if (IsResolved) return;
+
             if (Index == 0)
             {
                 var pendingKey = LevelManager.Instance.LevelGame.BlockBoardController.GetPendingKey();

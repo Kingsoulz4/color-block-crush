@@ -39,7 +39,7 @@ namespace ColorBlockCrush
         private const float raycastSpacing = 0.15f;
         private const int maxRaycastSteps = 65;
 
-        private float maxShootingAngle = 5f;
+        private float maxShootingAngle = 6.5f;
         private bool isTurning;
         private bool isFireFirstTime = false;
         private TrayItem trayItem;
@@ -91,6 +91,7 @@ namespace ColorBlockCrush
             BulletRayCount = gunDataP.bulletNumber;
             ColumnIndex = column;
             IsFrontRow = false;
+            SetTextBlur(true);
             isFireFirstTime = false;
             isTurning = false;
             gunData = gunDataP;
@@ -181,6 +182,7 @@ namespace ColorBlockCrush
         {
             base.SetIndex(index);
             IsFrontRow = index == 0;
+            SetTextBlur(!IsFrontRow);
 
             if (index == 0)
             {
@@ -233,16 +235,16 @@ namespace ColorBlockCrush
                     Dictionary<int, List<Gun>> listGunByColumn = new();
                     listGunByColumn[ColumnIndex] = new();
                     listGunByColumn[ColumnIndex].Add(this);
-                    foreach(var gun in AllConnectedGuns)
+                    foreach (var gun in AllConnectedGuns)
                     {
-                        if(!listGunByColumn.ContainsKey(gun.ColumnIndex))
+                        if (!listGunByColumn.ContainsKey(gun.ColumnIndex))
                         {
-                            listGunByColumn[ColumnIndex] = new();
+                            listGunByColumn[gun.ColumnIndex] = new();
                         }
-                        listGunByColumn[ColumnIndex].Add(gun);
+                        listGunByColumn[gun.ColumnIndex].Add(gun);
                     }    
 
-                    foreach(var item in listGunByColumn)
+                    foreach (var item in listGunByColumn)
                     {
                         var listGun = item.Value.OrderBy(x => x.Index);
                         if (!listGun.First().IsFrontRow) return false;
@@ -340,8 +342,6 @@ namespace ColorBlockCrush
             {
                 CurrentTarget = null;
 
-
-
                 CheckDisappear();
             }
         }
@@ -356,10 +356,18 @@ namespace ColorBlockCrush
 
                 PlayAnim(Constant.GunAnimation.DISAPPEAR);
 
-                foreach (var gun in ConnectedGuns)
+                foreach (var gun in AllConnectedGuns)
                 {
-                    gun.CheckDisappear();
+                    if (gun != this)
+                    {
+                        gun.CheckDisappear();
+                    }
                 }
+
+                LevelManager.Instance.LevelGame.SlotController.RemoveGun(this);
+
+                moveToConveyorTw.Kill();
+                moveSortSlotTw.Kill();
 
                 this.Wait(0.3f, () =>
                 {
@@ -406,7 +414,7 @@ namespace ColorBlockCrush
             {
                 return;
             }
-
+            isFireFirstTime = true;
             Vector3 newRotation;
             newRotation = GetTurnDirection(!isFireFirstTime ? directionNonfire : direction);
             currentMoveFireDir = directionNonfire;
@@ -489,6 +497,12 @@ namespace ColorBlockCrush
         private void EnableTextBulletCount(bool enable)
         {
             bulletCountText.gameObject.SetActive(enable);
+            SetTextBlur(!enable);
+        }
+
+        private void SetTextBlur(bool enable)
+        {
+            bulletCountText.alpha = enable ? 100f / 255f : 1f;
         }
 
         #region Move spline
@@ -502,19 +516,24 @@ namespace ColorBlockCrush
             GunPos = GunPos.TWEEN_SORT;
             currentFireDir = RotationDirection.Up;
             currentMoveFireDir = RotationDirection.Right;
-
+            SetTextBlur(false);
 
             moveToConveyorTw = moveToConveyorSq.Append(
                 transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration + delay)).SetEase(moveToConveyorEase).OnComplete(() =>
             {
-                Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
-                transform.DORotate(newRotation, 0f);
+                //Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
+                //transform.DORotate(newRotation, 0f);
 
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
                 GetTargetBock();
-
             });
+
+            this.Wait(moveToConveyorDuration, () =>
+            {
+                AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
+            });
+
             moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration + delay));
             moveToConveyorSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration + delay));
             moveToConveyorSq.SetId(this);
@@ -547,6 +566,12 @@ namespace ColorBlockCrush
                 PlayAnim(Constant.GunAnimation.IDLE);
                 AllConnectedGunCount = OriginConnectedGun;
             });
+
+            this.Wait(moveToSlotDuration, () =>
+            {
+                AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
+            });
+
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
             moveToSlotSq.Join(transform.DOScale(Vector3.one, moveToSlotDuration));
             moveToSlotSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration));
@@ -582,11 +607,11 @@ namespace ColorBlockCrush
         public override void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
         {
             Sequence moveSortSlotSq = DOTween.Sequence();
-            if(moveSortSlotTw != null && moveSortSlotTw.IsPlaying())
+            if (moveSortSlotTw != null && moveSortSlotTw.IsPlaying())
             {
                 moveSortSlotTw.Kill();
                 transform.position = currentTargetPos;
-                
+
             }
 
             currentTargetPos = targetPos;
@@ -625,9 +650,9 @@ namespace ColorBlockCrush
             }
             else
             {
-                for (int i = 0; i < ConnectedGuns.Count; i++)
+                for (int i = 0; i < AllConnectedGuns.Count; i++)
                 {
-                    if (ConnectedGuns[i].BulletCount > 0)
+                    if (AllConnectedGuns[i].BulletCount > 0)
                     {
                         return false;
                     }
