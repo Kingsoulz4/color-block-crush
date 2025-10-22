@@ -105,11 +105,12 @@ public class ConveyorController : MonoBehaviour
         AddTrayItem(trayItem);
         UpdateTrayText();
         gun.OnGunEmpty += OnGunEmpty;
+        trayItem.MyGun = gun;
 
         gun.MoveToConeyor(position, () =>
         {
-            trayItem.SetChild(gun);
             trayItem.Move();
+            trayItem.SetChild(gun);
         }, delay);
     }
 
@@ -122,7 +123,7 @@ public class ConveyorController : MonoBehaviour
     {
         if (gun.TrayItem != null)
         {
-            MoveTrayIn(gun.TrayItem);
+            MoveTrayIn(gun.TrayItem, true);
             RemoveTrayItem(gun.TrayItem);
         }
 
@@ -136,9 +137,12 @@ public class ConveyorController : MonoBehaviour
         for (int i = movingTrayItems.Count - 1; i >= 0; i--)
         {
             var gun = movingTrayItems[i].MyGun;
-            gun.Scale(Vector3.one * 0.8f, 0.2f);
-            gun.OnRevive();
-            LevelController.Instance.BonusSlotController.MoveGunIn(gun);
+            if (gun != null)
+            {
+                gun.Scale(Vector3.one * 0.8f, 0.2f);
+                gun.OnRevive();
+                LevelController.Instance.BonusSlotController.MoveGunIn(gun);
+            }
             MoveTrayIn(movingTrayItems[i], true);
         }
 
@@ -208,7 +212,10 @@ public class ConveyorController : MonoBehaviour
         if (movingTrayItems != null && movingTrayItems.Contains(trayItem))
         {
             trayItem.SplineAnimate.Pause();
-            trayItem.MyGun.OnGunEmpty -= OnGunEmpty;
+            if (trayItem.MyGun != null)
+            {
+                trayItem.MyGun.OnGunEmpty -= OnGunEmpty;
+            }
             movingTrayItems.Remove(trayItem);
             OnGunRemovedConveyor?.Invoke(trayItem.MyGun);
         }

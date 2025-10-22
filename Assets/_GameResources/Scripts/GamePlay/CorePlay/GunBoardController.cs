@@ -481,6 +481,11 @@ namespace ColorBlockCrush
             return count;
         }
 
+        public float GetPercentGunCleared()
+        {
+            return totalGunCount;
+        }    
+
         public void ShuffleBoard()
         {
             List<ShuffleableGun> shuffleableGuns = new List<ShuffleableGun>();
