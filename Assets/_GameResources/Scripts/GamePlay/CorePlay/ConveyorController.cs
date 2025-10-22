@@ -84,6 +84,12 @@ public class ConveyorController : MonoBehaviour
             PrepairTrayItems(1);
             SetGunStartPosition(guns[i], prepairTrayItems[0], i, i * startMovingGunSpacing + timeDelayMove);
             OnStartAddGunToConveyor?.Invoke(guns[i]);
+
+            this.Wait(0.12f * i, () =>
+            {
+                AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
+            });
+
         }
 
         timeDelayMove = (guns.Count + 1) * startMovingGunSpacing;

@@ -93,14 +93,14 @@ namespace ColorBlockCrush
                 return;
             }
 
-            gunsToPush.Sort((a, b) =>
-            {
-                int result = a.ColumnIndex.CompareTo(b.ColumnIndex);
-                if (result == 0)
-                    result = a.ConnectedGuns.Count.CompareTo(b.ConnectedGuns.Count); // second field
+            //gunsToPush.Sort((a, b) =>
+            //{
+            //    int result = a.ColumnIndex.CompareTo(b.ColumnIndex);
+            //    if (result == 0)
+            //        result = a.ConnectedGuns.Count.CompareTo(b.ConnectedGuns.Count); // second field
 
-                return result;
-            });
+            //    return result;
+            //});
 
             LevelController.Instance.ConveyorController.MoveGunIn(gunsToPush);
 
@@ -118,7 +118,24 @@ namespace ColorBlockCrush
             while (stack.Count > 0)
             {
                 var gunTemp = stack.Pop();
-                listGunToPush.Add(gunTemp);
+
+                if (listGunToPush.Count < 2)
+                {
+                    listGunToPush.Add(gunTemp);
+                }
+                else if (listGunToPush[0].ConnectedGuns.Count <= 1 && listGunToPush[^1].ConnectedGuns.Count <= 1)
+                {
+                    listGunToPush.Insert(listGunToPush.Count - 2, gunTemp);
+                }
+                else if (listGunToPush[0].ConnectedGuns.Count <= 1)
+                {
+                    listGunToPush.Add(gunTemp);
+                }
+                else if (listGunToPush[^1].ConnectedGuns.Count <= 1)
+                {
+                    listGunToPush.Insert(0, gunTemp);
+                }
+
                 for (int i = 0; i < gunTemp.ConnectedGuns.Count; i++)
                 {
                     var linkGun = gunTemp.ConnectedGuns[i];

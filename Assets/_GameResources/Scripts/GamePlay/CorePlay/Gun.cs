@@ -1,5 +1,6 @@
 ﻿using ColorBlockCrush.Tools;
 using DG.Tweening;
+using Lofelt.NiceVibrations;
 using Sirenix.Serialization;
 using Sirenix.Utilities;
 using System;
@@ -39,7 +40,7 @@ namespace ColorBlockCrush
         private const float raycastSpacing = 0.15f;
         private const int maxRaycastSteps = 65;
 
-        private float maxShootingAngle = 6.5f;
+        private float maxShootingAngle = 5.5f;
         private bool isTurning;
         private bool isFireFirstTime = false;
         private TrayItem trayItem;
@@ -217,9 +218,9 @@ namespace ColorBlockCrush
         {
             if (IsMovingToConveyor() || IsMovingToSlot()) return false;
 
-            foreach (var gunn in ConnectedGuns)
+            foreach (var gunn in AllConnectedGuns)
             {
-                if (gunn.IsMovingToSlot() || gunn.IsMovingToConveyor()) return false;
+                if (gunn.IsMovingToSlot() || gunn.IsMovingToConveyor() || gunn.GunPos == GunPos.ON_CONVEYOR || gunn.GunPos == GunPos.TWEEN_SORT) return false;
             }
 
             if (GunPos == GunPos.ON_CONVEYOR || GunPos == GunPos.TWEEN_SORT) return false;
@@ -326,7 +327,9 @@ namespace ColorBlockCrush
             RotateToFire(target.transform);
             BulletCount--;
             PlayAnim(Constant.GunAnimation.SHOOT);
+            AudioSourcePool.Instance.PlaySFX(AudioManager.Instance.GetAudioClip(Constant.SFX.SHOOT));
             UpdateBulletCountDisplay();
+            HapticPatterns.PlayPreset(HapticPatterns.PresetType.LightImpact);
 
             Bullet bullet = Instantiate(bulletPrb, bulletSpawnPos.position, Quaternion.identity);
             bullet.transform.SetParent(LevelController.Instance.transform);
@@ -365,6 +368,7 @@ namespace ColorBlockCrush
                 }
 
                 LevelManager.Instance.LevelGame.SlotController.RemoveGun(this);
+                LevelManager.Instance.LevelGame.BonusSlotController.RemoveGun(this);
 
                 moveToConveyorTw.Kill();
                 moveSortSlotTw.Kill();
@@ -529,11 +533,6 @@ namespace ColorBlockCrush
                 GetTargetBock();
             });
 
-            this.Wait(moveToConveyorDuration, () =>
-            {
-                AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
-            });
-
             moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration + delay));
             moveToConveyorSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration + delay));
             moveToConveyorSq.SetId(this);
@@ -565,11 +564,6 @@ namespace ColorBlockCrush
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
                 AllConnectedGunCount = OriginConnectedGun;
-            });
-
-            this.Wait(moveToSlotDuration, () =>
-            {
-                AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
             });
 
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
