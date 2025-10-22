@@ -531,10 +531,10 @@ namespace ColorBlockCrush
                 GetTargetBock();
             });
 
-            this.Wait(moveToConveyorDuration, () =>
-            {
-                AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
-            });
+            //this.Wait(moveToConveyorDuration, () =>
+            //{
+            //    AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
+            //});
 
             moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration + delay));
             moveToConveyorSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration + delay));
@@ -567,11 +567,6 @@ namespace ColorBlockCrush
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
                 AllConnectedGunCount = OriginConnectedGun;
-            });
-
-            this.Wait(moveToSlotDuration, () =>
-            {
-                AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
             });
 
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
