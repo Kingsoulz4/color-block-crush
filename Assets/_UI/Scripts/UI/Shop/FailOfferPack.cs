@@ -22,7 +22,17 @@ namespace ColorBlockCrush
         {
             m_buttonBuy.onClick.AddListener(OnClickBuy);
         }
-        
+
+        private void OnEnable()
+        {
+            InAppPurchaseAnalyticStruct iapAnalyticStruct = new InAppPurchaseAnalyticStruct();
+            AnalyticManager.Instance.iAPShow = IAPShowType.pack;
+            AnalyticManager.Instance.iAPTriggerType = TriggerType.popup;
+            iapAnalyticStruct = iapAnalyticStruct.SetBaseIAP(AnalyticManager.Instance.GetCurrentPrefixPlacement() + UiHolderManager.Instance.GetCurrentPlacement(),
+                AnalyticManager.Instance.iAPShow, AnalyticManager.Instance.iAPTriggerType, "fail_offer").SetIAPShow();
+            Server.Get<OnIAPShowEventLog>().Dispatch(iapAnalyticStruct);
+        }
+
         public void SetData(ShopPack packData, Action onRevival)
         {
             this.shopPack = packData;

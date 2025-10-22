@@ -1,6 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Analytics;
+using Yoolax.Framework;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +24,14 @@ namespace ColorBlockCrush
             var packNoAds = m_listRemoveAdsPacks.listShopPack.Find(
                 x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_ADS) != null);
             priceValueTxt.text = IAPManager.Instance.GetLocalizedPriceString(packNoAds.id);
+        }
+
+        private void OnEnable()
+        {
+            InAppPurchaseAnalyticStruct iapAnalyticStruct = new InAppPurchaseAnalyticStruct();
+            iapAnalyticStruct = iapAnalyticStruct.SetBaseIAP(UiHolderManager.Instance.GetCurrentPlacement(), IAPShowType.pack, AnalyticManager.Instance.iAPTriggerType, "NoAds")
+                .SetIAPShow();
+            Server.Get<OnIAPShowEventLog>().Dispatch(iapAnalyticStruct);
         }
 
         public void UpdateUI()
@@ -56,6 +63,10 @@ namespace ColorBlockCrush
 
         private void OnClickClose()
         {
+            InAppPurchaseAnalyticStruct iapAnalyticStruct = new InAppPurchaseAnalyticStruct();       
+            iapAnalyticStruct = iapAnalyticStruct.SetBaseIAP(AnalyticManager.Instance.GetCurrentPrefixPlacement() + UiHolderManager.Instance.GetCurrentPlacement(), IAPShowType.pack, AnalyticManager.Instance.iAPTriggerType, "NoAds")
+                .SetIAPClose(Time.time - AnalyticManager.Instance.timeOpenPopupIap);
+            Server.Get<OnIAPCloseEventLog>().Dispatch(iapAnalyticStruct);
             Hide();
         }
     }

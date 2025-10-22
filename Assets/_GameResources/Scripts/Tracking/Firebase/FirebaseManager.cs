@@ -39,14 +39,14 @@ impressionParameters[0] = new Firebase.Analytics.Parameter("ad_platform", "Ios")
 
     private void Update()
     {
-        if (isInited)
-        {
+        // if (isInited)
+        // {
             if (eventQueues.Count > 0)
             {
                 EventData eventData = eventQueues.Dequeue();
                 eventData.FireEvent();
             }
-        }
+        //}
     }
 
     void OnInit()

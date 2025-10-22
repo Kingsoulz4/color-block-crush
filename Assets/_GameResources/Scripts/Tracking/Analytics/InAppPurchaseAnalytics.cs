@@ -18,7 +18,6 @@ namespace Analytics
         public static void LogIAPShowEvent(InAppPurchaseAnalyticStruct iapStruct)
         {
             if(AnalyticManager.Instance) AnalyticManager.Instance.timeOpenPopupIap = Time.time;
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("placement", iapStruct.placement),
@@ -34,12 +33,10 @@ namespace Analytics
                 { "pack_name", iapStruct.pack_name }                
             };
             FirebaseManager.Instance.AddEvent("iap_show", paramData, parameters);
-#endif
         }
 
         public static void LogIAPClickEvent(InAppPurchaseAnalyticStruct iapStruct)
         {
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("placement", iapStruct.placement),
@@ -56,12 +53,10 @@ namespace Analytics
                 { "pack_name", iapStruct.pack_name }
             };
             FirebaseManager.Instance.AddEvent("iap_click", paramData, parameters);
-#endif
         }
 
         public static void LogIAPPurchaseEvent(InAppPurchaseAnalyticStruct iapStruct)
         {
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("placement", iapStruct.placement),
@@ -82,12 +77,10 @@ namespace Analytics
                 { "currency", iapStruct.currency }
             };
             FirebaseManager.Instance.AddEvent("iap_purchase", paramData, parameters);
-#endif
         }
 
         public static void LogIAPCloseEvent(InAppPurchaseAnalyticStruct iapStruct)
         {
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("placement", iapStruct.placement),
@@ -106,7 +99,6 @@ namespace Analytics
                 { "view_time", iapStruct.view_time }                
             };
             FirebaseManager.Instance.AddEvent("iap_close", paramData, parameters);
-#endif
         }
     }
 

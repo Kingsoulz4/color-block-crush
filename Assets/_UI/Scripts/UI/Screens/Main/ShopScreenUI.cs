@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Analytics;
+using Yoolax.Framework;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,7 +42,19 @@ namespace ColorBlockCrush
 
         private void OnEnable()
         {
+            InAppPurchaseAnalyticStruct iapAnalyticStruct = new InAppPurchaseAnalyticStruct();
+            iapAnalyticStruct = iapAnalyticStruct.SetBaseIAP(UiHolderManager.Instance.GetCurrentPlacement(), IAPShowType.shop, TriggerType.click, "Null")
+                .SetIAPShow();
+            Server.Get<OnIAPShowEventLog>().Dispatch(iapAnalyticStruct);
             UpdateUI();
+        }
+
+        private void OnDisable()
+        {
+            InAppPurchaseAnalyticStruct iapAnalyticStruct = new InAppPurchaseAnalyticStruct();
+            iapAnalyticStruct = iapAnalyticStruct.SetBaseIAP(UiHolderManager.Instance.GetCurrentPlacement(), IAPShowType.shop, TriggerType.click, "Null")
+                .SetIAPClose(Time.time - AnalyticManager.Instance.timeOpenPopupIap);
+            Server.Get<OnIAPCloseEventLog>().Dispatch(iapAnalyticStruct);
         }
 
         private void UpdateUI()

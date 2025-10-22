@@ -32,7 +32,15 @@ namespace ColorBlockCrush
             coinReceive.text = goldQuantity.ToString();
             priceValueTxt.text = IAPManager.Instance.GetLocalizedPriceString(starterPack.id);
         }
-        
+
+        private void OnEnable()
+        {
+            InAppPurchaseAnalyticStruct iapAnalyticStruct = new InAppPurchaseAnalyticStruct();
+            iapAnalyticStruct = iapAnalyticStruct.SetBaseIAP(UiHolderManager.Instance.GetCurrentPlacement(), IAPShowType.pack, AnalyticManager.Instance.iAPTriggerType, "StarterPack")
+                .SetIAPShow();
+            Server.Get<OnIAPShowEventLog>().Dispatch(iapAnalyticStruct);
+        }
+
         private void OnClickPurchaseStarterPack()
         {
             var starterPack = m_list.listShopPack.Find(
@@ -84,6 +92,10 @@ namespace ColorBlockCrush
 
         private void OnClickClose()
         {
+            InAppPurchaseAnalyticStruct iapAnalyticStruct = new InAppPurchaseAnalyticStruct();       
+            iapAnalyticStruct = iapAnalyticStruct.SetBaseIAP(AnalyticManager.Instance.GetCurrentPrefixPlacement() + UiHolderManager.Instance.GetCurrentPlacement(), IAPShowType.pack, AnalyticManager.Instance.iAPTriggerType, "StarterPack")
+                .SetIAPClose(Time.time - AnalyticManager.Instance.timeOpenPopupIap);
+            Server.Get<OnIAPCloseEventLog>().Dispatch(iapAnalyticStruct);
             Hide();
         }
     }

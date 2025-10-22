@@ -17,6 +17,7 @@ namespace Analytics
 
         public static void LogLevelStartEvent(LevelAnalyticStruct levelStruct)
         {            
+            Debug.Log("LogLevelStartEvent: " + levelStruct.ToString());
             var parameters = new[]
             {
             new Parameter("level", levelStruct.level),
