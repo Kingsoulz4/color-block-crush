@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace ColorBlockCrush
 {
@@ -10,6 +11,8 @@ namespace ColorBlockCrush
         [Header("Settings")]
         [SerializeField] private LayerMask _gunLayerMask;
 
+        private float lastClickTime = 0f;
+        private float clickCooldown = 0.05f;
         private void Awake()
         {
             if (_camera == null)
@@ -28,11 +31,31 @@ namespace ColorBlockCrush
             HandleInput();
         }
 
+        private bool IsPointerOverUI()
+        {
+            if (EventSystem.current == null) return false;
+
+#if UNITY_EDITOR || UNITY_STANDALONE
+            // Mouse / Editor
+            return EventSystem.current.IsPointerOverGameObject();
+#else
+    // Mobile (Touch)
+    if (Input.touchCount > 0)
+        return EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
+
+    return EventSystem.current.IsPointerOverGameObject();
+#endif
+        }
+
         private void HandleInput()
         {
-            // Mouse/Touch input
             if (Input.GetMouseButtonDown(0))
             {
+                if (Time.time - lastClickTime < clickCooldown) return;
+
+                if (IsPointerOverUI()) return;
+
+                lastClickTime = Time.time;
                 Vector3 inputPosition = Input.mousePosition;
                 DetectAndTapGun(inputPosition);
             }
