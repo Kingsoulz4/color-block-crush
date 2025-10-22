@@ -86,7 +86,8 @@ namespace ColorBlockCrush
             {
                 if (_gunsInSlots[i].ColorType == colorType)
                 {
-                    _gunsInSlots[i].gameObject.SetActive(false);
+                    _gunsInSlots[i].RemoveAllConnection();
+                    _gunsInSlots[i].ForceDisappear();
                     RemoveGun(_gunsInSlots[i]);
                 }
             }

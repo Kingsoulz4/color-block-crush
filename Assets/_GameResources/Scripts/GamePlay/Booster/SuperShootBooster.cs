@@ -83,6 +83,7 @@ namespace ColorBlockCrush
             LevelController.Instance.GunBoardController.RemoveGunByColor(colorType);
             LevelController.Instance.SlotController.RemoveGunByColor(colorType);
             LevelController.Instance.BonusSlotController.RemoveGunByColor(colorType);
+            LevelController.Instance.ConveyorController.RemoveGunByColor(colorType);
 
             yield return new WaitForEndOfFrame();
 

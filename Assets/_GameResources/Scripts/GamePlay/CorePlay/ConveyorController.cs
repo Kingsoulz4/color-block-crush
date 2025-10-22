@@ -1,4 +1,5 @@
 ﻿using ColorBlockCrush;
+using ColorBlockCrush.Tools;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using System;
@@ -105,12 +106,11 @@ public class ConveyorController : MonoBehaviour
         AddTrayItem(trayItem);
         UpdateTrayText();
         gun.OnGunEmpty += OnGunEmpty;
-        trayItem.MyGun = gun;
 
         gun.MoveToConeyor(position, () =>
         {
-            trayItem.Move();
             trayItem.SetChild(gun);
+            trayItem.Move();
         }, delay);
     }
 
@@ -123,7 +123,7 @@ public class ConveyorController : MonoBehaviour
     {
         if (gun.TrayItem != null)
         {
-            MoveTrayIn(gun.TrayItem, true);
+            MoveTrayIn(gun.TrayItem);
             RemoveTrayItem(gun.TrayItem);
         }
 
@@ -137,18 +137,25 @@ public class ConveyorController : MonoBehaviour
         for (int i = movingTrayItems.Count - 1; i >= 0; i--)
         {
             var gun = movingTrayItems[i].MyGun;
-            if (gun != null)
-            {
-                gun.Scale(Vector3.one * 0.8f, 0.2f);
-                gun.OnRevive();
-                LevelController.Instance.BonusSlotController.MoveGunIn(gun);
-            }
+            gun.Scale(Vector3.one * 0.8f, 0.2f);
+            gun.OnRevive();
+            LevelController.Instance.BonusSlotController.MoveGunIn(gun);
             MoveTrayIn(movingTrayItems[i], true);
         }
 
         Gun lastGunInSlot = LevelController.Instance.SlotController.GetLastGun();
         lastGunInSlot.Scale(Vector3.one * 0.8f, 0.2f);
         LevelController.Instance.BonusSlotController.MoveGunIn(lastGunInSlot);
+    }
+
+    public void RemoveGunByColor(ColorType colorType)
+    {
+         for (int i = movingTrayItems.Count - 1; i >= 0; i--)
+        {
+            var gun = movingTrayItems[i].MyGun;
+            gun.RemoveAllConnection();
+            gun.ForceDisappear();
+        }
     }
 
     #region Tray Management
@@ -212,10 +219,7 @@ public class ConveyorController : MonoBehaviour
         if (movingTrayItems != null && movingTrayItems.Contains(trayItem))
         {
             trayItem.SplineAnimate.Pause();
-            if (trayItem.MyGun != null)
-            {
-                trayItem.MyGun.OnGunEmpty -= OnGunEmpty;
-            }
+            trayItem.MyGun.OnGunEmpty -= OnGunEmpty;
             movingTrayItems.Remove(trayItem);
             OnGunRemovedConveyor?.Invoke(trayItem.MyGun);
         }
