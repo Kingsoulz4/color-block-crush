@@ -1143,8 +1143,8 @@ MonoBehaviour:
   initMaxSlot: 5
   startPos: {fileID: 5707933120642198670}
   startMovingGunSpacing: 0.15
-  trayMoveDuration: 5
-  trayMoveDurationFast: 2.5
+  trayMoveDuration: 6
+  trayMoveDurationFast: 3
   endPointConveyor: {fileID: 9217796885872078684}
   startPosBooster: {fileID: 2221898326775534222}
   trayPrefab: {fileID: 7864664086401441334, guid: b0fe6a15e27bbf049bcdbde5b85cbab7, type: 3}

@@ -39,7 +39,7 @@ namespace ColorBlockCrush
         private const float raycastSpacing = 0.15f;
         private const int maxRaycastSteps = 65;
 
-        private float maxShootingAngle = 6.5f;
+        private float maxShootingAngle = 5.5f;
         private bool isTurning;
         private bool isFireFirstTime = false;
         private TrayItem trayItem;
