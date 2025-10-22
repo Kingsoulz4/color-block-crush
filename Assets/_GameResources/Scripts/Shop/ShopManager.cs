@@ -11,18 +11,6 @@ namespace ColorBlockCrush
         [SerializeField] private ShopData m_listRemoveAdsPacks;
         [SerializeField] private ShopData m_listDataShop;
 
-        public bool HasPurchasedRemoveInterAds
-        {
-            get => PlayerPrefs.GetInt("HasPurchasedRemoveInterAds", 0) > 0;
-            set => PlayerPrefs.SetInt("HasPurchasedRemoveInterAds", value? 1: 0);
-        }
-
-        public bool HasPurchasedRemoveAds
-        {
-            get => PlayerPrefs.GetInt("HasPurchasedRemoveBannerAds", 0) > 0;
-            set => PlayerPrefs.SetInt("HasPurchasedRemoveBannerAds", value ? 1 : 0);
-        }
-
         public bool HasPurchasedNoAdsPack
         {
             get => PlayerPrefs.GetInt("HasPurchasedNoAdsPack", 0) > 0;

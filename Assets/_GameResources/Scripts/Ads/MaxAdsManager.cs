@@ -72,6 +72,10 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
     }
     public void ShowInterstitialAd(string adUnitId, Action onComplete = null)
     {
+        if (ShopManager.Instance.HasPurchasedNoAdsPack)
+        {
+            return;
+        }
         if(UserDataManager.Level < 20) return;
         if (!MaxAdsManager.Instance.IsShowPopupDefault(MaxKeys.interstitialID))
         {

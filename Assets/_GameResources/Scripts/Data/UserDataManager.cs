@@ -1,4 +1,4 @@
-
+using Yoolax.Framework;
 using Newtonsoft.Json;
 using System;
 using Analytics;
@@ -53,6 +53,15 @@ public class UserDataManager : MonoBehaviour
 
     public static void AddGold(int value, string where, bool isLog = false, string reason = "", float timeDelay = 0)
     {
+        if (where != " ")
+        {
+            string[] types = { ResourceType.currency.ToString() };
+            string[] names = { "coin" };
+            string[] amounts = { value.ToString() };            
+            ResourceAnalyticStruct resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, 
+                where, reason);
+            Server.Get<OnResourceEarnEventLog>().Dispatch(resourceAnalyticStruct);   
+        }
         Gold = Mathf.Clamp(Gold + value, 0, int.MaxValue);
         OnUpdateGold?.Invoke(Gold + value, Gold, timeDelay);
     }
