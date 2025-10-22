@@ -326,6 +326,7 @@ namespace ColorBlockCrush
             RotateToFire(target.transform);
             BulletCount--;
             PlayAnim(Constant.GunAnimation.SHOOT);
+            AudioSourcePool.Instance.PlaySFX(AudioManager.Instance.GetAudioClip(Constant.SFX.SHOOT));
             UpdateBulletCountDisplay();
 
             Bullet bullet = Instantiate(bulletPrb, bulletSpawnPos.position, Quaternion.identity);
