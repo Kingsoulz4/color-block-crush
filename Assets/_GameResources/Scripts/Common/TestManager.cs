@@ -177,7 +177,7 @@ namespace ColorBlockCrush
         {
             if (int.TryParse(inputCoins.text, out int result))
             {
-                UserDataManager.AddGold(1000, "set coin", false);;
+                UserDataManager.AddGold(result, " ");;
                 PlayerPrefs.Save();
             }
         }
@@ -189,7 +189,7 @@ namespace ColorBlockCrush
 
         private void AddRes()
         {
-            UserDataManager.AddGold(1000, "test", false);
+            UserDataManager.AddGold(1000, " ");
             UserDataManager.AddHeart(5, "test", false);
             UserDataManager.ShuffleBooster += 3;
             UserDataManager.HandBooster += 3;

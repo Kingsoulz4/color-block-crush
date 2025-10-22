@@ -17,7 +17,6 @@ namespace Analytics
 
         public static void LogLevelStartEvent(LevelAnalyticStruct levelStruct)
         {            
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("level", levelStruct.level),
@@ -39,12 +38,10 @@ namespace Analytics
                 { "mode", levelStruct.mode.ToString() }               
             };
             FirebaseManager.Instance.AddEvent("level_start", paramData, parameters);
-#endif
         }
 
         public static void LogLevelEndEvent(LevelAnalyticStruct levelStruct)
         {
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("level", levelStruct.level),
@@ -57,7 +54,6 @@ namespace Analytics
             new Parameter("total_duration_end", levelStruct.total_duration_end),
             new Parameter("remain_duration", levelStruct.remain_duration),
             new Parameter("play_duration", levelStruct.playDuration),
-            new Parameter("level_wave", levelStruct.levelWave),
             new Parameter("level_progress", levelStruct.levelProgress),
             new Parameter("result", levelStruct.result.ToString()),
             new Parameter("lose_by", levelStruct.loseBy.ToString())       
@@ -74,26 +70,22 @@ namespace Analytics
                 { "total_duration_end", levelStruct.total_duration_end },
                 { "remain_duration", levelStruct.remain_duration },
                 { "level_progress", levelStruct.levelProgress },
-                { "level_wave", levelStruct.levelWave },
                 { "play_duration", levelStruct.playDuration },
                 { "mode", levelStruct.mode.ToString() },
                 { "result", levelStruct.result.ToString() },
                 { "lose_by", levelStruct.loseBy.ToString() }
             };
             FirebaseManager.Instance.AddEvent("level_end", paramData, parameters);
-#endif
         }
 
         public static void LogLevelExitEvent(LevelAnalyticStruct levelStruct)
         {
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("level", levelStruct.level),
             new Parameter("loop_by", levelStruct.loopBy),
             new Parameter("play_type", levelStruct.playType.ToString()),
             new Parameter("mode", levelStruct.mode.ToString()),
-            new Parameter("level_wave", levelStruct.levelWave),
             new Parameter("level_progress", levelStruct.levelProgress),
             new Parameter("play_index", levelStruct.playIndex),
             new Parameter("lose_index", levelStruct.loseIndex),
@@ -106,7 +98,6 @@ namespace Analytics
                 { "loop_by", levelStruct.loopBy },
                 { "play_type", levelStruct.playType.ToString() },
                 { "level_progress", levelStruct.levelProgress },
-                { "level_wave", levelStruct.levelWave },
                 { "play_index", levelStruct.playIndex },
                 { "lose_index", levelStruct.loseIndex },                                
                 { "play_duration", levelStruct.playDuration },
@@ -114,7 +105,6 @@ namespace Analytics
                 { "exit_index", levelStruct.exitIndex }
             };
             FirebaseManager.Instance.AddEvent("level_exit", paramData, parameters);
-#endif
         }
 
         public static void LogLevelReopenEvent(LevelAnalyticStruct levelStruct)

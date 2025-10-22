@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -49,7 +50,7 @@ namespace ColorBlockCrush
         {
             if (UserDataManager.Gold >= boosterData.price)
             {
-                UserDataManager.AddGold(-boosterData.price, "Revival");
+                UserDataManager.AddGold(-boosterData.price, "revival", ReasonType.use.ToString());
                 LevelController.Instance.ReviveLevel(boosterData.price);
                 OnKeepPlaying?.Invoke();
                 Hide();

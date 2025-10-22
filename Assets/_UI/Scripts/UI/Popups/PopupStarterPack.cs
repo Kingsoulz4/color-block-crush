@@ -2,6 +2,8 @@ using System;
 using UnityEngine.UI;
 using UnityEngine;
 using System.Linq;
+using Analytics;
+using Yoolax.Framework;
 
 namespace ColorBlockCrush
 {
@@ -47,10 +49,20 @@ namespace ColorBlockCrush
                 {
                     var popupReceiveRewards = UIManager.Instance.ShowPopup<PopupReceiveReward>(null);
                     popupReceiveRewards.SetData(starterPack.listReward);
-                    foreach(var item in starterPack.listReward)
+                    
+                    string[] types = new string[starterPack.listReward.Count];
+                    string[] names = new string[starterPack.listReward.Count];
+                    string[] amounts = new string[starterPack.listReward.Count];
+                    for(int i = 0; i < starterPack.listReward.Count; i++)
                     {
-                        item.Claim();
+                        starterPack.listReward[i].Claim();
+                        types[i] = AnalyticUtils.GetCurrencyTypeFromCurrencyName(starterPack.listReward[i].type.ToString().ToLower()).ToString();
+                        names[i] = AnalyticUtils.GetNameFromType(starterPack.listReward[i].type.ToString().ToLower());
+                        amounts[i] = starterPack.listReward[i].quantity.ToString();
                     }
+                    ResourceAnalyticStruct resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, starterPack.title.ToLower(),
+                        ReasonType.purchase.ToString());
+                    Server.Get<OnResourceEarnEventLog>().Dispatch(resourceAnalyticStruct);
             
                     m_goldBar.gameObject.SetActive(false);
                     var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);

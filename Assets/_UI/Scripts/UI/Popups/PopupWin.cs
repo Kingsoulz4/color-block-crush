@@ -33,7 +33,7 @@ namespace ColorBlockCrush
             MaxAdsManager.Instance.ShowRewardedAd(MaxKeys.rewardedID, () =>
             {
                 UserDataManager.PlayType = PlayType.next;
-                UserDataManager.AddGold(80, "WinX2");
+                UserDataManager.AddGold(80, "winX2", ReasonType.reward.ToString());
                 OnClaimedReward.Invoke(coinReceiveValue * 2); 
             });
         }
@@ -42,7 +42,7 @@ namespace ColorBlockCrush
         {
             UserDataManager.PlayType = PlayType.next;
             MaxAdsManager.Instance.ShowInterstitialAd(MaxKeys.interstitialID);
-            UserDataManager.AddGold(coinReceiveValue, "Win");
+            UserDataManager.AddGold(coinReceiveValue, "win", ReasonType.reward.ToString());
             OnClaimedReward.Invoke(coinReceiveValue);
         }
 

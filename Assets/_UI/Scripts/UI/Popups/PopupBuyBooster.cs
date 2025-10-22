@@ -1,7 +1,9 @@
 using System;
+using Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 using I2.Loc;
+using Yoolax.Framework;
 
 namespace ColorBlockCrush
 {
@@ -50,7 +52,19 @@ namespace ColorBlockCrush
             if (UserDataManager.Gold >= boosterData.price)
             {
                 UserDataManager.AddBooster(boosterType, 3);
-                UserDataManager.AddGold(-boosterData.price, "Buy Booster");
+                UserDataManager.AddGold(-boosterData.price, $"buy_{boosterType.ToString().ToLower()}",
+                    ReasonType.exchange.ToString());
+                
+                string[] types = { ResourceType.booster.ToString()};
+                string[] names = { boosterData.boosterType.ToString().ToLower()};
+                string[] amounts = {"1"};
+                ResourceAnalyticStruct resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, $"buy_{boosterType.ToString().ToLower()}",
+                    ReasonType.exchange.ToString());
+                Server.Get<OnResourceEarnEventLog>().Dispatch(resourceAnalyticStruct);
+
+                resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, $"use_{boosterType.ToString().ToLower()}",
+                    ReasonType.use.ToString());
+                Server.Get<OnResourceSpendEventLog>().Dispatch(resourceAnalyticStruct);
                 OnBought?.Invoke();
             }
             else

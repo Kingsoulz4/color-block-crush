@@ -2,6 +2,8 @@ using System;
 using UnityEngine.UI;
 using UnityEngine;
 using DG.Tweening;
+using Analytics;
+using Yoolax.Framework;
 
 namespace ColorBlockCrush
 {
@@ -53,10 +55,19 @@ namespace ColorBlockCrush
                     });
                     popupReceiveReward.SetData(shopPack.listReward);
 
-                    foreach(var item in shopPack.listReward)
+                    string[] types = new string[shopPack.listReward.Count];
+                    string[] names = new string[shopPack.listReward.Count];
+                    string[] amounts = new string[shopPack.listReward.Count];
+                    for(int i = 0; i < shopPack.listReward.Count; i++)
                     {
-                        item.Claim();
+                        shopPack.listReward[i].Claim();
+                        types[i] = AnalyticUtils.GetCurrencyTypeFromCurrencyName(shopPack.listReward[i].type.ToString().ToLower()).ToString();
+                        names[i] = AnalyticUtils.GetNameFromType(shopPack.listReward[i].type.ToString().ToLower());
+                        amounts[i] = shopPack.listReward[i].quantity.ToString();
                     }
+                    ResourceAnalyticStruct resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, shopPack.title.ToLower(),
+                        ReasonType.purchase.ToString());
+                    Server.Get<OnResourceEarnEventLog>().Dispatch(resourceAnalyticStruct);
                 }
                 else
                 {

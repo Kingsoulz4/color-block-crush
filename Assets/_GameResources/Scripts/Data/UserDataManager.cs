@@ -51,7 +51,7 @@ public class UserDataManager : MonoBehaviour
 
     #region Common
 
-    public static void AddGold(int value, string where, bool isLog = false, string reason = "", float timeDelay = 0)
+    public static void AddGold(int value, string where, string reason = "", float timeDelay = 0)
     {
         if (where != " ")
         {
@@ -60,7 +60,12 @@ public class UserDataManager : MonoBehaviour
             string[] amounts = { value.ToString() };            
             ResourceAnalyticStruct resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, 
                 where, reason);
-            Server.Get<OnResourceEarnEventLog>().Dispatch(resourceAnalyticStruct);   
+            if(value >= 0)
+                Server.Get<OnResourceEarnEventLog>().Dispatch(resourceAnalyticStruct);
+            else
+            {
+                Server.Get<OnResourceSpendEventLog>().Dispatch(resourceAnalyticStruct);
+            }
         }
         Gold = Mathf.Clamp(Gold + value, 0, int.MaxValue);
         OnUpdateGold?.Invoke(Gold + value, Gold, timeDelay);
@@ -72,10 +77,24 @@ public class UserDataManager : MonoBehaviour
 
     public static bool IsNewDay = false;
 
-    public static void AddHeart(int amount, string where, bool hasAnimation, int typeHeart = 0, bool isLog = false, string reason = "")
+    public static void AddHeart(int amount, string where, bool hasAnimation, int typeHeart = 0, string reason = "")
     {
         if (typeHeart == 0)
         {
+            if (where != " ")
+            {
+                string[] types = { ResourceType.currency.ToString() };
+                string[] names = { "heart" };
+                string[] amounts = { amount.ToString() };            
+                ResourceAnalyticStruct resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, 
+                    where, reason);
+                if(amount >= 0)
+                    Server.Get<OnResourceEarnEventLog>().Dispatch(resourceAnalyticStruct);
+                else
+                {
+                    Server.Get<OnResourceSpendEventLog>().Dispatch(resourceAnalyticStruct);
+                }
+            }
             int current = Heart;
             int newValue = current + amount;
             if (newValue < 0)
@@ -92,6 +111,20 @@ public class UserDataManager : MonoBehaviour
         }
         else
         {
+            if (where != " ")
+            {
+                string[] types = { ResourceType.currency.ToString() };
+                string[] names = { "infinity_lives" };
+                string[] amounts = { amount.ToString() };            
+                ResourceAnalyticStruct resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, 
+                    where, reason);
+                if(amount >= 0)
+                    Server.Get<OnResourceEarnEventLog>().Dispatch(resourceAnalyticStruct);
+                else
+                {
+                    Server.Get<OnResourceSpendEventLog>().Dispatch(resourceAnalyticStruct);
+                }
+            }
             var now = GameTime.Instance.GetUtcTime();
             if (HeartManager.InfinityEndTime < now)
             {
