@@ -1,5 +1,6 @@
 ﻿using ColorBlockCrush.Tools;
 using DG.Tweening;
+using Lofelt.NiceVibrations;
 using Sirenix.Serialization;
 using Sirenix.Utilities;
 using System;
@@ -328,6 +329,7 @@ namespace ColorBlockCrush
             PlayAnim(Constant.GunAnimation.SHOOT);
             AudioSourcePool.Instance.PlaySFX(AudioManager.Instance.GetAudioClip(Constant.SFX.SHOOT));
             UpdateBulletCountDisplay();
+            HapticPatterns.PlayPreset(HapticPatterns.PresetType.LightImpact);
 
             Bullet bullet = Instantiate(bulletPrb, bulletSpawnPos.position, Quaternion.identity);
             bullet.transform.SetParent(LevelController.Instance.transform);
@@ -531,11 +533,6 @@ namespace ColorBlockCrush
                 GetTargetBock();
             });
 
-            this.Wait(moveToConveyorDuration, () =>
-            {
-                AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
-            });
-
             moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration + delay));
             moveToConveyorSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration + delay));
             moveToConveyorSq.SetId(this);
@@ -567,11 +564,6 @@ namespace ColorBlockCrush
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
                 AllConnectedGunCount = OriginConnectedGun;
-            });
-
-            this.Wait(moveToSlotDuration, () =>
-            {
-                AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
             });
 
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
