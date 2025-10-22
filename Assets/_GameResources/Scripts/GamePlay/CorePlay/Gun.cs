@@ -218,9 +218,9 @@ namespace ColorBlockCrush
         {
             if (IsMovingToConveyor() || IsMovingToSlot()) return false;
 
-            foreach (var gunn in ConnectedGuns)
+            foreach (var gunn in AllConnectedGuns)
             {
-                if (gunn.IsMovingToSlot() || gunn.IsMovingToConveyor()) return false;
+                if (gunn.IsMovingToSlot() || gunn.IsMovingToConveyor() || gunn.GunPos == GunPos.ON_CONVEYOR || gunn.GunPos == GunPos.TWEEN_SORT) return false;
             }
 
             if (GunPos == GunPos.ON_CONVEYOR || GunPos == GunPos.TWEEN_SORT) return false;
