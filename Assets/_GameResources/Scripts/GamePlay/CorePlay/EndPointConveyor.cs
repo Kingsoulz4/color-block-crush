@@ -14,6 +14,8 @@ namespace ColorBlockCrush
             {
                 if (other.TryGetComponent(out Gun gun))
                 {
+                    if (gun.GunPos != GunPos.ON_CONVEYOR) return;
+
                     if (gun.ConnectedGuns.Count > 0)
                     {
                         if (!LevelController.Instance.SlotController.CanPlaceGuns(gun.AllConnectedGunCount))

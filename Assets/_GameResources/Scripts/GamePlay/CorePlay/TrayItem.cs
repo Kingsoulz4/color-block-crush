@@ -32,6 +32,11 @@ namespace ColorBlockCrush
             LevelEvent.OnFastMode += OnFastMode;
         }
 
+        private void Update()
+        {
+              
+        }
+
         private void OnFastMode()
         {
             float t = splineAnimate.NormalizedTime;

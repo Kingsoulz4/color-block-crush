@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ColorBlockCrush.Tools;
 using DG.Tweening;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ColorBlockCrush
@@ -38,6 +39,19 @@ namespace ColorBlockCrush
         public bool CanPlaceGuns(int count)
         {
             return _gunsInSlots.Count + count <= _maxSlots;
+        }
+
+        public void RemoveGunByColor(ColorType colorType)
+        {
+            for (int i = _gunsInSlots.Count - 1; i >= 0; i--)
+            {
+                if (_gunsInSlots[i].ColorType == colorType)
+                {
+                    _gunsInSlots[i].gameObject.SetActive(false);
+                    RemoveGun(_gunsInSlots[i]);
+                }
+            }
+            ShiftAllToTheLeft();
         }
 
         public void MoveGunIn(Gun gun)
