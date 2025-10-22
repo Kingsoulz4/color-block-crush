@@ -110,7 +110,6 @@ namespace Analytics
 
         public static void LogLevelReopenEvent(LevelAnalyticStruct levelStruct)
         {
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("level", levelStruct.level),
@@ -128,7 +127,6 @@ namespace Analytics
                 { "mode", levelStruct.mode.ToString() },               
             };
             FirebaseManager.Instance.AddEvent("level_reopen", paramData, parameters);
-#endif
         }
     }
 

@@ -21,6 +21,16 @@ namespace ColorBlockCrush
             });
         }
         
+
+        private void OnEnable()
+        {
+            if (!LevelManager.Instance.inGameplay)
+            {
+                Hide();
+                return;
+            };
+        }
+
         public void SetData(NewFeatureItemData newFeatureData)
         {
             m_textFeatureTitle.text = LocalizationManager.GetTranslation(newFeatureData.title);

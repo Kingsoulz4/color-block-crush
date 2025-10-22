@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   listShopPack:
   - id: fail_offer
-    googleID: 
-    appleID: 
+    googleID: com.color.pixel.fail.offer
+    appleID: com.color.pixel.fail.offer
     title: Fail Offer
     type: 0
     description: boost
@@ -30,11 +30,11 @@ MonoBehaviour:
     - type: 5
       quantity: 1
   - id: starter_pack
-    googleID: 
-    appleID: 
+    googleID: com.color.pixel.shooter.starter
+    appleID: com.color.pixel.shooter.starter
     title: Starter Pack
     type: 1
-    description: 
+    description: boost
     icon: {fileID: 21300000, guid: 33794141aa455cb4b8fb459a7462ad9b, type: 3}
     listReward:
     - type: 0

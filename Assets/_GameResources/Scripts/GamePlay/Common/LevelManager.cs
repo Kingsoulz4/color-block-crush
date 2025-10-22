@@ -23,6 +23,7 @@ namespace ColorBlockCrush
         private int priceRevive = 900;
 
         public DateTime timeStart;
+        public bool inGameplay = false;
 
         public LevelController LevelGame
         {

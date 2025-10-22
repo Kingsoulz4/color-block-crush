@@ -101,11 +101,13 @@ namespace ColorBlockCrush
         {
             var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.ADD_TRAY);
             boostersObj.SetActive(boosterData.levelUnlock <= UserDataManager.Level);
+            LevelManager.Instance.inGameplay = true;
         }
 
         private void OnDisable()
         {
             HideAllTuts();
+            LevelManager.Instance.inGameplay = false;
         }
 
         private void OnDestroy()

@@ -53,6 +53,7 @@ namespace ColorBlockCrush
                     popupReceiveRewards.SetData(packNoAds.listReward);
                     ShopManager.Instance.HasPurchasedNoAdsPack = true;
                     Hide();
+                    Server.Get<OnBuyNoAds>().Dispatch();
                 }
                 else
                 {

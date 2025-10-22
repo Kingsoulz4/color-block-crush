@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using ColorBlockCrush.Tools;
 using UnityEngine;
 using UnityEngine.UI;
+using Yoolax.Framework;
 
 public class MainScreenUI : ScreenUI
 {
@@ -74,8 +75,17 @@ public class MainScreenUI : ScreenUI
         {
             var popupStarterPack = UIManager.Instance.ShowPopup<PopupStarterPack>(null);
         });
+        
+        Server.Get<OnBuyNoAds>().AddListener(UpdateButtonRemoveAds);
+        Server.Get<OnBuyStarterPack>().AddListener(UpdateButtonStarterPack);
     }
-    
+
+    private void OnDestroy()
+    {
+        Server.Get<OnBuyNoAds>().RemoveListener(UpdateButtonRemoveAds);
+        Server.Get<OnBuyStarterPack>().RemoveListener(UpdateButtonStarterPack);
+    }
+
     public void UpdateUI()
     {
         //txt_Level.text = $"Level {LevelManager.Instance.CurrentLevel}";
@@ -251,12 +261,14 @@ public class MainScreenUI : ScreenUI
 
     private void OnEnable()
     {
+        LevelManager.Instance.inGameplay = false;
         GameManager.Instance.SetGameState(GameState.MainMenu);
         btn_Play.GetComponent<ButtonPlay>().SetDisplayLevelType(LevelManager.Instance.GetCurrentLevelType());
     }
 
     private void OnDisable()
     {
+        LevelManager.Instance.inGameplay = true;
         UIManager.OnRefeshBannerAndAds -= UpdateButtonRemoveAds;
         DOTween.Kill(this);
     }

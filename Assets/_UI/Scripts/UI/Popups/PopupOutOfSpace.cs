@@ -34,6 +34,10 @@ namespace ColorBlockCrush
         public override void Show(Action onClose)
         {
             base.Show(onClose);
+            if(!LevelManager.Instance.inGameplay)  {
+                Hide();
+                return;
+            };
             boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.REVIVAL);
             m_textPrice.text = boosterData.price.ToString();
             AudioManager.Instance.PlayOneShot(failSfx, 1);

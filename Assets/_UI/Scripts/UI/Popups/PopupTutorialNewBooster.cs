@@ -22,6 +22,10 @@ namespace ColorBlockCrush
 
         private void OnEnable()
         {
+            if(!LevelManager.Instance.inGameplay)  {
+                Hide();
+                return;
+            };
             //var feature = NewFeatureManager.Instance.GetNewFeatureInProgress();
             //if (feature != null )
             //{

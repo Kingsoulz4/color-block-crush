@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startManually: 0
   appToken: fugemt3pybcw
-  environment: 0
+  environment: 1
   logLevel: 3
   coppaCompliance: 0
   sendInBackground: 0

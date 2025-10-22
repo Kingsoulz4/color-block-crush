@@ -82,6 +82,7 @@ namespace ColorBlockCrush
                         Hide();
                     });
                     ShopManager.Instance.HasPurchasedStarterPack = true;
+                    Server.Get<OnBuyStarterPack>().Dispatch();
                 }
                 else
                 {
