@@ -55,6 +55,13 @@ public class AudioManager : SingletonMono<AudioManager>
         AudioClip clip = commonSound.GetClip(clipName);
         PlayOneShot(clip, volume, pitch, delay);
     }
+
+    public AudioClip GetAudioClip(string clipName)
+    {
+        return commonSound.GetClip(clipName);
+
+    }
+
     IEnumerator IEDeplayPlayOneShot(AudioClip audioClip, float volume, float pitch, float delay = 0)
     {
         float timer = delay;
