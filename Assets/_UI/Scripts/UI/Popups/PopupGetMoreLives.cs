@@ -71,13 +71,16 @@ namespace ColorBlockCrush
 
         private void OnClickClaimByAds()
         {
-            UserDataManager.AddHeart(1, "Refill Heart", false);
-            
-            UIManager.Instance.ShowPopup<PopupReceiveHeart>(() =>
+            MaxAdsManager.Instance.ShowRewardedAd(MaxKeys.rewardedID, () =>
             {
-                Hide();
-                OnRefilled?.Invoke();
-            }).PlayCollectFx(m_heartBar.transform.position, Vector3.zero, 1);
+                UserDataManager.AddHeart(1, "Refill Heart", false);
+            
+                UIManager.Instance.ShowPopup<PopupReceiveHeart>(() =>
+                {
+                    Hide();
+                    OnRefilled?.Invoke();
+                }).PlayCollectFx(m_heartBar.transform.position, Vector3.zero, 1);
+            });
         }
     }
 }

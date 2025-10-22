@@ -1,12 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using Analytics;
 using ColorBlockCrush.Tools;
-using TMPro;
+using Yoolax.Framework;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ColorBlockCrush
@@ -33,12 +30,18 @@ namespace ColorBlockCrush
 
         private void OnClickClaimX2()
         {
-            UserDataManager.AddGold(80, "WinX2");
-            OnClaimedReward.Invoke(coinReceiveValue * 2);
+            MaxAdsManager.Instance.ShowRewardedAd(MaxKeys.rewardedID, () =>
+            {
+                UserDataManager.PlayType = PlayType.next;
+                UserDataManager.AddGold(80, "WinX2");
+                OnClaimedReward.Invoke(coinReceiveValue * 2); 
+            });
         }
 
         private void OnClickClaim()
         {
+            UserDataManager.PlayType = PlayType.next;
+            MaxAdsManager.Instance.ShowInterstitialAd(MaxKeys.interstitialID);
             UserDataManager.AddGold(coinReceiveValue, "Win");
             OnClaimedReward.Invoke(coinReceiveValue);
         }
@@ -103,6 +106,18 @@ namespace ColorBlockCrush
             base.Show(onClose);
             AudioManager.Instance.PlayOneShot(winSfx, 1);
             m_buttonClaimX2.gameObject.SetActive(UserDataManager.Level >= 10);
+            
+            LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
+            levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelEndStruct(UserDataManager.PlayType,
+                LevelController.Instance.GunBoardController.TotalGunCount, LevelResult.win, 
+                LoseBy.NULL, (float)(DateTime.Now - LevelManager.Instance.timeStart).TotalSeconds);
+            Server.Get<OnLevelEndEventLog>().Dispatch(levelAnalyticStruct);
+
+            UserDataManager.PlayIndex = 0;
+            UserDataManager.LoseIndex = 0;
+            UserDataManager.ExitIndex = 0;
+            UserDataManager.LoseStreak = 0;
+            UserDataManager.WinStreak++;
         }
     }
 }

@@ -1,13 +1,11 @@
-using ColorBlockCrush.PathFinding;
+using System;
 using ColorBlockCrush.Tools;
 using Newtonsoft.Json;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using UnityEngine;
-using static DG.Tweening.DOTweenAnimation;
+using Analytics;
+using Yoolax.Framework;
 
 namespace ColorBlockCrush
 {
@@ -23,6 +21,8 @@ namespace ColorBlockCrush
         private LevelController levelGame;
 
         private int priceRevive = 900;
+
+        public DateTime timeStart;
 
         public LevelController LevelGame
         {
@@ -79,9 +79,33 @@ namespace ColorBlockCrush
             LevelEvent.OnLose -= OnLoseGame;
             LevelEvent.OnRevive -= OnReviveGame;
         }
+        
+        public void OnApplicationPause(bool pause)
+        {
+            if (pause)
+            {
+                UserDataManager.ExitIndex++;
+                LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
+                levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelExitStruct(UserDataManager.PlayType,
+                    LevelController.Instance.GunBoardController.TotalGunCount, 
+                    (float)(DateTime.Now - timeStart).TotalSeconds, UserDataManager.ExitIndex);
+                Server.Get<OnLevelExitEventLog>().Dispatch(levelAnalyticStruct);
+            }
+            else
+            {
+                LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
+                levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelReopenStruct();
+                Server.Get<OnLevelReopenEventLog>().Dispatch(levelAnalyticStruct);
+            }
+        }
 
         public void StartCurrentLevel()
         {
+            LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
+            levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelStartStruct(UserDataManager.PlayType,
+                0);       
+            Server.Get<OnLevelStartEventLog>().Dispatch(levelAnalyticStruct);
+            timeStart = DateTime.Now;
             StartLevel(CurrentLevel, CurrentLevelSetID);
         }
 
@@ -178,6 +202,7 @@ namespace ColorBlockCrush
         {
             if (UserDataManager.Heart > 1)
             {
+                UserDataManager.PlayType = PlayType.restart;
                 StartCurrentLevel();
                 var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
                 loading.Show(() =>
@@ -190,6 +215,7 @@ namespace ColorBlockCrush
                 var popupGetMoreLives = UIManager.Instance.ShowPopup<PopupGetMoreLives>(null);
                 popupGetMoreLives.OnRefilled = () =>
                 {
+                    UserDataManager.PlayType = PlayType.restart;
                     StartCurrentLevel();
                 };
                 popupGetMoreLives.OnClose = () =>
