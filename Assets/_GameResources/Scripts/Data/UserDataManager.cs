@@ -29,11 +29,22 @@ public class UserDataManager : MonoBehaviour
         public int avtarID = 1;
         public int isFirstShowChangeName;
         public int lastFeatureCount;
+        public int buyIapCount;
+        public int winStreak;
+        public int loseStreak;
     }
 
     private const string USER_DATA_KEY = Constant.PlayerPrefs.USER_DATA;
     public static Action<int, int, float> OnUpdateGold;
 
+    [System.Serializable]
+    public class LevelData
+    {
+        public int playIndex;
+        public int loseIndex;
+    }
+    
+    private const string LEVEL_DATA_KEY = Constant.PlayerPrefs.LEVEL_DATA_KEY;
 
     #region Common
 
@@ -320,6 +331,61 @@ public class UserDataManager : MonoBehaviour
             SaveUserData(data);
         }
     }
+    
+    public static int BuyIapCount
+    {
+        get { return LoadUserData().buyIapCount; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.buyIapCount = value;
+            SaveUserData(data);
+        }
+    }
+    
+    public static int WinStreak
+    {
+        get { return LoadUserData().winStreak; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.winStreak = value;
+            SaveUserData(data);
+        }
+    }
+
+    public static int LoseStreak
+    {
+        get { return LoadUserData().loseStreak; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.loseStreak = value;
+            SaveUserData(data);
+        }
+    }
+    
+    public static int PlayIndex
+    {
+        get { return LoadLevelData().playIndex; }
+        set
+        {
+            LevelData data = LoadLevelData();
+            data.playIndex = value;
+            SaveLevelData(data);
+        }
+    }
+    
+    public static int LoseIndex
+    {
+        get { return LoadLevelData().loseIndex; }
+        set
+        {
+            LevelData data = LoadLevelData();
+            data.loseIndex = value;
+            SaveLevelData(data);
+        }
+    }
 
     public static void AddBooster(BoosterType boosterType, int quantity)
     {
@@ -359,6 +425,23 @@ public class UserDataManager : MonoBehaviour
         PlayerPrefs.SetString(USER_DATA_KEY, jsonData);
         PlayerPrefs.Save();
     }
+    
+    public static LevelData LoadLevelData()
+    {
+        if (PlayerPrefs.HasKey(LEVEL_DATA_KEY))
+        {
+            string jsonData = PlayerPrefs.GetString(LEVEL_DATA_KEY);
+            return JsonConvert.DeserializeObject<LevelData>(jsonData);
+        }
+        return GetDefaultLevelData();
+    }
+
+    private static void SaveLevelData(LevelData data)
+    {
+        string jsonData = JsonConvert.SerializeObject(data);
+        PlayerPrefs.SetString(LEVEL_DATA_KEY, jsonData);
+        PlayerPrefs.Save();
+    }
     #endregion
 
 
@@ -377,7 +460,19 @@ public class UserDataManager : MonoBehaviour
             firstClaimAddTrayBooster = false,
             firstClaimHandBooster = false,
             firstClaimShuffleBooster = false,
-            firstClaimMagnetBooster = false
+            firstClaimMagnetBooster = false,
+            buyIapCount = 0,
+            winStreak = 0,
+            loseStreak = 0,
+        };
+    }
+    
+    private static LevelData GetDefaultLevelData()
+    {
+        return new LevelData
+        {
+            playIndex = 1,
+            loseIndex = 0,
         };
     }
 }

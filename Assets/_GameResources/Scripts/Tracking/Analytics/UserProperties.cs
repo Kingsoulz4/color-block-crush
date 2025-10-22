@@ -24,16 +24,11 @@ namespace Analytics
             FirebaseManager.Instance.AddQueueProperty("lose_streak_n", userProperties.loseStreak.ToString());
             FirebaseManager.Instance.AddQueueProperty("balance_coin_n", userProperties.balanceCoin.ToString());
             FirebaseManager.Instance.AddQueueProperty("balance_heart_n", userProperties.balanceHeart.ToString());
+            FirebaseManager.Instance.AddQueueProperty("balance_add_tray_n", userProperties.balanceAddTray.ToString());
+            FirebaseManager.Instance.AddQueueProperty("balance_hand_n", userProperties.balanceHand.ToString());
             FirebaseManager.Instance.AddQueueProperty("balance_shuffle_n", userProperties.balanceShuffle.ToString());
-            FirebaseManager.Instance.AddQueueProperty("balance_undo_n", userProperties.balanceUndo.ToString());
-            FirebaseManager.Instance.AddQueueProperty("balance_magnet_n", userProperties.balanceMagnet.ToString());
-            FirebaseManager.Instance.AddQueueProperty("balance_add_space_n", userProperties.balanceAddSpace.ToString());
+            FirebaseManager.Instance.AddQueueProperty("balance_super_shoot_n", userProperties.balanceSuperShoot.ToString());
             FirebaseManager.Instance.AddQueueProperty("balance_revive_n", userProperties.balanceRevive.ToString());
-            FirebaseManager.Instance.AddQueueProperty("country_ranking_n", userProperties.countryRanking.ToString());
-            FirebaseManager.Instance.AddQueueProperty("global_ranking_n", userProperties.globalRanking.ToString());
-            FirebaseManager.Instance.AddQueueProperty("current_event", userProperties.currentEvent.ToString());
-            FirebaseManager.Instance.AddQueueProperty("current_event_index_n", userProperties.currentEventIndex.ToString());
-            FirebaseManager.Instance.AddQueueProperty("current_event_cycle_n", userProperties.currentEventCycle.ToString());
         }
 
         #region Send Databucket       
@@ -52,16 +47,11 @@ namespace Analytics
             propertyData["lose_streak_n"] = userProperties.loseStreak;
             propertyData["balance_coin_n"] = userProperties.balanceCoin;
             propertyData["balance_heart_n"] = userProperties.balanceHeart;
+            propertyData["balance_add_tray_n"] = userProperties.balanceAddTray;
+            propertyData["balance_hand_n"] = userProperties.balanceHand;
             propertyData["balance_shuffle_n"] = userProperties.balanceShuffle;
-            propertyData["balance_undo_n"] = userProperties.balanceUndo;
-            propertyData["balance_magnet_n"] = userProperties.balanceMagnet;
-            propertyData["balance_add_space_n"] = userProperties.balanceAddSpace;
+            propertyData["balance_super_shoot_n"] = userProperties.balanceSuperShoot;
             propertyData["balance_revive_n"] = userProperties.balanceRevive;
-            propertyData["country_ranking_n"] = userProperties.countryRanking;
-            propertyData["global_ranking_n"] = userProperties.globalRanking;
-            propertyData["current_event"] = userProperties.currentEvent;
-            propertyData["current_event_index_n"] = userProperties.currentEventIndex;
-            propertyData["current_event_cycle_n"] = userProperties.currentEventCycle;
         }
 
         #endregion
@@ -79,16 +69,11 @@ namespace Analytics
         public int loseStreak;
         public int balanceCoin;
         public int balanceHeart;
+        public int balanceAddTray;
+        public int balanceHand;
         public int balanceShuffle;
-        public int balanceUndo;
-        public int balanceMagnet;
-        public int balanceAddSpace;
+        public int balanceSuperShoot;
         public int balanceRevive;
-        public int countryRanking;
-        public int globalRanking;
-        public string currentEvent;
-        public string currentEventIndex;
-        public string currentEventCycle;
     };
 
     public enum Mode
