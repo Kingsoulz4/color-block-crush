@@ -20,6 +20,19 @@ namespace ColorBlockCrush
         [SerializeField] private Button btnTestLose;
         [SerializeField] private Button btnTestWin;
         [SerializeField] private Button btnExit;
+        [SerializeField] private GameObject cheatingPanel;
+        
+        
+        public static bool IsCheating
+        {
+            get => PlayerPrefs.GetInt("IsCheating", 0) > 0;
+            set => PlayerPrefs.SetInt("IsCheating", value? 1: 0);
+        }
+
+        public void UpdateState()
+        {
+            cheatingPanel.SetActive(IsCheating);
+        }
 
         private void Update()
         {
@@ -44,7 +57,7 @@ namespace ColorBlockCrush
         {
             //AddRes();
 
-
+            UpdateState();
             BoosterManager.Instance.UpdateVisualBooster();
             btn_Load.onClick.AddListener(LoadLevel);
             btn_backLevel.onClick.AddListener(() =>

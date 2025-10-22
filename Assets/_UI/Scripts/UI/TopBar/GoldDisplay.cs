@@ -32,6 +32,7 @@ namespace ColorBlockCrush
         private void OnEnable()
         {
             UserDataManager.OnUpdateGold += UpdateTextGold;
+            txt_Gold.text = UserDataManager.Gold + "";
         }
 
         private void setUpVisual()

@@ -39,7 +39,7 @@ namespace ColorBlockCrush
         private const float raycastSpacing = 0.15f;
         private const int maxRaycastSteps = 65;
 
-        private float maxShootingAngle = 5f;
+        private float maxShootingAngle = 6.5f;
         private bool isTurning;
         private bool isFireFirstTime = false;
         private TrayItem trayItem;
@@ -410,7 +410,7 @@ namespace ColorBlockCrush
             {
                 return;
             }
-
+            isFireFirstTime = true;
             Vector3 newRotation;
             newRotation = GetTurnDirection(!isFireFirstTime ? directionNonfire : direction);
             currentMoveFireDir = directionNonfire;
@@ -511,8 +511,8 @@ namespace ColorBlockCrush
             moveToConveyorTw = moveToConveyorSq.Append(
                 transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration + delay)).SetEase(moveToConveyorEase).OnComplete(() =>
             {
-                Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
-                transform.DORotate(newRotation, 0f);
+                //Vector3 newRotation = GetTurnDirection(RotationDirection.Right);
+                //transform.DORotate(newRotation, 0f);
 
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;

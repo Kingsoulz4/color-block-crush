@@ -143,7 +143,7 @@ namespace ColorBlockCrush
         {
             if(onCompleteForceTut != null)
             {
-                // onCompleteForceTut.Invoke();
+                onCompleteForceTut.Invoke();
                 onCompleteForceTut = null;
             }       
             boosterCanvas.sortingOrder = 0;
@@ -156,7 +156,6 @@ namespace ColorBlockCrush
             if(type != boosterType) return;
             Debug.Log($"Show effect {startPosition}");
             onCompleteForceTut = complete;
-            onCompleteForceTut?.Invoke();
             boosterCanvas.sortingOrder = 10;
             goEffect.SetActive(true);
             goEffect.transform.position = startPosition;

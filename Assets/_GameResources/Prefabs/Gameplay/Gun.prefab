@@ -412,6 +412,7 @@ GameObject:
   - component: {fileID: 224953591484563130}
   - component: {fileID: 23119740175010185}
   - component: {fileID: 23198141706592332}
+  - component: {fileID: 1124883502966612882}
   m_Layer: 9
   m_Name: Text-AmmoAmount
   m_TagString: Untagged
@@ -572,6 +573,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 23119740175010185}
   m_maskType: 0
+--- !u!114 &1124883502966612882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813141941877208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a525b3b0e91368148941c9e4a89cf497, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6299932957865095922
 GameObject:
   m_ObjectHideFlags: 0

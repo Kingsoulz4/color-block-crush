@@ -38,6 +38,7 @@ namespace ColorBlockCrush
             if (starterPack == null) return;
             
             var popupLoadingProcess = UIManager.Instance.ShowPopup<PopupLoadingProcess>(null);
+            popupLoadingProcess.ShowPopup();
             
             IAPManager.Instance.BuyProductID(starterPack.id, (success) =>
             {
