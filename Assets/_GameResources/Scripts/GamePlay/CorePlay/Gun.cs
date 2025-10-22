@@ -365,6 +365,7 @@ namespace ColorBlockCrush
                 }
 
                 LevelManager.Instance.LevelGame.SlotController.RemoveGun(this);
+                LevelManager.Instance.LevelGame.BonusSlotController.RemoveGun(this);
 
                 moveToConveyorTw.Kill();
                 moveSortSlotTw.Kill();
