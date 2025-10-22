@@ -124,7 +124,12 @@ public class ConveyorController : MonoBehaviour
         if (gun.TrayItem != null)
         {
             MoveTrayIn(gun.TrayItem);
-            RemoveTrayItem(gun.TrayItem);
+            //RemoveTrayItem(gun.TrayItem);
+        }
+        else
+        {
+            Debug.Log("gun.TrayItem null");
+
         }
 
         UpdateTrayText();
@@ -137,10 +142,27 @@ public class ConveyorController : MonoBehaviour
         for (int i = movingTrayItems.Count - 1; i >= 0; i--)
         {
             var gun = movingTrayItems[i].MyGun;
+            if (!gun)
+            {
+                return;
+            }
             gun.Scale(Vector3.one * 0.8f, 0.2f);
             gun.OnRevive();
             LevelController.Instance.BonusSlotController.MoveGunIn(gun);
             MoveTrayIn(movingTrayItems[i], true);
+        }
+
+        for (int i = prepairTrayItems.Count - 1; i >= 0; i--)
+        {
+            var gun = prepairTrayItems[i].MyGun;
+            if (!gun)
+            {
+                return;
+            }
+            gun.Scale(Vector3.one * 0.8f, 0.2f);
+            gun.OnRevive();
+            LevelController.Instance.BonusSlotController.MoveGunIn(gun);
+            MoveTrayIn(prepairTrayItems[i], true);
         }
 
         Gun lastGunInSlot = LevelController.Instance.SlotController.GetLastGun();
@@ -150,11 +172,14 @@ public class ConveyorController : MonoBehaviour
 
     public void RemoveGunByColor(ColorType colorType)
     {
-         for (int i = movingTrayItems.Count - 1; i >= 0; i--)
+        for (int i = movingTrayItems.Count - 1; i >= 0; i--)
         {
             var gun = movingTrayItems[i].MyGun;
-            gun.RemoveAllConnection();
-            gun.ForceDisappear();
+            if (gun && gun.ColorType == colorType)
+            {
+                gun.RemoveAllConnection();
+                gun.ForceDisappear();
+            }
         }
     }
 
@@ -252,14 +277,19 @@ public class ConveyorController : MonoBehaviour
         {
             tray.Pause();
         }
+
+        foreach (var tray in prepairTrayItems)
+        {
+            tray.Pause();
+        }
     }
 
     public bool MoveTrayIn(TrayItem tray, bool forceMove = false)
     {
-        if (!LevelController.Instance.SlotController.CanPlaceGuns(1) && !forceMove)
-        {
-            return false;
-        }
+        //if (!LevelController.Instance.SlotController.CanPlaceGuns(1) && !forceMove)
+        //{
+        //    return false;
+        //}
 
         if (!tray)
         {
