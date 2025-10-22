@@ -8362,6 +8362,7 @@ GameObject:
   - component: {fileID: 8608368986315043444}
   - component: {fileID: 3508880465791921251}
   - component: {fileID: 1488430927309418248}
+  - component: {fileID: 1035336953700707640}
   m_Layer: 5
   m_Name: InGameScreenUI
   m_TagString: Untagged
@@ -8456,6 +8457,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IgnoreSafeAreaTop: 0
   isSetBanner: 1
+--- !u!114 &1035336953700707640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6538443191816620942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5838c03e3e2ea34eb7fd20cbd06d1e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placement: game_play
 --- !u!1 &6860641391099875392
 GameObject:
   m_ObjectHideFlags: 0

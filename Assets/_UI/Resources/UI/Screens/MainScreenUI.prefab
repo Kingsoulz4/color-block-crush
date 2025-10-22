@@ -273,6 +273,7 @@ GameObject:
   - component: {fileID: 2669745647989834151}
   - component: {fileID: 6466735285239831646}
   - component: {fileID: 4932901845116659673}
+  - component: {fileID: 7367369044283670709}
   m_Layer: 5
   m_Name: MainScreenUI
   m_TagString: Untagged
@@ -360,6 +361,19 @@ MonoBehaviour:
   clip_GoldEnd: {fileID: 8300000, guid: 5ef7df8eed91a54449a1ae7dcf0dfffc, type: 3}
   rect_TargetHeartPos: {fileID: 9202327270911389756}
   rect_TargetBoosterPos: {fileID: 6439577925040059918}
+--- !u!114 &7367369044283670709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6855456883839030463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5838c03e3e2ea34eb7fd20cbd06d1e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placement: main_menu
 --- !u!1 &8843026669445852160
 GameObject:
   m_ObjectHideFlags: 0

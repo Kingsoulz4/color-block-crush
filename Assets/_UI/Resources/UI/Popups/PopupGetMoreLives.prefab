@@ -2225,6 +2225,7 @@ GameObject:
   - component: {fileID: 4158670992420962136}
   - component: {fileID: 2295181956545337443}
   - component: {fileID: 3744507558931075792}
+  - component: {fileID: 2491782953849115877}
   m_Layer: 5
   m_Name: PopupGetMoreLives
   m_TagString: Untagged
@@ -2316,6 +2317,19 @@ MonoBehaviour:
   m_textCountDown: {fileID: 5498113790156742770}
   m_textPriceCoinRefill: {fileID: 6802359113475702385}
   m_heartBar: {fileID: 8046818372744571477}
+--- !u!114 &2491782953849115877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8585611033759907379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5838c03e3e2ea34eb7fd20cbd06d1e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placement: refill_heart
 --- !u!1 &8595617369257331529
 GameObject:
   m_ObjectHideFlags: 0
