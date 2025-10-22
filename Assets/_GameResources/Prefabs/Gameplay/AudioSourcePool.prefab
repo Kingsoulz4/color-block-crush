@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a71174868264cb4b84d7e121a16eb44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolSize: 15
+  poolSize: 8
   allowOverride: 0
   volume: 1
   mixerGroup: {fileID: 0}
