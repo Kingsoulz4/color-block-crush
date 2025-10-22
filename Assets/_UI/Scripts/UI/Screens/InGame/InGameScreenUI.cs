@@ -367,11 +367,11 @@ namespace ColorBlockCrush
 
         private void HideAllTuts()
         {
-            var popupTut = UIManager.Instance.GetPopupActive<PopupTutorialNewFeature>();
-            if (popupTut != null)
-            {
-                popupTut.Hide();
-            }
+            // var popupTut = UIManager.Instance.GetPopupActive<PopupTutorialNewFeature>();
+            // if (popupTut != null)
+            // {
+            //     popupTut.Hide();
+            // }
         }
 
 

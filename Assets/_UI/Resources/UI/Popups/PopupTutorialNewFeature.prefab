@@ -228,7 +228,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5490134939601239339
 RectTransform:
   m_ObjectHideFlags: 0
@@ -299,12 +299,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6943a82038887d645a88775e92adb41a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCache: 1
+  isCache: 0
   isCloseAnim: 0
   duration: 0.3
   animType: 2
   mainPopUp: {fileID: 7935477077577111185}
-  m_background: {fileID: 0}
+  m_background: {fileID: 9098534671625575125}
   m_continue: {fileID: 1742361546947663073}
   m_textFeatureTitle: {fileID: 5825798243797848358}
   m_textFeatureDes: {fileID: 7244095207963813542}
