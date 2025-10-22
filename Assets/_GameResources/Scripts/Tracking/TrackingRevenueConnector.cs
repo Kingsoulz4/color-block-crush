@@ -85,33 +85,19 @@ public static class TrackingRevenueConnector
         Server.Get<OnAdImpressionEventLog>().Dispatch(adAnalyticStruct);
     }
 
-    //public static void SendRevenue_ToAppflyer_Admob(GoogleMobileAds.Api.AdValue adValue, string adSource, string adFormat)
-    //{
-    //    double revenue = adValue.Value / 1000000f;
-
-    //    Dictionary<string, string> dic = new Dictionary<string, string>();
-    //    dic.Add(FirebaseAnalytics.ParameterAdSource, adSource);
-    //    dic.Add(FirebaseAnalytics.ParameterAdFormat, adFormat);
-
-    //    AppsFlyer.logAdRevenue(new AFAdRevenueData("admob", MediationNetwork.GoogleAdMob, "USD", revenue), dic);
-
-    //}
-
-    //public static void SendRevenue_ToFirebase_Admob(GoogleMobileAds.Api.AdValue adValue, string adSource, string adFormat)
-    //{
-    //    double? revenue = adValue.Value;        
-    //    var impressionParameters = new[]
-    //    {
-    //            new Parameter("ad_platform", "ADMOD"),
-    //            new Parameter("ad_source",adSource),                
-    //            new Parameter("ad_format", adFormat),
-    //            new Parameter("value", (float)revenue/ 1000000f),
-    //            new Parameter("currency", "USD"),
-    //    };
-    //    Debug.Log("Admob Ad Source " + adSource);
-    //    FirebaseManager.Instance.LogRevenueToAdmob(impressionParameters);       
-    //}
-
+    public static void SendRevenue_ToAdjust_MaxAppLovin(MaxSdkBase.AdInfo adInfo)
+    {
+        if (adInfo != null)
+        {
+            double revenue = ConvertRevenue(adInfo.Revenue, RevenueSource.Any);
+            AdjustAdRevenue adjustAdRevenue = new AdjustAdRevenue("applovin_max_sdk");
+            adjustAdRevenue.AdRevenuePlacement = adInfo.Placement;
+            adjustAdRevenue.SetRevenue(adInfo.Revenue, "USD");
+            adjustAdRevenue.AdRevenueNetwork = adInfo.NetworkName;
+            Adjust.TrackAdRevenue(adjustAdRevenue);   
+        }
+    }
+    
     // public static void SendRevenue_ToAppflyer_MaxApplovin(MaxSdkBase.AdInfo adValue)
     // {
     //     if (adValue != null)
@@ -140,6 +126,33 @@ public static class TrackingRevenueConnector
     //     }
     //
     // }
+
+    //public static void SendRevenue_ToAppflyer_Admob(GoogleMobileAds.Api.AdValue adValue, string adSource, string adFormat)
+    //{
+    //    double revenue = adValue.Value / 1000000f;
+
+    //    Dictionary<string, string> dic = new Dictionary<string, string>();
+    //    dic.Add(FirebaseAnalytics.ParameterAdSource, adSource);
+    //    dic.Add(FirebaseAnalytics.ParameterAdFormat, adFormat);
+
+    //    AppsFlyer.logAdRevenue(new AFAdRevenueData("admob", MediationNetwork.GoogleAdMob, "USD", revenue), dic);
+
+    //}
+
+    //public static void SendRevenue_ToFirebase_Admob(GoogleMobileAds.Api.AdValue adValue, string adSource, string adFormat)
+    //{
+    //    double? revenue = adValue.Value;        
+    //    var impressionParameters = new[]
+    //    {
+    //            new Parameter("ad_platform", "ADMOD"),
+    //            new Parameter("ad_source",adSource),                
+    //            new Parameter("ad_format", adFormat),
+    //            new Parameter("value", (float)revenue/ 1000000f),
+    //            new Parameter("currency", "USD"),
+    //    };
+    //    Debug.Log("Admob Ad Source " + adSource);
+    //    FirebaseManager.Instance.LogRevenueToAdmob(impressionParameters);       
+    //}
 
     //public static void SendRevenueAdmob_To_Facebook(AdValue adValue)
     //{

@@ -586,7 +586,7 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
     private void OnAdRevenuePaidEvent(string arg1, MaxSdkBase.AdInfo adInfo)
     {
         TrackingRevenueConnector.SendRevenue_ToFirebase_MaxApplovin(adInfo);
-        // TrackingRevenueConnector.SendRevenue_ToAppflyer_MaxApplovin(adInfo);
+        TrackingRevenueConnector.SendRevenue_ToAdjust_MaxAppLovin(adInfo);
         // TrackingRevenueConnector.SendRevenue_ToFacebook_MaxApplovin(adInfo);
     }
 
