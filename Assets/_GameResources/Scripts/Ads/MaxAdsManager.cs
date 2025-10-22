@@ -7,6 +7,7 @@ using Analytics;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using ColorBlockCrush;
+using Yoolax.Framework;
 
 public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
 {
@@ -81,6 +82,8 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
         {
             return;
         }
+
+        Analytics.AnalyticManager.Instance.adPlacement = UiHolderManager.Instance.GetCurrentPlacement();
         UnityEngine.Debug.Log("Show Inter Max");
         if (TestManager.IsCheating && TestManager.IsAdsOff)
         {
@@ -114,6 +117,7 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
     }
     public void ShowRewardedAd(string adUnitId, Action onComplete = null)
     {
+        Analytics.AnalyticManager.Instance.adPlacement = UiHolderManager.Instance.GetCurrentPlacement();
         this.onComplete = onComplete;
         this.acceptCallback = false;
 
@@ -222,17 +226,26 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
 
     private void OnBannerAdLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
     {
-        
+        AdsAnalyticStruct adAnalyticStruct = new AdsAnalyticStruct();
+        adAnalyticStruct = adAnalyticStruct.SetBaseAd(adInfo.AdFormat, "Max", adInfo.NetworkName)
+            .SetAdRequest(1, 0);
+        Server.Get<OnAdRequestEventLog>().Dispatch(adAnalyticStruct);
     }
 
     private void OnBannerAdLoadFailedEvent(string adUnitId, MaxSdkBase.ErrorInfo errorInfo) 
     {
-        
+        AdsAnalyticStruct adAnalyticStruct = new AdsAnalyticStruct();
+        adAnalyticStruct = adAnalyticStruct.SetBaseAd("Null", "Max", "Null")
+            .SetAdRequest(0, 0);
+        Server.Get<OnAdRequestEventLog>().Dispatch(adAnalyticStruct);
     }
 
     private void OnBannerAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) 
     {
-        
+        AdsAnalyticStruct adAnalyticStruct = new AdsAnalyticStruct();
+        adAnalyticStruct = adAnalyticStruct.SetBaseAd(adInfo.AdFormat, "Max", adInfo.NetworkName)
+            .SetAdClick();
+        Server.Get<OnAdClickEventLog>().Dispatch(adAnalyticStruct);
     }
 
     private void OnBannerAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) { }
@@ -288,7 +301,11 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
             if (timers.TryGetValue(adUnitId, out sw)) timers.Remove(adUnitId);
         }
         var elapsedMs = sw != null ? sw.Elapsed.TotalMilliseconds : -1;
-        
+
+        AdsAnalyticStruct adAnalyticStruct = new AdsAnalyticStruct();
+        adAnalyticStruct = adAnalyticStruct.SetBaseAd(adInfo.AdFormat, "Max", adInfo.NetworkName)
+            .SetAdRequest(1, Math.Max((float)(elapsedMs / 1000f), 0f));
+        Server.Get<OnAdRequestEventLog>().Dispatch(adAnalyticStruct);
         // Reset retry attempt
         retryAttemptInterstitial = 0;
     }
@@ -302,7 +319,11 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
             if (timers.TryGetValue(adUnitId, out sw)) timers.Remove(adUnitId);
         }
         var elapsedMs = sw != null ? sw.Elapsed.TotalMilliseconds : -1;
-        
+
+        AdsAnalyticStruct adAnalyticStruct = new AdsAnalyticStruct();
+        adAnalyticStruct = adAnalyticStruct.SetBaseAd("Null", "Max", "Null")
+            .SetAdRequest(0, Math.Max((float)(elapsedMs / 1000f), 0f));
+        Server.Get<OnAdRequestEventLog>().Dispatch(adAnalyticStruct);
         // AppLovin recommends that you retry with exponentially higher delays, up to a maximum delay (in this case 64 seconds)
 
         retryAttemptInterstitial++;
@@ -325,14 +346,21 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
 
     private void OnInterstitialClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) 
     {
-      
+        AdsAnalyticStruct adAnalyticStruct = new AdsAnalyticStruct();
+        adAnalyticStruct = adAnalyticStruct.SetBaseAd(adInfo.AdFormat, "Max", adInfo.NetworkName)
+            .SetAdClick();
+        Server.Get<OnAdClickEventLog>().Dispatch(adAnalyticStruct);
     }
 
     private void OnInterstitialHiddenEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
     {
         double ms = (DateTime.Now - startShowAds).TotalMilliseconds;
         Time.timeScale = 1;
-        
+
+        AdsAnalyticStruct adAnalyticStruct = new AdsAnalyticStruct();
+        adAnalyticStruct = adAnalyticStruct.SetBaseAd(adInfo.AdFormat, "Max", adInfo.NetworkName)
+            .SetAdComplete(EndType.done, (float)ms);
+        Server.Get<OnAdCompleteEventLog>().Dispatch(adAnalyticStruct);
 
         StartCoroutine(DelayCloseAds(() =>
         {
@@ -401,7 +429,11 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
             if (timers.TryGetValue(adUnitId, out sw)) timers.Remove(adUnitId);
         }
         var elapsedMs = sw != null ? sw.Elapsed.TotalMilliseconds : -1;
-        
+
+        AdsAnalyticStruct adAnalyticStruct = new AdsAnalyticStruct();
+        adAnalyticStruct = adAnalyticStruct.SetBaseAd(adInfo.AdFormat, "Max", adInfo.NetworkName)
+            .SetAdRequest(1, Math.Max((float)(elapsedMs / 1000f), 0f));
+        Server.Get<OnAdRequestEventLog>().Dispatch(adAnalyticStruct);
         // Reset retry attempt
         retryAttemptRewarded = 0;
     }
@@ -415,7 +447,11 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
             if (timers.TryGetValue(adUnitId, out sw)) timers.Remove(adUnitId);
         }
         var elapsedMs = sw != null ? sw.Elapsed.TotalMilliseconds : -1;
-        
+
+        AdsAnalyticStruct adAnalyticStruct = new AdsAnalyticStruct();
+        adAnalyticStruct = adAnalyticStruct.SetBaseAd("Null", "Max", "Null")
+            .SetAdRequest(0, Math.Max((float)(elapsedMs / 1000f), 0f));
+        Server.Get<OnAdRequestEventLog>().Dispatch(adAnalyticStruct);
         // AppLovin recommends that you retry with exponentially higher delays, up to a maximum delay (in this cas      Debug.LogError("InterRewardChecker 1");e 64 seconds).
 
         retryAttemptRewarded++;
@@ -439,13 +475,21 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
 
     private void OnRewardedAdClickedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo) 
     {
-        
+        AdsAnalyticStruct adAnalyticStruct = new AdsAnalyticStruct();
+        adAnalyticStruct = adAnalyticStruct.SetBaseAd(adInfo.AdFormat, "Max", adInfo.NetworkName)
+            .SetAdClick();
+        Server.Get<OnAdClickEventLog>().Dispatch(adAnalyticStruct);
     }
 
     private void OnRewardedAdHiddenEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
     {
         double ms = (DateTime.Now - startShowAds).TotalMilliseconds; UnityEngine.Debug.Log("End Show Reward " + DateTime.Now + " " + startShowAds);
         Time.timeScale = 1;
+
+        AdsAnalyticStruct adAnalyticStruct = new AdsAnalyticStruct();
+        adAnalyticStruct = adAnalyticStruct.SetBaseAd(adInfo.AdFormat, "Max", adInfo.NetworkName)
+            .SetAdComplete(acceptCallback ? EndType.done : EndType.quit, (float)ms);
+        Server.Get<OnAdCompleteEventLog>().Dispatch(adAnalyticStruct);
 
         StartCoroutine(DelayCloseAds(() =>
         {
@@ -541,7 +585,7 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
     
     private void OnAdRevenuePaidEvent(string arg1, MaxSdkBase.AdInfo adInfo)
     {
-        // TrackingRevenueConnector.SendRevenue_ToFirebase_MaxApplovin(adInfo);
+        TrackingRevenueConnector.SendRevenue_ToFirebase_MaxApplovin(adInfo);
         // TrackingRevenueConnector.SendRevenue_ToAppflyer_MaxApplovin(adInfo);
         // TrackingRevenueConnector.SendRevenue_ToFacebook_MaxApplovin(adInfo);
     }

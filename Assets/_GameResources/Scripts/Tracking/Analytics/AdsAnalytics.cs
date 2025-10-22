@@ -16,7 +16,6 @@ namespace Analytics
 
         public static void LogAdRequestEvent(AdsAnalyticStruct adStruct)
         {
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("ad_format", adStruct.adFormat),
@@ -37,12 +36,10 @@ namespace Analytics
                 { "load_time", adStruct.loadTime }
             };
             FirebaseManager.Instance.AddEvent("ad_request", paramData, parameters);
-#endif
         }
 
         public static void LogAdImpressionEvent(AdsAnalyticStruct adStruct)
         {
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("ad_format", adStruct.adFormat),
@@ -62,12 +59,10 @@ namespace Analytics
                 { "value", adStruct.value }
             };
             FirebaseManager.Instance.AddEvent("ad_impression", paramData, parameters);
-#endif
         }
 
         public static void LogAdClickEvent(AdsAnalyticStruct adStruct)
         {
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("ad_format", adStruct.adFormat),
@@ -83,12 +78,10 @@ namespace Analytics
                 { "placement", adStruct.placement }               
             };
             FirebaseManager.Instance.AddEvent("ad_click", paramData, parameters);
-#endif
         }
 
         public static void LogAdCompleteEvent(AdsAnalyticStruct adStruct)
         {
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("ad_format", adStruct.adFormat),
@@ -108,7 +101,6 @@ namespace Analytics
                 { "placement", adStruct.placement }
             };
             FirebaseManager.Instance.AddEvent("ad_complete", paramData, parameters);
-#endif
         }
     }
 
