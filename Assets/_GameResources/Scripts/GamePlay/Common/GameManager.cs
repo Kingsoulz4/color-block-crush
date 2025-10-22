@@ -24,6 +24,7 @@ namespace ColorBlockCrush
 
         private void Start()
         {
+            Input.multiTouchEnabled = false;
             InitAllManager();
             Init();
         }

@@ -98,10 +98,10 @@ public class ConveyorController : MonoBehaviour
         gun.TrayItem = trayItem;
         AddTrayItem(trayItem);
         UpdateTrayText();
+        gun.OnGunEmpty += OnGunEmpty;
 
         gun.MoveToConeyor(position, () =>
         {
-            gun.OnGunEmpty += OnGunEmpty;
             trayItem.SetChild(gun);
             trayItem.Move();
         }, delay);

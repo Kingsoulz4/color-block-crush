@@ -340,8 +340,6 @@ namespace ColorBlockCrush
             {
                 CurrentTarget = null;
 
-
-
                 CheckDisappear();
             }
         }
@@ -356,10 +354,16 @@ namespace ColorBlockCrush
 
                 PlayAnim(Constant.GunAnimation.DISAPPEAR);
 
-                foreach (var gun in ConnectedGuns)
+                foreach (var gun in AllConnectedGuns)
                 {
-                    gun.CheckDisappear();
+                    if (gun != this)
+                    {
+                        gun.CheckDisappear();
+                    }
                 }
+
+                moveToConveyorTw.Kill();
+                moveSortSlotTw.Kill();
 
                 this.Wait(0.3f, () =>
                 {
@@ -625,9 +629,9 @@ namespace ColorBlockCrush
             }
             else
             {
-                for (int i = 0; i < ConnectedGuns.Count; i++)
+                for (int i = 0; i < AllConnectedGuns.Count; i++)
                 {
-                    if (ConnectedGuns[i].BulletCount > 0)
+                    if (AllConnectedGuns[i].BulletCount > 0)
                     {
                         return false;
                     }
