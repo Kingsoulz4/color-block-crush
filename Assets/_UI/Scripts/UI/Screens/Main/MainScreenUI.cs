@@ -132,6 +132,7 @@ public class MainScreenUI : ScreenUI
     {
         base.Active();
         UpdateUI();
+        UserDataManager.PlayType = Analytics.PlayType.home;
         AudioManager.Instance.StopMusic("BG_Gameplay");
         AudioManager.Instance.PlayMusic("BG_Home", 1, true);
     }

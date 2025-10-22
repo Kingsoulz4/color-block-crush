@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+using Analytics;
 using UnityEngine;
 using UnityEngine.UI;
+using Yoolax.Framework;
 
 namespace ColorBlockCrush
 {
@@ -34,6 +33,15 @@ namespace ColorBlockCrush
         {
             base.Show(onClose);
             AudioManager.Instance.PlayOneShot(failSfx, 1);
+            LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
+            levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelEndStruct(UserDataManager.PlayType,
+                LevelController.Instance.GunBoardController.TotalGunCount, LevelResult.lose, 
+                LoseBy.full_slot, (float)(DateTime.Now - LevelManager.Instance.timeStart).TotalSeconds);
+            Server.Get<OnLevelEndEventLog>().Dispatch(levelAnalyticStruct);
+
+            UserDataManager.LoseIndex++;
+            UserDataManager.LoseStreak++;
+            UserDataManager.WinStreak = 0;
         }
 
         private void OnClickClose()

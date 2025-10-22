@@ -1,6 +1,7 @@
 
 using Newtonsoft.Json;
 using System;
+using Analytics;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -42,6 +43,8 @@ public class UserDataManager : MonoBehaviour
     {
         public int playIndex;
         public int loseIndex;
+        public int exitIndex;
+        public PlayType playType;
     }
     
     private const string LEVEL_DATA_KEY = Constant.PlayerPrefs.LEVEL_DATA_KEY;
@@ -386,6 +389,28 @@ public class UserDataManager : MonoBehaviour
             SaveLevelData(data);
         }
     }
+    
+    public static int ExitIndex
+    {
+        get { return LoadLevelData().exitIndex; }
+        set
+        {
+            LevelData data = LoadLevelData();
+            data.exitIndex = value;
+            SaveLevelData(data);
+        }
+    }
+    
+    public static PlayType PlayType
+    {
+        get { return LoadLevelData().playType; }
+        set
+        {
+            LevelData data = LoadLevelData();
+            data.playType = value;
+            SaveLevelData(data);
+        }
+    }
 
     public static void AddBooster(BoosterType boosterType, int quantity)
     {
@@ -471,8 +496,10 @@ public class UserDataManager : MonoBehaviour
     {
         return new LevelData
         {
-            playIndex = 1,
+            playIndex = 0,
             loseIndex = 0,
+            exitIndex = 0,
+            playType = PlayType.home
         };
     }
 }
