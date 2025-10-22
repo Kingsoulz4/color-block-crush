@@ -99,7 +99,7 @@ namespace ColorBlockCrush
             }
 
             var textRect = (RectTransform)m_textHealth.transform;
-            textRect.sizeDelta = new Vector2(Mathf.Max(Size.x, 1f), Mathf.Max(Size.y, 2f)) * 0.9f;
+            textRect.sizeDelta = new Vector2(Mathf.Max(Size.x, 1f), Mathf.Max(Size.y, 1.35f)) * 0.9f;
                 
         }
 
