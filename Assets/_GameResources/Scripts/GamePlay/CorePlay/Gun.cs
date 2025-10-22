@@ -91,6 +91,7 @@ namespace ColorBlockCrush
             BulletRayCount = gunDataP.bulletNumber;
             ColumnIndex = column;
             IsFrontRow = false;
+            SetTextBlur(true);
             isFireFirstTime = false;
             isTurning = false;
             gunData = gunDataP;
@@ -181,6 +182,7 @@ namespace ColorBlockCrush
         {
             base.SetIndex(index);
             IsFrontRow = index == 0;
+            SetTextBlur(!IsFrontRow);
 
             if (index == 0)
             {
@@ -495,6 +497,12 @@ namespace ColorBlockCrush
         private void EnableTextBulletCount(bool enable)
         {
             bulletCountText.gameObject.SetActive(enable);
+            SetTextBlur(!enable);
+        }
+
+        private void SetTextBlur(bool enable)
+        {
+            bulletCountText.alpha = enable ? 100f / 255f : 1f;
         }
 
         #region Move spline
@@ -508,7 +516,7 @@ namespace ColorBlockCrush
             GunPos = GunPos.TWEEN_SORT;
             currentFireDir = RotationDirection.Up;
             currentMoveFireDir = RotationDirection.Right;
-
+            SetTextBlur(false);
 
             moveToConveyorTw = moveToConveyorSq.Append(
                 transform.DOJump(endPos, moveToConveyorJumpForce, 1, moveToConveyorDuration + delay)).SetEase(moveToConveyorEase).OnComplete(() =>
