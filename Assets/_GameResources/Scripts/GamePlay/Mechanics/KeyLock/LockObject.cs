@@ -37,6 +37,8 @@ namespace ColorBlockCrush
 
         public override void UpdateWhenColumnChange()
         {
+            if (IsResolved) return;
+
             if (Index == 0)
             {
                 var pendingKey = LevelManager.Instance.LevelGame.BlockBoardController.GetPendingKey();
