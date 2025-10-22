@@ -72,7 +72,12 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
     }
     public void ShowInterstitialAd(string adUnitId, Action onComplete = null)
     {
-        if (TestManager.IsCheating /*&& ToolkitManager.IsAdsOff*/)
+        if (!MaxAdsManager.Instance.IsShowPopupDefault(MaxKeys.interstitialID))
+        {
+            return;
+        }
+        UnityEngine.Debug.Log("Show Inter Max");
+        if (TestManager.IsCheating && TestManager.IsAdsOff)
         {
             onComplete?.Invoke();
             return;
@@ -107,7 +112,7 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
         this.onComplete = onComplete;
         this.acceptCallback = false;
 
-        if (TestManager.IsCheating /*&& ToolkitManager.IsAdsOff*/)
+        if (TestManager.IsCheating && TestManager.IsAdsOff)
         {
             var popupAds = UIManager.Instance.ShowPopup<PopupAds>(() =>
             {
@@ -502,27 +507,26 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
         callback?.Invoke();
     }
 
-//     public bool IsShowPopupDefault(string adUnitId)
-//     {
-//
-// #if APPLOVIN_MAX && !UNITY_EDITOR
-//         if (!MaxSdk.IsInterstitialReady(adUnitId))
-//         {
-//             FirebaseManager.Instance.LogEvent_Fail_Interstitial();
-//             return false;
-//         }
-// #endif
-//         float time = Time.unscaledTime - currentTime;
-//         currentTimeCheck = time;
-//         float timeShowInterstitial = DataManager.Instance.UserInfoPrefs.GetTimeShowInterstitial();
-//         if (time >= timeShowInterstitial)
-//         {
-//             currentTime = Time.unscaledTime;
-//             return true;
-//         }
-//         //Debug.LogError("Time Interstitial:" + time + "//" + timeShowInterstitial);
-//         return false;
-//     }
+    public bool IsShowPopupDefault(string adUnitId)
+    {
+
+#if !UNITY_EDITOR
+        if (!MaxSdk.IsInterstitialReady(adUnitId))
+        {
+            return false;
+        }
+#endif
+        float time = Time.unscaledTime - currentTime;
+        currentTimeCheck = time;
+        float timeShowInterstitial = 60f;
+        if (time >= timeShowInterstitial)
+        {
+            currentTime = Time.unscaledTime;
+            return true;
+        }
+        //Debug.LogError("Time Interstitial:" + time + "//" + timeShowInterstitial);
+        return false;
+    }
 
     public void ResetTimeShowPopup()
     {

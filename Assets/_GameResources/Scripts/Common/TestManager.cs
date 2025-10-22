@@ -15,18 +15,35 @@ namespace ColorBlockCrush
         [SerializeField] Button btn_Load;
         [SerializeField] Button btn_nextLevel;
         [SerializeField] Button btn_backLevel;
+        [SerializeField] Button btn_setCoins;
         [SerializeField] InputField inputField;
         [SerializeField] InputField inputLevelSet;
+        [SerializeField] InputField inputCoins;
         [SerializeField] private Button btnTestLose;
         [SerializeField] private Button btnTestWin;
         [SerializeField] private Button btnExit;
         [SerializeField] private GameObject cheatingPanel;
+        [SerializeField] private Toggle adsOffToogle;
+        [SerializeField] private Toggle testServerToogle;
         
         
         public static bool IsCheating
         {
             get => PlayerPrefs.GetInt("IsCheating", 0) > 0;
             set => PlayerPrefs.SetInt("IsCheating", value? 1: 0);
+        }
+        
+        public static bool IsAdsOff
+        {
+            get
+            {
+                return PlayerPrefs.GetInt("debugAdsoff", 0) == 1;
+            }
+
+            set
+            {
+                PlayerPrefs.SetInt("debugAdsoff", value ? 1 : 0);
+            }
         }
 
         public void UpdateState()
@@ -81,6 +98,8 @@ namespace ColorBlockCrush
                 });
             }    
             
+            btn_setCoins.onClick.AddListener(SetCoinButton);
+            
             btnTestLose.onClick.AddListener(LoseLevel);
             
             btnTestWin.onClick.AddListener(() =>
@@ -89,6 +108,9 @@ namespace ColorBlockCrush
             });
             
             btnExit.onClick.AddListener(ReturnLevelEditor);
+            
+            adsOffToogle.onValueChanged.AddListener(OnAdsOffTogle);
+            adsOffToogle.isOn = IsAdsOff;
         }
 
         private void LoadLevel()
@@ -149,6 +171,20 @@ namespace ColorBlockCrush
                 Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
                 SceneManager.LoadScene(0);
             }
+        }
+        
+        private void SetCoinButton()
+        {
+            if (int.TryParse(inputCoins.text, out int result))
+            {
+                UserDataManager.AddGold(1000, "set coin", false);;
+                PlayerPrefs.Save();
+            }
+        }
+        
+        private void OnAdsOffTogle(bool arg0)
+        {
+            IsAdsOff = arg0;
         }
 
         private void AddRes()
