@@ -50,6 +50,7 @@ namespace ColorBlockCrush
                     }
                     var newItem = Instantiate(m_itemPrefab, m_listRewardHolders[j]);
                     newItem.gameObject.SetActive(true);
+                    Debug.Log("Init Item " + newItem.gameObject.name + " " + newItem.gameObject.activeSelf + " " + newItem.transform.localScale);
                     newItem.SetData(listRewardData[i]);
                   
                 }
@@ -63,6 +64,7 @@ namespace ColorBlockCrush
             {
                 for(int j=0; j < m_listRewardHolders[i].childCount; j++)
                 {
+                    Debug.Log("Init Horizontal " + m_listRewardHolders[j]);
                     m_listRewardHolders[j].transform.localScale = Vector3.zero;
                 }
             }
@@ -79,6 +81,7 @@ namespace ColorBlockCrush
             {
                 for (int j = 0; j < m_listRewardHolders[i].childCount; j++)
                 {
+                    Debug.Log("Scale Horizontal " + m_listRewardHolders[j]);
                     m_listRewardHolders[j].transform.DOScale(1, 0.2f).SetEase(Ease.OutBack);
                     yield return new WaitForSeconds(0.15f);
                 }

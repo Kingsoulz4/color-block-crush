@@ -1,7 +1,6 @@
-Pig_jump.png
+Pig.png
 size:1026,760
 filter:Linear,Linear
-pma:true
 3
 bounds:871,189,27,31
 offsets:1,1,29,33

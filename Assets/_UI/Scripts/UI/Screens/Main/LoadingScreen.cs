@@ -13,7 +13,7 @@ namespace ColorBlockCrush
 
         public void Show(Action callback)
         {
-            m_sliderProgressLoading.DOValue(1, 1f).OnComplete(() =>
+            m_sliderProgressLoading.DOValue(1, 2f).OnComplete(() =>
             {
                 callback?.Invoke();
             });
