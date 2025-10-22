@@ -235,16 +235,16 @@ namespace ColorBlockCrush
                     Dictionary<int, List<Gun>> listGunByColumn = new();
                     listGunByColumn[ColumnIndex] = new();
                     listGunByColumn[ColumnIndex].Add(this);
-                    foreach(var gun in AllConnectedGuns)
+                    foreach (var gun in AllConnectedGuns)
                     {
-                        if(!listGunByColumn.ContainsKey(gun.ColumnIndex))
+                        if (!listGunByColumn.ContainsKey(gun.ColumnIndex))
                         {
                             listGunByColumn[gun.ColumnIndex] = new();
                         }
                         listGunByColumn[gun.ColumnIndex].Add(gun);
                     }    
 
-                    foreach(var item in listGunByColumn)
+                    foreach (var item in listGunByColumn)
                     {
                         var listGun = item.Value.OrderBy(x => x.Index);
                         if (!listGun.First().IsFrontRow) return false;
@@ -527,8 +527,13 @@ namespace ColorBlockCrush
                 callback?.Invoke();
                 GunPos = GunPos.ON_CONVEYOR;
                 GetTargetBock();
-
             });
+
+            this.Wait(moveToConveyorDuration, () =>
+            {
+                AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
+            });
+
             moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration + delay));
             moveToConveyorSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration + delay));
             moveToConveyorSq.SetId(this);
@@ -561,6 +566,12 @@ namespace ColorBlockCrush
                 PlayAnim(Constant.GunAnimation.IDLE);
                 AllConnectedGunCount = OriginConnectedGun;
             });
+
+            this.Wait(moveToSlotDuration, () =>
+            {
+                AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
+            });
+
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
             moveToSlotSq.Join(transform.DOScale(Vector3.one, moveToSlotDuration));
             moveToSlotSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration));
@@ -596,11 +607,11 @@ namespace ColorBlockCrush
         public override void MoveColumn(Vector3 targetPos, float _shiftDuration, Ease _shiftEase)
         {
             Sequence moveSortSlotSq = DOTween.Sequence();
-            if(moveSortSlotTw != null && moveSortSlotTw.IsPlaying())
+            if (moveSortSlotTw != null && moveSortSlotTw.IsPlaying())
             {
                 moveSortSlotTw.Kill();
                 transform.position = currentTargetPos;
-                
+
             }
 
             currentTargetPos = targetPos;

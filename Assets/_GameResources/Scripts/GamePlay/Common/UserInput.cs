@@ -63,7 +63,6 @@ namespace ColorBlockCrush
 
         private void DetectAndTapGun(Vector3 screenPosition)
         {
-            if (BoosterManager.Instance && BoosterManager.Instance.SuperShootBooster.InProgress) return;
 
             Ray ray = _camera.ScreenPointToRay(screenPosition);
             RaycastHit hit;
@@ -80,6 +79,8 @@ namespace ColorBlockCrush
 
                 if (gun != null)
                 {
+                    AudioManager.Instance.PlayOneShot(Constant.SFX.CLICK);
+                    if (BoosterManager.Instance && BoosterManager.Instance.SuperShootBooster.InProgress) return;
                     gun.OnGunClicked();
                     LevelEvent.OnGunClick?.Invoke(gun);
                 }
