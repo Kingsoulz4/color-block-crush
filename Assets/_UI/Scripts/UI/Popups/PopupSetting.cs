@@ -61,7 +61,7 @@ public class PopupSetting : PopupUI
                     UIManager.Instance.ShowScreen<MainScreenUI>();
                 });
                 Hide();
-                HeartManager.UseHeart(1);
+                //HeartManager.UseHeart(1);
                 
             };
         //}
@@ -86,7 +86,6 @@ public class PopupSetting : PopupUI
             
             LevelManager.Instance.OnRetryGame();
             Hide();
-            HeartManager.UseHeart(1);
         };
         popupConfirmLeave.OnClose = () => { };
     }

@@ -46,11 +46,13 @@ namespace ColorBlockCrush
             iapAnalyticStruct = iapAnalyticStruct.SetBaseIAP(UiHolderManager.Instance.GetCurrentPlacement(), IAPShowType.shop, TriggerType.click, "Null")
                 .SetIAPShow();
             Server.Get<OnIAPShowEventLog>().Dispatch(iapAnalyticStruct);
+            Server.Get<OnBuyNoAds>().AddListener(UpdateUI);
             UpdateUI();
         }
 
         private void OnDisable()
         {
+            Server.Get<OnBuyNoAds>().RemoveListener(UpdateUI);
             InAppPurchaseAnalyticStruct iapAnalyticStruct = new InAppPurchaseAnalyticStruct();
             iapAnalyticStruct = iapAnalyticStruct.SetBaseIAP(UiHolderManager.Instance.GetCurrentPlacement(), IAPShowType.shop, TriggerType.click, "Null")
                 .SetIAPClose(Time.time - AnalyticManager.Instance.timeOpenPopupIap);

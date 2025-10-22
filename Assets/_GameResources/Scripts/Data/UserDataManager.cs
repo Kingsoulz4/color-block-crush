@@ -79,6 +79,7 @@ public class UserDataManager : MonoBehaviour
 
     public static void AddHeart(int amount, string where, bool hasAnimation, int typeHeart = 0, string reason = "")
     {
+        Debug.Log($"Add Heart {Heart} {amount}");
         if (typeHeart == 0)
         {
             if (where != " ")

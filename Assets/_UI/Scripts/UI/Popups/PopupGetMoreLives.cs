@@ -72,6 +72,7 @@ namespace ColorBlockCrush
 
         private void OnClickClaimByAds()
         {
+            Debug.Log("Claim Heart");
             MaxAdsManager.Instance.ShowRewardedAd(MaxKeys.rewardedID, () =>
             {
                 UserDataManager.AddHeart(1, "refill_heart", false, reason: ReasonType.watch_ads.ToString());

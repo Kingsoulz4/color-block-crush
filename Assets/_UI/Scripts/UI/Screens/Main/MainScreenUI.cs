@@ -151,6 +151,7 @@ public class MainScreenUI : ScreenUI
     {
         if (UserDataManager.Heart > 0)
         {
+            HeartManager.UseHeart(1);
             var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
             loading.Show(() =>
             {

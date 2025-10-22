@@ -165,7 +165,7 @@ namespace ColorBlockCrush
             {
                 var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
 
-                HeartManager.UseHeart(1);
+                //HeartManager.UseHeart(1);
 
                 popupLose.OnClose = () =>
                 {
@@ -184,7 +184,7 @@ namespace ColorBlockCrush
                 {
                     var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
 
-                    HeartManager.UseHeart(1);
+                    //HeartManager.UseHeart(1);
 
                     popupLose.OnClose = () =>
                     {
@@ -201,8 +201,9 @@ namespace ColorBlockCrush
 
         public void OnRetryGame()
         {
-            if (UserDataManager.Heart > 1)
+            if (UserDataManager.Heart > 0)
             {
+                HeartManager.UseHeart(1);
                 UserDataManager.PlayType = PlayType.restart;
                 StartCurrentLevel();
                 var loading = UIManager.Instance.ShowScreen<LoadingScreen>();

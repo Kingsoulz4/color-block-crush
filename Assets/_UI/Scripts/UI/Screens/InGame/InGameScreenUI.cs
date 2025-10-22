@@ -410,7 +410,7 @@ namespace ColorBlockCrush
             popupConfirmLeave.SetTextButtonConfirm("Retry");
             popupConfirmLeave.OnConfirm = () =>
             {
-                HeartManager.UseHeart(1);
+                //HeartManager.UseHeart(1);
                 LevelManager.Instance.OnRetryGame();
             };
             popupConfirmLeave.OnClose = () => { };

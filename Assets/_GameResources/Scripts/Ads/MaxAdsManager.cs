@@ -137,6 +137,7 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
             currentTime = Time.unscaledTime;
             onComplete?.Invoke();
         });
+        return;
 #else
 
         if (MaxSdk.IsRewardedAdReady(adUnitId))
