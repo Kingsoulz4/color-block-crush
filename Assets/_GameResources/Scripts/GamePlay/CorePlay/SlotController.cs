@@ -88,7 +88,6 @@ namespace ColorBlockCrush
                 {
                     _gunsInSlots[i].RemoveAllConnection();
                     _gunsInSlots[i].ForceDisappear();
-                    RemoveGun(_gunsInSlots[i]);
                 }
             }
             ShiftAllToTheLeft();
