@@ -243,7 +243,7 @@ namespace ColorBlockCrush
                             listGunByColumn[gun.ColumnIndex] = new();
                         }
                         listGunByColumn[gun.ColumnIndex].Add(gun);
-                    }    
+                    }
 
                     foreach (var item in listGunByColumn)
                     {
@@ -686,6 +686,9 @@ namespace ColorBlockCrush
             }
         }
 
+
+        Block lastTarget;
+        float lastAngle;
         public bool IsBlockInShootingAngle(Block block)
         {
             Vector3 gunPos = transform.position;
@@ -701,8 +704,9 @@ namespace ColorBlockCrush
             shootDir.Normalize();
 
             float angle = Vector3.Angle(shootDir, toBlock);
-
+            //Debug.Log("Angle " + angle);
             var shootingAngle = maxShootingAngle;
+
 
             if (currentFireDir == RotationDirection.Up || currentFireDir == RotationDirection.Down)
             {
@@ -714,6 +718,17 @@ namespace ColorBlockCrush
             }
 
             bool isInAngle = angle <= shootingAngle;
+
+            if (!isInAngle && block == lastTarget && angle > lastAngle)
+            {
+                return true;
+            }
+
+            if (isInAngle)
+            {
+                lastTarget = block;
+                lastAngle = angle;
+            }
 
             return isInAngle;
         }
