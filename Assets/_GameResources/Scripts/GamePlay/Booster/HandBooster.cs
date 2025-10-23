@@ -49,6 +49,7 @@ namespace ColorBlockCrush
             base.CancelBooster();
             IsShowConfirm = false;
             Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
+            LevelController.Instance.ConveyorController.MoveAllTray();
         }
 
         public override void ActiveBooster()
