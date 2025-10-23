@@ -25,7 +25,7 @@ MonoBehaviour:
       quantity: 2400
     - type: 3
       quantity: 1
-    - type: 4
+    - type: 2
       quantity: 1
     - type: 5
       quantity: 1
@@ -41,7 +41,7 @@ MonoBehaviour:
       quantity: 1200
     - type: 3
       quantity: 1
-    - type: 4
+    - type: 2
       quantity: 1
     - type: 5
       quantity: 1
