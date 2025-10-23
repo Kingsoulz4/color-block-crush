@@ -14,6 +14,7 @@ public class UserDataManager : MonoBehaviour
     [System.Serializable]
     public class UserData
     {
+        public int session;
         public int level;
         public int levelSetID;
         public int gold;
@@ -61,7 +62,7 @@ public class UserDataManager : MonoBehaviour
         {
             string[] types = { ResourceType.currency.ToString() };
             string[] names = { "coin" };
-            string[] amounts = { value.ToString() };            
+            string[] amounts = { Math.Abs(value).ToString() };            
             ResourceAnalyticStruct resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, 
                 where, reason);
             if(value >= 0)
@@ -155,6 +156,18 @@ public class UserDataManager : MonoBehaviour
             SaveUserData(data);
         }
     }
+
+    public static int Session
+    {
+        get { return LoadUserData().session; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.session = value;
+            SaveUserData(data);
+        }
+    }
+    
     public static int Level
     {
         get { return LoadUserData().level; }
@@ -557,6 +570,7 @@ public class UserDataManager : MonoBehaviour
             buyIapCount = 0,
             winStreak = 0,
             loseStreak = 0,
+            session = 0
         };
     }
     

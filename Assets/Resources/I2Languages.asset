@@ -138,7 +138,7 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Select a color to remove from the level
+      - Select a color to shoot with Rainbow Gun
       - "Ch\u1ECDn m\u1ED9t m\xE0u \u0111\u1EC3 x\xF3a kh\u1ECFi c\u1EA5p \u0111\u1ED9"
       - 
       Flags: 000000
@@ -147,7 +147,7 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Magnet
+      - Super shoot
       - "Nam Ch\xE2m"
       - 
       Flags: 000000
@@ -648,15 +648,6 @@ MonoBehaviour:
       - 
       Flags: 000000
       Languages_Touch: []
-    - Term: Feature/txt_unlocked
-      TermType: 0
-      Description: 
-      Languages:
-      - Unlocked!
-      - "\u0110\xE3 M\u1EDF Kh\xF3a!"
-      - 
-      Flags: 000000
-      Languages_Touch: []
     CaseInsensitiveTerms: 0
     OnMissingTranslation: 1
     mTerm_AppName: 
@@ -675,7 +666,7 @@ MonoBehaviour:
     Google_WebServiceURL: https://script.google.com/macros/s/AKfycbxMqCXyTiN_PyFrLYDE1XF4owNSWUfvCq-gYA1uLUPVkyzqXdhMeBghVyGIw1q_QqN_iA/exec
     Google_SpreadsheetKey: 1tez-f603ElTwS8Yfqi72E0Wq-69JaMVmL_cORyXOWac
     Google_SpreadsheetName: I2Loc gec Localization
-    Google_LastUpdatedVersion: 1760606982836
+    Google_LastUpdatedVersion: 1761213060639
     Google_Password: change_this
     GoogleUpdateFrequency: 3
     GoogleInEditorCheckFrequency: 2

@@ -1631,7 +1631,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 250
   m_ChildAlignment: 4
-  m_Spacing: 25
+  m_Spacing: 100
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -15019,6 +15019,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShuffleBoosterBtn
       objectReference: {fileID: 0}
+    - target: {fileID: 1799304157085138387, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1845148848640810924, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -15061,7 +15065,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_AnchorMin.x
@@ -15069,7 +15073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_SizeDelta.x
@@ -15109,11 +15113,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 840.5
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -25
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

@@ -311,14 +311,15 @@ namespace ColorBlockCrush
             popupWin.OnClaimedReward = (val) =>
             {
                 CurrentLevel++;
-                if (UserDataManager.Level < 10)
+                if (UserDataManager.Level < GameManager.Instance.levelTriggerData.levelBackToHome
+                    && UserDataManager.Session <= 1)
                 {
                     popupWin.ShowClaimReward(val, NextLevel);
                     //NextLevel();   
                 }
                 else
                 {
-                    if (UserDataManager.Level == 15)
+                    if (UserDataManager.Level == GameManager.Instance.levelTriggerData.levelShowPopupRate)
                     {
                         var popupRate = UIManager.Instance.ShowPopup<PopupRateGame>(() =>
                         {

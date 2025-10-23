@@ -77,7 +77,7 @@ public class MaxAdsManager : SingletonDontDestroyMono<MaxAdsManager>
         {
             return;
         }
-        if(UserDataManager.Level < 20) return;
+        if(UserDataManager.Level < GameManager.Instance.levelTriggerData.levelShowAds) return;
         if (!MaxAdsManager.Instance.IsShowPopupDefault(MaxKeys.interstitialID))
         {
             return;

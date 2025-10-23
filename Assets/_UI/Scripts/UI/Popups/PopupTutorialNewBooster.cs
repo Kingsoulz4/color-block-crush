@@ -46,7 +46,7 @@ namespace ColorBlockCrush
         {
             Action useBooster = () =>
             {
-                UserDataManager.AddBooster(boosterType, 3);
+                UserDataManager.AddBooster(boosterType, 2);
                 doneForceTut?.Invoke();
             };
             Server.Get<OnForceTutBooster>().Dispatch(useBooster, boosterType, m_imageFeatureIcon.transform.position);
