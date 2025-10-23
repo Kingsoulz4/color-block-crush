@@ -144,7 +144,7 @@ public class ConveyorController : MonoBehaviour
             var gun = movingTrayItems[i].MyGun;
             if (!gun)
             {
-                return;
+                continue;
             }
             gun.Scale(Vector3.one * 0.8f, 0.2f);
             gun.OnRevive();
@@ -157,7 +157,7 @@ public class ConveyorController : MonoBehaviour
             var gun = prepairTrayItems[i].MyGun;
             if (!gun)
             {
-                return;
+                continue;
             }
             gun.Scale(Vector3.one * 0.8f, 0.2f);
             gun.OnRevive();
@@ -166,8 +166,20 @@ public class ConveyorController : MonoBehaviour
         }
 
         Gun lastGunInSlot = LevelController.Instance.SlotController.GetLastGun();
+        if (lastGunInSlot.AllConnectedGuns.Count > 0)
+        {
+            LevelController.Instance.BonusSlotController.MoveGunsIn(lastGunInSlot.AllConnectedGuns);
+            foreach (var gun in lastGunInSlot.AllConnectedGuns)
+            {
+                LevelController.Instance.SlotController.RemoveGun(gun);
+                gun.Scale(Vector3.one * 0.8f, 0.2f);
+            }
+            return;
+        }
+
         lastGunInSlot.Scale(Vector3.one * 0.8f, 0.2f);
         LevelController.Instance.BonusSlotController.MoveGunIn(lastGunInSlot);
+
     }
 
     public void RemoveGunByColor(ColorType colorType)

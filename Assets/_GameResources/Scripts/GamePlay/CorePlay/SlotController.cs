@@ -232,7 +232,6 @@ namespace ColorBlockCrush
         public Gun GetLastGun()
         {
             Gun lastGun = _gunsInSlots[_gunsInSlots.Count-1];
-            RemoveGun(lastGun);
             return lastGun;
         }
 

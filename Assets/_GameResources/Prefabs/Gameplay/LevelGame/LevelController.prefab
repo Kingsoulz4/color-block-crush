@@ -2198,7 +2198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f25f399b2401f40b40f596b32758ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxSlots: 6
+  _maxSlots: 500
   _slotStartPosition: {x: -3.5, y: 0, z: -5}
   _slotSpacing: 1.5
   slotItemPrb: {fileID: 0}
