@@ -3,7 +3,10 @@ using Newtonsoft.Json;
 using System;
 using Analytics;
 using UnityEngine;
+using ColorBlockCrush.Tools;
 using static UnityEngine.Rendering.DebugUI;
+using System.Collections.Generic;
+using System.Linq;
 
 public class UserDataManager : MonoBehaviour
 {
@@ -45,6 +48,7 @@ public class UserDataManager : MonoBehaviour
         public int loseIndex;
         public int exitIndex;
         public PlayType playType;
+        public List<LevelConfig> cacheLevel; 
     }
     
     private const string LEVEL_DATA_KEY = Constant.PlayerPrefs.LEVEL_DATA_KEY;
@@ -454,6 +458,25 @@ public class UserDataManager : MonoBehaviour
             SaveLevelData(data);
         }
     }
+    
+    public static List<LevelConfig> GetCacheLevel() => LoadLevelData().cacheLevel;
+
+    public static LevelConfig CheckLevelExistInCache(int levelId)
+    {
+        if(GetCacheLevel() == null || GetCacheLevel().Count == 0) return null;
+
+        Debug.Log("Start Find");
+        LevelConfig level = GetCacheLevel().FirstOrDefault(level => level.levelId == levelId);
+
+        return level;
+    }
+
+    public static LevelConfig GetCurrentLevel()
+    {
+        if(GetCacheLevel() == null || GetCacheLevel().Count == 0) return null;
+
+        return GetCacheLevel()[0];
+    }
 
     public static void AddBooster(BoosterType boosterType, int quantity)
     {
@@ -499,17 +522,18 @@ public class UserDataManager : MonoBehaviour
         if (PlayerPrefs.HasKey(LEVEL_DATA_KEY))
         {
             string jsonData = PlayerPrefs.GetString(LEVEL_DATA_KEY);
-            return JsonConvert.DeserializeObject<LevelData>(jsonData);
+            return JsonUtility.FromJson<LevelData>(jsonData);
         }
         return GetDefaultLevelData();
     }
 
-    private static void SaveLevelData(LevelData data)
+    public static void SaveLevelData(LevelData data)
     {
-        string jsonData = JsonConvert.SerializeObject(data);
+        string jsonData = JsonUtility.ToJson(data);
         PlayerPrefs.SetString(LEVEL_DATA_KEY, jsonData);
         PlayerPrefs.Save();
     }
+    
     #endregion
 
 
@@ -542,7 +566,8 @@ public class UserDataManager : MonoBehaviour
             playIndex = 0,
             loseIndex = 0,
             exitIndex = 0,
-            playType = PlayType.home
+            playType = PlayType.home,
+            cacheLevel = new List<LevelConfig>() { null, null, null, null, null}
         };
     }
 }

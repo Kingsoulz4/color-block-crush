@@ -104,7 +104,9 @@ namespace ColorBlockCrush
             m_winContent.SetActive(true);
             UpdateInfo();
             base.Show(onClose);
+            FetchLevelManager.Instance.FetchLevels();
             AudioManager.Instance.PlayOneShot(winSfx, 1);
+            UserDataManager.AddHeart(1, "win", false, reason: ReasonType.reward.ToString());
             m_buttonClaimX2.gameObject.SetActive(UserDataManager.Level >= 10);
             
             LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();

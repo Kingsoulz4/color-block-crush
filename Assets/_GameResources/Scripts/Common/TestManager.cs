@@ -46,6 +46,19 @@ namespace ColorBlockCrush
             }
         }
 
+        public static bool TestServer
+        {
+            get
+            {
+                return PlayerPrefs.GetInt("testServer", 0) == 1;
+            }
+
+            set
+            {
+                PlayerPrefs.SetInt("testServer", value ? 1 : 0);
+            }
+        }
+
         public void UpdateState()
         {
             cheatingPanel.SetActive(IsCheating);
@@ -111,6 +124,9 @@ namespace ColorBlockCrush
             
             adsOffToogle.onValueChanged.AddListener(OnAdsOffTogle);
             adsOffToogle.isOn = IsAdsOff;
+            
+            testServerToogle.onValueChanged.AddListener(OnTestServerToggle);
+            testServerToogle.isOn = TestServer;
         }
 
         private void LoadLevel()
@@ -185,6 +201,11 @@ namespace ColorBlockCrush
         private void OnAdsOffTogle(bool arg0)
         {
             IsAdsOff = arg0;
+        }
+        
+        private void OnTestServerToggle(bool arg0)
+        {
+            TestServer = arg0;
         }
 
         private void AddRes()

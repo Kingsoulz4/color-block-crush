@@ -112,7 +112,7 @@ namespace ColorBlockCrush
 
         public void StartLevel(int level, int levelSetID = 0)
         {
-            var levelData = LoadLevel(level, levelSetID);
+            var levelData = LoadCurrentLevel(level);
             if (LevelTestManager.Instance)
                 if (LevelTestManager.Instance.currentLevelPlay != null)
                     levelData = LevelTestManager.Instance.currentLevelPlay;
@@ -122,6 +122,27 @@ namespace ColorBlockCrush
             //#endif
             LevelGame.SetLevelData(levelData);
             OnStartGame(CurrentLevel);
+        }
+
+        public LevelConfig LoadCurrentLevel(int level)
+        {
+            int levelId = level;
+            if (level > FetchLevelManager.Instance.maxLevel)
+            {
+                levelId = FetchLevelManager.Instance.GetLoopLevelId(level);
+            }
+            LevelConfig levelConfig = UserDataManager.GetCurrentLevel();
+
+            if (levelConfig == null)
+            {
+                levelConfig = LoadLevel(levelId, UserDataManager.LevelSetID);
+            }
+            else
+            {
+                Debug.Log($"Have Cache Level {level}, Loop {levelId}");
+            }
+
+            return levelConfig;
         }
 
         public LevelConfig LoadLevel(int level, int levelSetID)
@@ -148,7 +169,7 @@ namespace ColorBlockCrush
 
         public LevelDifficult GetCurrentLevelType()
         {
-            var levelData = LoadLevel(CurrentLevel, CurrentLevelSetID);
+            var levelData = LoadCurrentLevel(CurrentLevel);
             return levelData.levelDifficult;
         }
 
