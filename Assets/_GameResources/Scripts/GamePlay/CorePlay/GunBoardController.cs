@@ -138,9 +138,11 @@ namespace ColorBlockCrush
 
             foreach (var kvp in removedIndicesByColumn)
             {
+                ShiftColumn(kvp.Key, 0);
                 if (kvp.Value.Count > 0)
                 {
-                    ShiftColumnAll(kvp.Key);
+                    //ShiftColumnAll(kvp.Key);
+                    
                 }
             }
         }
