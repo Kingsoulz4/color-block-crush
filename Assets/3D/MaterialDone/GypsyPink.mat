@@ -111,22 +111,22 @@ Material:
     - _RampOffset: 0
     - _RampScale: 1
     - _RampSmoothing: 0.62
-    - _RampThreshold: 0.77
+    - _RampThreshold: 0.946
     - _RampType: 2
     - _ReceiveShadowsOff: 1
     - _ReflectionMapType: 0
     - _ReflectionSmoothness: 0.5
     - _RenderingMode: 0
-    - _RimMax: 1
-    - _RimMin: 0.5
+    - _RimMax: 1.58
+    - _RimMin: 1.63
     - _ShadowColorLightAtten: 1
     - _SingleIndirectColor: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpecularMapType: 0
     - _SpecularRoughness: 0.5
-    - _SpecularToonSize: 0.06
-    - _SpecularToonSmoothness: 0.4
+    - _SpecularToonSize: 0.942
+    - _SpecularToonSmoothness: 1
     - _SpecularType: 1
     - _SrcBlend: 1
     - _UVSec: 0
@@ -157,4 +157,3 @@ Material:
     - _SColor: {r: 0.57232696, g: 0.17457764, b: 0.44133183, a: 1}
     - _SpecularColor: {r: 0.8867924, g: 0.21472637, b: 0.44954467, a: 1}
   m_BuildTextureStacks: []
-  m_AllowLocking: 0
