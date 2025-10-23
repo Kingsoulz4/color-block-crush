@@ -66,10 +66,10 @@ namespace ColorBlockCrush
         public GunPos GunPos { get => gunPos; set => gunPos = value; }
         public RotationDirection CurrentFireDir { get => currentFireDir; set => currentFireDir = value; }
         public RotationDirection CurrentMoveFireDir { get => currentMoveFireDir; set => currentMoveFireDir = value; }
-        public int AllConnectedGunCount { get => allConnectedGunCount; set => allConnectedGunCount = value; }
-        public int OriginConnectedGun { get => originConnectedGun; set => originConnectedGun = value; }
+        public int AllConnectedGunCount { get => allConnectedGunCount; set => allConnectedGunCount = value; } // > 1 is connected
+        public int OriginConnectedGunCount { get => originConnectedGunCount; set => originConnectedGunCount = value; }
 
-        private int originConnectedGun = 0;
+        private int originConnectedGunCount = 0;
         private int allConnectedGunCount;
 
 
@@ -154,7 +154,7 @@ namespace ColorBlockCrush
             //Debug.Log($"Gun {this.ID}: AllConnectedGunCount = {visited.Count}");
             AllConnectedGuns = new List<Gun>(visited);
             AllConnectedGunCount = visited.Count;
-            OriginConnectedGun = visited.Count;
+            OriginConnectedGunCount = visited.Count;
         }
 
         void Update()
@@ -593,7 +593,7 @@ namespace ColorBlockCrush
             {
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
-                AllConnectedGunCount = OriginConnectedGun;
+                AllConnectedGunCount = OriginConnectedGunCount;
             });
 
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));

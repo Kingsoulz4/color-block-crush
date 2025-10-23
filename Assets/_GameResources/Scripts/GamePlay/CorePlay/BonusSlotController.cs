@@ -56,20 +56,6 @@ namespace ColorBlockCrush
 
         public void MoveGunIn(Gun gun)
         {
-            if (gun.ConnectedGuns.Count > 0)
-            {
-                if (!CanPlaceGuns(gun.AllConnectedGunCount))
-                {
-                    LevelController.Instance.LoseLevel();
-                    return;
-                }
-            }
-            else if (!CanPlaceGuns(1))
-            {
-                LevelController.Instance.LoseLevel();
-                return;
-            }
-
             _gunsInSlots.Add(gun);
             gun.transform.SetParent(gunContainer);
 
@@ -80,6 +66,14 @@ namespace ColorBlockCrush
             {
                 ShiftAllToTheLeft();
             });
+        }
+
+        public void MoveGunsIn(List<Gun> guns)
+        {
+            foreach (Gun gun in guns)
+            {
+                MoveGunIn(gun);
+            }
         }
 
         public void OnTapGun(Gun gun)
@@ -104,6 +98,7 @@ namespace ColorBlockCrush
                     gun.PlayAnim(Constant.GunAnimation.IDLE);
                 });
                 Debug.Log("Not enough slots available");
+                LevelController.Instance.ConveyorController.WarnTrayText();
                 return;
             }
 

@@ -56,12 +56,26 @@ public class ConveyorController : MonoBehaviour
         InitTray();
         LevelEvent.OnFastMode += OnFastMode;
         LevelEvent.OnRevive += OnRevive;
+        GameManager.OnGameStateChange += OnGameStateChange;
+    }
+
+    private void OnGameStateChange(GameState state)
+    {
+        if (state == GameState.Playing)
+        {
+            MoveAllTray();
+        }
+        else
+        {
+            PauseAllTray();
+        }
     }
 
     private void OnDisable()
     {
         LevelEvent.OnFastMode -= OnFastMode;
         LevelEvent.OnRevive -= OnRevive;
+        GameManager.OnGameStateChange -= OnGameStateChange;
     }
 
     private void Update()
@@ -144,7 +158,7 @@ public class ConveyorController : MonoBehaviour
             var gun = movingTrayItems[i].MyGun;
             if (!gun)
             {
-                return;
+                continue;
             }
             gun.Scale(Vector3.one * 0.8f, 0.2f);
             gun.OnRevive();
@@ -157,7 +171,7 @@ public class ConveyorController : MonoBehaviour
             var gun = prepairTrayItems[i].MyGun;
             if (!gun)
             {
-                return;
+                continue;
             }
             gun.Scale(Vector3.one * 0.8f, 0.2f);
             gun.OnRevive();
@@ -166,8 +180,20 @@ public class ConveyorController : MonoBehaviour
         }
 
         Gun lastGunInSlot = LevelController.Instance.SlotController.GetLastGun();
+        if (lastGunInSlot.AllConnectedGuns.Count > 0)
+        {
+            LevelController.Instance.BonusSlotController.MoveGunsIn(lastGunInSlot.AllConnectedGuns);
+            foreach (var gun in lastGunInSlot.AllConnectedGuns)
+            {
+                LevelController.Instance.SlotController.RemoveGun(gun);
+                gun.Scale(Vector3.one * 0.8f, 0.2f);
+            }
+            return;
+        }
+
         lastGunInSlot.Scale(Vector3.one * 0.8f, 0.2f);
         LevelController.Instance.BonusSlotController.MoveGunIn(lastGunInSlot);
+
     }
 
     public void RemoveGunByColor(ColorType colorType)
@@ -212,6 +238,11 @@ public class ConveyorController : MonoBehaviour
         }
 
         trayText.transform.localScale = Vector3.one * 1.1f;
+        trayText.color = new Color32(255,26,76,255);
+        this.Wait(0.1f, () =>
+        {
+            trayText.color = Color.white;
+        });
         warnTrayTween = trayText.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
     }
 
@@ -271,6 +302,7 @@ public class ConveyorController : MonoBehaviour
         return currentStartPos + new Vector3(index * spaceOffsetX, 0, 0);
     }
 
+    [Button]
     public void PauseAllTray()
     {
         foreach (var tray in movingTrayItems)
@@ -281,6 +313,20 @@ public class ConveyorController : MonoBehaviour
         foreach (var tray in prepairTrayItems)
         {
             tray.Pause();
+        }
+    }
+
+    [Button]
+    public void MoveAllTray()
+    {
+        foreach (var tray in movingTrayItems)
+        {
+            tray.Move();
+        }
+
+        foreach (var tray in prepairTrayItems)
+        {
+            tray.Move();
         }
     }
 

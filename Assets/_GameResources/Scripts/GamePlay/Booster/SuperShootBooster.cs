@@ -52,6 +52,7 @@ namespace ColorBlockCrush
         {
             base.CancelBooster();
             Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
+            GameManager.Instance.SetGameState(GameState.Playing);
         }
 
         public override void ActiveBooster()
@@ -67,11 +68,13 @@ namespace ColorBlockCrush
             base.ShowBooster();
             IsShowConfirm = true;
             Camera.main.GetComponent<GameCamera>().MoveZ(zOffetCam, 0.2f);
+            GameManager.Instance.SetGameState(GameState.Paused);
         }
 
         protected override void Done()
         {
             base.Done();
+            GameManager.Instance.SetGameState(GameState.Playing);
             Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
         }
 

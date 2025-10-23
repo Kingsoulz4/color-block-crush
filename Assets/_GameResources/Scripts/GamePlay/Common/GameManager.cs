@@ -19,7 +19,7 @@ namespace ColorBlockCrush
         [SerializeField] UIManager uiManager;
 
         private static GameState gameState = GameState.MainMenu;
-        Action<GameState> OnGameStateChange;
+        public static event Action<GameState> OnGameStateChange;
         public static GameState GameState { get => gameState; }
 
         private void Start()
