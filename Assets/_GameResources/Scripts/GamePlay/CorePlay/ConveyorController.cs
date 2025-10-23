@@ -224,6 +224,11 @@ public class ConveyorController : MonoBehaviour
         }
 
         trayText.transform.localScale = Vector3.one * 1.1f;
+        trayText.color = new Color32(255,26,76,255);
+        this.Wait(0.1f, () =>
+        {
+            trayText.color = Color.white;
+        });
         warnTrayTween = trayText.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
     }
 

@@ -98,6 +98,7 @@ namespace ColorBlockCrush
                     gun.PlayAnim(Constant.GunAnimation.IDLE);
                 });
                 Debug.Log("Not enough slots available");
+                LevelController.Instance.ConveyorController.WarnTrayText();
                 return;
             }
 
