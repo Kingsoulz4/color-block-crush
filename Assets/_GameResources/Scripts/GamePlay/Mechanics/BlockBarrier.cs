@@ -255,9 +255,10 @@ namespace ColorBlockCrush
                         x.TakeDamage(1);
                         listBlockPlace.Remove(x);
                     });
-                }    
+                }
 
-                m_tailPart.transform.position = listBodyPart.Last().transform.position;
+                var lastPartPosition = listBodyPart.Last().transform.position;
+                m_tailPart.transform.position = new Vector3(lastPartPosition.x, m_tailPart.transform.position.y, lastPartPosition.z);
                 Destroy(listBodyPart[^1]);
                 listBodyPart.RemoveAt(listBodyPart.Count - 1);
                 UpdateCollider();
