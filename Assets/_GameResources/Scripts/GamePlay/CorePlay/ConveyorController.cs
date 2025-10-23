@@ -149,7 +149,7 @@ public class ConveyorController : MonoBehaviour
             gun.Scale(Vector3.one * 0.8f, 0.2f);
             gun.OnRevive();
             LevelController.Instance.BonusSlotController.MoveGunIn(gun);
-            MoveTrayIn(movingTrayItems[i], true);
+            MoveTrayIn(movingTrayItems[i]);
         }
 
         for (int i = prepairTrayItems.Count - 1; i >= 0; i--)
@@ -162,7 +162,7 @@ public class ConveyorController : MonoBehaviour
             gun.Scale(Vector3.one * 0.8f, 0.2f);
             gun.OnRevive();
             LevelController.Instance.BonusSlotController.MoveGunIn(gun);
-            MoveTrayIn(prepairTrayItems[i], true);
+            MoveTrayIn(prepairTrayItems[i]);
         }
 
         Gun lastGunInSlot = LevelController.Instance.SlotController.GetLastGun();
@@ -284,13 +284,8 @@ public class ConveyorController : MonoBehaviour
         }
     }
 
-    public bool MoveTrayIn(TrayItem tray, bool forceMove = false)
+    public bool MoveTrayIn(TrayItem tray)
     {
-        //if (!LevelController.Instance.SlotController.CanPlaceGuns(1) && !forceMove)
-        //{
-        //    return false;
-        //}
-
         if (!tray)
         {
             Debug.Log("tray null");
