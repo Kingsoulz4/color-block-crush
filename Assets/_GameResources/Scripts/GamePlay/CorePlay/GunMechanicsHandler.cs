@@ -74,6 +74,7 @@ namespace ColorBlockCrush
                 if (connectGun != this)
                 {
                     connectGun.RemoveConnection(this);
+                    connectGun.CheckDisappear();
                 }
             }
             AllConnectedGunCount = 0;
