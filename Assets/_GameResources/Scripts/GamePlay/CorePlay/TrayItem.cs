@@ -106,6 +106,10 @@ namespace ColorBlockCrush
 
         public void Move()
         {
+            if (!MyGun)
+            {
+                return;
+            }
             if (GameManager.GameState == GameState.Paused)
             {
                 return;

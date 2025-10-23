@@ -79,6 +79,8 @@ namespace ColorBlockCrush
         {
             base.Done();
             Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
+            LevelController.Instance.ConveyorController.MoveAllTray();
+
         }
     }
 }
