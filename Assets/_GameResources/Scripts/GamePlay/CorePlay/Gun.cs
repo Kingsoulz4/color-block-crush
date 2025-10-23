@@ -66,10 +66,10 @@ namespace ColorBlockCrush
         public GunPos GunPos { get => gunPos; set => gunPos = value; }
         public RotationDirection CurrentFireDir { get => currentFireDir; set => currentFireDir = value; }
         public RotationDirection CurrentMoveFireDir { get => currentMoveFireDir; set => currentMoveFireDir = value; }
-        public int AllConnectedGunCount { get => allConnectedGunCount; set => allConnectedGunCount = value; }
-        public int OriginConnectedGun { get => originConnectedGun; set => originConnectedGun = value; }
+        public int AllConnectedGunCount { get => allConnectedGunCount; set => allConnectedGunCount = value; } // > 1 is connected
+        public int OriginConnectedGunCount { get => originConnectedGunCount; set => originConnectedGunCount = value; }
 
-        private int originConnectedGun = 0;
+        private int originConnectedGunCount = 0;
         private int allConnectedGunCount;
 
 
@@ -154,7 +154,7 @@ namespace ColorBlockCrush
             //Debug.Log($"Gun {this.ID}: AllConnectedGunCount = {visited.Count}");
             AllConnectedGuns = new List<Gun>(visited);
             AllConnectedGunCount = visited.Count;
-            OriginConnectedGun = visited.Count;
+            OriginConnectedGunCount = visited.Count;
         }
 
         void Update()
@@ -243,7 +243,7 @@ namespace ColorBlockCrush
                             listGunByColumn[gun.ColumnIndex] = new();
                         }
                         listGunByColumn[gun.ColumnIndex].Add(gun);
-                    }    
+                    }
 
                     foreach (var item in listGunByColumn)
                     {
@@ -379,6 +379,36 @@ namespace ColorBlockCrush
                     OnGunDissapear?.Invoke(this);
                 });
             }
+        }
+
+
+        public void ForceDisappear()
+        {
+            isDisappeared = true;
+
+            OnGunEmpty?.Invoke(this);
+
+            PlayAnim(Constant.GunAnimation.DISAPPEAR);
+
+            foreach (var gun in AllConnectedGuns)
+            {
+                if (gun != this)
+                {
+                    gun.ForceDisappear();
+                }
+            }
+
+            LevelManager.Instance.LevelGame.SlotController.RemoveGun(this);
+            LevelManager.Instance.LevelGame.BonusSlotController.RemoveGun(this);
+
+            moveToConveyorTw.Kill();
+            moveSortSlotTw.Kill();
+
+            this.Wait(0.3f, () =>
+            {
+                gameObject.SetActive(false);
+                OnGunDissapear?.Invoke(this);
+            });
         }
 
         private void RotateToFire(Transform target)
@@ -563,7 +593,7 @@ namespace ColorBlockCrush
             {
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
-                AllConnectedGunCount = OriginConnectedGun;
+                AllConnectedGunCount = OriginConnectedGunCount;
             });
 
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
@@ -656,6 +686,9 @@ namespace ColorBlockCrush
             }
         }
 
+
+        Block lastTarget;
+        float lastAngle;
         public bool IsBlockInShootingAngle(Block block)
         {
             Vector3 gunPos = transform.position;
@@ -671,8 +704,9 @@ namespace ColorBlockCrush
             shootDir.Normalize();
 
             float angle = Vector3.Angle(shootDir, toBlock);
-
+            //Debug.Log("Angle " + angle);
             var shootingAngle = maxShootingAngle;
+
 
             if (currentFireDir == RotationDirection.Up || currentFireDir == RotationDirection.Down)
             {
@@ -684,6 +718,17 @@ namespace ColorBlockCrush
             }
 
             bool isInAngle = angle <= shootingAngle;
+
+            if (!isInAngle && block == lastTarget && angle > lastAngle)
+            {
+                return true;
+            }
+
+            if (isInAngle)
+            {
+                lastTarget = block;
+                lastAngle = angle;
+            }
 
             return isInAngle;
         }

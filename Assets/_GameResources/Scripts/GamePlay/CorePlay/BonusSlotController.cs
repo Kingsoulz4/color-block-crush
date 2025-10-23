@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ColorBlockCrush.Tools;
 using DG.Tweening;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ColorBlockCrush
@@ -40,22 +41,21 @@ namespace ColorBlockCrush
             return _gunsInSlots.Count + count <= _maxSlots;
         }
 
-        public void MoveGunIn(Gun gun)
+        public void RemoveGunByColor(ColorType colorType)
         {
-            if (gun.ConnectedGuns.Count > 0)
+            for (int i = _gunsInSlots.Count - 1; i >= 0; i--)
             {
-                if (!CanPlaceGuns(gun.AllConnectedGunCount))
+                if (_gunsInSlots[i].ColorType == colorType)
                 {
-                    LevelController.Instance.LoseLevel();
-                    return;
+                    _gunsInSlots[i].RemoveAllConnection();
+                    _gunsInSlots[i].ForceDisappear();
                 }
             }
-            else if (!CanPlaceGuns(1))
-            {
-                LevelController.Instance.LoseLevel();
-                return;
-            }
+            ShiftAllToTheLeft();
+        }
 
+        public void MoveGunIn(Gun gun)
+        {
             _gunsInSlots.Add(gun);
             gun.transform.SetParent(gunContainer);
 
@@ -66,6 +66,14 @@ namespace ColorBlockCrush
             {
                 ShiftAllToTheLeft();
             });
+        }
+
+        public void MoveGunsIn(List<Gun> guns)
+        {
+            foreach (Gun gun in guns)
+            {
+                MoveGunIn(gun);
+            }
         }
 
         public void OnTapGun(Gun gun)
@@ -90,6 +98,7 @@ namespace ColorBlockCrush
                     gun.PlayAnim(Constant.GunAnimation.IDLE);
                 });
                 Debug.Log("Not enough slots available");
+                LevelController.Instance.ConveyorController.WarnTrayText();
                 return;
             }
 

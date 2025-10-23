@@ -13,7 +13,7 @@ namespace ColorBlockCrush
         [SerializeField] private LayerMask _gunLayerMask;
 
         private float lastClickTime = 0f;
-        private float clickCooldown = 0.05f;
+        private float clickCooldown = 0.15f;
         private void Awake()
         {
             if (_camera == null)
