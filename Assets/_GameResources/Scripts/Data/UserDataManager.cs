@@ -486,9 +486,11 @@ public class UserDataManager : MonoBehaviour
 
     public static LevelConfig GetCurrentLevel(int levelId)
     {
+        Debug.Log($"Load Current Level {levelId}");
         if(GetCacheLevel() == null || GetCacheLevel().Count == 0) return null;
-        if (GetCacheLevel()[0].levelId != levelId) return null;
-
+        Debug.Log($"Load Current Level Get Cache {levelId}");
+        if (GetCacheLevel()[0] == null || GetCacheLevel()[0].levelId != levelId) return null;
+        Debug.Log($"Get Cache {levelId}");
         return GetCacheLevel()[0];
     }
 
