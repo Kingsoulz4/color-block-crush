@@ -670,7 +670,7 @@ namespace ColorBlockCrush
 
             if (ConnectedGuns.Count <= 0)
             {
-                return true;
+                return BulletCount <= 0;
             }
             else
             {
