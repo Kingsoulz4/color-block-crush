@@ -168,6 +168,14 @@ public class AudioSourcePool : SingletonMono<AudioSourcePool>
         }
     }
 
+    public void Mute(bool value)
+    {
+        foreach (var source in pool)
+        {
+            source.mute = value;
+        }
+    }
+
     private void OnDestroy()
     {
         StopAll();
