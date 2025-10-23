@@ -31,11 +31,11 @@ namespace ColorBlockCrush
         {
             if(shopPack == null) return;
             
-            var popupLoadingProcess = UIManager.Instance.ShowPopup<PopupLoadingProcess>(null);
-            popupLoadingProcess.ShowPopup();
+            // var popupLoadingProcess = UIManager.Instance.ShowPopup<PopupLoadingProcess>(null);
+            // popupLoadingProcess.ShowPopup();
             IAPManager.Instance.BuyProductID(shopPack.id, (success) =>
             {
-                popupLoadingProcess.Hide();
+                //popupLoadingProcess.Hide();
                 if (success)
                 {
                     
