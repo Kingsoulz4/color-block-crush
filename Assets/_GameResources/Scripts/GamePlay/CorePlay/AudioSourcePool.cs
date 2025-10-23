@@ -173,7 +173,6 @@ public class AudioSourcePool : SingletonMono<AudioSourcePool>
         foreach (var source in pool)
         {
             source.mute = value;
-            Debug.Log(source.mute);
         }
     }
 
