@@ -51,6 +51,10 @@ namespace ColorBlockCrush
             StartBlock();
             OnBlockInitialized?.Invoke(this);
             UpdateHeathText();
+            this.Wait(0.5f, () =>
+            {
+                m_textHealth.enableAutoSizing = false;
+            });
         }
 
         private void Start()
@@ -99,7 +103,7 @@ namespace ColorBlockCrush
             }
 
             var textRect = (RectTransform)m_textHealth.transform;
-            textRect.sizeDelta = new Vector2(Mathf.Max(Size.x, 1f), Mathf.Max(Size.y, 1.35f)) * 0.9f;
+            textRect.sizeDelta = new Vector2(Mathf.Max(Size.x, 1f), Mathf.Max(Size.y, 1.5f)) * 0.8f;
                 
         }
 
