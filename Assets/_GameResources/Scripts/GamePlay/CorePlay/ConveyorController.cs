@@ -56,12 +56,26 @@ public class ConveyorController : MonoBehaviour
         InitTray();
         LevelEvent.OnFastMode += OnFastMode;
         LevelEvent.OnRevive += OnRevive;
+        GameManager.OnGameStateChange += OnGameStateChange;
+    }
+
+    private void OnGameStateChange(GameState state)
+    {
+        if (state == GameState.Playing)
+        {
+            MoveAllTray();
+        }
+        else
+        {
+            PauseAllTray();
+        }
     }
 
     private void OnDisable()
     {
         LevelEvent.OnFastMode -= OnFastMode;
         LevelEvent.OnRevive -= OnRevive;
+        GameManager.OnGameStateChange -= OnGameStateChange;
     }
 
     private void Update()
@@ -288,6 +302,7 @@ public class ConveyorController : MonoBehaviour
         return currentStartPos + new Vector3(index * spaceOffsetX, 0, 0);
     }
 
+    [Button]
     public void PauseAllTray()
     {
         foreach (var tray in movingTrayItems)
@@ -298,6 +313,20 @@ public class ConveyorController : MonoBehaviour
         foreach (var tray in prepairTrayItems)
         {
             tray.Pause();
+        }
+    }
+
+    [Button]
+    public void MoveAllTray()
+    {
+        foreach (var tray in movingTrayItems)
+        {
+            tray.Move();
+        }
+
+        foreach (var tray in prepairTrayItems)
+        {
+            tray.Move();
         }
     }
 

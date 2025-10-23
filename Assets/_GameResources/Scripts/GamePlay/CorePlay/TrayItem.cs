@@ -34,7 +34,7 @@ namespace ColorBlockCrush
 
         private void Update()
         {
-              
+
         }
 
         private void OnFastMode()
@@ -106,12 +106,22 @@ namespace ColorBlockCrush
 
         public void Move()
         {
-            splineAnimate.Play();
+            if (GameManager.GameState == GameState.Paused)
+            {
+                return;
+            }
+            if (splineAnimate)
+            {
+                splineAnimate.Play();
+            }
         }
 
         public void Pause()
         {
-            splineAnimate.Pause();
+            if (splineAnimate)
+            {
+                splineAnimate.Pause();
+            }
         }
     }
 }
