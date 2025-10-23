@@ -131,7 +131,7 @@ namespace ColorBlockCrush
             {
                 levelId = FetchLevelManager.Instance.GetLoopLevelId(level);
             }
-            LevelConfig levelConfig = UserDataManager.GetCurrentLevel();
+            LevelConfig levelConfig = UserDataManager.GetCurrentLevel(levelId);
 
             if (levelConfig == null)
             {

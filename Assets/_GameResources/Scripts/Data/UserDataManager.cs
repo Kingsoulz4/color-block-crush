@@ -471,9 +471,10 @@ public class UserDataManager : MonoBehaviour
         return level;
     }
 
-    public static LevelConfig GetCurrentLevel()
+    public static LevelConfig GetCurrentLevel(int levelId)
     {
         if(GetCacheLevel() == null || GetCacheLevel().Count == 0) return null;
+        if (GetCacheLevel()[0].levelId != levelId) return null;
 
         return GetCacheLevel()[0];
     }

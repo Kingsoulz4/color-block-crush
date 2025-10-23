@@ -91,7 +91,7 @@ public class FetchLevelManager : SingletonDontDestroyMono<FetchLevelManager>
         fetchForceSucess = true;
 
         //FetchForceUpdateData();
-        FetchLevels();
+        FetchLevels(UserDataManager.Level);
     }
 
     private void FetchForceUpdateData()
@@ -121,7 +121,7 @@ public class FetchLevelManager : SingletonDontDestroyMono<FetchLevelManager>
                 
                 //Server.Get<OnFetchForceDataComplete>().Dispatch();
                 //Manager.Instance.CheckForceUpdate();
-                FetchLevels();
+                FetchLevels(UserDataManager.Level);
             }
             else
             {
@@ -165,17 +165,17 @@ public class FetchLevelManager : SingletonDontDestroyMono<FetchLevelManager>
         }
     }
 
-    public void FetchLevels()
+    public void FetchLevels(int startLevel)
     {
         //if(!fetchForceSucess || (Manager.Instance.isForceUpdate && !Manager.Instance.hasUpdateVersionInStore)) return;
-        StartCoroutine(FetchLevelsCoroutine());
+        StartCoroutine(FetchLevelsCoroutine(startLevel));
     }
 
-    public IEnumerator FetchLevelsCoroutine()
+    public IEnumerator FetchLevelsCoroutine(int startLevel)
     {
         for (int i = 0; i < cacheLevelNumber; i++)
         {           
-            int level = UserDataManager.Level + i;
+            int level = startLevel + i;
             int levelId = level;
             if (level > maxLevel)
             {
