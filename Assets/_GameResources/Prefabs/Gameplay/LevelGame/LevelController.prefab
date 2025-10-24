@@ -1089,6 +1089,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1, y: 1, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1387195825356611380
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4183221509266534299}
+  m_Layer: 0
+  m_Name: BlockTunnelAreaContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4183221509266534299
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1387195825356611380}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9145982648320308014}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1479559745595383833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2269,6 +2300,7 @@ Transform:
   m_Children:
   - {fileID: 4499429210029554757}
   - {fileID: 495411967210188505}
+  - {fileID: 4183221509266534299}
   - {fileID: 2379360013133241681}
   - {fileID: 7546292740293972303}
   - {fileID: 1332189147923130460}
@@ -2299,11 +2331,13 @@ MonoBehaviour:
   blockKeyPrefab: {fileID: 118782679763331951, guid: e567fba6d5d32f64cb34e6058cd591ad, type: 3}
   bigBlockPrefab: {fileID: 8957924663176318922, guid: f4b0003ec6942b94ebc6d010bfcd34cf, type: 3}
   blockBarrierPrefab: {fileID: 7380429117993173979, guid: f375ceb1987a251468f11d1c31d3f1d8, type: 3}
+  blockTunnelAreaPrefab: {fileID: 4289340324184203306, guid: c3e140a68b99834449a2536f020db422, type: 3}
   gridController: {fileID: 1346653134287712912}
   blockContainer: {fileID: 1332189147923130460}
   keyContainer: {fileID: 4499429210029554757}
   bigBlockContainer: {fileID: 495411967210188505}
   blockBarrierContainer: {fileID: 2379360013133241681}
+  blockTunnelAreaContainer: {fileID: 4183221509266534299}
 --- !u!1 &6648344636809376776
 GameObject:
   m_ObjectHideFlags: 0

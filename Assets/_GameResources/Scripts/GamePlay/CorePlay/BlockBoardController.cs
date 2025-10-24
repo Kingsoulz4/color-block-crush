@@ -23,6 +23,7 @@ namespace ColorBlockCrush
         [SerializeField] private BlockKey blockKeyPrefab;
         [SerializeField] private BigBlock bigBlockPrefab;
         [SerializeField] private BlockBarrier blockBarrierPrefab;
+        [SerializeField] private BlockTunnelArea blockTunnelAreaPrefab;
 
         [Header("References")]
         [SerializeField] private GridController gridController;
@@ -30,6 +31,7 @@ namespace ColorBlockCrush
         [SerializeField] private Transform keyContainer;
         [SerializeField] private Transform bigBlockContainer;
         [SerializeField] private Transform blockBarrierContainer;
+        [SerializeField] private Transform blockTunnelAreaContainer;
 
         private int _rows;
         private int _columns;
@@ -39,6 +41,7 @@ namespace ColorBlockCrush
         private List<BigBlock> listBigBlock = new();
         private List<BlockKey> listKey = new();
         private List<BlockBarrier> listBlockBarrier = new();
+        private List<BlockTunnelArea> listBlockTunnelArea = new();
 
         private Vector3 calculatedBlockScale;
         private Vector3 calculatedBlockOffset;
@@ -72,6 +75,7 @@ namespace ColorBlockCrush
             SpawnKeys();
             SpawnBigBlocks();
             SpawnBlockBarriers();
+            SpawnBlockTunnelAreas();
         }
         private void SpawnBlockBoard(LevelConfig levelConfig)
         {
@@ -145,6 +149,25 @@ namespace ColorBlockCrush
         private BlockBarrier SpawnBlockBarrier(PixelSnakeConfig blockBarrierData)
         {
             BlockBarrier newBlockBarrier = Instantiate(blockBarrierPrefab, blockBarrierContainer);
+            newBlockBarrier.transform.position = CalculateCenter(blockBarrierData.blocksId);
+            newBlockBarrier.Init(blockBarrierData);
+            newBlockBarrier.transform.localScale = Vector3.one * calculatedBlockScale.x;
+            return newBlockBarrier;
+        }
+
+        private void SpawnBlockTunnelAreas()
+        {
+            if (levelConfig.mapConfig.tunnelsArea.Count <= 0) return;
+
+            for (int i = 0; i < levelConfig.mapConfig.tunnelsArea.Count; i++)
+            {
+                listBlockTunnelArea.Add(SpawnBlockTunnleArea(levelConfig.mapConfig.tunnelsArea[i]));
+            }
+        }
+
+        private BlockTunnelArea SpawnBlockTunnleArea(TunnelAreaConfig blockBarrierData)
+        {
+            BlockTunnelArea newBlockBarrier = Instantiate(blockTunnelAreaPrefab, blockBarrierContainer);
             newBlockBarrier.transform.position = CalculateCenter(blockBarrierData.blocksId);
             newBlockBarrier.Init(blockBarrierData);
             newBlockBarrier.transform.localScale = Vector3.one * calculatedBlockScale.x;
