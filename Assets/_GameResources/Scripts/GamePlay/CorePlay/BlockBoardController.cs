@@ -146,7 +146,7 @@ namespace ColorBlockCrush
             BlockBarrier newBlockBarrier = Instantiate(blockBarrierPrefab, blockBarrierContainer);
             newBlockBarrier.transform.position = CalculateCenter(blockBarrierData.blocksId);
             newBlockBarrier.Init(blockBarrierData);
-            newBlockBarrier.transform.localScale = calculatedBlockScale;
+            newBlockBarrier.transform.localScale = Vector3.one * calculatedBlockScale.x;
             return newBlockBarrier;
         }
 

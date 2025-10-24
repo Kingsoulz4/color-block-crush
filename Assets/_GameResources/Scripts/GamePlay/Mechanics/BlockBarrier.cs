@@ -16,6 +16,8 @@ namespace ColorBlockCrush
 
         private List<GameObject> listBodyPart = new();
 
+        private List<GameObject> listBodyPartDestroyed = new();
+
         private List<Block> listBlockPlace = new();
 
         private int axis = 0;
@@ -140,12 +142,8 @@ namespace ColorBlockCrush
                     listBodyPart.Add(newPart);
                     newPart.transform.position = new Vector3(commonPos, newPart.transform.position.y, listPartPosZ[i]);
                     newPart.gameObject.SetActive(true);
-                    if (i % 3 == 0)
-                    {
-                        isColor = !isColor;
-                    }
 
-                    if (isColor)
+                    if (i%2 == 0)
                     {
                         newPart.GetComponent<MeshRenderer>().material = colorRef.listMaterial[ColorType].First();
                     }
@@ -182,12 +180,7 @@ namespace ColorBlockCrush
                     newPart.transform.position = new Vector3(listPartPosX[i], newPart.transform.position.y, commonPos);
                     newPart.gameObject.SetActive(true);
 
-                    if(i % 2 == 0)
-                    {
-                        isColor = !isColor;
-                    }
-
-                    if (isColor)
+                    if (i % 2 == 0)
                     {
                         newPart.GetComponent<MeshRenderer>().material = colorRef.listMaterial[ColorType].First();
                     }
@@ -238,8 +231,9 @@ namespace ColorBlockCrush
                 partCount = hitPoint / Size.y;
             }
 
-            if (partCount < listBodyPart.Count + 3 && listBodyPart.Count > 0)
+            if (partCount < listBodyPart.Count + 3 && partCount > listBodyPartDestroyed.Count && listBodyPart.Count > 0)
             {
+                
                 if(direction == Vector2Int.up || direction == Vector2Int.down)
                 {
                     var listBlockToDestroy = listBlockPlace.FindAll(x => Mathf.Abs(x.transform.position.z - m_tailPart.transform.position.z) <= float.Epsilon);
@@ -259,7 +253,8 @@ namespace ColorBlockCrush
 
                 var lastPartPosition = listBodyPart.Last().transform.position;
                 m_tailPart.transform.position = new Vector3(lastPartPosition.x, m_tailPart.transform.position.y, lastPartPosition.z);
-                Destroy(listBodyPart[^1]);
+                listBodyPart[^1].SetActive(false);
+                listBodyPartDestroyed.Add(listBodyPart[^1]);
                 listBodyPart.RemoveAt(listBodyPart.Count - 1);
                 UpdateCollider();
             }
@@ -276,11 +271,11 @@ namespace ColorBlockCrush
             {
                 if (direction == Vector2Int.up || direction == Vector2Int.down)
                 {
-                    boxCollider.size = new Vector3(Size.x - 1, boxCollider.size.y, listBodyPart.Count + 2);
+                    boxCollider.size = new Vector3(Size.x, boxCollider.size.y, listBodyPart.Count + 2);
                 }
                 else
                 {
-                    boxCollider.size = new Vector3(listBodyPart.Count + 2, boxCollider.size.y, Size.y -1);
+                    boxCollider.size = new Vector3(listBodyPart.Count + 2, boxCollider.size.y, Size.y);
                 }
 
                 if(hitPoint < maxHitPoint)
