@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace ColorBlockCrush.Tools
 {
-    [CreateAssetMenu(fileName = "NewLevelConfig", menuName = "GameConfigs/LevelConfig")]
-    public class LevelConfig : ScriptableObject
+    [Serializable]
+    public class LevelConfig
     {
         public int levelId;
         public LevelDifficult levelDifficult;

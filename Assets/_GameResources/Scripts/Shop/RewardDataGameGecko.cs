@@ -14,10 +14,10 @@ namespace ColorBlockCrush
             switch (type)
             {
                 case ItemType.GOLD:
-                    UserDataManager.AddGold(quantity, "Shop");
+                    UserDataManager.AddGold(quantity, " ");
                     break;
                 case ItemType.INFINITY_LIVES:
-                    UserDataManager.AddHeart(quantity * 1000, "Reward", true, typeHeart:1);
+                    UserDataManager.AddHeart(quantity * 1000, " ", true, typeHeart:1);
                     break;
                 case ItemType.BOOSTER_1:
                     UserDataManager.AddTrayBooster += quantity;
@@ -32,16 +32,13 @@ namespace ColorBlockCrush
                     }
                     break;
                 case ItemType.BOOSTER_2:
-                    Debug.Log("Add Hand");
                     UserDataManager.HandBooster += quantity;
                     if (BoosterManager.Instance != null)
                     {
-                        Debug.Log("Add Hand BM");
                         BoosterBase handBooster = BoosterManager.Instance.Boosters.FirstOrDefault(x =>
                             x.BoosterType == BoosterType.HAND_MOVE);
                         if (handBooster != null)
                         {
-                            Debug.Log("Add Hand BM Hand");
                             handBooster.UpdateVisualBooster();
                         }
                     }

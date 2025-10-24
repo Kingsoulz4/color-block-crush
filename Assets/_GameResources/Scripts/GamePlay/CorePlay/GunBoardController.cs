@@ -129,7 +129,7 @@ namespace ColorBlockCrush
                     if (listGunColumn[col][row] is Gun gun && gun.ColorType == colorType)
                     {
                         gun.RemoveAllConnection();
-                        gun.gameObject.SetActive(false);
+                        gun.ForceDisappear();
                         RemoveObjectFromColumn(gun);
                         removedIndicesByColumn[col].Add(row);
                     }
@@ -138,9 +138,11 @@ namespace ColorBlockCrush
 
             foreach (var kvp in removedIndicesByColumn)
             {
+                ShiftColumn(kvp.Key, 0);
                 if (kvp.Value.Count > 0)
                 {
-                    ShiftColumnAll(kvp.Key);
+                    //ShiftColumnAll(kvp.Key);
+                    
                 }
             }
         }
@@ -394,14 +396,17 @@ namespace ColorBlockCrush
             for (int i = removedIndex; i < columnObjects.Count; i++)
             {
                 ObjectOnGunBoardColumn objOnColumn = columnObjects[i];
-                objOnColumn.SetIndex(i);
-                objOnColumn.UpdateWhenColumnChange();
+                
 
                 if (!objOnColumn.CanShift)
                 {
-                    //objOnColumn.UpdateWhenColumnChange();
+                    objOnColumn.UpdateWhenColumnChange();
                     return;
                 }
+
+                objOnColumn.SetIndex(i);
+                objOnColumn.UpdateWhenColumnChange();
+
 
                 Vector3 currentPos = objOnColumn.transform.position;
 
@@ -480,6 +485,11 @@ namespace ColorBlockCrush
             }
             return count;
         }
+
+        public float GetPercentGunCleared()
+        {
+            return totalGunCount;
+        }    
 
         public void ShuffleBoard()
         {

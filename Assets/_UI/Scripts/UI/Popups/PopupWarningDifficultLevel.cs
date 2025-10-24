@@ -38,6 +38,10 @@ namespace ColorBlockCrush
         public void Show(LevelDifficult levelType, Action callback)
         {
             base.Show(null);
+            if(!LevelManager.Instance.inGameplay)  {
+                Hide();
+                return;
+            };
             if (levelType == LevelDifficult.Hard)
             {
                 superHardImage.gameObject.SetActive(false);

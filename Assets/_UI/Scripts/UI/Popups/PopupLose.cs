@@ -32,6 +32,11 @@ namespace ColorBlockCrush
         public override void Show(Action onClose)
         {
             base.Show(onClose);
+            if(!LevelManager.Instance.inGameplay)  
+            {
+                Hide();
+                return;
+            };
             AudioManager.Instance.PlayOneShot(failSfx, 1);
             LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
             levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelEndStruct(UserDataManager.PlayType,

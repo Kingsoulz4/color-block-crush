@@ -109,9 +109,9 @@ namespace ColorBlockCrush
 
             if (hitPoint <= 0)
             {
+                IsDestroyed = true;
                 DestroyBlock(() =>
                 {
-                    IsDestroyed = true;
                     gameObject.SetActive(false);
                     OnBlockDestroyed?.Invoke(this);
                 });

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pig_jump_SkeletonData
   m_EditorClassIdentifier: 
   atlasAssets:
-  - {fileID: 11400000, guid: 0b159888859ff1f4982ef5399d02aa9d, type: 2}
+  - {fileID: 11400000, guid: a29cc91863801c045b1ba1935b114b97, type: 2}
   scale: 0.01
   skeletonJSON: {fileID: 4900000, guid: 88fc4fa6409a03646b4231eb5e1884ef, type: 3}
   isUpgradingBlendModeMaterials: 0

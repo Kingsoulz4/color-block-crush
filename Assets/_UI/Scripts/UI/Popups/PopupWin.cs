@@ -33,7 +33,7 @@ namespace ColorBlockCrush
             MaxAdsManager.Instance.ShowRewardedAd(MaxKeys.rewardedID, () =>
             {
                 UserDataManager.PlayType = PlayType.next;
-                UserDataManager.AddGold(80, "WinX2");
+                UserDataManager.AddGold(80, "winX2", ReasonType.reward.ToString());
                 OnClaimedReward.Invoke(coinReceiveValue * 2); 
             });
         }
@@ -42,7 +42,7 @@ namespace ColorBlockCrush
         {
             UserDataManager.PlayType = PlayType.next;
             MaxAdsManager.Instance.ShowInterstitialAd(MaxKeys.interstitialID);
-            UserDataManager.AddGold(coinReceiveValue, "Win");
+            UserDataManager.AddGold(coinReceiveValue, "win", ReasonType.reward.ToString());
             OnClaimedReward.Invoke(coinReceiveValue);
         }
 
@@ -104,8 +104,10 @@ namespace ColorBlockCrush
             m_winContent.SetActive(true);
             UpdateInfo();
             base.Show(onClose);
+            FetchLevelManager.Instance.FetchLevels(UserDataManager.Level + 1);
             AudioManager.Instance.PlayOneShot(winSfx, 1);
-            m_buttonClaimX2.gameObject.SetActive(UserDataManager.Level >= 10);
+            UserDataManager.AddHeart(1, "win", false, reason: ReasonType.reward.ToString());
+            m_buttonClaimX2.gameObject.SetActive(UserDataManager.Level >= GameManager.Instance.levelTriggerData.levelShowButtonClaimX2);
             
             LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
             levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelEndStruct(UserDataManager.PlayType,

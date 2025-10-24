@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Analytics;
 using UnityEngine;
 
 public class HeartManager : SingletonMono<HeartManager>
@@ -85,7 +86,7 @@ public class HeartManager : SingletonMono<HeartManager>
     {
         if (v)
         {
-            UserDataManager.AddHeart(1, "receive_heart", false, isLog: true, reason: "reward");
+            UserDataManager.AddHeart(1, "receive_heart", false, reason: ReasonType.time.ToString());
         }
     }
     public void RemoveListener()
@@ -102,7 +103,7 @@ public class HeartManager : SingletonMono<HeartManager>
         long r = recoverTime - now;
         if (r <= 0)
         {
-            UserDataManager.AddHeart(1, "recover", false, isLog: true, reason: "reward");
+            UserDataManager.AddHeart(1, "time", false, reason: ReasonType.time.ToString());
         }
     }
     private void OnAddHeart(int old, int newValue, bool hasAnimation)
@@ -185,7 +186,7 @@ public class HeartManager : SingletonMono<HeartManager>
         }
         if (lives > 0)
         {
-            UserDataManager.AddHeart(lives, "recover", false, isLog: true, reason: "reward");
+            UserDataManager.AddHeart(lives, "offline", false, 0, ReasonType.time.ToString());
         }
     }
 
@@ -221,7 +222,7 @@ public class HeartManager : SingletonMono<HeartManager>
             {
                 return false;
             }
-            UserDataManager.AddHeart(-number, "start_level", false);
+            UserDataManager.AddHeart(-number, "play", false, reason: ReasonType.use.ToString());
             return true;
         }
         else

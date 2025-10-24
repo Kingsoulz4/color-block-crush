@@ -1,0 +1,6 @@
+Super_Shooter.png
+size:335,332
+filter:Linear,Linear
+icon_Hand
+bounds:2,2,331,328
+offsets:3,2,336,332

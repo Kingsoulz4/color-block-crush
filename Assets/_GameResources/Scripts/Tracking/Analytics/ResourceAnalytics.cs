@@ -15,7 +15,6 @@ namespace Analytics
 
         public static void LogResourceEarnEvent(ResourceAnalyticStruct resourceStruct)
         {
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("resource_type", resourceStruct.resourceType),
@@ -33,12 +32,10 @@ namespace Analytics
                 { "reason", resourceStruct.reason}
             };
             FirebaseManager.Instance.AddEvent("resource_earn", paramData, parameters);
-#endif
         }
 
         public static void LogResourceSpendEvent(ResourceAnalyticStruct resourceStruct)
         {
-#if UNITY_FIREBASE
             var parameters = new[]
             {
             new Parameter("resource_type", resourceStruct.resourceType),
@@ -56,7 +53,6 @@ namespace Analytics
                 { "reason", resourceStruct.reason}
             };
             FirebaseManager.Instance.AddEvent("resource_spend", paramData, parameters);
-#endif
         }
     }
 

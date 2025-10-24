@@ -1626,12 +1626,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 60
+    m_Left: 0
     m_Right: 0
     m_Top: 0
     m_Bottom: 250
   m_ChildAlignment: 4
-  m_Spacing: 25
+  m_Spacing: 100
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -8362,6 +8362,7 @@ GameObject:
   - component: {fileID: 8608368986315043444}
   - component: {fileID: 3508880465791921251}
   - component: {fileID: 1488430927309418248}
+  - component: {fileID: 1035336953700707640}
   m_Layer: 5
   m_Name: InGameScreenUI
   m_TagString: Untagged
@@ -8456,6 +8457,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IgnoreSafeAreaTop: 0
   isSetBanner: 1
+--- !u!114 &1035336953700707640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6538443191816620942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5838c03e3e2ea34eb7fd20cbd06d1e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placement: game_play
 --- !u!1 &6860641391099875392
 GameObject:
   m_ObjectHideFlags: 0
@@ -15005,6 +15019,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShuffleBoosterBtn
       objectReference: {fileID: 0}
+    - target: {fileID: 1799304157085138387, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1845148848640810924, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -15047,7 +15065,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_AnchorMin.x
@@ -15055,7 +15073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_SizeDelta.x
@@ -15095,11 +15113,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 840.5
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -25
       objectReference: {fileID: 0}
     - target: {fileID: 4579823197926973769, guid: 40bd32061c06d5941975fae4b8d43d96, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

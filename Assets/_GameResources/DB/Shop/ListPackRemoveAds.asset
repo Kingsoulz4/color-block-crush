@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   listShopPack:
   - id: no_ads
-    googleID: no_ads
-    appleID: no_ads
+    googleID: com.color.pixel.shooter.remove.ads
+    appleID: com.color.pixel.shooter.remove.ads
     title: No Ads
     type: 1
     description: No Ads

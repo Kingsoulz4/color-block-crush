@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ColorBlockCrush.Tools;
 using DG.Tweening;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ColorBlockCrush
@@ -40,22 +41,21 @@ namespace ColorBlockCrush
             return _gunsInSlots.Count + count <= _maxSlots;
         }
 
-        public void MoveGunIn(Gun gun)
+        public void RemoveGunByColor(ColorType colorType)
         {
-            if (gun.ConnectedGuns.Count > 0)
+            for (int i = _gunsInSlots.Count - 1; i >= 0; i--)
             {
-                if (!CanPlaceGuns(gun.AllConnectedGunCount))
+                if (_gunsInSlots[i].ColorType == colorType)
                 {
-                    LevelController.Instance.LoseLevel();
-                    return;
+                    _gunsInSlots[i].RemoveAllConnection();
+                    _gunsInSlots[i].ForceDisappear();
                 }
             }
-            else if (!CanPlaceGuns(1))
-            {
-                LevelController.Instance.LoseLevel();
-                return;
-            }
+            ShiftAllToTheLeft();
+        }
 
+        public void MoveGunIn(Gun gun)
+        {
             _gunsInSlots.Add(gun);
             gun.transform.SetParent(gunContainer);
 
@@ -66,6 +66,14 @@ namespace ColorBlockCrush
             {
                 ShiftAllToTheLeft();
             });
+        }
+
+        public void MoveGunsIn(List<Gun> guns)
+        {
+            foreach (Gun gun in guns)
+            {
+                MoveGunIn(gun);
+            }
         }
 
         public void OnTapGun(Gun gun)
@@ -90,17 +98,18 @@ namespace ColorBlockCrush
                     gun.PlayAnim(Constant.GunAnimation.IDLE);
                 });
                 Debug.Log("Not enough slots available");
+                LevelController.Instance.ConveyorController.WarnTrayText();
                 return;
             }
 
-            gunsToPush.Sort((a, b) =>
-            {
-                int result = a.ColumnIndex.CompareTo(b.ColumnIndex);
-                if (result == 0)
-                    result = a.ConnectedGuns.Count.CompareTo(b.ConnectedGuns.Count); // second field
+            //gunsToPush.Sort((a, b) =>
+            //{
+            //    int result = a.ColumnIndex.CompareTo(b.ColumnIndex);
+            //    if (result == 0)
+            //        result = a.ConnectedGuns.Count.CompareTo(b.ConnectedGuns.Count); // second field
 
-                return result;
-            });
+            //    return result;
+            //});
 
             LevelController.Instance.ConveyorController.MoveGunIn(gunsToPush);
 
@@ -118,7 +127,24 @@ namespace ColorBlockCrush
             while (stack.Count > 0)
             {
                 var gunTemp = stack.Pop();
-                listGunToPush.Add(gunTemp);
+
+                if (listGunToPush.Count < 2)
+                {
+                    listGunToPush.Add(gunTemp);
+                }
+                else if (listGunToPush[0].ConnectedGuns.Count <= 1 && listGunToPush[^1].ConnectedGuns.Count <= 1)
+                {
+                    listGunToPush.Insert(listGunToPush.Count - 2, gunTemp);
+                }
+                else if (listGunToPush[0].ConnectedGuns.Count <= 1)
+                {
+                    listGunToPush.Add(gunTemp);
+                }
+                else if (listGunToPush[^1].ConnectedGuns.Count <= 1)
+                {
+                    listGunToPush.Insert(0, gunTemp);
+                }
+
                 for (int i = 0; i < gunTemp.ConnectedGuns.Count; i++)
                 {
                     var linkGun = gunTemp.ConnectedGuns[i];

@@ -101,11 +101,13 @@ namespace ColorBlockCrush
         {
             var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.ADD_TRAY);
             boostersObj.SetActive(boosterData.levelUnlock <= UserDataManager.Level);
+            LevelManager.Instance.inGameplay = true;
         }
 
         private void OnDisable()
         {
             HideAllTuts();
+            LevelManager.Instance.inGameplay = false;
         }
 
         private void OnDestroy()
@@ -365,11 +367,11 @@ namespace ColorBlockCrush
 
         private void HideAllTuts()
         {
-            var popupTut = UIManager.Instance.GetPopupActive<PopupTutorialNewFeature>();
-            if (popupTut != null)
-            {
-                popupTut.Hide();
-            }
+            // var popupTut = UIManager.Instance.GetPopupActive<PopupTutorialNewFeature>();
+            // if (popupTut != null)
+            // {
+            //     popupTut.Hide();
+            // }
         }
 
 
@@ -408,7 +410,7 @@ namespace ColorBlockCrush
             popupConfirmLeave.SetTextButtonConfirm("Retry");
             popupConfirmLeave.OnConfirm = () =>
             {
-                HeartManager.UseHeart(1);
+                //HeartManager.UseHeart(1);
                 LevelManager.Instance.OnRetryGame();
             };
             popupConfirmLeave.OnClose = () => { };

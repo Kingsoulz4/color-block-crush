@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   listShopPack:
   - id: small_bundle
-    googleID: small_bundle
-    appleID: small_bundle
+    googleID: com.color.pixel.small.bundle
+    appleID: com.color.pixel.small.bundle
     title: Small Bundle
     type: 0
     description: boost
@@ -25,15 +25,15 @@ MonoBehaviour:
       quantity: 5000
     - type: 3
       quantity: 1
-    - type: 4
+    - type: 2
       quantity: 1
     - type: 5
       quantity: 1
     - type: 1
       quantity: 3600
   - id: medium_bundle
-    googleID: medium_bundle
-    appleID: medium_bundle
+    googleID: com.color.pixel.medium.bundle
+    appleID: com.color.pixel.medium.bundle
     title: Medium Bundle
     type: 0
     description: boost
@@ -43,15 +43,15 @@ MonoBehaviour:
       quantity: 10000
     - type: 3
       quantity: 5
-    - type: 4
+    - type: 2
       quantity: 5
     - type: 5
       quantity: 5
     - type: 1
       quantity: 7200
   - id: big_bundle
-    googleID: big_bundle
-    appleID: big_bundle
+    googleID: com.color.pixel.big.bundle
+    appleID: com.color.pixel.big.bundle
     title: Big Bundle
     type: 0
     description: boost
@@ -61,7 +61,7 @@ MonoBehaviour:
       quantity: 16000
     - type: 3
       quantity: 10
-    - type: 4
+    - type: 2
       quantity: 10
     - type: 5
       quantity: 10

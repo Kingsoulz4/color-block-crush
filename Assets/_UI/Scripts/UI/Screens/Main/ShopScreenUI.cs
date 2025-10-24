@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Analytics;
+using Yoolax.Framework;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +24,7 @@ namespace ColorBlockCrush
         [Header("Others Packs")]
         [SerializeField] private Button m_buttonRemoveAdsPacks;
         [SerializeField] private GameObject m_removeAdsPacks;
+        [SerializeField] private FreeCoinPack m_freeCoinPack;
 
         [Header("UI")]
         [SerializeField] private GoldDisplay m_goldBar;
@@ -42,7 +43,21 @@ namespace ColorBlockCrush
 
         private void OnEnable()
         {
+            InAppPurchaseAnalyticStruct iapAnalyticStruct = new InAppPurchaseAnalyticStruct();
+            iapAnalyticStruct = iapAnalyticStruct.SetBaseIAP(UiHolderManager.Instance.GetCurrentPlacement(), IAPShowType.shop, TriggerType.click, "Null")
+                .SetIAPShow();
+            Server.Get<OnIAPShowEventLog>().Dispatch(iapAnalyticStruct);
+            Server.Get<OnBuyNoAds>().AddListener(UpdateUI);
             UpdateUI();
+        }
+
+        private void OnDisable()
+        {
+            Server.Get<OnBuyNoAds>().RemoveListener(UpdateUI);
+            InAppPurchaseAnalyticStruct iapAnalyticStruct = new InAppPurchaseAnalyticStruct();
+            iapAnalyticStruct = iapAnalyticStruct.SetBaseIAP(UiHolderManager.Instance.GetCurrentPlacement(), IAPShowType.shop, TriggerType.click, "Null")
+                .SetIAPClose(Time.time - AnalyticManager.Instance.timeOpenPopupIap);
+            Server.Get<OnIAPCloseEventLog>().Dispatch(iapAnalyticStruct);
         }
 
         private void UpdateUI()
@@ -84,6 +99,15 @@ namespace ColorBlockCrush
                     });
                 };
             }
+            m_freeCoinPack.OnGotCoin = (val) => {
+                m_goldBar.gameObject.SetActive(false);
+                var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
+                popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, val, () =>
+                {
+                    m_goldBar.gameObject.SetActive(true);
+                    m_goldBar.SetText(UserDataManager.Gold);
+                });
+            };
         }
     }
 }

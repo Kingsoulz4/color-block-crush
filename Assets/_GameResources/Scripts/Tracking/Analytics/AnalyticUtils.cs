@@ -126,17 +126,43 @@ namespace Analytics
                 case "gold":
                 case "coin":               
                     return ResourceType.currency;
-                case "undo":
-                case "shuffle":
-                case "magnet":
-                case "add_space":
+                case "booster_1":
+                case "booster_2":
+                case "booster_3":
+                case "booster_4":
+                case "booster_5":
+                case "booster_6":
                     return ResourceType.booster;
                 case "accessory":
-                case "infinity_heart":
+                case "infinity_lives":
                 case "heart":
                     return ResourceType.item;
                 default:
                     return ResourceType.item;
+            }
+        }
+        
+        public static string GetNameFromType(string resourceName)
+        {
+            switch (resourceName)
+            {
+                case "booster_1":
+                    return BoosterType.ADD_TRAY.ToString().ToLower();
+                case "booster_2":
+                    return BoosterType.HAND_MOVE.ToString().ToLower();
+                case "booster_3":
+                    return BoosterType.SHUFFLE.ToString().ToLower();
+                case "booster_4":
+                    return BoosterType.SUPER_SHOOT.ToString().ToLower();
+                case "infinity_lives":
+                    return "infinity_lives";
+                case "heart":
+                    return "heart";
+                case "booster_5":
+                case "booster_6":
+                case "accessory":
+                default:
+                    return resourceName;
             }
         }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,6 +34,10 @@ namespace ColorBlockCrush
         public override void Show(Action onClose)
         {
             base.Show(onClose);
+            if(!LevelManager.Instance.inGameplay)  {
+                Hide();
+                return;
+            };
             boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.REVIVAL);
             m_textPrice.text = boosterData.price.ToString();
             AudioManager.Instance.PlayOneShot(failSfx, 1);
@@ -49,7 +54,7 @@ namespace ColorBlockCrush
         {
             if (UserDataManager.Gold >= boosterData.price)
             {
-                UserDataManager.AddGold(-boosterData.price, "Revival");
+                UserDataManager.AddGold(-boosterData.price, "revival", ReasonType.use.ToString());
                 LevelController.Instance.ReviveLevel(boosterData.price);
                 OnKeepPlaying?.Invoke();
                 Hide();

@@ -32,6 +32,11 @@ namespace ColorBlockCrush
             LevelEvent.OnFastMode += OnFastMode;
         }
 
+        private void Update()
+        {
+
+        }
+
         private void OnFastMode()
         {
             float t = splineAnimate.NormalizedTime;
@@ -101,12 +106,26 @@ namespace ColorBlockCrush
 
         public void Move()
         {
-            splineAnimate.Play();
+            if (!MyGun)
+            {
+                return;
+            }
+            if (GameManager.GameState == GameState.Paused)
+            {
+                return;
+            }
+            if (splineAnimate)
+            {
+                splineAnimate.Play();
+            }
         }
 
         public void Pause()
         {
-            splineAnimate.Pause();
+            if (splineAnimate)
+            {
+                splineAnimate.Pause();
+            }
         }
     }
 }

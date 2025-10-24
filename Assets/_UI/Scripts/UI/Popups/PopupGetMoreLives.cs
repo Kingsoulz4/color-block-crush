@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -55,8 +56,8 @@ namespace ColorBlockCrush
             if (UserDataManager.Gold >= coinRequire)
             {
                 int heartNeedToFull = 5 - UserDataManager.Heart;
-                UserDataManager.AddHeart(5, "Refill Heart", false);
-                UserDataManager.AddGold(-coinRequire, "Refill Heart");
+                UserDataManager.AddHeart(5, "refill_heart", false, 0, ReasonType.exchange.ToString());
+                UserDataManager.AddGold(-coinRequire, "refill_heart", ReasonType.exchange.ToString());
                 UIManager.Instance.ShowPopup<PopupReceiveHeart>(() => {
                     Hide();
                     OnRefilled?.Invoke();
@@ -71,9 +72,10 @@ namespace ColorBlockCrush
 
         private void OnClickClaimByAds()
         {
+            Debug.Log("Claim Heart");
             MaxAdsManager.Instance.ShowRewardedAd(MaxKeys.rewardedID, () =>
             {
-                UserDataManager.AddHeart(1, "Refill Heart", false);
+                UserDataManager.AddHeart(1, "refill_heart", false, reason: ReasonType.watch_ads.ToString());
             
                 UIManager.Instance.ShowPopup<PopupReceiveHeart>(() =>
                 {

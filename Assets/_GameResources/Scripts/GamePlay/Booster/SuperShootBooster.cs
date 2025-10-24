@@ -52,6 +52,7 @@ namespace ColorBlockCrush
         {
             base.CancelBooster();
             Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
+            GameManager.Instance.SetGameState(GameState.Playing);
         }
 
         public override void ActiveBooster()
@@ -67,11 +68,13 @@ namespace ColorBlockCrush
             base.ShowBooster();
             IsShowConfirm = true;
             Camera.main.GetComponent<GameCamera>().MoveZ(zOffetCam, 0.2f);
+            GameManager.Instance.SetGameState(GameState.Paused);
         }
 
         protected override void Done()
         {
             base.Done();
+            GameManager.Instance.SetGameState(GameState.Playing);
             Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
         }
 
@@ -81,6 +84,9 @@ namespace ColorBlockCrush
             List<Block> blocks = new List<Block>();
             blocks = LevelController.Instance.BlockBoardController.GetBlockListByColor(colorType);
             LevelController.Instance.GunBoardController.RemoveGunByColor(colorType);
+            LevelController.Instance.SlotController.RemoveGunByColor(colorType);
+            LevelController.Instance.BonusSlotController.RemoveGunByColor(colorType);
+            LevelController.Instance.ConveyorController.RemoveGunByColor(colorType);
 
             yield return new WaitForEndOfFrame();
 
@@ -163,7 +169,7 @@ namespace ColorBlockCrush
                     {
                         block.TakeDamageRaycast(1);
 
-                        spawPos.y = 0;
+                        spawPos.y = 0.6f;
                         Bullet bullet = Instantiate(bulletPrb, spawPos, Quaternion.identity);
                         bullet.transform.SetParent(LevelController.Instance.transform);
                         bullet.OnInit(null, block, (gun, b) =>
