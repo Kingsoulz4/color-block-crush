@@ -53,6 +53,7 @@ namespace ColorBlockCrush
             IsShowConfirm = false;
             Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
             LevelController.Instance.ConveyorController.MoveAllTray();
+            LevelController.Instance.GunBoardController.OnHandBoosterDone();
         }
 
         public override void ActiveBooster()
@@ -76,6 +77,7 @@ namespace ColorBlockCrush
             IsShowConfirm = true;
             Camera.main.GetComponent<GameCamera>().MoveZ(zOffetCam, 0.2f);
             LevelController.Instance.ConveyorController.PauseAllTray();
+            LevelController.Instance.GunBoardController.OnHandBoosterShow();
         }
 
         protected override void Done()
@@ -83,6 +85,7 @@ namespace ColorBlockCrush
             base.Done();
             Camera.main.GetComponent<GameCamera>().MoveZ(originCamZ, 0.2f);
             LevelController.Instance.ConveyorController.MoveAllTray();
+            LevelController.Instance.GunBoardController.OnHandBoosterDone();
 
         }
     }
