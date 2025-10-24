@@ -77,7 +77,7 @@ public class ParatermterEventData : EventData {
 	public override void FireEvent()
 	{
 		//FirebaseAnalytics.LogEvent(EventName, paratermterEventDatas);
-		Debug.Log("Fire Event");
+		//Debug.Log("Fire Event");
 		Server.Get<OnUserPropertiesLog>().Dispatch(AnalyticUtils.GetCurrentUserProperty());
         try
         {
@@ -97,7 +97,7 @@ public class ParatermterEventData : EventData {
                     // avoid collision with reserved keys
                     if (kv.Value == "_ts" || kv.Key == "event_name") continue;
                     evt[kv.Key] = kv.Value;
-                    Debug.Log("Key " + kv.Key + " Value " + kv.Value);
+                    //Debug.Log("Key " + kv.Key + " Value " + kv.Value);
                 }
             }
 
@@ -110,7 +110,7 @@ public class ParatermterEventData : EventData {
 
 #if UNITY_EDITOR
         string parContent = string.Empty;
-		Debug.Log("[EVENT PARA] " + EventName );
+		//Debug.Log("[EVENT PARA] " + EventName );
 #endif
 	}
 }
