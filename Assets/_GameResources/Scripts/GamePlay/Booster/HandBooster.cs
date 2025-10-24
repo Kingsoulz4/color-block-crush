@@ -35,7 +35,10 @@ namespace ColorBlockCrush
             {
                 StartCoroutine(DoBooster());
                 gun.OnGunClicked(true);
-                gun.ForceResoveHidden();
+                foreach (var gunConnect in gun.ConnectedGuns)
+                {
+                    gunConnect.ForceResoveHidden();
+                }
             }
         }
 
