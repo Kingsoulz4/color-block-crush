@@ -1,3 +1,4 @@
+using ColorBlockCrush;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,9 +41,9 @@ public class UISettingModule : MonoBehaviour
 
     private void OnClickVibrate()
     {
-        bool isActiveVibrate = PlayerPrefs.GetInt("isActiveVibrate", 1) == 1;
-        PlayerPrefs.SetInt("isActiveVibrate", !isActiveVibrate ? 1 : 0);
+        bool isActiveVibrate = HapticManager.HapticSetting == 1;
         AudioManager.Instance.PlayOneShot(SFX_ButtonSwitch, 1);
+        HapticManager.Instance.EnableHaptic(!isActiveVibrate);
         vibrateAni.Play(!isActiveVibrate ? "SettingChangeOn_New" : "SettingChangeOff_New");
     }
 
@@ -50,6 +51,6 @@ public class UISettingModule : MonoBehaviour
     {
         musicAni.Play(AudioManager.MusicSetting == 1 ? "SettingOn_New" : "SettingOff_New");
         soundAni.Play(AudioManager.SoundSetting == 1 ? "SettingOn_New" : "SettingOff_New");
-        vibrateAni.Play(PlayerPrefs.GetInt("KeyConfigVibrate", 1) == 1 ? "SettingOn_New" : "SettingOff_New");
+        vibrateAni.Play(HapticManager.HapticSetting == 1 ? "SettingOn_New" : "SettingOff_New");
     }
 }
