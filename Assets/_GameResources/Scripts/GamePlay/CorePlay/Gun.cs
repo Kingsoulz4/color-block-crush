@@ -216,14 +216,14 @@ namespace ColorBlockCrush
 
         public bool CanPushToConveyor()
         {
-            if (IsMovingToConveyor() || IsMovingToSlot()) return false;
-
             foreach (var gunn in AllConnectedGuns)
             {
-                if (gunn.IsMovingToSlot() || gunn.IsMovingToConveyor() || gunn.GunPos == GunPos.ON_CONVEYOR || gunn.GunPos == GunPos.TWEEN_SORT) return false;
+                if (gunn.GunPos == GunPos.ON_CONVEYOR || gunn.GunPos == GunPos.TWEEN_SORT)
+                {
+                    //Debug.Log("Gun false: " + GunPos);
+                    return false;
+                }
             }
-
-            if (GunPos == GunPos.ON_CONVEYOR || GunPos == GunPos.TWEEN_SORT) return false;
 
             if (GunPos == GunPos.ON_GUN_BOARD)
             {
@@ -588,12 +588,14 @@ namespace ColorBlockCrush
         {
             Sequence moveToSlotSq = DOTween.Sequence();
 
-            GunPos = GunPos.ON_SLOT;
+            GunPos = GunPos.TWEEN_SORT;
             moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, moveToSlotDuration)).SetEase(Ease.Linear).OnComplete(() =>
             {
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
                 AllConnectedGunCount = OriginConnectedGunCount;
+                GunPos = GunPos.ON_SLOT;
+                Debug.Log("MoveToSlot done" + GunPos);
             });
 
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
@@ -606,11 +608,12 @@ namespace ColorBlockCrush
         {
             Sequence moveToSlotSq = DOTween.Sequence();
 
-            GunPos = GunPos.ON_BONUS_SLOT;
+            GunPos = GunPos.TWEEN_SORT;
             moveToSlotTw = moveToSlotSq.Append(transform.DOJump(endPos, 3, 1, moveToSlotDuration)).SetEase(Ease.Linear).OnComplete(() =>
             {
                 callback?.Invoke();
                 PlayAnim(Constant.GunAnimation.IDLE);
+                GunPos = GunPos.ON_BONUS_SLOT;
             });
             moveToSlotSq.Join(transform.DORotate(Vector3.zero, moveToSlotDuration));
             moveToSlotSq.SetId(this);
@@ -624,6 +627,7 @@ namespace ColorBlockCrush
             moveSortSlotTw = moveSortSlotSq.Append(transform.DOMove(targetPos, _shiftDuration).SetEase(_shiftEase)).OnComplete(() =>
             {
                 GunPos = gunPosOnDone;
+                Debug.Log("MoveSortSlot done" + GunPos);
             });
             moveSortSlotSq.SetId(this);
         }
