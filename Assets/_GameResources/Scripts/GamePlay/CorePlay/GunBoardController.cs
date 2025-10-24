@@ -475,6 +475,11 @@ namespace ColorBlockCrush
                 {
                     if (listGunColumn[col][row] is Gun gun)
                     {
+                        if (gun.IsFrontRow)
+                        {
+                            gun.PlayAnim(Constant.GunAnimation.STAND);
+                            continue;
+                        }
                         gun.PlayAnim(Constant.GunAnimation.IDLE);
                     }
                 }
