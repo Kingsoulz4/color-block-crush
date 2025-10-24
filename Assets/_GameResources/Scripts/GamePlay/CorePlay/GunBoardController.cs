@@ -296,15 +296,6 @@ namespace ColorBlockCrush
                 return;
             }
 
-            //gunsToPush.Sort((a, b) =>
-            //{
-            //    int result = a.ColumnIndex.CompareTo(b.ColumnIndex);
-            //    if (result == 0)
-            //        result = a.ConnectedGuns.Count.CompareTo(b.ConnectedGuns.Count); // second field
-
-            //    return result;
-            //});
-
             conveyor.MoveGunIn(gunsToPush);
 
             foreach (Gun g in gunsToPush)
@@ -473,6 +464,37 @@ namespace ColorBlockCrush
                 {
                     LevelController.Instance.WinLevel();
                 });
+            }
+        }
+
+        public void OnHandBoosterShow()
+        {
+            for (int col = 0; col < listGunColumn.Count; col++)
+            {
+                for (int row = 0; row < listGunColumn[col].Count; row++)
+                {
+                    if (listGunColumn[col][row] is Gun gun)
+                    {
+                        gun.PlayAnim(Constant.GunAnimation.IDLE);
+                    }
+                }
+            }
+        }
+
+        public void OnHandBoosterDone()
+        {
+            for (int col = 0; col < listGunColumn.Count; col++)
+            {
+                for (int row = 0; row < listGunColumn[col].Count; row++)
+                {
+                    if (listGunColumn[col][row] is Gun gun)
+                    {
+                        if (!gun.IsFrontRow)
+                        {
+                            gun.PlayAnim(Constant.GunAnimation.STAND);
+                        }
+                    }
+                }
             }
         }
 

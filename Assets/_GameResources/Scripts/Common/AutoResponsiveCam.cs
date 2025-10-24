@@ -30,9 +30,13 @@ namespace ColorBlockCrush
 
         }
 
-        private void Update()
+        private void Start()
         {
             CalculateResponsiveCam();
+            if (MyUlti.IsiPad())
+            {
+                _cam.orthographicSize = 13f;
+            }
         }
 
         private (Vector3 center, float size) CalculateOrthoSize()
@@ -50,7 +54,7 @@ namespace ColorBlockCrush
 
         private void OnValidate()
         {
-            _cam = Camera.main; 
+            _cam = Camera.main;
         }
 
         public Vector2Int GetGameViewSize()
