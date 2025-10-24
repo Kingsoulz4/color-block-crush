@@ -353,50 +353,23 @@ namespace ColorBlockCrush
         {
             if (CheckCanDisappear())
             {
-                isDisappeared = true;
-
-                OnGunEmpty?.Invoke(this);
-
-                PlayAnim(Constant.GunAnimation.DISAPPEAR);
-
                 foreach (var gun in AllConnectedGuns)
                 {
-                    if (gun != this)
+                    if (gun)
                     {
-                        gun.CheckDisappear();
+                        gun.Disappear();
                     }
                 }
-
-                LevelManager.Instance.LevelGame.SlotController.RemoveGun(this);
-                LevelManager.Instance.LevelGame.BonusSlotController.RemoveGun(this);
-
-                moveToConveyorTw.Kill();
-                moveSortSlotTw.Kill();
-
-                this.Wait(0.3f, () =>
-                {
-                    gameObject.SetActive(false);
-                    OnGunDissapear?.Invoke(this);
-                });
             }
         }
 
-
-        public void ForceDisappear()
+        private void Disappear()
         {
             isDisappeared = true;
 
             OnGunEmpty?.Invoke(this);
 
             PlayAnim(Constant.GunAnimation.DISAPPEAR);
-
-            foreach (var gun in AllConnectedGuns)
-            {
-                if (gun != this)
-                {
-                    gun.ForceDisappear();
-                }
-            }
 
             LevelManager.Instance.LevelGame.SlotController.RemoveGun(this);
             LevelManager.Instance.LevelGame.BonusSlotController.RemoveGun(this);
@@ -409,6 +382,18 @@ namespace ColorBlockCrush
                 gameObject.SetActive(false);
                 OnGunDissapear?.Invoke(this);
             });
+        }
+
+
+        public void ForceDisappear()
+        {
+            foreach (var gun in AllConnectedGuns)
+            {
+                if (gun)
+                {
+                    gun.Disappear();
+                }
+            }
         }
 
         private void RotateToFire(Transform target)
