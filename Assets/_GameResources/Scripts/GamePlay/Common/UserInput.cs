@@ -1,4 +1,4 @@
-using Lofelt.NiceVibrations;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -80,7 +80,7 @@ namespace ColorBlockCrush
 
                 if (gun != null)
                 {
-                    HapticPatterns.PlayPreset(HapticPatterns.PresetType.LightImpact);
+                    HapticManager.Instance.Haptic();
                     if (BoosterManager.Instance && BoosterManager.Instance.SuperShootBooster.InProgress) return;
                     gun.OnGunClicked();
                     LevelEvent.OnGunClick?.Invoke(gun);
