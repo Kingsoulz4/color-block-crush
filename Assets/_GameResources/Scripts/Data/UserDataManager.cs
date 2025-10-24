@@ -1,8 +1,12 @@
-
+using Yoolax.Framework;
 using Newtonsoft.Json;
 using System;
+using Analytics;
 using UnityEngine;
+using ColorBlockCrush.Tools;
 using static UnityEngine.Rendering.DebugUI;
+using System.Collections.Generic;
+using System.Linq;
 
 public class UserDataManager : MonoBehaviour
 {
@@ -10,6 +14,7 @@ public class UserDataManager : MonoBehaviour
     [System.Serializable]
     public class UserData
     {
+        public int session;
         public int level;
         public int levelSetID;
         public int gold;
@@ -29,16 +34,44 @@ public class UserDataManager : MonoBehaviour
         public int avtarID = 1;
         public int isFirstShowChangeName;
         public int lastFeatureCount;
+        public int buyIapCount;
+        public int winStreak;
+        public int loseStreak;
     }
 
     private const string USER_DATA_KEY = Constant.PlayerPrefs.USER_DATA;
     public static Action<int, int, float> OnUpdateGold;
 
+    [System.Serializable]
+    public class LevelData
+    {
+        public int playIndex;
+        public int loseIndex;
+        public int exitIndex;
+        public PlayType playType;
+        public List<LevelConfig> cacheLevel; 
+    }
+    
+    private const string LEVEL_DATA_KEY = Constant.PlayerPrefs.LEVEL_DATA_KEY;
 
     #region Common
 
-    public static void AddGold(int value, string where, bool isLog = false, string reason = "", float timeDelay = 0)
+    public static void AddGold(int value, string where, string reason = "", float timeDelay = 0)
     {
+        if (where != " ")
+        {
+            string[] types = { ResourceType.currency.ToString() };
+            string[] names = { "coin" };
+            string[] amounts = { Math.Abs(value).ToString() };            
+            ResourceAnalyticStruct resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, 
+                where, reason);
+            if(value >= 0)
+                Server.Get<OnResourceEarnEventLog>().Dispatch(resourceAnalyticStruct);
+            else
+            {
+                Server.Get<OnResourceSpendEventLog>().Dispatch(resourceAnalyticStruct);
+            }
+        }
         Gold = Mathf.Clamp(Gold + value, 0, int.MaxValue);
         OnUpdateGold?.Invoke(Gold + value, Gold, timeDelay);
     }
@@ -49,10 +82,25 @@ public class UserDataManager : MonoBehaviour
 
     public static bool IsNewDay = false;
 
-    public static void AddHeart(int amount, string where, bool hasAnimation, int typeHeart = 0, bool isLog = false, string reason = "")
+    public static void AddHeart(int amount, string where, bool hasAnimation, int typeHeart = 0, string reason = "")
     {
+        Debug.Log($"Add Heart {Heart} {amount}");
         if (typeHeart == 0)
         {
+            if (where != " ")
+            {
+                string[] types = { ResourceType.currency.ToString() };
+                string[] names = { "heart" };
+                string[] amounts = { amount.ToString() };            
+                ResourceAnalyticStruct resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, 
+                    where, reason);
+                if(amount >= 0)
+                    Server.Get<OnResourceEarnEventLog>().Dispatch(resourceAnalyticStruct);
+                else
+                {
+                    Server.Get<OnResourceSpendEventLog>().Dispatch(resourceAnalyticStruct);
+                }
+            }
             int current = Heart;
             int newValue = current + amount;
             if (newValue < 0)
@@ -69,6 +117,20 @@ public class UserDataManager : MonoBehaviour
         }
         else
         {
+            if (where != " ")
+            {
+                string[] types = { ResourceType.currency.ToString() };
+                string[] names = { "infinity_lives" };
+                string[] amounts = { amount.ToString() };            
+                ResourceAnalyticStruct resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, 
+                    where, reason);
+                if(amount >= 0)
+                    Server.Get<OnResourceEarnEventLog>().Dispatch(resourceAnalyticStruct);
+                else
+                {
+                    Server.Get<OnResourceSpendEventLog>().Dispatch(resourceAnalyticStruct);
+                }
+            }
             var now = GameTime.Instance.GetUtcTime();
             if (HeartManager.InfinityEndTime < now)
             {
@@ -94,6 +156,18 @@ public class UserDataManager : MonoBehaviour
             SaveUserData(data);
         }
     }
+
+    public static int Session
+    {
+        get { return LoadUserData().session; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.session = value;
+            SaveUserData(data);
+        }
+    }
+    
     public static int Level
     {
         get { return LoadUserData().level; }
@@ -320,6 +394,105 @@ public class UserDataManager : MonoBehaviour
             SaveUserData(data);
         }
     }
+    
+    public static int BuyIapCount
+    {
+        get { return LoadUserData().buyIapCount; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.buyIapCount = value;
+            SaveUserData(data);
+        }
+    }
+    
+    public static int WinStreak
+    {
+        get { return LoadUserData().winStreak; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.winStreak = value;
+            SaveUserData(data);
+        }
+    }
+
+    public static int LoseStreak
+    {
+        get { return LoadUserData().loseStreak; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.loseStreak = value;
+            SaveUserData(data);
+        }
+    }
+    
+    public static int PlayIndex
+    {
+        get { return LoadLevelData().playIndex; }
+        set
+        {
+            LevelData data = LoadLevelData();
+            data.playIndex = value;
+            SaveLevelData(data);
+        }
+    }
+    
+    public static int LoseIndex
+    {
+        get { return LoadLevelData().loseIndex; }
+        set
+        {
+            LevelData data = LoadLevelData();
+            data.loseIndex = value;
+            SaveLevelData(data);
+        }
+    }
+    
+    public static int ExitIndex
+    {
+        get { return LoadLevelData().exitIndex; }
+        set
+        {
+            LevelData data = LoadLevelData();
+            data.exitIndex = value;
+            SaveLevelData(data);
+        }
+    }
+    
+    public static PlayType PlayType
+    {
+        get { return LoadLevelData().playType; }
+        set
+        {
+            LevelData data = LoadLevelData();
+            data.playType = value;
+            SaveLevelData(data);
+        }
+    }
+    
+    public static List<LevelConfig> GetCacheLevel() => LoadLevelData().cacheLevel;
+
+    public static LevelConfig CheckLevelExistInCache(int levelId)
+    {
+        if(GetCacheLevel() == null || GetCacheLevel().Count == 0) return null;
+
+        Debug.Log("Start Find");
+        LevelConfig level = GetCacheLevel().FirstOrDefault(level => level.levelId == levelId);
+
+        return level;
+    }
+
+    public static LevelConfig GetCurrentLevel(int levelId)
+    {
+        Debug.Log($"Load Current Level {levelId}");
+        if(GetCacheLevel() == null || GetCacheLevel().Count == 0) return null;
+        Debug.Log($"Load Current Level Get Cache {levelId}");
+        if (GetCacheLevel()[0] == null || GetCacheLevel()[0].levelId != levelId) return null;
+        Debug.Log($"Get Cache {levelId}");
+        return GetCacheLevel()[0];
+    }
 
     public static void AddBooster(BoosterType boosterType, int quantity)
     {
@@ -359,6 +532,24 @@ public class UserDataManager : MonoBehaviour
         PlayerPrefs.SetString(USER_DATA_KEY, jsonData);
         PlayerPrefs.Save();
     }
+    
+    public static LevelData LoadLevelData()
+    {
+        if (PlayerPrefs.HasKey(LEVEL_DATA_KEY))
+        {
+            string jsonData = PlayerPrefs.GetString(LEVEL_DATA_KEY);
+            return JsonUtility.FromJson<LevelData>(jsonData);
+        }
+        return GetDefaultLevelData();
+    }
+
+    public static void SaveLevelData(LevelData data)
+    {
+        string jsonData = JsonUtility.ToJson(data);
+        PlayerPrefs.SetString(LEVEL_DATA_KEY, jsonData);
+        PlayerPrefs.Save();
+    }
+    
     #endregion
 
 
@@ -377,7 +568,23 @@ public class UserDataManager : MonoBehaviour
             firstClaimAddTrayBooster = false,
             firstClaimHandBooster = false,
             firstClaimShuffleBooster = false,
-            firstClaimMagnetBooster = false
+            firstClaimMagnetBooster = false,
+            buyIapCount = 0,
+            winStreak = 0,
+            loseStreak = 0,
+            session = 0
+        };
+    }
+    
+    private static LevelData GetDefaultLevelData()
+    {
+        return new LevelData
+        {
+            playIndex = 0,
+            loseIndex = 0,
+            exitIndex = 0,
+            playType = PlayType.home,
+            cacheLevel = new List<LevelConfig>() { null, null, null, null, null}
         };
     }
 }

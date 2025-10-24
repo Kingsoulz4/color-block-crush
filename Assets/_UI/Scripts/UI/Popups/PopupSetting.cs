@@ -2,6 +2,8 @@ using System;
 using ColorBlockCrush;
 using UnityEngine;
 using UnityEngine.UI;
+using Analytics;
+using Yoolax.Framework;
 
 public enum PopupSettingType
 {
@@ -47,13 +49,19 @@ public class PopupSetting : PopupUI
             var popupConfirmLeave = UIManager.Instance.ShowPopup<PopupConfirmLeave>(null);
             popupConfirmLeave.OnConfirm = () =>
             {
+                LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
+                levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelEndStruct(UserDataManager.PlayType,
+                    LevelController.Instance.GunBoardController.TotalGunCount, LevelResult.quit, 
+                    LoseBy.NULL, (float)(DateTime.Now - LevelManager.Instance.timeStart).TotalSeconds);
+                Server.Get<OnLevelEndEventLog>().Dispatch(levelAnalyticStruct);
+                
                 var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
                 loading.Show(() =>
                 {
                     UIManager.Instance.ShowScreen<MainScreenUI>();
                 });
                 Hide();
-                HeartManager.UseHeart(1);
+                //HeartManager.UseHeart(1);
                 
             };
         //}
@@ -70,9 +78,14 @@ public class PopupSetting : PopupUI
         popupConfirmLeave.SetTextButtonConfirm("Retry");
         popupConfirmLeave.OnConfirm = () =>
         {
+            LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
+            levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelEndStruct(UserDataManager.PlayType,
+                LevelController.Instance.GunBoardController.TotalGunCount, LevelResult.restart, 
+                LoseBy.NULL, (float)(DateTime.Now - LevelManager.Instance.timeStart).TotalSeconds);
+            Server.Get<OnLevelEndEventLog>().Dispatch(levelAnalyticStruct);
+            
             LevelManager.Instance.OnRetryGame();
             Hide();
-            HeartManager.UseHeart(1);
         };
         popupConfirmLeave.OnClose = () => { };
     }

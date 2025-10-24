@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   listShopPack:
   - id: coin1
-    googleID: coin1
-    appleID: coin1
+    googleID: com.color.pixel.shooter.pack1
+    appleID: com.color.pixel.shooter.pack1
     title: Coin 1
     type: 0
     description: Coin 1
@@ -24,8 +24,8 @@ MonoBehaviour:
     - type: 0
       quantity: 2000
   - id: coin2
-    googleID: coin2
-    appleID: coin2
+    googleID: com.color.pixel.shooter.pack2
+    appleID: com.color.pixel.shooter.pack2
     title: Coin 2
     type: 0
     description: Coin 2
@@ -34,8 +34,8 @@ MonoBehaviour:
     - type: 0
       quantity: 5000
   - id: coin3
-    googleID: coin3
-    appleID: coin3
+    googleID: com.color.pixel.shooter.pack3
+    appleID: com.color.pixel.shooter.pack3
     title: Coin 3
     type: 0
     description: Coin 3
@@ -44,8 +44,8 @@ MonoBehaviour:
     - type: 0
       quantity: 10000
   - id: coin4
-    googleID: coin4
-    appleID: coin4
+    googleID: com.color.pixel.shooter.pack4
+    appleID: com.color.pixel.shooter.pack4
     title: Coin 4
     type: 0
     description: Coin 4
@@ -54,8 +54,8 @@ MonoBehaviour:
     - type: 0
       quantity: 25000
   - id: coin5
-    googleID: coin5
-    appleID: coin5
+    googleID: com.color.pixel.shooter.pack5
+    appleID: com.color.pixel.shooter.pack5
     title: Coin 5
     type: 0
     description: Coin 5
@@ -64,8 +64,8 @@ MonoBehaviour:
     - type: 0
       quantity: 50000
   - id: coin6
-    googleID: coin6
-    appleID: coin6
+    googleID: com.color.pixel.shooter.pack6
+    appleID: com.color.pixel.shooter.pack6
     title: Coin 6
     type: 0
     description: Coin 6

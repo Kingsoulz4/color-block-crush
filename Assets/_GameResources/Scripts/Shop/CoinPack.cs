@@ -25,16 +25,19 @@ namespace ColorBlockCrush
         private void OnClickBuy()
         {
             //Add Logic IAP Here
-            var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
+            IAPManager.Instance.BuyProductID(shopPack.id, (success) =>
             {
-                OnPurchased?.Invoke();
-            });
-            popupReceiveReward.SetData(shopPack.listReward);
+                var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
+                {
+                    OnPurchased?.Invoke();
+                });
+                popupReceiveReward.SetData(shopPack.listReward);
 
-            foreach (var item in shopPack.listReward)
-            {
-                item.Claim();
-            }
+                foreach (var item in shopPack.listReward)
+                {
+                    item.Claim();
+                }
+            });
         }
 
         public void SetData(ShopPack packData)
@@ -42,7 +45,7 @@ namespace ColorBlockCrush
             this.shopPack = packData;
             m_textCoinQuantity.text = packData.listReward.Find(x => x.type == ItemType.GOLD).quantity + "";
             m_iconCoin.sprite = packData.icon;
-
+            m_textPrice.text = IAPManager.Instance.GetLocalizedPriceString(packData.id);
 
         }
     }

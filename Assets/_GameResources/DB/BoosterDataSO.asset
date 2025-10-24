@@ -18,9 +18,9 @@ MonoBehaviour:
     description: Booster/txt_add_tray_des
     icon: {fileID: 21300000, guid: b28502ff1569fc24a96a08142f2f610f, type: 3}
     iconBig: {fileID: 21300000, guid: b28502ff1569fc24a96a08142f2f610f, type: 3}
-    price: 300
+    price: 600
     quantity: 3
-    levelUnlock: 7
+    levelUnlock: 6
   - boosterType: 2
     title: Booster/txt_hand_title
     description: Booster/txt_hand_des
@@ -36,15 +36,15 @@ MonoBehaviour:
     iconBig: {fileID: 21300000, guid: 5ca0e79d76f2d734184fdf5b977355b0, type: 3}
     price: 900
     quantity: 3
-    levelUnlock: 15
+    levelUnlock: 100000
   - boosterType: 3
     title: Booster/txt_magnet_title
     description: Booster/txt_magnet_des
     icon: {fileID: 21300000, guid: 010b5d3b459c9ce4da6d0fd55eaa027a, type: 3}
     iconBig: {fileID: 21300000, guid: 010b5d3b459c9ce4da6d0fd55eaa027a, type: 3}
     price: 1200
-    quantity: 1
-    levelUnlock: 18
+    quantity: 3
+    levelUnlock: 15
   - boosterType: 4
     title: Super Shoot
     description: Use "Scissors" booster to shorten a random dog

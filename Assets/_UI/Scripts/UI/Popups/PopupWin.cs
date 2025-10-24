@@ -1,12 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using Analytics;
 using ColorBlockCrush.Tools;
-using TMPro;
+using Yoolax.Framework;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ColorBlockCrush
@@ -33,13 +30,19 @@ namespace ColorBlockCrush
 
         private void OnClickClaimX2()
         {
-            UserDataManager.AddGold(80, "WinX2");
-            OnClaimedReward.Invoke(coinReceiveValue * 2);
+            MaxAdsManager.Instance.ShowRewardedAd(MaxKeys.rewardedID, () =>
+            {
+                UserDataManager.PlayType = PlayType.next;
+                UserDataManager.AddGold(80, "winX2", ReasonType.reward.ToString());
+                OnClaimedReward.Invoke(coinReceiveValue * 2); 
+            });
         }
 
         private void OnClickClaim()
         {
-            UserDataManager.AddGold(coinReceiveValue, "Win");
+            UserDataManager.PlayType = PlayType.next;
+            MaxAdsManager.Instance.ShowInterstitialAd(MaxKeys.interstitialID);
+            UserDataManager.AddGold(coinReceiveValue, "win", ReasonType.reward.ToString());
             OnClaimedReward.Invoke(coinReceiveValue);
         }
 
@@ -101,8 +104,22 @@ namespace ColorBlockCrush
             m_winContent.SetActive(true);
             UpdateInfo();
             base.Show(onClose);
+            FetchLevelManager.Instance.FetchLevels(UserDataManager.Level + 1);
             AudioManager.Instance.PlayOneShot(winSfx, 1);
-            m_buttonClaimX2.gameObject.SetActive(UserDataManager.Level >= 10);
+            UserDataManager.AddHeart(1, "win", false, reason: ReasonType.reward.ToString());
+            m_buttonClaimX2.gameObject.SetActive(UserDataManager.Level >= GameManager.Instance.levelTriggerData.levelShowButtonClaimX2);
+            
+            LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
+            levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelEndStruct(UserDataManager.PlayType,
+                LevelController.Instance.GunBoardController.TotalGunCount, LevelResult.win, 
+                LoseBy.NULL, (float)(DateTime.Now - LevelManager.Instance.timeStart).TotalSeconds);
+            Server.Get<OnLevelEndEventLog>().Dispatch(levelAnalyticStruct);
+
+            UserDataManager.PlayIndex = 0;
+            UserDataManager.LoseIndex = 0;
+            UserDataManager.ExitIndex = 0;
+            UserDataManager.LoseStreak = 0;
+            UserDataManager.WinStreak++;
         }
     }
 }

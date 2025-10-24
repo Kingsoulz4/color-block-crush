@@ -534,7 +534,7 @@ namespace ColorBlockCrush.Tools
             string assetPath = Path.Combine(folderPath, newFileName);
 
             // Create the new LevelConfig
-            LevelConfig newLevel = ScriptableObject.CreateInstance<LevelConfig>();
+            LevelConfig newLevel = new LevelConfig();
             newLevel.levelId = nextIndex;
             newLevel.gunLines = new List<GunLineConfig>();
             for (int i = 0; i < 5; i++)
@@ -569,12 +569,12 @@ namespace ColorBlockCrush.Tools
         CollectLevelConfigs(saveFolderPath);
         foreach (LevelConfig levelConfig in _levelConfigs)
         {
-            if (levelConfig == null || levelConfig.name == null)
+            if (levelConfig == null)
             {
                 Debug.LogError("ERROR LEVEL CONFIG");
                 continue;
             }
-            string fileName = levelConfig.name; // e.g. Level_001
+            string fileName = $"Level_{levelConfig.levelId}"; // e.g. Level_001
 
             // Try to extract the number after "Level_"
             if (fileName.StartsWith("Level_"))
@@ -648,7 +648,7 @@ namespace ColorBlockCrush.Tools
         
         public LevelConfig FromJson(string json)
         {
-            LevelConfig config = ScriptableObject.CreateInstance<LevelConfig>();
+            LevelConfig config = new LevelConfig();
             JsonUtility.FromJsonOverwrite(json, config);
             return config;
         }

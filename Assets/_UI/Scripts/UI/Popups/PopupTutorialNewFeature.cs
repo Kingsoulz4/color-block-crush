@@ -21,6 +21,16 @@ namespace ColorBlockCrush
             });
         }
         
+
+        private void OnEnable()
+        {
+            if (!LevelManager.Instance.inGameplay)
+            {
+                Hide();
+                return;
+            };
+        }
+
         public void SetData(NewFeatureItemData newFeatureData)
         {
             m_textFeatureTitle.text = LocalizationManager.GetTranslation(newFeatureData.title);
@@ -30,17 +40,20 @@ namespace ColorBlockCrush
 
         public void Execute(Action callback)
         {
-            var feature = NewFeatureManager.Instance.GetNewFeatureInProgress();
+            Debug.Log("Check Feature");
+            var feature = NewFeatureManager.Instance.NewFeatureSO.newFeatureItemDatas
+                .Find(x => x.level == LevelManager.Instance.CurrentLevel);
             if (feature != null && LevelManager.Instance.CurrentLevel == feature.level)
             {
+                Debug.Log("Show Feature");
                 GameManager.Instance.SetGameState(GameState.Paused);
                 base.Show(callback);
                 SetData(feature);
             }
             else
             {
-                Hide();
                 callback?.Invoke();
+                Hide();
             }
         }
     }

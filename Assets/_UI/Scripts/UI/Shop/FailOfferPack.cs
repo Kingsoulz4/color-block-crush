@@ -2,6 +2,8 @@ using System;
 using UnityEngine.UI;
 using UnityEngine;
 using DG.Tweening;
+using Analytics;
+using Yoolax.Framework;
 
 namespace ColorBlockCrush
 {
@@ -20,7 +22,17 @@ namespace ColorBlockCrush
         {
             m_buttonBuy.onClick.AddListener(OnClickBuy);
         }
-        
+
+        private void OnEnable()
+        {
+            InAppPurchaseAnalyticStruct iapAnalyticStruct = new InAppPurchaseAnalyticStruct();
+            AnalyticManager.Instance.iAPShow = IAPShowType.pack;
+            AnalyticManager.Instance.iAPTriggerType = TriggerType.popup;
+            iapAnalyticStruct = iapAnalyticStruct.SetBaseIAP(AnalyticManager.Instance.GetCurrentPrefixPlacement() + UiHolderManager.Instance.GetCurrentPlacement(),
+                AnalyticManager.Instance.iAPShow, AnalyticManager.Instance.iAPTriggerType, "fail_offer").SetIAPShow();
+            Server.Get<OnIAPShowEventLog>().Dispatch(iapAnalyticStruct);
+        }
+
         public void SetData(ShopPack packData, Action onRevival)
         {
             this.shopPack = packData;
@@ -38,11 +50,11 @@ namespace ColorBlockCrush
                 return;
             }
 
-            var popupLoadingProcess = UIManager.Instance.ShowPopup<PopupLoadingProcess>(null);
-            popupLoadingProcess.ShowPopup();
+            // var popupLoadingProcess = UIManager.Instance.ShowPopup<PopupLoadingProcess>(null);
+            // popupLoadingProcess.ShowPopup();
             IAPManager.Instance.BuyProductID(shopPack.id, (success) =>
             {
-                popupLoadingProcess.Hide();
+                //popupLoadingProcess.Hide();
                 if (success)
                 {
                     ShopManager.Instance.AddPurchasedPack(shopPack);
@@ -53,10 +65,19 @@ namespace ColorBlockCrush
                     });
                     popupReceiveReward.SetData(shopPack.listReward);
 
-                    foreach(var item in shopPack.listReward)
+                    string[] types = new string[shopPack.listReward.Count];
+                    string[] names = new string[shopPack.listReward.Count];
+                    string[] amounts = new string[shopPack.listReward.Count];
+                    for(int i = 0; i < shopPack.listReward.Count; i++)
                     {
-                        item.Claim();
+                        shopPack.listReward[i].Claim();
+                        types[i] = AnalyticUtils.GetCurrencyTypeFromCurrencyName(shopPack.listReward[i].type.ToString().ToLower()).ToString();
+                        names[i] = AnalyticUtils.GetNameFromType(shopPack.listReward[i].type.ToString().ToLower());
+                        amounts[i] = shopPack.listReward[i].quantity.ToString();
                     }
+                    ResourceAnalyticStruct resourceAnalyticStruct = new ResourceAnalyticStruct(types, names, amounts, shopPack.title.ToLower(),
+                        ReasonType.purchase.ToString());
+                    Server.Get<OnResourceEarnEventLog>().Dispatch(resourceAnalyticStruct);
                 }
                 else
                 {

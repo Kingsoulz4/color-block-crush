@@ -22,6 +22,7 @@ namespace ColorBlockCrush
         public static event Action<GameState> OnGameStateChange;
         public static GameState GameState { get => gameState; }
 
+        public LevelTriggerData levelTriggerData;
         private void Start()
         {
             Input.multiTouchEnabled = false;
@@ -36,10 +37,12 @@ namespace ColorBlockCrush
             I2.Loc.LocalizationManager.CurrentLanguage = "English";
             SetGameState(GameState.MainMenu);
 
+            UserDataManager.Session++;
             var loading = UIManager.Instance.ShowScreen<FirstLoadingScreen>();
             loading.Show(() =>
             {
-                if (UserDataManager.Level <= 10)
+                if (UserDataManager.Level <= levelTriggerData.levelBackToHome
+                    && UserDataManager.Session <= 1)
                 {
                     LevelManager.Instance.StartCurrentLevel();
                     UIManager.Instance.ShowScreen<InGameScreenUI>();

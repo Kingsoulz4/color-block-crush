@@ -190,6 +190,7 @@ public class UnityIAPManger : IAPHandlerBase {
         Debug.Log($"OnPurchasePending: {pending.Info.TransactionID}");
         _storeController.ConfirmPurchase(pending);
     }
+    
     private void OnPurchaseFailed(FailedOrder failed) {
         Debug.Log("Buy Fail:  "+ failed.ToString());
        //// var productId = failed.Info.PurchasedProductInfo.First().productId;
@@ -200,6 +201,44 @@ public class UnityIAPManger : IAPHandlerBase {
        //     if (productCallbackDict.TryGetValue(meta.internalId, out var cb) && cb != null) cb.Invoke(false);
        //     if (productCallbackRuntimeDict.TryGetValue(meta.internalId, out cb) && cb != null) cb.Invoke(false);
        // }
+    }
+    
+    public override float GetLocalizedPrice(string pPackageId)
+    {
+        try
+        {
+            if (IsInitialized())
+            {
+                var product = _storeController.GetProductById(pPackageId);
+                if (product != null)
+                    return (float)product.metadata.localizedPrice;
+            }
+               
+            return 0;
+        }
+        catch (System.Exception)
+        {
+            return 0;
+        }
+    }
+    
+    public override string GetLocalizedPriceString(string pPackageId)
+    {
+        try
+        {
+            if (IsInitialized())
+            {
+                var product = _storeController.GetProductById(pPackageId);
+                if (product != null)
+                    return product.metadata.localizedPriceString;
+            }
+                   
+            return "$0.00";
+        }
+        catch (System.Exception)
+        {
+            return "$0.00";
+        }
     }
     #endregion
     #region Helpers: grant rewards

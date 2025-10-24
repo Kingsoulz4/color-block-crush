@@ -1,13 +1,11 @@
-using ColorBlockCrush.PathFinding;
+using System;
 using ColorBlockCrush.Tools;
 using Newtonsoft.Json;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using UnityEngine;
-using static DG.Tweening.DOTweenAnimation;
+using Analytics;
+using Yoolax.Framework;
 
 namespace ColorBlockCrush
 {
@@ -23,6 +21,9 @@ namespace ColorBlockCrush
         private LevelController levelGame;
 
         private int priceRevive = 900;
+
+        public DateTime timeStart;
+        public bool inGameplay = false;
 
         public LevelController LevelGame
         {
@@ -79,15 +80,39 @@ namespace ColorBlockCrush
             LevelEvent.OnLose -= OnLoseGame;
             LevelEvent.OnRevive -= OnReviveGame;
         }
+        
+        public void OnApplicationPause(bool pause)
+        {
+            if (pause)
+            {
+                UserDataManager.ExitIndex++;
+                LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
+                levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelExitStruct(UserDataManager.PlayType,
+                    LevelController.Instance.GunBoardController.TotalGunCount, 
+                    (float)(DateTime.Now - timeStart).TotalSeconds, UserDataManager.ExitIndex);
+                Server.Get<OnLevelExitEventLog>().Dispatch(levelAnalyticStruct);
+            }
+            else
+            {
+                LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
+                levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelReopenStruct();
+                Server.Get<OnLevelReopenEventLog>().Dispatch(levelAnalyticStruct);
+            }
+        }
 
         public void StartCurrentLevel()
         {
+            LevelAnalyticStruct levelAnalyticStruct = new LevelAnalyticStruct();
+            levelAnalyticStruct = levelAnalyticStruct.SetBaseLevel().SetLevelStartStruct(UserDataManager.PlayType,
+                0);       
+            Server.Get<OnLevelStartEventLog>().Dispatch(levelAnalyticStruct);
+            timeStart = DateTime.Now;
             StartLevel(CurrentLevel, CurrentLevelSetID);
         }
 
         public void StartLevel(int level, int levelSetID = 0)
         {
-            var levelData = LoadLevel(level, levelSetID);
+            var levelData = LoadCurrentLevel(level);
             if (LevelTestManager.Instance)
                 if (LevelTestManager.Instance.currentLevelPlay != null)
                     levelData = LevelTestManager.Instance.currentLevelPlay;
@@ -97,6 +122,27 @@ namespace ColorBlockCrush
             //#endif
             LevelGame.SetLevelData(levelData);
             OnStartGame(CurrentLevel);
+        }
+
+        public LevelConfig LoadCurrentLevel(int level)
+        {
+            int levelId = level;
+            if (level > FetchLevelManager.Instance.maxLevel)
+            {
+                levelId = FetchLevelManager.Instance.GetLoopLevelId(level);
+            }
+            LevelConfig levelConfig = UserDataManager.GetCurrentLevel(levelId);
+
+            if (levelConfig == null)
+            {
+                levelConfig = LoadLevel(levelId, UserDataManager.LevelSetID);
+            }
+            else
+            {
+                Debug.Log($"Have Cache Level {level}, Loop {levelId}");
+            }
+
+            return levelConfig;
         }
 
         public LevelConfig LoadLevel(int level, int levelSetID)
@@ -123,7 +169,7 @@ namespace ColorBlockCrush
 
         public LevelDifficult GetCurrentLevelType()
         {
-            var levelData = LoadLevel(CurrentLevel, CurrentLevelSetID);
+            var levelData = LoadCurrentLevel(CurrentLevel);
             return levelData.levelDifficult;
         }
 
@@ -140,7 +186,7 @@ namespace ColorBlockCrush
             {
                 var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
 
-                HeartManager.UseHeart(1);
+                //HeartManager.UseHeart(1);
 
                 popupLose.OnClose = () =>
                 {
@@ -159,7 +205,7 @@ namespace ColorBlockCrush
                 {
                     var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
 
-                    HeartManager.UseHeart(1);
+                    //HeartManager.UseHeart(1);
 
                     popupLose.OnClose = () =>
                     {
@@ -176,8 +222,10 @@ namespace ColorBlockCrush
 
         public void OnRetryGame()
         {
-            if (UserDataManager.Heart > 1)
+            if (UserDataManager.Heart > 0)
             {
+                HeartManager.UseHeart(1);
+                UserDataManager.PlayType = PlayType.restart;
                 StartCurrentLevel();
                 var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
                 loading.Show(() =>
@@ -190,6 +238,7 @@ namespace ColorBlockCrush
                 var popupGetMoreLives = UIManager.Instance.ShowPopup<PopupGetMoreLives>(null);
                 popupGetMoreLives.OnRefilled = () =>
                 {
+                    UserDataManager.PlayType = PlayType.restart;
                     StartCurrentLevel();
                 };
                 popupGetMoreLives.OnClose = () =>
@@ -234,12 +283,12 @@ namespace ColorBlockCrush
 
             CheckShowTutorials();
 
-            var popupTutNewFeature = UIManager.Instance.GetPopup<PopupTutorialNewFeature>();
-            InjectToFlowStartGame(popupTutNewFeature, 1);
+            var popupTutNewFeature = UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
+            InjectToFlowStartGame(popupTutNewFeature, 0);
             var popupTutNewBooster = UIManager.Instance.GetPopup<PopupTutorialNewBooster>();
-            InjectToFlowStartGame(popupTutNewBooster, 2);
+            InjectToFlowStartGame(popupTutNewBooster, 1);
             var popupWarningDifficultLevel = UIManager.Instance.GetPopup<PopupWarningDifficultLevel>();
-            InjectToFlowStartGame(popupWarningDifficultLevel, 0);
+            InjectToFlowStartGame(popupWarningDifficultLevel, 2);
 
             ExecuteNextFlowStep();
 
@@ -262,14 +311,15 @@ namespace ColorBlockCrush
             popupWin.OnClaimedReward = (val) =>
             {
                 CurrentLevel++;
-                if (UserDataManager.Level < 10)
+                if (UserDataManager.Level < GameManager.Instance.levelTriggerData.levelBackToHome
+                    && UserDataManager.Session <= 1)
                 {
                     popupWin.ShowClaimReward(val, NextLevel);
                     //NextLevel();   
                 }
                 else
                 {
-                    if (UserDataManager.Level == 15)
+                    if (UserDataManager.Level == GameManager.Instance.levelTriggerData.levelShowPopupRate)
                     {
                         var popupRate = UIManager.Instance.ShowPopup<PopupRateGame>(() =>
                         {

@@ -13,6 +13,7 @@ namespace ColorBlockCrush
         [SerializeField] private List<Transform> m_listRewardHolders;
         [SerializeField] private Button m_buttonClaim;
         [SerializeField] private GameObject m_ribbon;
+        [SerializeField] private List<ItemRewardUI> m_listRewards;
 
         private void Awake()
         {
@@ -26,10 +27,23 @@ namespace ColorBlockCrush
 
         public void SetData(List<RewardDataGameGecko> listRewardData)
         {
-            for (int i = 0; i < m_listRewardHolders.Count; i++)
+            if (m_listRewards != null && m_listRewards.Count > 0)
             {
-                MyUlti.RemoveAllChilds(m_listRewardHolders[i]);
+                for (int i = m_listRewards.Count - 1; i >= 0; i--)
+                {
+                    ItemRewardUI itemReward = m_listRewards[i];
+                    m_listRewards.RemoveAt(i);
+
+                    Destroy(itemReward.gameObject);
+                }
             }
+
+            m_listRewards = new List<ItemRewardUI>();
+            
+            // for (int i = 0; i < m_listRewardHolders.Count; i++)
+            // {
+            //     MyUlti.RemoveAllChilds(m_listRewardHolders[i]);
+            // }
             if(listRewardData.Count <= 3)
             {
                 for(int i=0; i<listRewardData.Count; i++)
@@ -37,6 +51,7 @@ namespace ColorBlockCrush
                     var newItem = Instantiate(m_itemPrefab, m_listRewardHolders[1]);
                     newItem.gameObject.SetActive(true);
                     newItem.SetData(listRewardData[i]);
+                    m_listRewards.Add(newItem);
                 }    
             }    
             else
@@ -50,8 +65,9 @@ namespace ColorBlockCrush
                     }
                     var newItem = Instantiate(m_itemPrefab, m_listRewardHolders[j]);
                     newItem.gameObject.SetActive(true);
+                    Debug.Log("Init Item " + newItem.gameObject.name + " " + newItem.gameObject.activeSelf + " " + newItem.transform.localScale);
                     newItem.SetData(listRewardData[i]);
-                  
+                    m_listRewards.Add(newItem);
                 }
             }
             StartCoroutine(IEAnimateShow());
@@ -61,10 +77,11 @@ namespace ColorBlockCrush
         {
             for(int i=0; i<m_listRewardHolders.Count; i++)
             {
-                for(int j=0; j < m_listRewardHolders[i].childCount; j++)
-                {
-                    m_listRewardHolders[j].transform.localScale = Vector3.zero;
-                }
+                // for(int j=0; j < m_listRewardHolders[i].childCount; j++)
+                // {
+                    Debug.Log("Init Horizontal " + m_listRewardHolders[i]);
+                    m_listRewardHolders[i].transform.localScale = Vector3.zero;
+                //}
             }
             m_ribbon.transform.localScale = Vector3.zero;
             m_buttonClaim.transform.localScale = Vector3.zero;
@@ -77,11 +94,12 @@ namespace ColorBlockCrush
 
             for (int i = 0; i < m_listRewardHolders.Count; i++)
             {
-                for (int j = 0; j < m_listRewardHolders[i].childCount; j++)
-                {
-                    m_listRewardHolders[j].transform.DOScale(1, 0.2f).SetEase(Ease.OutBack);
+                // for (int j = 0; j < m_listRewardHolders[i].childCount; j++)
+                // {
+                    Debug.Log("Scale Horizontal " + m_listRewardHolders[i]);
+                    m_listRewardHolders[i].transform.DOScale(1, 0.2f).SetEase(Ease.OutBack);
                     yield return new WaitForSeconds(0.15f);
-                }
+                // }
             }
 
             yield return new WaitForSeconds(0.2f);

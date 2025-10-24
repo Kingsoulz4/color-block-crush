@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "385044016381",
+    "project_id": "color-pixel-shooter---android",
+    "storage_bucket": "color-pixel-shooter---android.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:385044016381:android:fa40b90284c940ccc6e294",
+        "android_client_info": {
+          "package_name": "com.color.pixel.shooter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBi8zJJyv0TOFGKdCRCWkhkr_fnnE962o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

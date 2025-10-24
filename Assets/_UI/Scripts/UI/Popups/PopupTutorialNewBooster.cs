@@ -22,6 +22,10 @@ namespace ColorBlockCrush
 
         private void OnEnable()
         {
+            if(!LevelManager.Instance.inGameplay)  {
+                Hide();
+                return;
+            };
             //var feature = NewFeatureManager.Instance.GetNewFeatureInProgress();
             //if (feature != null )
             //{
@@ -42,7 +46,7 @@ namespace ColorBlockCrush
         {
             Action useBooster = () =>
             {
-                UserDataManager.AddBooster(boosterType, 3);
+                UserDataManager.AddBooster(boosterType, 2);
                 doneForceTut?.Invoke();
             };
             Server.Get<OnForceTutBooster>().Dispatch(useBooster, boosterType, m_imageFeatureIcon.transform.position);
@@ -51,9 +55,11 @@ namespace ColorBlockCrush
 
         public void Execute(Action callback)
         {
+            Debug.Log("Check Booster");
             var boosterUnlock = BoosterManager.Instance.BoosterData.boosterItemDatas.Find(x => x.levelUnlock == LevelManager.Instance.CurrentLevel);
             if (CheckShowForceTut())
             {
+                Debug.Log("Show Booster");
                 base.Show(null);
                 doneForceTut = callback;
                 GameManager.Instance.SetGameState(GameState.Paused);

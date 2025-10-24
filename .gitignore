@@ -73,6 +73,7 @@ Assets/GeneratedLocalRepo/
 Assets/GeneratedLocalRepo.meta
 Assets/AddressablesBuildResources.meta
 Assets/AddressablesBuildResources/
+Assets/Firebase/
 Screenshots/
 *.dwlt
 ProjectSettings/BurstAotSettings_Android.json
