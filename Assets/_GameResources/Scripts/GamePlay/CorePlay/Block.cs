@@ -24,7 +24,7 @@ namespace ColorBlockCrush
 
         [Header("Renderer References")]
         [SerializeField] protected Transform centerPoint;
-        [SerializeField] private Renderer _blockMeshRenderer;
+        [SerializeField] protected Renderer _blockMeshRenderer;
         [SerializeField] protected ListMaterialsByColor colorRef;
         [SerializeField] protected Collider mCollider;
         public SerializedDictionary<int, int> colorRate;

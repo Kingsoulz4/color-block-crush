@@ -27,6 +27,11 @@ namespace ColorBlockCrush
             tunnelData = tunnelAreaConfig;
             hitPoint = tunnelAreaConfig.elements.Sum(x => x.health);
             maxHitPoint = hitPoint;
+            UpdateHeathText();
+
+            var currentElement = tunnelData.elements[currentElementIndex];
+            currentElementHealthRemain = currentElement.health;
+            _blockMeshRenderer.material = colorRef.listMaterial[currentElement.elementColor].First();
 
         }    
 
@@ -59,8 +64,10 @@ namespace ColorBlockCrush
         private void NextElement()
         {
             currentElementIndex += 1;
-            currentElementHealthRemain = tunnelData.elements[currentElementIndex].health;
-
+            var currentElement = tunnelData.elements[currentElementIndex];
+            currentElementHealthRemain = currentElement.health;
+            _blockMeshRenderer.material = colorRef.listMaterial[currentElement.elementColor].First();
+                
         }
 
         private void UpdateHeathText()
