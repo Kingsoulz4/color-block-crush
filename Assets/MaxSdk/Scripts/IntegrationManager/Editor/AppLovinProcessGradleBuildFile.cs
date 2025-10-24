@@ -6,14 +6,17 @@
 
 #if UNITY_ANDROID
 
+using System.Text;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AppLovinMax.Internal;
+using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+using UnityEngine.Networking;
+using Debug = UnityEngine.Debug;
 
 namespace AppLovinMax.Scripts.IntegrationManager.Editor
 {
@@ -57,29 +60,6 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
         private const string SafeDkLegacyDependencyClassPath = "com.safedk:SafeDKGradlePlugin:";
 
         /// <summary>
-        /// Adds the Quality Service plugin to the root gradle file.
-        /// </summary>
-        /// <param name="path">The path to the unityLibrary's module.</param>
-        /// <returns>True if the plugin was added successfully, otherwise return false</returns>
-        protected static bool AddQualityServiceToRootGradleFile(string path)
-        {
-            var rootGradleBuildFilePath = Path.Combine(path, "../build.gradle");
-            var shouldAddQualityServiceToDependencies = ShouldAddQualityServiceToDependencies(rootGradleBuildFilePath);
-
-            if (shouldAddQualityServiceToDependencies)
-            {
-                // Add the Quality Service Plugin to the dependencies block in the root build.gradle file
-                return AddQualityServiceBuildScriptLines(rootGradleBuildFilePath);
-            }
-
-            // Add the Quality Service Plugin to the plugin block in the root build.gradle file
-            var rootSettingsGradleFilePath = Path.Combine(path, "../settings.gradle");
-            var qualityServiceAdded = AddPluginToRootGradleBuildFile(rootGradleBuildFilePath);
-            var appLovinRepositoryAdded = AddAppLovinRepository(rootSettingsGradleFilePath);
-            return qualityServiceAdded && appLovinRepositoryAdded;
-        }
-
-        /// <summary>
         /// Determines whether the AppLovin Quality Service plugin should be added to the 
         /// dependencies block in the root build.gradle file or to the plugins block.
         ///
@@ -104,7 +84,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
         /// </summary>
         /// <param name="rootGradleBuildFile">The path to project's root build.gradle file.</param>
         /// <returns><c>true</c> if the file contains a `dependencies` block, indicating an older Gradle version</returns>
-        private static bool ShouldAddQualityServiceToDependencies(string rootGradleBuildFile)
+        protected static bool ShouldAddQualityServiceToDependencies(string rootGradleBuildFile)
         {
             var lines = File.ReadAllLines(rootGradleBuildFile).ToList();
             return lines.Any(line => TokenBuildScriptDependencies.IsMatch(line));
@@ -140,7 +120,11 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
             var outputLines = GenerateUpdatedBuildFileLines(
                 sanitizedLines,
                 apiKey,
-                false // The buildscript closure related lines will to be added to the root build.gradle file.
+#if UNITY_2019_3_OR_NEWER
+                false // On Unity 2019.3+, the buildscript closure related lines will to be added to the root build.gradle file.
+#else
+                true
+#endif
             );
             // outputLines can be null if we couldn't add the plugin. 
             if (outputLines == null) return;
@@ -171,7 +155,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
         /// </summary>
         /// <param name="rootGradleBuildFile">The path to project's root build.gradle file.</param>
         /// <returns><c>true</c> when the plugin was added successfully.</returns>
-        private static bool AddPluginToRootGradleBuildFile(string rootGradleBuildFile)
+        protected bool AddPluginToRootGradleBuildFile(string rootGradleBuildFile)
         {
             var lines = File.ReadAllLines(rootGradleBuildFile).ToList();
 
@@ -231,7 +215,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
         /// </summary>
         /// <param name="settingsGradleFile">The path to the project's settings.gradle file.</param>
         /// <returns><c>true</c> if the repository was added successfully.</returns>
-        private static bool AddAppLovinRepository(string settingsGradleFile)
+        protected bool AddAppLovinRepository(string settingsGradleFile)
         {
             var lines = File.ReadLines(settingsGradleFile).ToList();
             var outputLines = new List<string>();
@@ -293,6 +277,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
             return true;
         }
 
+#if UNITY_2019_3_OR_NEWER
         /// <summary>
         /// Adds the necessary AppLovin Quality Service dependency and maven repo lines to the provided root build.gradle file.
         /// Sample build.gradle file after adding quality service:
@@ -313,7 +298,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
         /// </summary>
         /// <param name="rootGradleBuildFile">The root build.gradle file path</param>
         /// <returns><c>true</c> if the build script lines were applied correctly.</returns>
-        private static bool AddQualityServiceBuildScriptLines(string rootGradleBuildFile)
+        protected bool AddQualityServiceBuildScriptLines(string rootGradleBuildFile)
         {
             var lines = File.ReadAllLines(rootGradleBuildFile).ToList();
             var outputLines = GenerateUpdatedBuildFileLines(lines, null, true);
@@ -355,6 +340,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
                 Console.WriteLine(exception);
             }
         }
+#endif
 
         private static AppLovinQualityServiceData RetrieveQualityServiceData(string sdkKey)
         {
@@ -450,13 +436,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
 
         private static List<string> GenerateUpdatedBuildFileLines(List<string> lines, string apiKey, bool addBuildScriptLines)
         {
-            // Check if the plugin exists, if so, update the SDK Key.
-            var pluginExists = lines.Any(line => TokenAppLovinPlugin.IsMatch(line));
-            return pluginExists ? UpdateExistingPlugin(lines, apiKey) : AddPluginAndBuildScript(lines, apiKey, addBuildScriptLines);
-        }
-
-        private static List<string> UpdateExistingPlugin(List<string> lines, string apiKey)
-        {
+            var addPlugin = MaxSdkUtils.IsValidString(apiKey);
             // A sample of the template file.
             // ...
             // allprojects {
@@ -477,162 +457,149 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
             //     **DEPS**}
             // ...
             var outputLines = new List<string>();
-            var pluginMatched = false;
-            var insideAppLovinClosure = false;
-            var updatedApiKey = false;
-            var mavenRepoUpdated = false;
-            var dependencyClassPathUpdated = false;
-            foreach (var line in lines)
+            // Check if the plugin exists, if so, update the SDK Key.
+            var pluginExists = lines.Any(line => TokenAppLovinPlugin.IsMatch(line));
+            if (pluginExists)
             {
-                // Bintray maven repo is no longer being used. Update to s3 maven repo with regex check
-                if (!mavenRepoUpdated && (line.Contains(QualityServiceBintrayMavenRepo) || line.Contains(QualityServiceNoRegexMavenRepo)))
+                var pluginMatched = false;
+                var insideAppLovinClosure = false;
+                var updatedApiKey = false;
+                var mavenRepoUpdated = false;
+                var dependencyClassPathUpdated = false;
+                foreach (var line in lines)
                 {
-                    outputLines.Add(GetFormattedBuildScriptLine(QualityServiceMavenRepo));
-                    mavenRepoUpdated = true;
-                    continue;
-                }
-
-                // We no longer use version specific dependency class path. Just use + for version to always pull the latest.
-                if (!dependencyClassPathUpdated && line.Contains(QualityServiceDependencyClassPathV3))
-                {
-                    outputLines.Add(GetFormattedBuildScriptLine(QualityServiceDependencyClassPath));
-                    dependencyClassPathUpdated = true;
-                    continue;
-                }
-
-                if (!pluginMatched && line.Contains(QualityServicePlugin))
-                {
-                    insideAppLovinClosure = true;
-                    pluginMatched = true;
-                }
-
-                if (insideAppLovinClosure && line.Contains("}"))
-                {
-                    insideAppLovinClosure = false;
-                }
-
-                // Update the API key.
-                if (insideAppLovinClosure && !updatedApiKey && TokenApiKey.IsMatch(line))
-                {
-                    outputLines.Add(string.Format(QualityServiceApiKey, apiKey));
-                    updatedApiKey = true;
-                }
-                // Keep adding the line until we find and update the plugin.
-                else
-                {
-                    outputLines.Add(line);
-                }
-            }
-
-            return outputLines;
-        }
-
-        private static List<string> AddPluginAndBuildScript(List<string> lines, string apiKey, bool addBuildScriptLines)
-        {
-            var shouldAddPlugin = MaxSdkUtils.IsValidString(apiKey);
-            if (shouldAddPlugin)
-            {
-                lines = AddPlugin(lines, apiKey);
-                if (lines == null) return null;
-            }
-
-            if (!addBuildScriptLines) return lines;
-
-            lines = AddBuildScript(lines);
-            return lines;
-        }
-
-        private static List<string> AddBuildScript(List<string> lines)
-        {
-            var outputLines = new List<string>();
-            var buildScriptClosureDepth = 0;
-            var insideBuildScriptClosure = false;
-            var buildScriptMatched = false;
-            var qualityServiceRepositoryAdded = false;
-            var qualityServiceDependencyClassPathAdded = false;
-            foreach (var line in lines)
-            {
-                // Add the line to the output lines.
-                outputLines.Add(line);
-
-                if (!buildScriptMatched && line.Contains(BuildScriptMatcher))
-                {
-                    buildScriptMatched = true;
-                    insideBuildScriptClosure = true;
-                }
-
-                // Match the parenthesis to track if we are still inside the buildscript closure.
-                if (insideBuildScriptClosure)
-                {
-                    if (line.Contains("{"))
-                    {
-                        buildScriptClosureDepth++;
-                    }
-
-                    if (line.Contains("}"))
-                    {
-                        buildScriptClosureDepth--;
-                    }
-
-                    if (buildScriptClosureDepth == 0)
-                    {
-                        insideBuildScriptClosure = false;
-
-                        // There may be multiple buildscript closures and we need to keep looking until we added both the repository and classpath.
-                        buildScriptMatched = qualityServiceRepositoryAdded && qualityServiceDependencyClassPathAdded;
-                    }
-                }
-
-                if (insideBuildScriptClosure)
-                {
-                    // Add the build script dependency repositories.
-                    if (!qualityServiceRepositoryAdded && TokenBuildScriptRepositories.IsMatch(line))
+                    // Bintray maven repo is no longer being used. Update to s3 maven repo with regex check
+                    if (!mavenRepoUpdated && (line.Contains(QualityServiceBintrayMavenRepo) || line.Contains(QualityServiceNoRegexMavenRepo)))
                     {
                         outputLines.Add(GetFormattedBuildScriptLine(QualityServiceMavenRepo));
-                        qualityServiceRepositoryAdded = true;
+                        mavenRepoUpdated = true;
+                        continue;
                     }
-                    // Add the build script dependencies.
-                    else if (!qualityServiceDependencyClassPathAdded && TokenBuildScriptDependencies.IsMatch(line))
+
+                    // We no longer use version specific dependency class path. Just use + for version to always pull the latest.
+                    if (!dependencyClassPathUpdated && line.Contains(QualityServiceDependencyClassPathV3))
                     {
                         outputLines.Add(GetFormattedBuildScriptLine(QualityServiceDependencyClassPath));
-                        qualityServiceDependencyClassPathAdded = true;
+                        dependencyClassPathUpdated = true;
+                        continue;
+                    }
+
+                    if (!pluginMatched && line.Contains(QualityServicePlugin))
+                    {
+                        insideAppLovinClosure = true;
+                        pluginMatched = true;
+                    }
+
+                    if (insideAppLovinClosure && line.Contains("}"))
+                    {
+                        insideAppLovinClosure = false;
+                    }
+
+                    // Update the API key.
+                    if (insideAppLovinClosure && !updatedApiKey && TokenApiKey.IsMatch(line))
+                    {
+                        outputLines.Add(string.Format(QualityServiceApiKey, apiKey));
+                        updatedApiKey = true;
+                    }
+                    // Keep adding the line until we find and update the plugin.
+                    else
+                    {
+                        outputLines.Add(line);
                     }
                 }
             }
-
-            if (!qualityServiceRepositoryAdded || !qualityServiceDependencyClassPathAdded)
+            // Plugin hasn't been added yet, add it.
+            else
             {
-                return null;
+                var buildScriptClosureDepth = 0;
+                var insideBuildScriptClosure = false;
+                var buildScriptMatched = false;
+                var qualityServiceRepositoryAdded = false;
+                var qualityServiceDependencyClassPathAdded = false;
+                var qualityServicePluginAdded = false;
+                foreach (var line in lines)
+                {
+                    // Add the line to the output lines.
+                    outputLines.Add(line);
+
+                    // Check if we need to add the build script lines and add them.
+                    if (addBuildScriptLines)
+                    {
+                        if (!buildScriptMatched && line.Contains(BuildScriptMatcher))
+                        {
+                            buildScriptMatched = true;
+                            insideBuildScriptClosure = true;
+                        }
+
+                        // Match the parenthesis to track if we are still inside the buildscript closure.
+                        if (insideBuildScriptClosure)
+                        {
+                            if (line.Contains("{"))
+                            {
+                                buildScriptClosureDepth++;
+                            }
+
+                            if (line.Contains("}"))
+                            {
+                                buildScriptClosureDepth--;
+                            }
+
+                            if (buildScriptClosureDepth == 0)
+                            {
+                                insideBuildScriptClosure = false;
+
+                                // There may be multiple buildscript closures and we need to keep looking until we added both the repository and classpath.
+                                buildScriptMatched = qualityServiceRepositoryAdded && qualityServiceDependencyClassPathAdded;
+                            }
+                        }
+
+                        if (insideBuildScriptClosure)
+                        {
+                            // Add the build script dependency repositories.
+                            if (!qualityServiceRepositoryAdded && TokenBuildScriptRepositories.IsMatch(line))
+                            {
+                                outputLines.Add(GetFormattedBuildScriptLine(QualityServiceMavenRepo));
+                                qualityServiceRepositoryAdded = true;
+                            }
+                            // Add the build script dependencies.
+                            else if (!qualityServiceDependencyClassPathAdded && TokenBuildScriptDependencies.IsMatch(line))
+                            {
+                                outputLines.Add(GetFormattedBuildScriptLine(QualityServiceDependencyClassPath));
+                                qualityServiceDependencyClassPathAdded = true;
+                            }
+                        }
+                    }
+
+                    // Check if we need to add the plugin and add it.
+                    if (addPlugin)
+                    {
+                        // Add the plugin.
+                        if (!qualityServicePluginAdded && TokenApplicationPlugin.IsMatch(line))
+                        {
+                            outputLines.Add(QualityServiceApplyPlugin);
+                            outputLines.AddRange(GenerateAppLovinPluginClosure(apiKey));
+                            qualityServicePluginAdded = true;
+                        }
+                    }
+                }
+
+                if ((addBuildScriptLines && (!qualityServiceRepositoryAdded || !qualityServiceDependencyClassPathAdded)) || (addPlugin && !qualityServicePluginAdded))
+                {
+                    return null;
+                }
             }
 
             return outputLines;
-        }
-
-        private static List<string> AddPlugin(List<string> lines, string apiKey)
-        {
-            var outputLines = new List<string>();
-            var qualityServicePluginAdded = false;
-            foreach (var line in lines)
-            {
-                outputLines.Add(line);
-
-                // Add the plugin.
-                if (qualityServicePluginAdded || !TokenApplicationPlugin.IsMatch(line)) continue;
-
-                outputLines.Add(QualityServiceApplyPlugin);
-                outputLines.AddRange(GenerateAppLovinPluginClosure(apiKey));
-                qualityServicePluginAdded = true;
-            }
-
-            return qualityServicePluginAdded ? outputLines : null;
         }
 
         public static string GetFormattedBuildScriptLine(string buildScriptLine)
         {
 #if UNITY_2022_2_OR_NEWER
             return "        "
-#else
+#elif UNITY_2019_3_OR_NEWER
             return "            "
+#else
+            return "        "
 #endif
                    + buildScriptLine;
         }

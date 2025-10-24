@@ -31,14 +31,20 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
     {
         private const string AppLovinMediationAmazonAdapterDependenciesPath = "Amazon/Scripts/Mediations/AppLovinMediation/Editor/Dependencies.xml";
 
+#if UNITY_2019_2_OR_NEWER
         private static readonly IPackageManagerClient _upmPackageManager = new AppLovinUpmPackageManager();
+#endif
         private static readonly IPackageManagerClient _assetsPackageManager = new AppLovinAssetsPackageManager();
 
         private static IPackageManagerClient PackageManagerClient
         {
             get
             {
+#if UNITY_2019_2_OR_NEWER
                 return AppLovinIntegrationManager.IsPluginInPackageManager ? _upmPackageManager : _assetsPackageManager;
+#else
+                return _assetsPackageManager;
+#endif
             }
         }
 
@@ -104,8 +110,10 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
             var installedNetworksInAssets = AppLovinAssetsPackageManager.GetInstalledMediationNetworks();
             installedNetworks.AddRange(installedNetworksInAssets);
 
+#if UNITY_2019_2_OR_NEWER
             var installedNetworksInPackages = AppLovinUpmPackageManager.GetInstalledMediationNetworks();
             installedNetworks.AddRange(installedNetworksInPackages);
+#endif
 
             if (IsAmazonAppLovinAdapterInstalled())
             {
@@ -166,10 +174,12 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
         internal static void UpdateCurrentVersions(Network network)
         {
             var assetPaths = GetAssetPathListForExportPath(network.DependenciesFilePath);
+#if UNITY_2019_2_OR_NEWER
             if (HasDuplicateAdapters(assetPaths))
             {
                 ShowDeleteDuplicateAdapterPrompt(network);
             }
+#endif
 
             var currentVersions = GetCurrentVersions(assetPaths);
             network.CurrentVersions = currentVersions;
@@ -227,6 +237,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
             }
         }
 
+#if UNITY_2019_2_OR_NEWER
         /// <summary>
         /// Checks whether a network has duplicate adapters installed in both the Assets folder and via UPM.
         /// </summary>
@@ -281,6 +292,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
 
             AppLovinUpmPackageManager.ResolvePackageManager();
         }
+#endif
 
         /// <summary>
         /// Gets the current versions for a given network's dependency file paths. UPM will have multiple paths
@@ -414,6 +426,7 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
         #endregion
     }
 
+#if UNITY_2019_2_OR_NEWER
     public class AppLovinUpmPackageManager : IPackageManagerClient
     {
         public const string PackageNamePrefixAppLovin = "com.applovin.mediation.ads";
@@ -581,6 +594,8 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
             return (request.Status == StatusCode.Success) ? request.Result : null;
         }
     }
+
+#endif
 
     public class AppLovinAssetsPackageManager : IPackageManagerClient
     {

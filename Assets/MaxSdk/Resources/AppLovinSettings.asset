@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebc0ba1b5ef6b4a6b9dd53d7eadfea16, type: 3}
+  m_Script: {fileID: 0}
   m_Name: AppLovinSettings
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: MaxSdk.Scripts.IntegrationManager.Editor::AppLovinSettings
   qualityServiceEnabled: 1
   sdkKey: nyoXoy93aTt9CkHTWGs5QxP4JzEIS81D5pltmvxKRpUeWnB2128R-XWHUlayuc9zQvrAonVEZ_t5m37o6GE4ol
   customGradleVersionUrl: 

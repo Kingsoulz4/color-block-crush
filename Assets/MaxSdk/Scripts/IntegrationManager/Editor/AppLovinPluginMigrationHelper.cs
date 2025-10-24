@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_2019_2_OR_NEWER
 namespace AppLovinMax.Scripts.IntegrationManager.Editor
 {
     /// <summary>
@@ -164,3 +165,4 @@ namespace AppLovinMax.Scripts.IntegrationManager.Editor
         #endregion
     }
 }
+#endif

@@ -1082,7 +1082,7 @@ public static class MaxSdkCallbacks
         MaxSdkLogger.D("Listener has been removed from callback: " + eventName);
     }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && UNITY_2019_2_OR_NEWER
     /// <summary>
     /// Resets static event handlers so they still get reset even if Domain Reloading is disabled
     /// </summary>
