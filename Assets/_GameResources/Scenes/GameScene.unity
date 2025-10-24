@@ -751,11 +751,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a3267720e82aa41c1a05ab29824902b4, type: 3}
---- !u!1 &1844801422 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1116564140590646203, guid: 46a8edf75861c5c4097b559db34fcef2, type: 3}
-  m_PrefabInstance: {fileID: 2216163947835597617}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2053529618
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -861,10 +856,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 5370612874470499271, guid: 46a8edf75861c5c4097b559db34fcef2, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6487142648059002569, guid: 46a8edf75861c5c4097b559db34fcef2, type: 3}
       propertyPath: m_Name
       value: Camera
@@ -872,33 +863,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1116564140590646203, guid: 46a8edf75861c5c4097b559db34fcef2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2230016265944609845}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46a8edf75861c5c4097b559db34fcef2, type: 3}
 --- !u!20 &2230016265944609841 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 2963680295945916546, guid: 46a8edf75861c5c4097b559db34fcef2, type: 3}
   m_PrefabInstance: {fileID: 2216163947835597617}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2230016265944609845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1844801422}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5905164e451d69543978e66430fb8944, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _buffer: 0
-  _cam: {fileID: 2230016265944609841}
-  defaultAspect: 0.42857143
-  defaultOrthoSize: 15
-  minOrthoSize: 12
 --- !u!1001 &8329528925555558761
 PrefabInstance:
   m_ObjectHideFlags: 0
