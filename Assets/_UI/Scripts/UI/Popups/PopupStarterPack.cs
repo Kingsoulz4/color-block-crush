@@ -47,12 +47,12 @@ namespace ColorBlockCrush
                 x => x.id == "starter_pack");
             if (starterPack == null) return;
             
-            // var popupLoadingProcess = UIManager.Instance.ShowPopup<PopupLoadingProcess>(null);
-            // popupLoadingProcess.ShowPopup();
+            var popupLoadingProcess = UIManager.Instance.ShowPopup<PopupLoadingProcess>(null);
+            popupLoadingProcess.ShowPopup();
             
             IAPManager.Instance.BuyProductID(starterPack.id, (success) =>
             {
-                //popupLoadingProcess.Hide();
+                popupLoadingProcess.Hide();
                 if (success)
                 {
                     var popupReceiveRewards = UIManager.Instance.ShowPopup<PopupReceiveReward>(null);

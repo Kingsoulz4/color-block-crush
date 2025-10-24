@@ -193,6 +193,9 @@ public class UnityIAPManger : IAPHandlerBase {
     
     private void OnPurchaseFailed(FailedOrder failed) {
         Debug.Log("Buy Fail:  "+ failed.ToString());
+        var product = _storeController.GetProductById(failed.Info.PurchasedProductInfo.First().productId);
+        if (productCallbackRuntimeDict.ContainsKey(product.definition.id))
+            productCallbackRuntimeDict[product.definition.id].Invoke(false);
        //// var productId = failed.Info.PurchasedProductInfo.First().productId;
        // Debug.LogError($"OnPurchaseFailed: productId={productId} reason={failed.FailureReason}");
 
