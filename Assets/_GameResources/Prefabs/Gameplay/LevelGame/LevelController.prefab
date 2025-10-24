@@ -1331,7 +1331,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxSlots: 5
-  _slotStartPosition: {x: -4, y: 0, z: -7.5}
+  _slotStartPosition: {x: -4, y: 0, z: -6.8}
   _slotSpacing: 2
   slotItemPrb: {fileID: 8942555809478992828, guid: 4957b2bd496e38944937d092d5ff0842, type: 3}
   gunContainer: {fileID: 4320968164407314973}
@@ -2114,9 +2114,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd90f07f28a54340ba3077f2b6237f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnOrigin: {x: 0, y: 0, z: -10.5}
+  spawnOrigin: {x: 0, y: 0, z: -9.3}
   columnSpacing: 2
-  rowSpacing: 2.8
+  rowSpacing: 2.4
   gunPrefab: {fileID: 769447249408881793, guid: c0ec142dcc474a84881e4d21fccb1b06, type: 3}
   lockPrefab: {fileID: 4719912956732493574, guid: 5d73177f82cd7f845b768f6c1551bc09, type: 3}
   tunnelPrefab: {fileID: 7841600385539253220, guid: 86817763f8a804f48945ed855cac0641, type: 3}
@@ -2199,7 +2199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxSlots: 500
-  _slotStartPosition: {x: -3.5, y: 0, z: -5}
+  _slotStartPosition: {x: -3.5, y: 0, z: -4.7}
   _slotSpacing: 1.5
   slotItemPrb: {fileID: 0}
   gunContainer: {fileID: 4993241944393017477}
@@ -3125,7 +3125,22 @@ MonoBehaviour:
   bonusSlotController: {fileID: 9173912794059990419}
   conveyorController: {fileID: 6226058982253706133}
   m_tutorialHandGuide: {fileID: 0}
-  levelData: {fileID: 0}
+  levelData:
+    levelId: 0
+    levelDifficult: 0
+    imageConfig:
+      SavePath: 
+      ImageSize: {x: 0, y: 0}
+      ColorFlatMap: 
+      pixelCountByColor: 
+    mapConfig:
+      mapSize: {x: 0, y: 0}
+      blocks: []
+      bigBlocks: []
+      keys: []
+      tunnelsArea: []
+      pixelSnakes: []
+    gunLines: []
 --- !u!1 &9055837541032993411
 GameObject:
   m_ObjectHideFlags: 0

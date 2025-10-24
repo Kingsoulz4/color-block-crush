@@ -563,7 +563,7 @@ namespace ColorBlockCrush
                 GetTargetBock();
             });
 
-            moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.85f, moveToConveyorDuration + delay));
+            moveToConveyorSq.Join(transform.DOScale(Vector3.one * 0.9f, moveToConveyorDuration + delay));
             moveToConveyorSq.Append(transform.DOPunchScale(Vector3.one * 0.2f, moveToSlotDuration + delay));
             moveToConveyorSq.SetId(this);
             //moveToConveyorSq.SetDelay(delay);
