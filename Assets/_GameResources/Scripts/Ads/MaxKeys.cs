@@ -7,8 +7,8 @@ public class MaxKeys
     public static readonly string interstitialID = "f0c4f66a10eec3a6";
     public static readonly string rewardedID = "19d68c96821a0049";
 #elif UNITY_IOS
-    public static readonly string bannerID = "b5f967ebd21f1d48";
-    public static readonly string interstitialID = "881bfb1c451376da";
-    public static readonly string rewardedID = "8e2dc1584de3351d";
+    public static readonly string bannerID = "d3f2548c56699148";
+    public static readonly string interstitialID = "6f495903c841a949";
+    public static readonly string rewardedID = "b07646e87ef52624";
 #endif
 }
