@@ -329,7 +329,7 @@ namespace ColorBlockCrush
             PlayAnim(Constant.GunAnimation.SHOOT);
             AudioSourcePool.Instance.PlaySFX(AudioManager.Instance.GetAudioClip(Constant.SFX.SHOOT));
             UpdateBulletCountDisplay();
-            HapticPatterns.PlayPreset(HapticPatterns.PresetType.LightImpact);
+            HapticManager.Instance.Haptic();
 
             Bullet bullet = Instantiate(bulletPrb, bulletSpawnPos.position, Quaternion.identity);
             bullet.transform.SetParent(LevelController.Instance.transform);
