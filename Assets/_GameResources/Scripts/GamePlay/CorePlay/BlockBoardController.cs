@@ -38,6 +38,7 @@ namespace ColorBlockCrush
         private Block[,] _blockStacks;
         private List<BigBlock> listBigBlock = new();
         private List<BlockKey> listKey = new();
+        private List<BlockBarrier> listBlockBarrier = new();
 
         private Vector3 calculatedBlockScale;
         private Vector3 calculatedBlockOffset;
@@ -137,7 +138,7 @@ namespace ColorBlockCrush
 
             for(int i=0; i<levelConfig.mapConfig.pixelSnakes.Count; i++)
             {
-                SpawnBlockBarrier(levelConfig.mapConfig.pixelSnakes[i]);
+                listBlockBarrier.Add(SpawnBlockBarrier(levelConfig.mapConfig.pixelSnakes[i]));
             }
         }
 
@@ -352,6 +353,8 @@ namespace ColorBlockCrush
             }
 
             blocks.AddRange(listBigBlock.FindAll(x => x.ColorType == targetColor));
+
+            blocks.AddRange(listBlockBarrier.FindAll(x => x.ColorType == targetColor));
 
             return blocks;
         }

@@ -174,6 +174,13 @@ namespace ColorBlockCrush
             tweenKillBlock = sq;
         }
 
+        public void DestroyBlock()
+        {
+            IsDestroyed = true;
+            OnBlockDestroyed?.Invoke(this);
+            gameObject.SetActive(false);
+        }
+
         public bool CanBeRaycastHit()
         {
             return hitPointRaycast > 0;

@@ -24,6 +24,8 @@ namespace ColorBlockCrush
 
         private Vector2Int direction;
 
+        private Vector2Int DefaultSize { get; set; } 
+
         public void Init(PixelSnakeConfig pixelSnakeConfig)
         {
             blockBarierData = pixelSnakeConfig;
@@ -75,6 +77,8 @@ namespace ColorBlockCrush
             }
 
             Size = CalculateSize();
+
+            DefaultSize = Size;
 
             if(Size.x == 2)
             {
@@ -225,13 +229,13 @@ namespace ColorBlockCrush
 
         private void ResizeBlock()
         {
-            var partCount = hitPoint / Size.x;
-            if(direction == Vector2Int.up || direction == Vector2Int.down)
+            var partCount = DefaultSize.x - (maxHitPoint - hitPoint) / (maxHitPoint / DefaultSize.x);
+            if (direction == Vector2Int.up || direction == Vector2Int.down)
             {
-                partCount = hitPoint / Size.y;
+                partCount = DefaultSize.y - (maxHitPoint - hitPoint) / (maxHitPoint / DefaultSize.y);
             }
 
-            if (partCount < listBodyPart.Count + 3 && partCount > listBodyPartDestroyed.Count && listBodyPart.Count > 0)
+            if (partCount < listBodyPart.Count + 3 && listBodyPart.Count > 0)
             {
                 
                 if(direction == Vector2Int.up || direction == Vector2Int.down)
@@ -240,6 +244,7 @@ namespace ColorBlockCrush
                     listBlockToDestroy.ForEach(x => {
                         x.TakeDamage(1);
                         listBlockPlace.Remove(x);
+                        x.DestroyBlock();
                     });
                 }    
                 else
@@ -248,6 +253,7 @@ namespace ColorBlockCrush
                     listBlockToDestroy.ForEach(x => {
                         x.TakeDamage(1);
                         listBlockPlace.Remove(x);
+                        x.DestroyBlock();
                     });
                 }
 
@@ -260,7 +266,9 @@ namespace ColorBlockCrush
             }
             else if(hitPoint <= 0)
             {
-                listBlockPlace.ForEach(x => x.OnBlockDestroyed?.Invoke(x));
+                listBlockPlace.ForEach(x => {
+                    x.DestroyBlock();
+                });
             }    
             
         }
@@ -271,11 +279,13 @@ namespace ColorBlockCrush
             {
                 if (direction == Vector2Int.up || direction == Vector2Int.down)
                 {
-                    boxCollider.size = new Vector3(Size.x, boxCollider.size.y, listBodyPart.Count + 2);
+                    Size = new Vector2Int(Size.x, listBodyPart.Count + 2);
+                    boxCollider.size = new Vector3(Size.x, boxCollider.size.y, Size.y);
                 }
                 else
                 {
-                    boxCollider.size = new Vector3(listBodyPart.Count + 2, boxCollider.size.y, Size.y);
+                    Size = new Vector2Int(listBodyPart.Count + 2, Size.y);
+                    boxCollider.size = new Vector3(Size.x, boxCollider.size.y, Size.y);
                 }
 
                 if(hitPoint < maxHitPoint)
