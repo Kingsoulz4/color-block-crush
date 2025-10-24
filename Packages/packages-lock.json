@@ -1,14 +1,5 @@
 {
   "dependencies": {
-    "com.applovin.mediation.ads": {
-      "version": "8.5.0",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.google.external-dependency-manager": "1.2.182"
-      },
-      "url": "https://unity.packages.applovin.com"
-    },
     "com.autodesk.fbx": {
       "version": "4.2.1",
       "depth": 1,
@@ -25,13 +16,6 @@
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "hash": "4b98abd7469b10d55c9c623830cb6e1518f72731"
-    },
-    "com.google.external-dependency-manager": {
-      "version": "1.2.182",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
     },
     "com.marijnzwemmer.unity-toolbar-extender": {
       "version": "https://github.com/marijnz/unity-toolbar-extender.git",
