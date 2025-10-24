@@ -30,7 +30,7 @@ namespace ColorBlockCrush
 
         }
 
-        private void Update()
+        private void Start()
         {
             CalculateResponsiveCam();
         }
