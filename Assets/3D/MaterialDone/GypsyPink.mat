@@ -111,22 +111,22 @@ Material:
     - _RampOffset: 0
     - _RampScale: 1
     - _RampSmoothing: 0.62
-    - _RampThreshold: 0.77
+    - _RampThreshold: 0.946
     - _RampType: 2
     - _ReceiveShadowsOff: 1
     - _ReflectionMapType: 0
     - _ReflectionSmoothness: 0.5
     - _RenderingMode: 0
-    - _RimMax: 1
-    - _RimMin: 0.5
+    - _RimMax: 1.58
+    - _RimMin: 1.63
     - _ShadowColorLightAtten: 1
     - _SingleIndirectColor: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpecularMapType: 0
     - _SpecularRoughness: 0.5
-    - _SpecularToonSize: 0.06
-    - _SpecularToonSmoothness: 0.4
+    - _SpecularToonSize: 0.942
+    - _SpecularToonSmoothness: 1
     - _SpecularType: 1
     - _SrcBlend: 1
     - _UVSec: 0
@@ -146,7 +146,7 @@ Material:
     - _UseSpecular: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.6679245, g: 0.11468137, b: 0.3843292, a: 1}
+    - _BaseColor: {r: 0.75294125, g: 0.28627452, b: 0.5137255, a: 1}
     - _Color: {r: 0.9063317, g: 0.9063317, b: 0.9063317, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _HColor: {r: 1, g: 1, b: 1, a: 1}
@@ -154,7 +154,6 @@ Material:
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectionColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.5}
-    - _SColor: {r: 0.57232696, g: 0.17457764, b: 0.44133183, a: 1}
-    - _SpecularColor: {r: 0.8867924, g: 0.21472637, b: 0.44954467, a: 1}
+    - _SColor: {r: 0.57254905, g: 0.1764706, b: 0.4431373, a: 1}
+    - _SpecularColor: {r: 0.8879232, g: 0.21586053, b: 0.45078585, a: 1}
   m_BuildTextureStacks: []
-  m_AllowLocking: 0
